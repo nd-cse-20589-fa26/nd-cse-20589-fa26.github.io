@@ -283,6 +283,8 @@
         topics:         SaaS
         items:
           - name:       Slides 33
+        assignments:
+          - Reading 11
 
       - date:           Wed 11/25
         topics:         <i class="muted">Thanksgiving</i>
@@ -299,6 +301,8 @@
         topics:         VPS
         items:
           - name:       Slides 34
+        assignments:
+          - Reading 12
 
       - date:           Wed 12/02
         topics:         Docker
