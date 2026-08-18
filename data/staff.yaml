@@ -1,0 +1,35 @@
+- name:     Peter Bui
+  role:     Instructor
+  icon:     human-male-board
+  netid:    pbui
+  github:   pbui
+
+- name:     Evan Waelde
+  role:     Teaching Assistant
+  icon:     account-question
+  netid:    ewaelde
+  github:   EvanWND
+
+- name:     Loise Wardhana
+  role:     Teaching Assistant
+  icon:     account-question
+  netid:    lwardhan
+  github:   loiseaward
+
+- name:     Will Griffin
+  role:     Teaching Assistant
+  icon:     account-question
+  netid:    wgriffi3
+  github:   whgriff05
+
+- name:     Hailey Butusov
+  role:     Teaching Assistant
+  icon:     account-question
+  netid:    hbutusov
+  github:   hiley-b
+
+- name:     Kathryn Fine
+  role:     Teaching Assistant
+  icon:     account-question
+  netid:    kfine
+  github:   kfine1526

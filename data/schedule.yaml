@@ -1,0 +1,333 @@
+- name:     Shell
+  days:
+      - date:           Mon 08/24
+        topics:         Syllabus, Unix Shell
+        assignments:
+          - Reading 01
+        items:
+          - name:       Slides 00
+          - name:       Slides 01
+
+      - date:           Wed 08/26
+        topics:         Git, Files
+        items:
+          - name:       Slides 02
+
+      - date:           Fri 08/28
+        topics:         Processes, I/O Redirection, Pipelines
+        items:
+          - name:       Slides 03
+
+      - date:           Sat 08/29
+        topics:         '<i class="muted">Command Line Adventure</i>'
+        assignments:
+          - Homework 01
+
+- name:     Scripting
+  days:
+      - date:           Mon 08/31
+        topics:         Python, Control Flow, Modules
+        assignments:
+          - Reading 02
+        items:
+          - name:       Slides 04
+
+      - date:           Wed 09/02
+        topics:         Data Structures, Arguments, Testing
+        items:
+          - name:       Slides 05
+
+      - date:           Fri 09/04
+        topics:         Processes, Requests
+        items:
+          - name:       Slides 06
+
+      - date:           Sat 09/05
+        topics:         '<i class="muted">Cut, Wc</i>'
+        assignments:
+          - Homework 02
+
+- name:     Data Processing
+  days:
+      - date:           Mon 09/07
+        topics:         Files, Regular Expressions
+        assignments:
+          - Reading 03
+        items:
+          - name:       Slides 07
+
+      - date:           Wed 09/09
+        topics:         CSV, JSON, YAML
+        items:
+          - name:       Slides 08
+
+      - date:           Fri 09/11
+        topics:         HTML, XML
+        items:
+          - name:       Slides 09
+
+      - date:           Sat 09/12
+        topics:         '<i class="muted">Weather, Mastodon</i>'
+        assignments:
+          - Homework 03
+
+- name:     Exam 01
+  days:
+      - date:           Mon 09/14
+        items:
+          - name:       Checklist 01
+
+      - date:           Wed 09/16
+        items:
+          - name:       Exam 01
+        assignments:
+          - Interview 01
+
+      - date:           Fri 09/18
+        topics:         Object-oriented Programming
+        items:
+          - name:       Slides 10
+
+- name:     Object-oriented Programming
+  days:
+      - date:           Mon 09/21
+        topics:         Structural Design Patterns
+        assignments:
+          - Reading 04
+        items:
+          - name:       Slides 11
+
+      - date:           Wed 09/23
+        topics:         Behavior Design Patterns
+        items:
+          - name:       Slides 12
+
+      - date:           Fri 09/25
+        topics:         Creational Design Patterns
+        items:
+          - name:       Slides 13
+
+      - date:           Sat 09/26
+        topics:         '<i class="muted">Fibonacci, Tree</i>'
+        assignments:
+          - Homework 04
+
+- name:     Functional Programming
+  days:
+      - date:           Mon 09/28
+        topics:         Sorting, Functional Programming
+        assignments:
+          - Reading 05
+        items:
+          - name:       Slides 14
+
+      - date:           Wed 09/30
+        topics:         List Comprehensions, Generators
+        items:
+          - name:       Slides 15
+
+      - date:           Fri 10/02
+        topics:         Concurrency and Parallelism
+        items:
+          - name:       Slides 16
+
+      - date:           Sat 10/03
+        topics:         '<i class="muted">Stats, Hulk</i>'
+        assignments:
+          - Homework 05
+
+- name:     Networking
+  days:
+      - date:           Mon 10/05
+        topics:         Networking, Sockets
+        assignments:
+          - Reading 06
+        items:
+          - name:       Slides 17
+
+      - date:           Wed 10/07
+        topics:         HTTP Client
+        items:
+          - name:       Slides 18
+
+      - date:           Fri 10/09
+        topics:         HTTP Server
+        items:
+          - name:       Slides 19
+
+      - date:           Sat 10/10
+        topics:         '<i class="muted">Miles</i>'
+        assignments:
+          - Homework 06
+
+- name:     Exam 02
+  days:
+      - date:           Mon 10/12
+        items:
+          - name:       Checklist 02
+
+      - date:           Wed 10/14
+        items:
+          - name:       Exam 02
+        assignments:
+          - Interview 02
+
+      - date:           Fri 10/16
+        topics:         Foreign Function Interfaces
+        items:
+          - name:       Slides 20
+
+- name:   "Fall Break"
+
+- name:    Web Application 
+  days:
+      - date:           Mon 10/26
+        topics:         Web Application
+        assignments:
+          - Reading 07
+        items:
+          - name:       Slides 21
+
+      - date:           Wed 10/28
+        topics:         REST
+        items:
+          - name:       Slides 22
+
+      - date:           Fri 10/30
+        topics:         MVC
+        items:
+          - name:       Slides 23
+
+      - date:           Sat 10/31
+        topics:         '<i class="muted">REST API</i>'
+        assignments:
+          - Project M1
+
+- name:     Databases
+  days:
+      - date:           Mon 11/02
+        topics:         Databases, DBM, Pickling
+        assignments:
+          - Reading 08
+        items:
+          - name:       Slides 24
+
+      - date:           Wed 11/04
+        topics:         SQLite, SQL
+        items:
+          - name:       Slides 25
+
+      - date:           Fri 11/06
+        topics:         Data Modeling
+        items:
+          - name:       Slides 26
+
+      - date:           Sat 11/07
+        topics:         '<i class="muted">Back-end</i>'
+        assignments:
+          - Project M2
+
+- name:     HTML
+  days:
+      - date:           Mon 11/09
+        topics:         HTML
+        assignments:
+          - Reading 09
+        items:
+          - name:       Slides 27
+
+      - date:           Wed 11/11
+        topics:         CSS
+        items:
+          - name:       Slides 28
+        assignments:
+          - Code Review 01
+
+      - date:           Fri 11/13
+        topics:         Templates
+        items:
+          - name:       Slides 29
+
+      - date:           Sat 11/14
+        topics:         '<i class="muted">Front-end (Static)</i>'
+        assignments:
+          - Project M3
+
+- name:     JavaScript
+  days:
+      - date:           Mon 11/16
+        topics:         JavaScript
+        assignments:
+          - Reading 10
+        items:
+          - name:       Slides 30
+
+      - date:           Wed 11/18
+        topics:         DOM
+        items:
+          - name:       Slides 31
+
+      - date:           Fri 11/20
+        topics:         AJAX
+        items:
+          - name:       Slides 32
+
+      - date:           Sat 11/21
+        topics:         '<i class="muted">Front-end (Interactive)</i>'
+        assignments:
+          - Project M4
+
+- name:     Hosting
+  days:
+      - date:           Mon 11/23
+        topics:         SaaS
+        items:
+          - name:       Slides 33
+
+      - date:           Wed 11/25
+        topics:         <i class="muted">Thanksgiving</i>
+        assignments:
+          - Code Review 02
+
+      - date:           Fri 11/27
+        topics:         <i class="muted">Thanksgiving</i>
+
+- name:     Self-Hosting
+
+  days:
+      - date:           Mon 11/30
+        topics:         VPS
+        items:
+          - name:       Slides 34
+
+      - date:           Wed 12/02
+        topics:         Docker
+        items:
+          - name:       Slides 35
+
+      - date:           Fri 12/04
+        topics:         System Administration
+        items:
+          - name:       Slides 36
+
+      - date:           Sat 12/05
+        topics:         '<i class="muted">Deployment</i>'
+        assignments:
+          - Project M5
+
+- name:     Exam 03
+  days:
+      - date:           Mon 12/07
+        items:
+          - name:       Checklist 03
+
+      - date:           Wed 12/09
+        topics:         The Hacker Ethic
+        items:
+          - name:       Slides 37
+        assignments:
+          - Code Review 03
+
+      - date:           XXX 12/XX
+        items:
+          - name:       Exam 03
