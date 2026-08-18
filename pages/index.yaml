@@ -252,7 +252,7 @@ body:       |
         </tr>
         <tr class="danger-bg">
           <td class="centered"><span class="badge danger-btn">Exams</span></td>
-          <td>Quarterly in-person written exams.</td>
+          <td>In-person written exams.</td>
           <td class="centered">2 &times; 10, 12</td>
         </tr>
         <tr class="success-bg">
