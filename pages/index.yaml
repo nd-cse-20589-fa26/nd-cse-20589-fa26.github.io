@@ -248,7 +248,7 @@ body:       |
         <tr class="special-bg">
           <td class="centered"><span class="badge special-btn">Project</span></td>
           <td>Final course project.</td>
-          <td class="centered">1 &times; 5</td>
+          <td class="centered">5 &times; 1</td>
         </tr>
         <tr class="danger-bg">
           <td class="centered"><span class="badge danger-btn">Exams</span></td>
