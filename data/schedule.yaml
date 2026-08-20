@@ -2,8 +2,6 @@
   days:
       - date:           Mon 08/24
         topics:         Syllabus, Unix Shell
-        assignments:
-          - Reading 01
         items:
           - name:       Slides 00
           - name:       Slides 01
@@ -12,6 +10,8 @@
         topics:         Git, Files
         items:
           - name:       Slides 02
+        assignments:
+          - Reading 01
 
       - date:           Fri 08/28
         topics:         Processes, I/O Redirection, Pipelines
