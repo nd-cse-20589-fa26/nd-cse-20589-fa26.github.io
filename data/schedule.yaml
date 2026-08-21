@@ -1,7 +1,7 @@
 - name:     Shell
   days:
       - date:           Mon 08/24
-        topics:         Syllabus, Unix Shell
+        topics:         Syllabus, Unix Programming Environment
         items:
           - name:       Slides 00
           - name:       Slides 01
