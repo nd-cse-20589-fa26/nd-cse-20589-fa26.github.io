@@ -1,5 +1,5 @@
 ---
-title: "Lecture 01: Unix Programming Environment"
+title: "Slides 01: Unix Programming Environment"
 description: "Unix Programming Environment"
 author: Peter Bui
 keywords: lecture,sos,unix,shell
