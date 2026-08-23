@@ -1,0 +1,106 @@
+title:  "Notes 01: Unix Programming Environment"
+body:   |
+
+  ## A. Login, Home Directory
+  
+  ### <strong class="cm">Login to a student machine</strong>
+  **0.** `ssh` (*using Windows terminal*)
+
+  ### <strong class="cm">Determine my location (*what is my $HOME*)</strong>
+  **1.** `pwd`
+
+  > After we login, we are running a program called a **shell** (*which is an
+  **interpreter***).  It **translates** commands on the fly (vs. a **compiler**
+  such as `gcc` that translates ahead of time).
+  
+  ### <strong class="cm">View environment variables</strong>
+  **2.** `env`<br>
+  &nbsp;&nbsp; `env` | `less`
+
+  ### <strong class="cm">Print value of a variable</strong>
+  **3.** `echo` $SHELL
+
+  ### <strong class="cm">Change value of a variable</strong>
+  **4.** SHELL=/usr/bin/python3
+  
+
+  
+  ## B. Files, Flags, Help
+  
+  ### <strong class="cm">Create empty file</strong>
+  **5.** `touch` lyrics.txt
+  
+  ### <strong class="cm">List contents of directory</strong>
+  **6.** `ls`
+  
+  ### <strong class="cm">List contents of directory (*metadata*)</strong>
+  **7.** `ls` -l
+  
+  ### <strong class="cm">Read documentation</strong>
+  **8.** `man` ls<br>
+  &nbsp;&nbsp; `tldr` ls
+  
+  ### <strong class="cm">Show usage message</strong>
+  **9.** `ls` --help<br>
+  &nbsp;&nbsp; `ls` --help | `less`
+
+
+  
+  ## C. Aliases, Configuration
+  
+  ### <strong class="cm">View all aliases</strong>
+  **10.** `alias`
+  
+  ### <strong class="cm">Create an alias</strong>
+  **11.** `alias` ls='ls -la'
+  
+  ### <strong class="cm">Test an alias</strong>
+  **12.** `la`
+
+  > Open another terminal and observe that new instance of **shell** does not
+  have **alias** of previous **shell**.  Need to edit `~/.bashrc` to make it
+  **persist**.
+  
+  ### <strong class="cm">Edit bash configuration</strong>
+  **13.** `vim` ~/.bashrc
+
+  ### <strong class="cm">View contents of file</strong>
+  **14.** `cat` ~/.bashrc
+  
+  ### <strong class="cm">Load settings into current shell</strong>
+  **15.** `source` ~/.bashrc
+  
+
+
+  ## D. Navigation, Directories, Management
+
+  ### <strong class="cm">Create directory</strong>
+  **16.** `mkdir` songs
+  
+  ### <strong class="cm">Move file</strong>
+  **17.** `mv` lyrics.txt songs
+  
+  ### <strong class="cm">Go into directory</strong>
+  **18.** `cd` songs
+  
+  ### <strong class="cm">Go back to previous directory</strong>
+  **19.** `cd` -
+  &nbsp;&nbsp; `cd` -
+  
+  ### <strong class="cm">Rename file</strong>
+  **20.** `mv` lyrics.txt song.txt
+  
+  ### <strong class="cm">Edit file</strong>
+  **21.** `vim` song.txt
+  
+  ### <strong class="cm">Copy file</strong>
+  **22.** `cp` song.txt copy.txt
+  
+  ### <strong class="cm">View differences between files</strong>
+  **23.** `diff` song.txt copy.txt
+  
+  ### <strong class="cm">Go back to parent directory</strong>
+  **24.** `cd` ..
+  
+  ### <strong class="cm">Remove directory and its contents</strong>
+  **25.** `rm` -fr songs
