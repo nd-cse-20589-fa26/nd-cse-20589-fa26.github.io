@@ -88,8 +88,10 @@ theme: domer-slides
 2. How do we <strong class="success">build</strong> modern <strong
    class="primary">software systems</strong>?
 
-3. How do we <strong class="danger">test</strong> modern <strong
-   class="primary">software systems</strong>?
+3. How do modern <strong class="primary">software systems</strong> <strong
+   class="info">work</strong>?
+
+</div>
 
 </div>
 
