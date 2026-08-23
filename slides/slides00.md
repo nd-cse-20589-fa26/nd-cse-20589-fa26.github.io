@@ -25,12 +25,11 @@ theme: domer-slides
 
 <div class="font-large">
 
-1. What is your <span class="green">**name**</span>?
+1. What is your <strong class="green">name</strong>?
 
-2. What do you wish to <span class="yellow">**learn**</span> in this class?
+2. What do you wish to <strong class="yellow">learn</strong> in this class?
 
-3. What is the most interesting thing you <span
-   class="red">**experienced**</span> this summer?
+3. What have you <strong class="red">heard</strong> about this class?
 
 </div>
 
