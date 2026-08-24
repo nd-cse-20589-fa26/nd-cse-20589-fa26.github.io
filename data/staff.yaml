@@ -4,24 +4,6 @@
   netid:    pbui
   github:   pbui
 
-- name:     Evan Waelde
-  role:     Teaching Assistant
-  icon:     account-question
-  netid:    ewaelde
-  github:   EvanWND
-
-- name:     Loise Wardhana
-  role:     Teaching Assistant
-  icon:     account-question
-  netid:    lwardhan
-  github:   loiseaward
-
-- name:     Will Griffin
-  role:     Teaching Assistant
-  icon:     account-question
-  netid:    wgriffi3
-  github:   whgriff05
-
 - name:     Hailey Butusov
   role:     Teaching Assistant
   icon:     account-question
@@ -33,3 +15,21 @@
   icon:     account-question
   netid:    kfine
   github:   kfine1526
+
+- name:     Will Griffin
+  role:     Teaching Assistant
+  icon:     account-question
+  netid:    wgriffi3
+  github:   whgriff05
+
+- name:     Evan Waelde
+  role:     Teaching Assistant
+  icon:     account-question
+  netid:    ewaelde
+  github:   EvanWND
+
+- name:     Loise Wardhana
+  role:     Teaching Assistant
+  icon:     account-question
+  netid:    lwardhan
+  github:   loiseaward
