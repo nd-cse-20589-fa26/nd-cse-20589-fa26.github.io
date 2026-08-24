@@ -7,14 +7,14 @@
           - name:       Slides 01
 
       - date:           Wed 08/26
-        topics:         Git, Files
+        topics:         Git
         items:
           - name:       Slides 02
         assignments:
           - Reading 01
 
       - date:           Fri 08/28
-        topics:         Processes, I/O Redirection, Pipelines
+        topics:         Files, Processes, I/O Redirection, Pipelines
         items:
           - name:       Slides 03
 
