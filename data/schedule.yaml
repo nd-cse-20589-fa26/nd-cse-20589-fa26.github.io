@@ -5,6 +5,8 @@
         items:
           - name:       Slides 00
           - name:       Slides 01
+          - name:       Panopto
+            link:       https://notredame.hosted.panopto.com/Panopto/Pages/Viewer.aspx?id=13bba168-1d72-4650-8274-b4b00113bea2
 
       - date:           Wed 08/26
         topics:         Git
