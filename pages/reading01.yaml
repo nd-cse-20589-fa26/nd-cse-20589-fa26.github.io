@@ -537,6 +537,33 @@ body:   |
 
     3.  <div class="flex-col">
 
+
+        Once you have your `answers.json` file, you will need to [add] and
+        [commit] the file to your [git] repository and then [push] your changes
+        to [GitHub].
+
+            :::bash
+            $ git add answers.json              # Add answers.json to staging area
+
+            $ git commit -m "Reading 01: Quiz"  # Commit work
+
+            $ git push -u origin reading01      # Push branch to GitHub
+
+        [add]: https://git-scm.com/docs/git-add
+        [commit]: https://git-scm.com/docs/git-commit
+        [push]: https://git-scm.com/docs/git-push
+        
+        <div class="alert success-bg" markdown="1">
+
+        ### <i class="icon icon-medium">{{ "git" | embed_icon }}</i> Iterative Approach
+
+        You may edit and commit changes to your branch as many times as you wish.
+        Just make sure all of your work goes in the appropriate branch and then
+        perform a `git push` when you are done.
+        </div>
+
+    4.  <div class="flex-col">
+
         When you are ready for your final submission, you need to create a
         **pull request** via the [GitHub] interface:
 
