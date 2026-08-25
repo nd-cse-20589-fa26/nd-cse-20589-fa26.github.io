@@ -262,6 +262,12 @@ section.lead {
     gap: 1rem;
 }
 
+.columns-2-3 {
+    display: grid;
+    grid-template-columns: 2fr 3fr;
+    gap: 1rem;
+}
+
 .columns-3-2 {
     display: grid;
     grid-template-columns: 3fr 2fr;
