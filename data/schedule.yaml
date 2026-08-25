@@ -16,7 +16,7 @@
           - Reading 01
 
       - date:           Fri 08/28
-        topics:         Files, Processes, I/O Redirection, Pipelines
+        topics:         Files, Processes, I/O
         items:
           - name:       Slides 03
 
