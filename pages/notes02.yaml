@@ -1,0 +1,204 @@
+title:  "Notes 02: Git"
+body:   |
+
+  ## Logistics
+
+  - **Office hours** with **TAs** maybe sporadic this week, times still being
+  finalized.
+
+  - **Overview**: Review what [git] is and how to use it to submit [Reading 01]
+    (**note**: there is a **grace period**).
+
+  [git]: https://git-scm.com/
+  [Reading 01]: reading01.html
+
+  ## SSH: <span class="gold">Model</span>
+
+  <div class="centered">
+
+  <img src="static/img/slides02-ssh-model.png" class="responsive transparent">
+
+  </div>
+
+  - **Local** terminal is just an **interface** for **remote** process (**bash**).
+
+  - **NFS** is used to share files between machines (same **file system**).
+
+  - **Student machines** used for **testing** and **grading** (*but you can use
+  your local computer if you wish*).
+
+  - **Firewall**: use **VPN** when off campus.
+
+  ## Git: <span class="gold">Concepts</span>
+
+  <strong class="primary">Git</strong> is a free and open source <strong
+  class="cm">distributed version control system</strong> designed to
+  handle everything from small to very <strong class="danger">large projects
+  </strong>with speed and efficiency.
+
+  <div class="flex-row" markdown="1">
+
+  <div class="flex-col" markdown="1">
+
+  - <strong class="success">Journal (*record transactions, diary*)</strong>
+
+  - <strong class="caution">Time Machine (*checkout different versions*)</strong>
+
+  - <strong class="special">Shared Space (*use for collaborating with TAs*)</strong>
+
+  </div>
+
+  <div class="flex-col-25 centered" markdown="1">
+
+  <img src="https://upload.wikimedia.org/wikipedia/commons/thumb/e/e0/Git-logo.svg/330px-Git-logo.svg.png" class="transparent">
+
+  </div>
+
+  </div>
+
+  ## Git: <span class="gold">Analogy</span>
+
+  <table class="bordered">
+  <thead>
+      <th>Transaction ID</th>
+      <th>Operation</th>
+      <th>Amount</th>
+      <th>Description</th>
+  </thead>
+  <tbody>
+      <tr class="success-bg">
+          <td class="centered">01</td>
+          <td class="centered">deposit</td>
+          <td>$100</td>
+          <td>Campus Job</td>
+      </tr>
+      <tr class="danger-bg">
+          <td class="centered">02</td>
+          <td class="centered">withdrawal</td>
+          <td>$25</td>
+          <td>Newfs</td>
+      </tr>
+      <tr class="info-bg">
+          <td></td>
+          <td></td>
+          <td>$75</td>
+          <td width="400">Checkpoint</td>
+      </tr>
+  </tbody>
+  </table>
+
+  ## Git: <span class="gold">Model</span>
+
+  <div class="centered">
+
+  <img src="static/img/slides02-model-push.png" class="responsive transparent">
+
+  </div>
+
+  ## Git: <span class="gold">Branches</span>
+
+  <div class="centered">
+
+  <img src="static/img/slides02-branches-creating.png" class="responsive transparent">
+
+  </div>
+
+  <strong class="cm">Create new branch and switch to it</strong><br>
+  $ **git switch** master<br>
+  $ **git pull** --rebase<br>
+  $ **git switch** -c reading01
+
+  ## Git: <span class="gold">Demonstration (*Clone, Navigation*)</span>
+
+  <strong class="cm">Clone TA Repository</strong><br>
+  $ **git clone** git@github.com:nd-cse-20589-fa26/assignments-ewaelde.git
+
+  <strong class="cm">Move folder to /tmp (*discuss tab-completion*)</strong><br>
+  $ **mv** assignments-ewaelde /tmp
+
+  <strong class="cm">Go to that folder</strong><br>
+  $ **cd** /tmp/assignments-ewaelde
+
+  <strong class="cm">Go to previous location</strong><br>
+  $ **cd** -
+
+  ## Git: <span class="gold">Demonstration (*Journal*, *Branch*)</span>
+
+  <strong class="cm">View journal entries</strong><br>
+  $ **git** log
+
+  <strong class="cm">View which branch (*mention Homework 01: Just For Fun*)</strong><br>
+  $ **git** branch
+
+  <strong class="cm">Create new branch</strong><br>
+  $ **git** switch -c reading01<br>
+  $ **git** branch
+
+  ## Git: <span class="gold">Demonstration (*Reading 01*)</span>
+
+  <strong class="cm">Create empty file</strong><br>
+  $ **touch** answers.json
+
+  <strong class="cm">Edit answers.json</strong><br>
+  $ **vim** answers.json<br>
+
+  ```json
+  {
+      "q01": ["ls"]
+  }
+  ```
+
+  <strong class="cm">Move answers.json to reading01 folder</strong><br>
+  $ **mv** answers.json reading01<br>
+  $ **cd** reading01
+
+  <strong class="cm">Check quiz answers (*remind students of Python3 configuration*)</strong><br>
+  $ **../.scripts.check.py**
+
+  <strong class="cm">View state of git repo</strong><br>
+  $ **git** status
+
+  ## Git: <span class="gold">Demonstration (*Commit*)</span>
+
+  <strong class="cm">Add answers.json to staging area</strong><br>
+  $ **git** add answers.json<br>
+  $ **git** status
+
+  <strong class="cm">Record changes to journal</strong><br>
+  $ **git** commit -m "Reading 01: first attempt"<br>
+  $ **git** log<br>
+  $ **git** show<br>
+
+  <strong class="cm">Edit answers.json</strong><br>
+  $ **vim** answers.json<br>
+
+  ```json
+  {
+      "q01": ["ls","asdf","fdsa"]
+  }
+  ```
+
+  <strong class="cm">Check quiz answers (*interpret results*)</strong><br>
+  $ **../.scripts.check.py**
+
+  ## Git: <span class="gold">Demonstration (*Checkout*)</span>
+
+  <strong class="cm">View changes</strong><br>
+  $ **git** status<br>
+  $ **git** diff
+
+  <strong class="cm">Go back to commited version</strong><br>
+  $ **git** restore answers.json
+
+  <strong class="cm">Switch to master branch (*file is not there!*)</strong><br>
+  $ **git** switch master<br>
+  $ **ls**<br>
+  $ **git** switch reading01<br>
+  $ **ls**
+
+  <strong class="cm">Send changes to GitHub (*Discuss PR workflow*)</strong><br>
+  $ **git** push -u origin reading01
+
+  - Can use **website** to **generate JSON**.
+
+  - Can **commit** and **push** as many times as you want (*only grade the final score*).
