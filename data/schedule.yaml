@@ -10,10 +10,12 @@
 
       - date:           Wed 08/26
         topics:         Git
-        items:
-          - name:       Slides 02
         assignments:
           - Reading 01
+        items:
+          - name:       Slides 02
+          - name:       Panopto
+            link:       https://notredame.hosted.panopto.com/Panopto/Pages/Viewer.aspx?id=64c4e20a-4bbc-4d45-bc83-b4b20114624d
 
       - date:           Fri 08/28
         topics:         Files, Processes, I/O
