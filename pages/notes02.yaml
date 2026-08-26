@@ -8,9 +8,15 @@ body:   |
 
   - **Overview**: Review what [git] is and how to use it to submit [Reading 01]
     (**note**: there is a **grace period**).
+  
+  - **Canvas**: nothing to submit ([GitHub] only).
+
+  - **Python3**: make sure to use provided `python3` otherwise, there could be
+  issues (*one fixed this morning*)
 
   [git]: https://git-scm.com/
   [Reading 01]: reading01.html
+  [GitHub]: https://github.com
 
   ## SSH: <span class="gold">Model</span>
 
