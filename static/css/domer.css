@@ -460,6 +460,10 @@ div.footnote > hr {
     }
 }
 
+.primary {
+    color: var(--primary);
+}
+
 .primary-btn {
     background-color: var(--primary);
 }
@@ -586,6 +590,10 @@ div.footnote > hr {
 
 .special-btn {
     background-color: var(--special);
+}
+
+.gold {
+    color: var(--nd-gold);
 }
 
 .muted {
