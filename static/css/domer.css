@@ -180,6 +180,11 @@ img {
     border: 1px solid var(--border);
 }
 
+img.transparent {
+    background: none;
+    border: 0;
+}
+
 svg {
     vertical-align: text-top;
 }
