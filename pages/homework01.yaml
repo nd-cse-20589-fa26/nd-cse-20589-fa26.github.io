@@ -73,7 +73,7 @@ body:       |
   prompt you to complete a series of tasks (**19** in total).  After you
   complete each task, you must run the `GUIDE` script so it can verify your
   work.  If it detects that you have completed the task, it will update the
-  `tasks.yaml` file with a specially encoded checkpoint payload associated with
+  `tasks.json` file with a specially encoded checkpoint payload associated with
   your **netid** and the corresponding task.  It will then prompt you with the
   next task.
 
@@ -84,7 +84,7 @@ body:       |
   You are to follow the prompts specified by the `GUIDE` until you have
   completed each of the tasks in the adventure.  Because some tasks depend on
   others, there is no skipping ahead or going backwards.   That said, you can
-  always remove the checkpoints in the `tasks.yaml` file to go back to a
+  always remove the checkpoints in the `tasks.json` file to go back to a
   particular task.
 
   At the end of this activity, you should see the following output from the `GUIDE`:
@@ -120,7 +120,7 @@ body:       |
 
   ### <i class="icon icon-medium">{{ "checkbox-marked-outline" | embed_icon }}</i> Task Checkpoints
 
-  Note, that each task checkpoint in the `tasks.yaml` is specially encoded for
+  Note, that each task checkpoint in the `tasks.json` is specially encoded for
   your **netid**.  This means that copying the checkpoint from another student
   or from a previous task will not work and will lead to a **corruption**
   warning that will anger the `GUIDE`.  The only way to proceed through the
@@ -378,7 +378,7 @@ body:       |
 
       $ git add Makefile                                    # Mark changes for commit
       $ git add GUIDE                                       # Mark changes for commit
-      $ git add tasks.yaml                                  # Mark changes for commit
+      $ git add tasks.json                                  # Mark changes for commit
       $ git commit -m "Homework 01: Tasks"                  # Record changes
       ...
 
