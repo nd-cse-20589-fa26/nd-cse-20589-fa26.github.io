@@ -1,0 +1,309 @@
+title:  "Notes 03: Files, Processes, I/O"
+body:   |
+
+  ## Files: <span class="gold">File System</span>
+
+  <div class="flex-row" markdown="1">
+
+  <div class="flex-col" markdown="1">
+
+  <div class="alert warning-bg centered" markdown="1">
+
+  Where is <strong class="primary">ls</strong> located?
+
+  </div>
+
+  <strong class="cm">Ask the shell</strong><br>
+  $ **which** ls
+
+  <strong class="cm">Verify using absolute path</strong><br>
+  $ **/usr/bin/ls**
+
+  <strong class="cm">How does the shell know where to find programs</strong><br>
+  $ **echo** $PATH
+
+  <strong class="cm">View hier manual</strong><br>
+  $ **man** hier
+
+  <strong class="cm">Go to someone's home directory</strong><br>
+  $ **cd** ~pbui<br>
+  $ **pwd**
+
+  <div class="centered" markdown="1">
+
+  The unix <strong class="primary">file system</strong> is structured as a
+  <strong class="success">hierarchical tree</strong> ([man 7 hier]).
+
+  </div>
+
+  </div>
+
+  <div class="flex-col" markdown="1">
+
+  <img src="static/img/slides03-files-hierarchy.png" class="responsive transparent">
+
+  </div>
+
+  </div>
+
+  [man 7 hier]:   https://man7.org/linux/man-pages/man7/hier.7.html
+
+  ## Files: <span class="gold">Metadata</span>
+
+  <div class="flex-row" markdown="1">
+
+  <div class="flex-col" markdown="1">
+
+  <div class="alert warning-bg centered" markdown="1">
+
+  How large is my <strong class="caution">~/.bashrc</strong>?
+
+  </div>
+
+  <strong class="cm">Use ls</strong><br>
+  $ **ls** -a <strong class="cm"># Show dotfiles</strong><br>
+  $ **ls** -la
+  $ **ls** -l ~/.bashrc
+
+  <strong class="cm">Use stat</strong><br>
+  $ **stat** ~/.bashrc
+
+  <strong class="cm">Use du</strong><br>
+  $ **du** -h ~/.bashrc
+
+  <div class="centered">
+
+  Every <strong class="success">file system object</strong> is represented by a
+  <strong class="danger">data structure</strong> called an <strong
+  class="caution">inode</strong>.
+
+  </div>
+
+  </div>
+
+  <div class="flex-col" markdown="1">
+
+  <div class="centered">
+
+  <img src="static/img/slides03-files-inode.png" class="responsive transparent">
+
+  </div>
+
+  </div>
+
+  </div>
+
+  ## Files: <span class="gold">Permissions</span>
+
+  <div class="alert warning-bg centered" markdown="1">
+
+  How do I <strong class="danger">prevent</strong> people from reading my work?
+
+  </div>
+
+  <strong class="cm">Use chmod with octal</strong><br>
+  $ **chmod** 600 work
+
+  <strong class="cm">Use chmod with symbols</strong><br>
+  $ **chmod** +x work
+
+  </div>
+
+  <table class="bordered">
+  <thead>
+      <th>Owner</th>
+      <th>Group</th>
+      <th>World</th>
+      <th>Octal</th>
+  </thead>
+  <tbody>
+  <tr class="caution-bg font-large">
+      <td class="centered" width="200">r w x</td>
+      <td class="centered" width="200">r w x</td>
+      <td class="centered" width="200">r w x</td>
+      <td class="centered" width="200"></td>
+  </tr>
+  <tr class="success-bg font-large">
+      <td class="centered" width="200">1 1 0</td>
+      <td class="centered" width="200">0 0 0</td>
+      <td class="centered" width="200">0 0 0</td>
+      <td class="centered" width="200">600</td>
+  </tr>
+  <tr class="info-bg font-large">
+      <td class="centered" width="200">1 1 1</td>
+      <td class="centered" width="200">1 0 1</td>
+      <td class="centered" width="200">1 0 1</td>
+      <td class="centered" width="200">755</td>
+  </tr>
+  </tbody>
+  </table>
+
+  ## Processes: <span class="gold">Attributes</span>
+
+  <div class="alert warning-bg centered" markdown="1">
+
+  What programs am I <strong class="success">running</strong>?
+
+  </div>
+
+  <div class="flex-row" markdown="1">
+
+  <div class="flex-col" markdown="1">
+
+  A <strong class="primary">process</strong> is a <strong
+  class="caution">loaded</strong> instance of a <strong
+  class="success">program</strong>.  Each process has:
+
+  - Process ID (PID)
+
+  - Parent Process ID (PPID)
+
+  - UID / GUID
+
+  - Priority
+
+  - Terminal / TTY
+
+  </div>
+
+  <div class="flex-col" markdown="1">
+
+  <strong class="cm">List processes</strong><br>
+  $ **ps** ux &nbsp;<strong class="cm"># User processes</strong><br>
+  $ **ps** aux <strong class="cm"># All processes</strong>
+
+  <strong class="cm">Watch processes</strong><br>
+  $ **top** &nbsp;<strong class="cm"># Interactive</strong><br>
+  $ **htop** <strong class="cm"># Colorful</strong>
+
+  <strong class="cm">Search Processes</strong><br>
+  $ **ps** ux | **grep** process-name<br>
+  $ **pgrep** process-name<br>
+
+  </div>
+
+  </div>
+
+  ## Processes: <span class="gold">Signals</span>
+
+  <div class="alert warning-bg centered" markdown="1">
+
+  How do I terminate a <strong class="primary">process</strong>?
+
+  </div>
+
+  <div class="flex-row" markdown="1">
+
+  <div class="flex-col" markdown="1">
+
+  $ **sleep** 60 & <strong class="cm"># Execute sleep in the background</strong><br>
+  [1] 23213
+
+  $ **jobs** <strong class="cm"># List jobs</strong><br>
+  [1]+ Running sleep 60 &<br>
+
+  $ **fg** <strong class="cm"># Bring job to foreground</strong><br>
+  sleep 60<br>
+  ^Z <strong class="cm"># Suspend job</strong><br>
+  [1]+ Stopped sleep 60<br>
+
+  $ **bg** <strong class="cm"># Background job</strong><br>
+  [1]+ sleep 60 &
+
+  $ **kill** %1 <strong class="cm"># Kill job</strong><br>
+  [1]+ Terminated sleep 60<br>
+
+  </div>
+
+  <div class="flex-col" markdown="1">
+
+  <table class="bordered">
+  <thead class="danger">
+      <th>Signal Name</th>
+      <th>Signal Number</th>
+      <th>Operation</th>
+  </thead>
+  <tbody>
+      <tr class="centered caution-bg font-large">
+          <td><b>SIGINT</b></td>
+          <td><b>2</b></td>
+          <td>Interrupt the process</td>
+      </tr>
+      <tr class="centered warning-bg font-large">
+          <td><b>SIGTERM</b></td>
+          <td><b>15</b></td>
+          <td>Terminate the process</td>
+      </tr>
+      <tr class="centered danger-bg font-large">
+          <td><b>SIGKILL</b></td>
+          <td><b>9</b></td>
+          <td>Kill the process</td>
+      </tr>
+  </tbody>
+  </table>
+
+  </div>
+
+  </div>
+
+  ## I/O: <span class="gold">File Streams</span>
+
+  <div class="alert warning-bg centered" markdown="1">
+
+  How do you <strong class="success">save</strong> the result of a command?
+
+  </div>
+
+  When a <strong class="primary">process</strong> is created, it automatically
+  has three <strong class="caution">file streams</strong>:
+
+  <div class="centered">
+
+  <br>
+
+  <img src="static/img/slides03-io-file-streams.png" class="transparent responsive">
+
+  </div>
+
+  <strong class="cm">Redirect stdout</strong><br>
+  $ **command** > output
+
+  <strong class="cm">Pipe stdout to tee</strong><br>
+  $ **command** | **tee** output
+
+  ## I/O: <span class="gold">Pipelines</span>
+
+  <div class="alert warning-bg centered" markdown="1">
+
+  How do you <strong class="caution">ignore</strong> error messages?
+
+  </div>
+
+  A <strong class="caution">pipe</strong> connects the <strong
+  class="danger">standard output</strong> of the first <strong
+  class="primary">process</strong> to the <strong class="danger">standard
+  input</strong> of the second <strong class="primary">process</strong>.
+
+  <div class="centered">
+
+  <img src="static/img/slides03-io-pipelines.png" class="transparent responsive">
+
+  </div>
+
+  <strong class="cm">Redirect stdout and stderr to separate files</strong><br>
+  $ **find** /etc -type d > output 2> errors
+
+  <strong class="cm">Redirect both stdout and stderr to same file</strong><br>
+  $ **find** /etc -type d > combined 2>&1<br>
+  $ **find** /etc -type d &> combined
+
+  <strong class="cm">Redirect stderr to stdout, then stdout to file</strong><br>
+  $ **find** /etc -type d 2>&1 > output<br>
+
+  <strong class="cm">Redirect both stdout and stderr to tee program</strong><br>
+  $ **find** /etc -type d 2>&1 | **tee** combined<br>
+
+  <strong class="cm">Redirect stderr to blackhole and stdout to tee program</strong><br>
+  $ **find** /etc -type d 2> /dev/null | **tee** output<br>
+
+
