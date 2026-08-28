@@ -317,7 +317,7 @@ A <strong class="primary">process</strong> is a <strong
 class="caution">loaded</strong> instance of a <strong
 class="success">program</strong>.  Each process has:
 
-<div class="font-small">
+<div class="font-smaller">
 
 - Process ID (PID)
 
@@ -358,7 +358,7 @@ $ **pkill** -9 process-name
 
 </div>
 
-<div class="font-small">
+<div class="font-smaller">
 
 <table class="bordered">
 <thead class="danger-bg">
@@ -367,17 +367,17 @@ $ **pkill** -9 process-name
     <th>Operation</th>
 </thead>
 <tbody>
-    <tr class="centered">
-        <td><b>TERM</b></td>
-        <td><b>15</b></td>
-        <td>Terminate the process</td>
-    </tr>
-    <tr class="centered">
+    <tr class="centered caution-bg">
         <td><b>INT</b></td>
         <td><b>2</b></td>
         <td>Interrupt the process</td>
     </tr>
-    <tr class="centered">
+    <tr class="centered warning-bg">
+        <td><b>TERM</b></td>
+        <td><b>15</b></td>
+        <td>Terminate the process</td>
+    </tr>
+    <tr class="centered danger-bg">
         <td><b>KILL</b></td>
         <td><b>9</b></td>
         <td>Kill the process</td>
@@ -486,23 +486,23 @@ $ **command** | **tee** output
     <th>Syntax</td>
 </thead>
 <tbody>
-    <tr class="centered">
+    <tr class="centered info-bg">
         <td>Redirect <b>standard out</b></td>
         <td>&gt; file</td>
     </tr>
-    <tr class="centered">
+    <tr class="centered special-bg">
         <td>Redirect <b>standard out</b> and <b>error</b></td>
         <td class="centered">&gt; file 2&gt;&1 or &&gt; file</td>
     </tr>
-    <tr class="centered">
+    <tr class="centered caution-bg">
         <td>Redirect <b>standard input</b></td>
         <td>&lt; file</td>
     </tr>
-    <tr class="centered">
+    <tr class="centered warning-bg">
         <td>Redirect <b>standard output</b> to another command</td>
         <td><b>command1</b> | <b>command2</b></td>
     </tr>
-    <tr class="centered">
+    <tr class="centered success-bg">
         <td>Append <b>standard out</b></td>
         <td>&gt;&gt; file</td>
     </tr>
