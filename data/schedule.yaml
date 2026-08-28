@@ -21,6 +21,8 @@
         topics:         Files, Processes, I/O
         items:
           - name:       Slides 03
+          - name:       Panopto
+            link:       https://notredame.hosted.panopto.com/Panopto/Pages/Viewer.aspx?id=b61ecf04-a804-4d39-b287-b4b40111607e
 
       - date:           Sat 08/29
         topics:         '<i class="muted">Command Line Adventure</i>'
