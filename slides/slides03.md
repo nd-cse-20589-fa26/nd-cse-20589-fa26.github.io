@@ -534,12 +534,6 @@ The parent of the created <strong class="primary">process</strong> (usually the
 <strong class="danger">$SHELL</strong>) can redirect any of these files to
 another file.
 
-```bash
-# Demonstration
-$ sleep 60 < /etc/hosts > output
-$ ls -l /proc/$(pgrep sleep)/fd
-```
-
 ---
 
 # I/O: <strong class="gold">Pipelines</strong>
