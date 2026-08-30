@@ -1,0 +1,58 @@
+{
+    "q01": {
+        "type": "multiple",
+        "question": "\n<p>Throughout the tasks for <b>Homework 01</b>, you had to reference the\n<code>HOME</code> directory.  Which of the following are valid ways of\nreferring to your <code>HOME</code> directory in <code>bash</code>?</p>\n",
+        "responses": {
+            "a": "<code>~</code>",
+            "b": "<code>.</code>",
+            "c": "<code>%HOME%\"</code>",
+            "d": "<code>$home\"</code>",
+            "e": "<code>$HOME\"</code>"
+        }
+    },
+    "q02": {
+        "type": "single",
+        "question": "\n<p>What happens if you <code>touch</code> an existing file?</p>\n",
+        "responses": {
+            "a": "<b>Nothing</b> happens.",
+            "b": "File is <b>deleted</b>.",
+            "c": "File is <b>truncated</b>.",
+            "d": "File <b>modification time</b> is <b>updated</b>."
+        }
+    },
+    "q03": {
+        "type": "multiple",
+        "question": "\n<p>Which of the following statements regarding <b>symlinks</b> and\n<b>hardlinks</b> are <b>true</b>?</p>\n",
+        "responses": {
+            "a": "A <b>soft link</b> cannot cross partition boundaries.",
+            "b": "A <b>soft link</b> contains the path to its target reference.",
+            "c": "A <b>hard link</b> appears as a separate file but actually points to an existing inode.",
+            "d": "A <b>hard link</b> is typically slower than a <b>soft link</b>."
+        }
+    },
+    "q04": {
+        "type": "single",
+        "question": "\n<p>Which of the following <b>pipelines</b> counts all the <b>\"Permission\ndenied\"</b> errors encountered when recursively searching file names under\nthe <b>\"/etc\"</b> directory?</p>\n",
+        "responses": {
+            "a": "<b>find</b> /etc > /dev/null | <b>wc</b> -l",
+            "b": "<b>find</b> /etc 2> /dev/null | <b>wc</b> -l",
+            "c": "<b>find</b> /etc 2>&1 > /dev/null | <b>wc</b> -l",
+            "d": "<b>find</b> /etc > /dev/null 2>&1 | <b>wc</b> -l"
+        }
+    },
+    "q05": {
+        "type": "blank",
+        "question": "\n<p>Use the <code>find</code> command on the <code>/etc</code> folder on\n<code>student13.cse.nd.edu</code> to answer the following questions:</p>\n\n<p>\n<ol>\n\n  <li>How many <b>files</b> are there? <b>(1)</b> ____</li>\n\n  <li>How many <b>directories</b> are there? <b>(2)</b> ____</li>\n\n  <li>How many <b>executable files</b> are there? <b>(3)</b> ____</li>\n\n  <li>How many <b>empty files</b> are there? <b>(4)</b> ____</li>\n\n  <li>How many <b>files</b> or <b>directories</b> have the string\n  <b>\"host\"</b> in the <b>name</b>? <b>(5)</b> ____</li>\n\n</ol>\n</p>\n"
+    },
+    "q06": {
+        "type": "single",
+        "question": "\n<p>Which one of the following <b>signals</b> triggers the <b>matrix</b>\nwhen sent to the <code>TROLL</code>?</p>\n",
+        "responses": {
+            "a": "<code>HUP</code>",
+            "b": "<code>BUS</code>",
+            "c": "<code>ALRM</code>",
+            "d": "<code>USR1</code>",
+            "e": "<code>USR2</code>"
+        }
+    }
+}
