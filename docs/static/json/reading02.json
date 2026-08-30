@@ -1,0 +1,32 @@
+{
+    "q01": {
+        "type": "multiple",
+        "question": "\n<p>Given the following Python script, <code>arguments.py</code>:</p>\n\n<pre>\n<span class=\"cm\">#!/usr/bin/env python3</span>\n\nimport sys\n\nfor arg in sys.argv:\n    print(arg)\n</pre>\n\n<p>To run this script, you can do one of the following:</p>\n\n<pre>\n<span class=\"cm\"># 1. Invoke python3 interpreter explicitly</span>\n$ python3 arguments.py hello world\n\n<span class=\"cm\"># 2. Make the script executable and then run the script</span>\n$ chmod +x arguments.py\n$ ./arguments.py hello world\n</pre>\n\n<p>Play around with this script, and then determine which of the following\nstatements are <b>true</b> (<i>choose all that apply</i>)?</p>\n",
+        "responses": {
+            "import": "The <code>import sys</code> statement loads the <code>sys</code> Python module.",
+            "arguments": "The command line arguments to the script are stored in <code>sys.argv</code>.",
+            "print": "It is not necessary to include the parentheses when calling the <code>print</code> function.",
+            "she-bang": "The first line in the script, <code>#!/usr/bin/env python3</code> is called the <b>she-bang</b>, and it tells the operating system to use the Python interpreter to evaluate this script.",
+            "length": "In the examples above, the <code>len(sys.argv)</code> would be <code>3</code>."
+        }
+    },
+    "q02": {
+        "type": "blank",
+        "question": "\n<p>Given the following Python script, <code>filtered.py</code>:</p>\n\n<pre>\n<span class=\"cm\">#!/usr/bin/env python3</span>\n\nimport sys\n\ntarget = 're'\nwords  = ____                       <span class=\"cm\"># 1. Initialize to empty list</span>\n\nfor line in ____:                   <span class=\"cm\"># 2. Loop over standard input</span>\n    for word in ____:               <span class=\"cm\"># 3. Loop over each word</span>\n        if target in ____:          <span class=\"cm\"># 4. Search lowercased word</span>\n            words.____(word)        <span class=\"cm\"># 5. Add word to list</span>\n\n<span class=\"cm\"># 6. Number of words in list</span>\nprint(f'There are {____(words)} words that contain \"{target}\":')\n\n<span class=\"cm\"># 7. Loop over each word in list, along with its index (first index is 1)</span>\nfor index, word in sorted(____(words, 1)):\n    print(f'{index}. {word}')\n</pre>\n\n<p>Complete the <code>filtered.py</code> script by filling in the blanks.\nThe purpose of the script is to read one line from standard input at a\ntime, then check if any of the words in the line contain the\n<code>target</code> string.  If so, then add the word to the <code>words</code>\nlist.  Afterwards, print out a summary of how many words contain the\n<code>target</code> and then all the words in the list in ascending order.</p>\n\n<p>Here is an example of how the script can be executed:</p>\n\n<pre>\n<span class=\"cm\"># Filter README.md in assignments repository</span>\n$ ./filtered.py < ../README.md\nThere are 33 words that contain \"re\":\n1. Software\n2. reading\n3. repository\n4. Readings\n...\n</pre>\n"
+    },
+    "q03": {
+        "type": "multiple",
+        "question": "\n<p>Given the Python script above, <code>filtered.py</code>, which of the\nfollowing statements are <b>true</b> (<i>choose all that apply</i>):</p>\n",
+        "responses": {
+            "stdin": "<code>sys.stdin</code> is a list.",
+            "linear": "The <code>target in</code> expression is a linear search.",
+            "descending": "To have the words print in descending order, you can add the <code>reverse</code> keyword argument to <code>sorted</code>.",
+            "set": "To only track the unique matches, you can use a <code>set()</code> instead of a <code>list</code> for <code>words</code>.",
+            "split": "By default, the <code>.split()</code> method separates words by whitespace."
+        }
+    },
+    "q04": {
+        "type": "blank",
+        "question": "\n<p>Given the following Python script, <code>subtract.py</code>:</p>\n\n<pre>\n<span class=\"cm\">#!/usr/bin/env python3</span>\n\nx = 10\n\ndef subtract(x, n=1):\n    ''' Update x by subtracting n '''   <span class=\"cm\"># 1. What is this called? ____</span>\n    x = x - n\n    print(x)\n\nprint(x)                                <span class=\"cm\"># 2. What does this output? ____</span>\nsubtract(x)                             <span class=\"cm\"># 3. What does this output? ____</span>\nprint(x)                                <span class=\"cm\"># 4. What does this output? ____</span>\nsubtract(x, x)                          <span class=\"cm\"># 5. What does this output? ____</span>\n</pre>\n\n<p>Answer the questions in the comments by filling in the blanks below:</p>\n"
+    }
+}

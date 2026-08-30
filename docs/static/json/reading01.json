@@ -1,0 +1,58 @@
+{
+    "q01": {
+        "type": "order",
+        "question": "\n<p>Order the following <b>command</b> to match the following descriptions:</p>\n\n<ul>\n  <li>List contents of a directory.</li>\n  <li>List processes on current system.</li>\n  <li>Copy files or directories.</li>\n  <li>Move or rename a file or directory.</li>\n  <li>Remove a file or directory.</li>\n\n  <li>Display the contents of a text file.</li>\n  <li>Change the permissions of a file.</li>\n  <li>Recursively search file paths.</li>\n  <li>Search contents of files for patterns.</li>\n  <li>Send a signal to a process.</li>\n</ul>\n",
+        "responses": {
+            "cat": "cat",
+            "chmod": "chmod",
+            "cp": "cp",
+            "find": "find",
+            "grep": "grep",
+            "kill": "kill",
+            "ls": "ls",
+            "mv": "mv",
+            "rm": "rm",
+            "ps": "ps"
+        }
+    },
+    "q02": {
+        "type": "blank",
+        "question": "\n<p>When a program is executed, it has access to three special files:\n<b>(1)</b> ____, <b>(2)</b> ____, and <b>(3)</b> ____.  The first is\nconnected to the keyboard, while the second and third are attached to the\nscreen or terminal.</p>\n\n<p>To redirect the contents of a file into a command such as\n<code>sha1sum</code>, we can do:</p>\n\n<pre>\n$ sha1sum ____ file     # (4)\n</pre>\n\n<p>To redirect the output of a command such as <code>date</code> to a file, we\ncan do:</p>\n\n<pre>\n$ date ____ file        # (5)\n</pre>\n\n<p>To append the output of a command such as <code>uname</code> to a file, we\ncan do: </p>\n\n<pre>\n$ uname -a ____ file    # (6)\n</pre>\n\n<p>To redirect only the error messages of a command such as <code>find</code>\nto a file, we can do:</p>\n\n<pre>\n$ find /etc ____ file   # (7)\n</pre>\n\n<p>To redirect both the output and error messages of a command such as\n<code>du</code>, we can do:</p>\n\n<pre>\n$ du /etc ____ file     # (8)\n</pre>\n\n<p>To redirect the output of a command such as <code>ls</code> to the input of\nanother command such as <code>grep</code>, we can do:</p>\n\n<pre>\n$ ls /etc ____ grep host # (9)\n</pre>\n"
+    },
+    "q03": {
+        "type": "blank",
+        "question": "\n<p>Two important features of a typical Unix shell are variables (ie.\nparameter expansion) and command substitution.  Using these features,\ncomplete the following prompts:</p>\n\n<p>To print all the environment variables in the shell, we could do:</p>\n\n<pre>\n$ ____          # (1)\n</pre>\n\n<p>To print the value of the <code>HOME</code> variable, we could do:</p>\n\n<pre>\n$ echo ____     # (2)\n</pre>\n\n<p>To set the value of the <code>SHELL</code> variable to\n<code>/usr/bin/python3</code>, we could do:</p>\n\n<pre>\n$ ____          # (3)\n</pre>\n\n<p>To compute the <code>sha1sum</code> of all the files listed in a\n<code>files.txt</code> file, we could do:</p>\n\n<pre>\n$ sha1sum ____  # (4)\n</pre>\n"
+    },
+    "q04": {
+        "type": "multiple",
+        "question": "\n<p>Given the following output of <code>ls -l</code>:</p>\n\n<pre>\n-rw------- 1 pbui notre-dame 0 Jan 18 07:19 Beastie\n-rwxr-xr-x 1 pbui notre-dame 0 Jan 18 07:18 Huxley\n-rwxr-x--- 1 pbui notre-dame 0 Jan 18 07:18 Tux\n</pre>\n\n<p>Which files are executable by the owner?</p>\n",
+        "responses": {
+            "beastie": "Beastie",
+            "huxley": "Huxley",
+            "tux": "Tux"
+        }
+    },
+    "q05": {
+        "type": "blank",
+        "question": "<p>Suppose you run the <code>htop</code> command</b>\n\n<ol>\n\n<li>We could suspend the process with the keystroke: CTRL-____.</li>\n\n<li>We could resume the suspended process with the command: ____.</li>\n\n<li>We could indicate the end of input with the keystroke: CTRL-____.</li>\n\n<li>If the <code>htop</code> process was still running, we could terminate\nthe process using the keystroke: CTRL-____.</li>\n\n<li>If the <code>htop</code> process was still running, and we knew its\nPID, we could terminate the process using the command: ____ PID.</li>\n\n<li>If the <code>htop</code> process was still running, and we did not know\nits PID, we could terminate the process using the command: ____ htop.</li>\n\n</ol>\n"
+    },
+    "q06": {
+        "type": "multiple",
+        "question": "\n<strong>\nWhich of the following statements about the course is true (<i>choose all that apply</i>)?\n</strong>\n",
+        "responses": {
+            "readings": "Students cannot drop any <b>readings</b>.",
+            "homeworks": "Students cannot drop any <b>homeworks</b>.",
+            "exams": "There are two written <b>exams</b> in this class.",
+            "interviews": "There are in-person <b>interviews</b> and <b>code reviews</b> in this class.",
+            "project": "There is a course <b>project</b>.",
+            "participation": "Students are expected to <b>attend class</b> regularly and on-time.",
+            "officehours": "There are in-person <b>office hours</b> and online help via <b>Slack</b> available to students.",
+            "respectful": "Students are expected to be <b>respectful</b> of their fellow classmates and the instructional staff.",
+            "video": "There is no <b>video capture</b> for this class.",
+            "references": "Students may <b>consult</b> online <b>references</b> or copy from <b>resources</b> if properly cited.",
+            "solutions": "Students may <b>consult</b> or copy from <b>solutions</b> found online or from other students.",
+            "ai_reference": "Students may <b>consult</b> ChatGPT, Co-Pilot, or other <b>AI-based tools</b> for explaining concepts, debugging problems, or as a reference.",
+            "ai_generate": "Students may <b>generate solutions</b> with ChatGPT, Co-Pilot, or other <b>AI-based tools</b> to do programming assignments."
+        }
+    }
+}
