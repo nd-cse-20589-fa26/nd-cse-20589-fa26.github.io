@@ -1,0 +1,257 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<!-- Favicon -->
+<link rel="icon" type="image/png" sizes="32x32" href="static/ico/favicon-32x32.png">
+<link rel="icon" type="image/png" sizes="16x16" href="static/ico/favicon-16x16.png">
+<link rel="manifest" href="static/ico/site.webmanifest">
+<!-- Stylesheets -->
+<link rel="stylesheet" href="static/css/domer.css">
+<title>Notes 03: Files, Processes, I/O</title>
+</head>
+<body>
+<header>
+<a class="logo" href="notes03.html">
+    <h1>Notes 03: Files, Processes, I/O</h1>
+</a>
+<nav>
+    <ul>
+        <li><a href="index.html"><h4>Home</h4></a></li>
+        </ul>
+</nav></header>
+<main>
+<h2 id="files-file-system">Files: <span class="gold">File System</span><a class="headerlink" href="#files-file-system" title="Permanent link">&para;</a></h2>
+<div class="flex-row">
+<div class="flex-col">
+<div class="alert warning-bg centered">
+<p>Where is <strong class="primary">ls</strong> located?</p>
+</div>
+<p><strong class="cm">Ask the shell</strong><br>
+$ <strong>which</strong> ls</p>
+<p><strong class="cm">Verify using absolute path</strong><br>
+$ <strong>/usr/bin/ls</strong></p>
+<p><strong class="cm">How does the shell know where to find programs</strong><br>
+$ <strong>echo</strong> $PATH</p>
+<p><strong class="cm">View hier manual</strong><br>
+$ <strong>man</strong> hier</p>
+<p><strong class="cm">Go to someone's home directory</strong><br>
+$ <strong>cd</strong> ~pbui<br>
+$ <strong>pwd</strong></p>
+<div class="centered">
+<p>The unix <strong class="primary">file system</strong> is structured as a
+<strong class="success">hierarchical tree</strong> (<a href="https://man7.org/linux/man-pages/man7/hier.7.html">man 7 hier</a>).</p>
+</div>
+</div>
+<div class="flex-col">
+<p><img src="static/img/slides03-files-hierarchy.png" class="responsive transparent"></p>
+</div>
+</div>
+<h2 id="files-metadata">Files: <span class="gold">Metadata</span><a class="headerlink" href="#files-metadata" title="Permanent link">&para;</a></h2>
+<div class="flex-row">
+<div class="flex-col">
+<div class="alert warning-bg centered">
+<p>How large is my <strong class="caution">~/.bashrc</strong>?</p>
+</div>
+<p><strong class="cm">Use ls</strong><br>
+$ <strong>ls</strong> -a <strong class="cm"># Show dotfiles</strong><br>
+$ <strong>ls</strong> -la
+$ <strong>ls</strong> -l ~/.bashrc</p>
+<p><strong class="cm">Use stat</strong><br>
+$ <strong>stat</strong> ~/.bashrc</p>
+<p><strong class="cm">Use du</strong><br>
+$ <strong>du</strong> -h ~/.bashrc</p>
+<div class="centered">
+
+Every <strong class="success">file system object</strong> is represented by a
+<strong class="danger">data structure</strong> called an <strong
+class="caution">inode</strong>.
+
+</div>
+</div>
+<div class="flex-col">
+<div class="centered">
+
+<img src="static/img/slides03-files-inode.png" class="responsive transparent">
+
+</div>
+</div>
+</div>
+<h2 id="files-permissions">Files: <span class="gold">Permissions</span><a class="headerlink" href="#files-permissions" title="Permanent link">&para;</a></h2>
+<div class="alert warning-bg centered">
+<p>How do I <strong class="danger">prevent</strong> people from reading my work?</p>
+</div>
+<p><strong class="cm">Use chmod with octal</strong><br>
+$ <strong>chmod</strong> 600 work</p>
+<p><strong class="cm">Use chmod with symbols</strong><br>
+$ <strong>chmod</strong> +x work</p>
+</div>
+<table class="bordered">
+<thead>
+    <th>Owner</th>
+    <th>Group</th>
+    <th>World</th>
+    <th>Octal</th>
+</thead>
+<tbody>
+<tr class="caution-bg font-large">
+    <td class="centered" width="200">r w x</td>
+    <td class="centered" width="200">r w x</td>
+    <td class="centered" width="200">r w x</td>
+    <td class="centered" width="200"></td>
+</tr>
+<tr class="success-bg font-large">
+    <td class="centered" width="200">1 1 0</td>
+    <td class="centered" width="200">0 0 0</td>
+    <td class="centered" width="200">0 0 0</td>
+    <td class="centered" width="200">600</td>
+</tr>
+<tr class="info-bg font-large">
+    <td class="centered" width="200">1 1 1</td>
+    <td class="centered" width="200">1 0 1</td>
+    <td class="centered" width="200">1 0 1</td>
+    <td class="centered" width="200">755</td>
+</tr>
+</tbody>
+</table>
+
+<h2 id="processes-attributes">Processes: <span class="gold">Attributes</span><a class="headerlink" href="#processes-attributes" title="Permanent link">&para;</a></h2>
+<div class="alert warning-bg centered">
+<p>What programs am I <strong class="success">running</strong>?</p>
+</div>
+<div class="flex-row">
+<div class="flex-col">
+<p>A <strong class="primary">process</strong> is a <strong
+class="caution">loaded</strong> instance of a <strong
+class="success">program</strong>.  Each process has:</p>
+<ul>
+<li>
+<p>Process ID (PID)</p>
+</li>
+<li>
+<p>Parent Process ID (PPID)</p>
+</li>
+<li>
+<p>UID / GUID</p>
+</li>
+<li>
+<p>Priority</p>
+</li>
+<li>
+<p>Terminal / TTY</p>
+</li>
+</ul>
+</div>
+<div class="flex-col">
+<p><strong class="cm">List processes</strong><br>
+$ <strong>ps</strong> ux &nbsp;<strong class="cm"># User processes</strong><br>
+$ <strong>ps</strong> aux <strong class="cm"># All processes</strong></p>
+<p><strong class="cm">Watch processes</strong><br>
+$ <strong>top</strong> &nbsp;<strong class="cm"># Interactive</strong><br>
+$ <strong>htop</strong> <strong class="cm"># Colorful</strong></p>
+<p><strong class="cm">Search Processes</strong><br>
+$ <strong>ps</strong> ux | <strong>grep</strong> process-name<br>
+$ <strong>pgrep</strong> process-name<br></p>
+</div>
+</div>
+<h2 id="processes-signals">Processes: <span class="gold">Signals</span><a class="headerlink" href="#processes-signals" title="Permanent link">&para;</a></h2>
+<div class="alert warning-bg centered">
+<p>How do I terminate a <strong class="primary">process</strong>?</p>
+</div>
+<div class="flex-row">
+<div class="flex-col">
+<p>$ <strong>sleep</strong> 60 &amp; <strong class="cm"># Execute sleep in the background</strong><br>
+[1] 23213</p>
+<p>$ <strong>jobs</strong> <strong class="cm"># List jobs</strong><br>
+[1]+ Running sleep 60 &amp;<br></p>
+<p>$ <strong>fg</strong> <strong class="cm"># Bring job to foreground</strong><br>
+sleep 60<br>
+^Z <strong class="cm"># Suspend job</strong><br>
+[1]+ Stopped sleep 60<br></p>
+<p>$ <strong>bg</strong> <strong class="cm"># Background job</strong><br>
+[1]+ sleep 60 &amp;</p>
+<p>$ <strong>kill</strong> %1 <strong class="cm"># Kill job</strong><br>
+[1]+ Terminated sleep 60<br></p>
+</div>
+<div class="flex-col">
+<table class="bordered">
+<thead class="danger">
+    <th>Signal Name</th>
+    <th>Signal Number</th>
+    <th>Operation</th>
+</thead>
+<tbody>
+    <tr class="centered caution-bg font-large">
+        <td><b>SIGINT</b></td>
+        <td><b>2</b></td>
+        <td>Interrupt the process</td>
+    </tr>
+    <tr class="centered warning-bg font-large">
+        <td><b>SIGTERM</b></td>
+        <td><b>15</b></td>
+        <td>Terminate the process</td>
+    </tr>
+    <tr class="centered danger-bg font-large">
+        <td><b>SIGKILL</b></td>
+        <td><b>9</b></td>
+        <td>Kill the process</td>
+    </tr>
+</tbody>
+</table>
+</div>
+</div>
+<h2 id="io-file-streams">I/O: <span class="gold">File Streams</span><a class="headerlink" href="#io-file-streams" title="Permanent link">&para;</a></h2>
+<div class="alert warning-bg centered">
+<p>How do you <strong class="success">save</strong> the result of a command?</p>
+</div>
+<p>When a <strong class="primary">process</strong> is created, it automatically
+has three <strong class="caution">file streams</strong>:</p>
+<div class="centered">
+
+<br>
+
+<img src="static/img/slides03-io-file-streams.png" class="transparent responsive">
+
+</div>
+
+<p><strong class="cm">Redirect stdout</strong><br>
+$ <strong>command</strong> &gt; output</p>
+<p><strong class="cm">Pipe stdout to tee</strong><br>
+$ <strong>command</strong> | <strong>tee</strong> output</p>
+<h2 id="io-pipelines">I/O: <span class="gold">Pipelines</span><a class="headerlink" href="#io-pipelines" title="Permanent link">&para;</a></h2>
+<div class="alert warning-bg centered">
+<p>How do you <strong class="caution">ignore</strong> error messages?</p>
+</div>
+<p>A <strong class="caution">pipe</strong> connects the <strong
+class="danger">standard output</strong> of the first <strong
+class="primary">process</strong> to the <strong class="danger">standard
+input</strong> of the second <strong class="primary">process</strong>.</p>
+<div class="centered">
+
+<img src="static/img/slides03-io-pipelines.png" class="transparent responsive">
+
+</div>
+
+<p><strong class="cm">Redirect stdout and stderr to separate files</strong><br>
+$ <strong>find</strong> /etc -type d &gt; output 2&gt; errors</p>
+<p><strong class="cm">Redirect both stdout and stderr to same file</strong><br>
+$ <strong>find</strong> /etc -type d &gt; combined 2&gt;&amp;1<br>
+$ <strong>find</strong> /etc -type d &amp;&gt; combined</p>
+<p><strong class="cm">Redirect stderr to stdout, then stdout to file</strong><br>
+$ <strong>find</strong> /etc -type d 2&gt;&amp;1 &gt; output<br></p>
+<p><strong class="cm">Redirect both stdout and stderr to tee program</strong><br>
+$ <strong>find</strong> /etc -type d 2&gt;&amp;1 | <strong>tee</strong> combined<br></p>
+<p><strong class="cm">Redirect stderr to blackhole and stdout to tee program</strong><br>
+$ <strong>find</strong> /etc -type d 2&gt; /dev/null | <strong>tee</strong> output<br></p>
+</main>
+<footer>
+Built using <a href="https://python.org">Python</a>
+and <a href="https://jinja.palletsprojects.com">Jinja</a>
+with colors from 
+<a href="https://onmessage.nd.edu/university-branding/colors/">Notre Dame</a>, 
+<a href="https://spreadsheet.dev/how-to-get-the-hexadecimal-codes-of-colors-in-google-sheets">Google Docs</a>, and 
+<a href="https://nordtheme.com">Nord Theme</a>,
+and icons from <a href="https://pictogrammers.com/library/mdi/">Material Design Icons</a>.</footer>
+</body>
+</html>
