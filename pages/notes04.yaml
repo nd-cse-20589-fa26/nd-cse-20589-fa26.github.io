@@ -1,0 +1,239 @@
+title:  "Notes 04: Python, Control Flow, Modules"
+body:   |
+
+  ## Logistics
+
+  - [Reading 02] due today
+
+  - [Homework 02] due on Saturday
+
+  - **Correction**: only need `x` permission to execute (*but `r` is
+  recommended in case you want to debug*)
+
+  [Reading 02]: reading02.html
+  [Homework 02]: homework02.html
+
+  ## Python: <span class="gold">Overview</span>
+
+  - Compared to **C**: **high-level** (*no need for manual memory management*),
+  **batteries included** (*we will take advantage of libraries*)
+
+  <div class="alert success-bg centered" markdown="1">
+
+  We will **rebuild the wheel** to understand how things work.
+
+  </div>
+
+  ## Python: <span class="gold">Interpreter / Scripts</span>
+
+  ```python
+  # 0. Python Interpreter
+
+  $ which python3
+  ~/pub/pkgsrc-2024Q2/bin/python3.12
+
+  $ python3
+  >>> print('Hello, World')
+  ```
+
+  ```python
+  # 1. Python Scripts
+
+  $ $EDITOR hello.py
+  #!/usr/bin/env python3      # Discuss: comments, she-bang
+  print('Hello, World')
+
+  $ chmod +x hello.py
+  $ ./hello.py
+  Hello, World
+  ```
+
+  ## Python: <span class="gold">Values, Variables</span>
+
+  ```python
+  # 2. Values
+
+  >>> 'loise'                 # Discuss: objects
+  >>> type('loise')
+  >>> dir('loise')            # Discuss: methods
+  >>> 'loise'.upper()
+  ```
+
+  ```python
+  # 3. Variables
+
+  >>> name = 'will'
+  >>> type(name)
+  >>> dir(name)
+  ```
+
+  ## Python: <span class="gold">Assignment, Types</span>
+
+  ```python
+  # 4. Assignment
+
+  >>> help(name.replace)      # Discuss: help function
+  >>> name.replace('w', 'b')  # Discuss: side-effects
+  >>> name                    # Discuss: assignment
+  >>> name = name.replace('w', 'b')
+  ```
+
+  ```python
+  # 5. Types
+
+  >>> number = '123'          # Discuss: duck typing
+  >>> type(number)
+
+  >>> number = int(number)
+  >>> type(number)
+
+  >>> number = 'abc'          # Discuss: exceptions
+  >>> int(number)
+  ```
+
+  ## Python: <span class="gold">Conditional Execution</span>
+
+  ```python
+  # 6. Conditional Execution
+
+  $ $EDITOR roll.py
+  #!/usr/bin/env python3
+
+  import random                       # Discuss: import
+
+  n = random.randint(0, 10)
+
+  if n < 5:                           # Discuss: if statement
+      print(f'{n} is less than 5')    # Discuss: blocks/indents
+  elif n > 5:                         # Discuss: expandtabs
+      print(f'{n} is greater than 5') # Discuss: formatting
+  else:
+      print(f'{n} equals to 5')
+  ```
+
+  <div class="alert success-bg" markdown="1">
+
+  - Need to **indent**
+  - **Colons** at the end of statements
+  - No need for **parentheses**.
+
+  </div>
+
+  ## Python: <span class="gold">Repeated Execution</span>
+
+  ```python
+  # 7. Repeated Execution
+
+  $ $EDITOR roll.py                         # Discuss: while loop
+  #!/usr/bin/env python3
+  import random
+
+  n = random.randint(0, 10)
+  while n != 5:                             # Discuss: infinite loop
+      print(n)
+      n = random.randint(0, 10)
+
+  ...
+
+  n = None                                  # Discuss: None
+  while n != 5:
+      n = random.randint(0, 10)
+      print(n)
+
+  ...
+
+  while (n := random.randint(0, 10)) != 5:  # Discuss: walrus
+      print(n)
+
+  ```
+
+  ## Python: <span class="gold">For Loops</span>
+
+  ```python
+  # 8. For Loops
+
+  $ $EDITOR for.py
+  #!/usr/bin/env python3
+
+  for number in range(0, 10):             # Discuss: range
+      print(number)                       # range(5)
+                                          # range(1, 6, 2)
+
+  for number in [9, 2, 8, 6, 7]:          # Discuss: list
+      print(number)
+
+  tas = ['kathryn', 'evan', 'hailey']     # Discuss: enumerate, format, f-strings
+  for i, ta in enumerate(tas):
+      print(f'{i}. {ta}')
+  ```
+
+  ## Python: <span class="gold">Fizz Buzz</span> (<i class="muted">Base</i>)
+
+  ```python
+  $ $EDITOR fizzbuzz.py
+  #!/usr/bin/env python3
+
+  for number in range(1, 101):            # Discuss: Fizz Buzz
+      if number % 3 == 0 and number % 5 == 0:
+          print('FizzBuzz')
+      elif number % 3 == 0:
+          print('Fizz')
+      elif number % 5 == 0:
+          print('Buzz')
+      else:
+          print(number)
+  ```
+
+  ## Python: <span class="gold">Fizz Buzz</span> (<i class="muted">Functions</i>)
+
+  ```python
+  $ $EDITOR fizzbuzz.py
+  #!/usr/bin/env python3
+
+  def fizzbuzz(start=1, stop=100):        # Discuss: keyword arguments
+      for number in range(start, stop + 1):
+          if number % 3 == 0 and number % 5 == 0:
+              print('FizzBuzz')
+          elif number % 3 == 0:
+              print('Fizz')
+          elif number % 5 == 0:
+              print('Buzz')
+          else:
+              print(number)
+
+  fizzbuzz(1, 20)
+  fizzbuzz()                              # Discuss: default arguments
+  fizzbuzz(end=5)
+  fizzbuzz(end=5, start=2)
+  ```
+
+  ## Python: <span class="gold">Fizz Buzz</span> (<i class="muted">Doctests</i>)
+
+  ```python
+  $ $EDITOR fizzbuzz.py
+  #!/usr/bin/env python3
+
+  def fizzbuzz(start=1, stop=100):        # Discuss: keyword arguments
+      ''' Print fizzbuzz from start to end.
+
+      >>> fizzbuzz(1, 5)                  # Discuss: docstring, doctest
+      1
+      2
+      Fizz
+      4
+      Buzz
+      '''
+      for number in range(start, stop + 1):
+        ...
+
+  if __name__ == '__main__':              # Demonstrate: import guard
+      fizzbuzz()                          # Demonstrate: default arguments
+
+  $ python3
+  ...
+  >>> import fizzbuzz                     # Demonstrate: importing module
+  >>> fizzbuzz.fizzbuzz(1, 5)             # Demonstrate: call imported function
+
+  $ python3 -m doctest fizzbuzz.py -v     # Demonstrate: checking doctests
+  ...
+  ```
