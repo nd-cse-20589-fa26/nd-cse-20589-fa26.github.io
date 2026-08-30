@@ -44,7 +44,7 @@
           - name:       Slides 05
 
       - date:           Fri 09/04
-        topics:         Processes, Requests
+        topics:         Files, Processes, Requests
         items:
           - name:       Slides 06
 
@@ -56,14 +56,14 @@
 - name:     Data Processing
   days:
       - date:           Mon 09/07
-        topics:         Files, Regular Expressions
+        topics:         Regular Expressions
         assignments:
           - Reading 03
         items:
           - name:       Slides 07
 
       - date:           Wed 09/09
-        topics:         CSV, JSON, YAML
+        topics:         CSV, JSON
         items:
           - name:       Slides 08
 
@@ -114,7 +114,7 @@
           - name:       Slides 13
 
       - date:           Sat 09/26
-        topics:         '<i class="muted">Fibonacci, Tree</i>'
+        topics:         '<i class="muted">Du, Find</i>'
         assignments:
           - Homework 04
 
@@ -138,7 +138,7 @@
           - name:       Slides 16
 
       - date:           Sat 10/03
-        topics:         '<i class="muted">Stats, Hulk</i>'
+        topics:         '<i class="muted">Hulk, Miles</i>'
         assignments:
           - Homework 05
 
@@ -162,7 +162,7 @@
           - name:       Slides 19
 
       - date:           Sat 10/10
-        topics:         '<i class="muted">Miles</i>'
+        topics:         '<i class="muted">Thor, Loki</i>'
         assignments:
           - Homework 06
 
