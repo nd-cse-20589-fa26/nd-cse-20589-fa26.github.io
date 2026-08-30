@@ -39,7 +39,7 @@
           - name:       Slides 04
 
       - date:           Wed 09/02
-        topics:         Data Structures, Arguments, Testing
+        topics:         Data Structures, Arguments, I/O
         items:
           - name:       Slides 05
 
@@ -185,7 +185,7 @@
 
 - name:   "Fall Break"
 
-- name:    Web Application 
+- name:    Web Application
   days:
       - date:           Mon 10/26
         topics:         Web Application
