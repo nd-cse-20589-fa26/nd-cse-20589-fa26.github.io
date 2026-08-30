@@ -1,6 +1,6 @@
 ---
 title: "Slides 04: Python, Control Flow, Modules"
-description: "Files, Processes, I/O"
+description: "Python, Control Flow, Modules"
 author: Peter Bui
 keywords: lecture,sos,python,control flow,modules
 url: https://pnutz.h4x0r.space/courses/cse.20589.fa26/slides04.html
