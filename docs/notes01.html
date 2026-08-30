@@ -1,0 +1,105 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<!-- Favicon -->
+<link rel="icon" type="image/png" sizes="32x32" href="static/ico/favicon-32x32.png">
+<link rel="icon" type="image/png" sizes="16x16" href="static/ico/favicon-16x16.png">
+<link rel="manifest" href="static/ico/site.webmanifest">
+<!-- Stylesheets -->
+<link rel="stylesheet" href="static/css/domer.css">
+<title>Notes 01: Unix Programming Environment</title>
+</head>
+<body>
+<header>
+<a class="logo" href="notes01.html">
+    <h1>Notes 01: Unix Programming Environment</h1>
+</a>
+<nav>
+    <ul>
+        <li><a href="index.html"><h4>Home</h4></a></li>
+        </ul>
+</nav></header>
+<main>
+<h2 id="a-login-home-directory">A. Login, Home Directory<a class="headerlink" href="#a-login-home-directory" title="Permanent link">&para;</a></h2>
+<h3 id="login-to-a-student-machine"><strong class="cm">Login to a student machine</strong><a class="headerlink" href="#login-to-a-student-machine" title="Permanent link">&para;</a></h3>
+<p><strong>0.</strong> <code>ssh</code> (<em>using Windows terminal</em>)</p>
+<h3 id="determine-my-location-what-is-my-home"><strong class="cm">Determine my location (<em>what is my $HOME</em>)</strong><a class="headerlink" href="#determine-my-location-what-is-my-home" title="Permanent link">&para;</a></h3>
+<p><strong>1.</strong> <code>pwd</code></p>
+<blockquote>
+<p>After we login, we are running a program called a <strong>shell</strong> (<em>which is an
+</em><em>interpreter</em><strong>).  It </strong>translates<strong> commands on the fly (vs. a </strong>compiler**
+such as <code>gcc</code> that translates ahead of time).</p>
+</blockquote>
+<h3 id="view-environment-variables"><strong class="cm">View environment variables</strong><a class="headerlink" href="#view-environment-variables" title="Permanent link">&para;</a></h3>
+<p><strong>2.</strong> <code>env</code><br>
+&nbsp;&nbsp; <code>env</code> | <code>less</code></p>
+<h3 id="print-value-of-a-variable"><strong class="cm">Print value of a variable</strong><a class="headerlink" href="#print-value-of-a-variable" title="Permanent link">&para;</a></h3>
+<p><strong>3.</strong> <code>echo</code> $SHELL</p>
+<h3 id="change-value-of-a-variable"><strong class="cm">Change value of a variable</strong><a class="headerlink" href="#change-value-of-a-variable" title="Permanent link">&para;</a></h3>
+<p><strong>4.</strong> SHELL=/usr/bin/python3</p>
+<h2 id="b-files-flags-help">B. Files, Flags, Help<a class="headerlink" href="#b-files-flags-help" title="Permanent link">&para;</a></h2>
+<h3 id="create-empty-file"><strong class="cm">Create empty file</strong><a class="headerlink" href="#create-empty-file" title="Permanent link">&para;</a></h3>
+<p><strong>5.</strong> <code>touch</code> lyrics.txt</p>
+<h3 id="list-contents-of-directory"><strong class="cm">List contents of directory</strong><a class="headerlink" href="#list-contents-of-directory" title="Permanent link">&para;</a></h3>
+<p><strong>6.</strong> <code>ls</code></p>
+<h3 id="list-contents-of-directory-metadata"><strong class="cm">List contents of directory (<em>metadata</em>)</strong><a class="headerlink" href="#list-contents-of-directory-metadata" title="Permanent link">&para;</a></h3>
+<p><strong>7.</strong> <code>ls</code> -l</p>
+<h3 id="read-documentation"><strong class="cm">Read documentation</strong><a class="headerlink" href="#read-documentation" title="Permanent link">&para;</a></h3>
+<p><strong>8.</strong> <code>man</code> ls<br>
+&nbsp;&nbsp; <code>tldr</code> ls</p>
+<h3 id="show-usage-message"><strong class="cm">Show usage message</strong><a class="headerlink" href="#show-usage-message" title="Permanent link">&para;</a></h3>
+<p><strong>9.</strong> <code>ls</code> --help<br>
+&nbsp;&nbsp; <code>ls</code> --help | <code>less</code></p>
+<h2 id="c-aliases-configuration">C. Aliases, Configuration<a class="headerlink" href="#c-aliases-configuration" title="Permanent link">&para;</a></h2>
+<h3 id="view-all-aliases"><strong class="cm">View all aliases</strong><a class="headerlink" href="#view-all-aliases" title="Permanent link">&para;</a></h3>
+<p><strong>10.</strong> <code>alias</code></p>
+<h3 id="create-an-alias"><strong class="cm">Create an alias</strong><a class="headerlink" href="#create-an-alias" title="Permanent link">&para;</a></h3>
+<p><strong>11.</strong> <code>alias</code> ls='ls -la'</p>
+<h3 id="test-an-alias"><strong class="cm">Test an alias</strong><a class="headerlink" href="#test-an-alias" title="Permanent link">&para;</a></h3>
+<p><strong>12.</strong> <code>la</code></p>
+<blockquote>
+<p>Open another terminal and observe that new instance of <strong>shell</strong> does not
+have <strong>alias</strong> of previous <strong>shell</strong>.  Need to edit <code>~/.bashrc</code> to make it
+<strong>persist</strong>.</p>
+</blockquote>
+<h3 id="edit-bash-configuration"><strong class="cm">Edit bash configuration</strong><a class="headerlink" href="#edit-bash-configuration" title="Permanent link">&para;</a></h3>
+<p><strong>13.</strong> <code>vim</code> ~/.bashrc</p>
+<h3 id="view-contents-of-file"><strong class="cm">View contents of file</strong><a class="headerlink" href="#view-contents-of-file" title="Permanent link">&para;</a></h3>
+<p><strong>14.</strong> <code>cat</code> ~/.bashrc</p>
+<h3 id="load-settings-into-current-shell"><strong class="cm">Load settings into current shell</strong><a class="headerlink" href="#load-settings-into-current-shell" title="Permanent link">&para;</a></h3>
+<p><strong>15.</strong> <code>source</code> ~/.bashrc</p>
+<h2 id="d-navigation-directories-management">D. Navigation, Directories, Management<a class="headerlink" href="#d-navigation-directories-management" title="Permanent link">&para;</a></h2>
+<h3 id="create-directory"><strong class="cm">Create directory</strong><a class="headerlink" href="#create-directory" title="Permanent link">&para;</a></h3>
+<p><strong>16.</strong> <code>mkdir</code> songs</p>
+<h3 id="move-file"><strong class="cm">Move file</strong><a class="headerlink" href="#move-file" title="Permanent link">&para;</a></h3>
+<p><strong>17.</strong> <code>mv</code> lyrics.txt songs</p>
+<h3 id="go-into-directory"><strong class="cm">Go into directory</strong><a class="headerlink" href="#go-into-directory" title="Permanent link">&para;</a></h3>
+<p><strong>18.</strong> <code>cd</code> songs</p>
+<h3 id="go-back-to-previous-directory"><strong class="cm">Go back to previous directory</strong><a class="headerlink" href="#go-back-to-previous-directory" title="Permanent link">&para;</a></h3>
+<p><strong>19.</strong> <code>cd</code> -
+&nbsp;&nbsp; <code>cd</code> -</p>
+<h3 id="rename-file"><strong class="cm">Rename file</strong><a class="headerlink" href="#rename-file" title="Permanent link">&para;</a></h3>
+<p><strong>20.</strong> <code>mv</code> lyrics.txt song.txt</p>
+<h3 id="edit-file"><strong class="cm">Edit file</strong><a class="headerlink" href="#edit-file" title="Permanent link">&para;</a></h3>
+<p><strong>21.</strong> <code>vim</code> song.txt</p>
+<h3 id="copy-file"><strong class="cm">Copy file</strong><a class="headerlink" href="#copy-file" title="Permanent link">&para;</a></h3>
+<p><strong>22.</strong> <code>cp</code> song.txt copy.txt</p>
+<h3 id="view-differences-between-files"><strong class="cm">View differences between files</strong><a class="headerlink" href="#view-differences-between-files" title="Permanent link">&para;</a></h3>
+<p><strong>23.</strong> <code>diff</code> song.txt copy.txt</p>
+<h3 id="go-back-to-parent-directory"><strong class="cm">Go back to parent directory</strong><a class="headerlink" href="#go-back-to-parent-directory" title="Permanent link">&para;</a></h3>
+<p><strong>24.</strong> <code>cd</code> ..</p>
+<h3 id="remove-directory-and-its-contents"><strong class="cm">Remove directory and its contents</strong><a class="headerlink" href="#remove-directory-and-its-contents" title="Permanent link">&para;</a></h3>
+<p><strong>25.</strong> <code>rm</code> -fr songs</p>
+</main>
+<footer>
+Built using <a href="https://python.org">Python</a>
+and <a href="https://jinja.palletsprojects.com">Jinja</a>
+with colors from 
+<a href="https://onmessage.nd.edu/university-branding/colors/">Notre Dame</a>, 
+<a href="https://spreadsheet.dev/how-to-get-the-hexadecimal-codes-of-colors-in-google-sheets">Google Docs</a>, and 
+<a href="https://nordtheme.com">Nord Theme</a>,
+and icons from <a href="https://pictogrammers.com/library/mdi/">Material Design Icons</a>.</footer>
+</body>
+</html>
