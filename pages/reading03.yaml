@@ -1,0 +1,158 @@
+title:      "Reading 03: Regular Expressions, CSV, JSON"
+body:       |
+
+  **Everyone**:
+
+  Next week, we will continue exploring scripting in [Python] by using the
+  programming language to process data in a variety of formats.  In particular,
+  we will examine using [regular expressions] on plain text, discuss using data
+  in [CSV] and [JSON], and then take a brief look at [HTML] and [XML].
+
+  <div class="alert info-bg" markdown="1">
+
+  ### <i class="icon icon-medium">{{ "book" | embed_icon }}</i> TL;DR
+
+  The focus of this reading is to introduce processing data in [Python] using
+  [regular expressions] and libraries for [CSV] and [JSON] formats.
+
+  </div>
+
+  [regular expressions]: https://en.wikipedia.org/wiki/Regular_expression
+  [CSV]: https://en.wikipedia.org/wiki/Comma-separated_values
+  [JSON]: https://en.wikipedia.org/wiki/JSON
+  [HTML]: https://en.wikipedia.org/wiki/HTML
+  [XML]: https://en.wikipedia.org/wiki/XML
+
+  ## Readings
+
+  <div class="flex-row" markdown="1">
+
+  <div class="flex-col" markdown="1">
+
+  The readings for this week are:
+
+  1.  <div class="flex-col">
+
+      [Real Python]
+
+      - [Regular Expressions: Regexes in Python (Part 1)](https://realpython.com/regex-python/)
+      - [Reading and Writing CSV Files in Python](https://realpython.com/python-csv/)
+
+      - [Working With JSON Data in Python](https://realpython.com/python-json/)
+
+  </div>
+
+  <div class="flex-col" markdown="1">
+
+  ### Optional Resources
+
+  Here are some additional resources:
+
+  1.  <div class="flex-col" markdown="1">
+
+      [Python Standard Library]
+
+      - [csv](https://docs.python.org/3/library/csv.html)
+      - [json](https://docs.python.org/3/library/json.html)
+      - [re](https://docs.python.org/3/library/re.html)
+
+  2. [RegexOne](https://regexone.com/)
+
+  </div>
+
+  <div class="flex-col-25 centered" markdown="1">
+    <img src="https://upload.wikimedia.org/wikipedia/commons/thumb/3/31/Python-logo.png/250px-Python-logo.png" class="transparent">
+  </div>
+
+  </div>
+
+  [Python]: https://www.python.org/
+  [Real Python]: https://realpython.com/
+  [Python Standard Library]: https://docs.python.org/3/library/
+
+  ## Quiz
+
+  Once you have completed the readings, answer the following [Reading 03 Quiz] questions:
+
+  <div id="quiz-questions"></div>
+
+  <div id="quiz-responses"></div>
+
+  <script src="static/js/dredd-quiz.js"></script>
+
+  <script>
+  loadQuiz('static/json/reading03.json');
+  </script>
+
+  <pre style="display: none;" id="dr-container" class="codehilite"><code id="dredd-response"></code></pre>
+
+  To submit your work, follow the same process outlined in [Reading 01]:
+
+      :::bash
+      $ git switch master                   # Make sure we are in master branch
+      $ git pull --rebase                   # Make sure we are up-to-date with GitHub
+
+      $ git switch -c reading03             # Create reading03 branch and check it out
+
+      $ cd reading03                        # Go into reading03 folder
+      $ $EDITOR answers.json                # Edit your answers.json file
+
+      $ ../.scripts/check.py                # Check reading03 quiz
+      Checking reading03 quiz ...
+           Q01  6.00 /  6.00
+           Q02  2.00 /  2.00
+           Q03  7.00 /  7.00
+           Q04  3.00 /  3.00
+           Q05  1.00 /  1.00
+           Q06  7.00 /  7.00
+           Q07  5.00 /  5.00
+        --------------------
+         Score 31.00 / 31.00
+         Grade  1.00 /  1.00
+        Status Success
+
+      $ git add answers.json                # Add answers.json to staging area
+      $ git commit -m "Reading 03: Quiz"    # Commit work
+
+      $ git push -u origin reading03        # Push branch to GitHub
+
+  <div class="alert warning-bg" markdown="1">
+
+  ### <i class="icon icon-medium">{{ "lifebuoy" | embed_icon }}</i> Acknowledgments
+
+  If you collaborated with any other students, or received help from TAs or AI
+  tools on this assignment, please record this support in the `README.md` in
+  the `reading03` folder and include it with your **Pull Request**.
+
+  </div>
+
+  <div class="alert success-bg" markdown="1">
+
+  ### <i class="icon icon-medium">{{ "account-question" | embed_icon }}</i> Graders
+
+  Once you have committed your work and pushed it to [GitHub], remember to
+  create a **pull request** and assign it to the appropriate **teaching
+  assistant** from the [Reading 03 TA List].
+
+  **Note**: this list changes each week, so be sure to consult the appropriate
+  list for each assignment.
+
+  </div>
+
+  [git]: https://git-scm.com/
+  [clone]: https://git-scm.com/docs/git-clone
+  [commit]: https://git-scm.com/docs/git-commit
+  [push]: https://git-scm.com/docs/git-push
+  [GitHub]: https://github.com
+  [Reading 01]: reading01.html
+  [Reading 03]: reading03.html
+  [Reading 03 TA List]: reading03_tas.html
+  [dredd]: https://dredd.h4x0r.space
+  [Reading 03 quiz]: static/json/reading03.json
+
+  [The Linux Command Line]: http://linuxcommand.org/tlcl.php
+  [Unix]: https://en.wikipedia.org/wiki/Unix
+  [Unix Shell]: https://en.wikipedia.org/wiki/Unix_shell
+  [Git]: https://git-scm.com/
+  [Bash]: https://www.gnu.org/software/bash/
+  [shell scripting]: https://en.wikipedia.org/wiki/Shell_script
