@@ -37,6 +37,8 @@
           - Reading 02
         items:
           - name:       Slides 04
+          - name:       Panopto
+            link:       https://notredame.hosted.panopto.com/Panopto/Pages/Viewer.aspx?id=be384674-8096-45b3-bb97-b4b701154ff5
 
       - date:           Wed 09/02
         topics:         Data Structures, Arguments, I/O
