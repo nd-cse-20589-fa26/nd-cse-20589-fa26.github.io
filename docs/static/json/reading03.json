@@ -37,6 +37,6 @@
     },
     "q07": {
         "type": "blank",
-        "question": "\n<p>After reading the <a\nhref=\"https://man7.org/linux/man-pages/man8/lsblk.8.html\">lsblk</a>\n<b>manual</b>, you realize that it supports a <code>--json</code> that will\nforce the command emit <b>JSON</b> data.  To take advantage of this\nfeature, you modify parts of the <code>lsblk-size.py</code> script to look\nas follows:</p>\n\n<pre>\n...\ncommand    = 'lsblk --bytes --json'\nblock_info = ____(command)                  # 1.\nblock_json = json.____(block_info)          # 2.\n\nfor block_data in ____:                     # 3.\n    if ____ != 'disk':                      # 4.\n        continue\n\n    block_size = int(____)                  # 5.\n...\n</pre>\n"
+        "question": "\n<p>After reading the <a\nhref=\"https://man7.org/linux/man-pages/man8/lsblk.8.html\">lsblk</a>\n<b>manual</b>, you realize that it supports a <code>--json</code> that will\nforce the command to emit <b>JSON</b> data.  To take advantage of this\nfeature, you modify parts of the <code>lsblk-size.py</code> script to look\nas follows:</p>\n\n<pre>\n...\ncommand    = 'lsblk --bytes --json'\nblock_info = ____(command)                  # 1.\nblock_json = json.____(block_info)          # 2.\n\nfor block_data in ____:                     # 3.\n    if ____ != 'disk':                      # 4.\n        continue\n\n    block_size = int(____)                  # 5.\n...\n</pre>\n"
     }
 }
