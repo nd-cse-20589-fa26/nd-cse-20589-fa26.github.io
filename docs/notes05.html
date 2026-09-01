@@ -1,0 +1,268 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<!-- Favicon -->
+<link rel="icon" type="image/png" sizes="32x32" href="static/ico/favicon-32x32.png">
+<link rel="icon" type="image/png" sizes="16x16" href="static/ico/favicon-16x16.png">
+<link rel="manifest" href="static/ico/site.webmanifest">
+<!-- Stylesheets -->
+<link rel="stylesheet" href="static/css/domer.css">
+<title>Notes 05: Data Structures, Arguments, I/O</title>
+</head>
+<body>
+<header>
+<a class="logo" href="notes05.html">
+    <h1>Notes 05: Data Structures, Arguments, I/O</h1>
+</a>
+<nav>
+    <ul>
+        <li><a href="index.html"><h4>Home</h4></a></li>
+        </ul>
+</nav></header>
+<main>
+<h2 id="logistics">Logistics<a class="headerlink" href="#logistics" title="Permanent link">&para;</a></h2>
+<ul>
+<li>
+<p><a href="homework02.html">Homework 02</a>: <strong>Cut</strong>, <strong>WC</strong> (<em>reinvent the wheel, understand how these tools work</em>)</p>
+</li>
+<li>
+<div class="flex-col" markdown="1">
+<p>What stands out about <strong>Python</strong>?</p>
+<ul>
+<li><strong>Whitespace</strong></li>
+<li><strong>Simplicity</strong></li>
+<li><strong>Batteries included</strong></li>
+</ul>
+</li>
+</ul>
+<h2 id="python-fizz-buzz-functions">Python: <span class="gold">Fizz Buzz</span> (<i class="muted">Functions</i>)<a class="headerlink" href="#python-fizz-buzz-functions" title="Permanent link">&para;</a></h2>
+<div class="codehilite"><pre><span></span><code><span class="err">$</span> <span class="err">$</span><span class="n">EDITOR</span> <span class="n">fizzbuzz</span><span class="o">.</span><span class="n">py</span>
+<span class="c1">#!/usr/bin/env python3</span>
+
+<span class="k">def</span> <span class="nf">fizzbuzz</span><span class="p">(</span><span class="n">start</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span> <span class="n">stop</span><span class="o">=</span><span class="mi">100</span><span class="p">):</span>        <span class="c1"># Discuss: keyword arguments</span>
+    <span class="k">for</span> <span class="n">number</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">start</span><span class="p">,</span> <span class="n">stop</span> <span class="o">+</span> <span class="mi">1</span><span class="p">):</span>
+        <span class="k">if</span> <span class="n">number</span> <span class="o">%</span> <span class="mi">3</span> <span class="o">==</span> <span class="mi">0</span> <span class="ow">and</span> <span class="n">number</span> <span class="o">%</span> <span class="mi">5</span> <span class="o">==</span> <span class="mi">0</span><span class="p">:</span>
+            <span class="nb">print</span><span class="p">(</span><span class="s1">&#39;FizzBuzz&#39;</span><span class="p">)</span>
+        <span class="k">elif</span> <span class="n">number</span> <span class="o">%</span> <span class="mi">3</span> <span class="o">==</span> <span class="mi">0</span><span class="p">:</span>
+            <span class="nb">print</span><span class="p">(</span><span class="s1">&#39;Fizz&#39;</span><span class="p">)</span>
+        <span class="k">elif</span> <span class="n">number</span> <span class="o">%</span> <span class="mi">5</span> <span class="o">==</span> <span class="mi">0</span><span class="p">:</span>
+            <span class="nb">print</span><span class="p">(</span><span class="s1">&#39;Buzz&#39;</span><span class="p">)</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="nb">print</span><span class="p">(</span><span class="n">number</span><span class="p">)</span>
+
+<span class="n">fizzbuzz</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="mi">20</span><span class="p">)</span>
+<span class="n">fizzbuzz</span><span class="p">()</span>                              <span class="c1"># Discuss: default arguments</span>
+<span class="n">fizzbuzz</span><span class="p">(</span><span class="n">end</span><span class="o">=</span><span class="mi">5</span><span class="p">)</span>
+<span class="n">fizzbuzz</span><span class="p">(</span><span class="n">end</span><span class="o">=</span><span class="mi">5</span><span class="p">,</span> <span class="n">start</span><span class="o">=</span><span class="mi">2</span><span class="p">)</span>
+</code></pre></div>
+
+<h2 id="python-fizz-buzz-doctests">Python: <span class="gold">Fizz Buzz</span> (<i class="muted">Doctests</i>)<a class="headerlink" href="#python-fizz-buzz-doctests" title="Permanent link">&para;</a></h2>
+<div class="codehilite"><pre><span></span><code><span class="err">$</span> <span class="err">$</span><span class="n">EDITOR</span> <span class="n">fizzbuzz</span><span class="o">.</span><span class="n">py</span>
+<span class="c1">#!/usr/bin/env python3</span>
+
+<span class="k">def</span> <span class="nf">fizzbuzz</span><span class="p">(</span><span class="n">start</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span> <span class="n">stop</span><span class="o">=</span><span class="mi">100</span><span class="p">):</span>        <span class="c1"># Discuss: keyword arguments</span>
+<span class="w">    </span><span class="sd">&#39;&#39;&#39; Print fizzbuzz from start to end.</span>
+
+<span class="sd">    &gt;&gt;&gt; fizzbuzz(1, 5)                  # Discuss: docstring, doctest</span>
+<span class="sd">    1</span>
+<span class="sd">    2</span>
+<span class="sd">    Fizz</span>
+<span class="sd">    4</span>
+<span class="sd">    Buzz</span>
+<span class="sd">    &#39;&#39;&#39;</span>
+    <span class="k">for</span> <span class="n">number</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">start</span><span class="p">,</span> <span class="n">stop</span> <span class="o">+</span> <span class="mi">1</span><span class="p">):</span>
+        <span class="o">...</span>
+
+<span class="k">if</span> <span class="vm">__name__</span> <span class="o">==</span> <span class="s1">&#39;__main__&#39;</span><span class="p">:</span>              <span class="c1"># Demonstrate: import guard</span>
+    <span class="n">fizzbuzz</span><span class="p">()</span>                          <span class="c1"># Demonstrate: default arguments</span>
+
+<span class="err">$</span> <span class="n">python3</span>
+<span class="o">...</span>
+<span class="o">&gt;&gt;&gt;</span> <span class="kn">import</span> <span class="nn">fizzbuzz</span>                     <span class="c1"># Demonstrate: importing module</span>
+<span class="o">&gt;&gt;&gt;</span> <span class="n">fizzbuzz</span><span class="o">.</span><span class="n">fizzbuzz</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="mi">5</span><span class="p">)</span>             <span class="c1"># Demonstrate: call imported function</span>
+
+<span class="err">$</span> <span class="n">python3</span> <span class="o">-</span><span class="n">m</span> <span class="n">doctest</span> <span class="n">fizzbuzz</span><span class="o">.</span><span class="n">py</span> <span class="o">-</span><span class="n">v</span>     <span class="c1"># Demonstrate: checking doctests</span>
+<span class="o">...</span>
+</code></pre></div>
+
+<h2 id="python-fizz-buzz-arguments-types">Python: <span class="gold">Fizz Buzz</span> (<i class="muted">Arguments, Types</i>)<a class="headerlink" href="#python-fizz-buzz-arguments-types" title="Permanent link">&para;</a></h2>
+<div class="codehilite"><pre><span></span><code><span class="kn">import</span> <span class="nn">sys</span>
+<span class="o">...</span>                                     <span class="c1"># Discuss: types</span>
+<span class="k">def</span> <span class="nf">fizzbuzz</span><span class="p">(</span><span class="n">start</span><span class="p">:</span> <span class="nb">int</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span> <span class="n">stop</span><span class="p">:</span> <span class="nb">int</span><span class="o">=</span><span class="mi">100</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
+<span class="o">...</span>
+
+<span class="k">def</span> <span class="nf">main</span><span class="p">(</span><span class="n">arguments</span><span class="p">:</span> <span class="nb">list</span><span class="p">[</span><span class="nb">str</span><span class="p">]</span><span class="o">=</span><span class="n">sys</span><span class="o">.</span><span class="n">argv</span><span class="p">[</span><span class="mi">1</span><span class="p">:])</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
+    <span class="c1"># Version 1: no checks</span>
+    <span class="n">start</span> <span class="o">=</span> <span class="n">arguments</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>                <span class="c1"># Demonstrate: mypy</span>
+    <span class="n">end</span>   <span class="o">=</span> <span class="n">arguments</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span>
+
+    <span class="c1"># Version 2: try/except</span>
+    <span class="k">try</span><span class="p">:</span>
+        <span class="n">start</span> <span class="o">=</span> <span class="nb">int</span><span class="p">(</span><span class="n">arguments</span><span class="p">[</span><span class="mi">0</span><span class="p">])</span>
+    <span class="k">except</span> <span class="ne">IndexError</span><span class="p">:</span>                  <span class="c1"># Discuss: exceptions</span>
+        <span class="n">start</span> <span class="o">=</span> <span class="mi">1</span>
+
+    <span class="k">try</span><span class="p">:</span>
+        <span class="n">end</span> <span class="o">=</span> <span class="nb">int</span><span class="p">(</span><span class="n">arguments</span><span class="p">[</span><span class="mi">1</span><span class="p">])</span>
+    <span class="k">except</span> <span class="ne">IndexError</span><span class="p">:</span>
+        <span class="n">end</span> <span class="o">=</span> <span class="mi">100</span>
+
+    <span class="c1"># Version 3: ternary</span>
+    <span class="n">start</span> <span class="o">=</span> <span class="nb">int</span><span class="p">(</span><span class="n">arguments</span><span class="p">[</span><span class="mi">0</span><span class="p">])</span> <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">arguments</span><span class="p">)</span> <span class="o">&gt;=</span> <span class="mi">1</span> <span class="k">else</span> <span class="mi">1</span>
+    <span class="n">end</span>   <span class="o">=</span> <span class="nb">int</span><span class="p">(</span><span class="n">arguments</span><span class="p">[</span><span class="mi">1</span><span class="p">])</span> <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">arguments</span><span class="p">)</span> <span class="o">&gt;=</span> <span class="mi">2</span> <span class="k">else</span> <span class="mi">100</span>
+
+    <span class="n">fizzbuzz</span><span class="p">(</span><span class="n">start</span><span class="p">,</span> <span class="n">end</span><span class="p">)</span>
+</code></pre></div>
+
+<h2 id="python-fizz-buzz-unit-tests-lists">Python: <span class="gold">Fizz Buzz</span> (<i class="muted">Unit Tests, Lists</i>)<a class="headerlink" href="#python-fizz-buzz-unit-tests-lists" title="Permanent link">&para;</a></h2>
+<div class="codehilite"><pre><span></span><code><span class="c1"># Use sftp to download file</span>
+$<span class="w"> </span>sftp<span class="w"> </span>xavier.h4x0r.space
+&gt;<span class="w"> </span>get<span class="w"> </span>src/teaching/cse.20589.fa26/examples/slides04/fizzbuzz.test
+
+<span class="c1"># Use curl to download file</span>
+$<span class="w"> </span>curl<span class="w"> </span>-LO<span class="w"> </span>https://github.com/nd-cse-20589-fa26/examples/raw/refs/heads/master/slides04/fizzbuzz.test
+</code></pre></div>
+
+<div class="codehilite"><pre><span></span><code><span class="k">def</span> <span class="nf">fizzbuzz</span><span class="p">(</span><span class="n">start</span><span class="p">:</span> <span class="nb">int</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span> <span class="n">stop</span><span class="p">:</span> <span class="nb">int</span><span class="o">=</span><span class="mi">100</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">list</span><span class="p">[</span><span class="nb">str</span><span class="p">]:</span>
+    <span class="o">...</span>
+    <span class="n">results</span> <span class="o">=</span> <span class="p">[]</span>
+    <span class="k">for</span> <span class="n">number</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">start</span><span class="p">,</span> <span class="n">stop</span> <span class="o">+</span> <span class="mi">1</span><span class="p">):</span>
+        <span class="k">if</span> <span class="n">number</span> <span class="o">%</span> <span class="mi">3</span> <span class="o">==</span> <span class="mi">0</span> <span class="ow">and</span> <span class="n">number</span> <span class="o">%</span> <span class="mi">5</span> <span class="o">==</span> <span class="mi">0</span><span class="p">:</span>
+            <span class="n">results</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="s1">&#39;FizzBuzz&#39;</span><span class="p">)</span>
+        <span class="o">...</span>
+        <span class="k">else</span><span class="p">:</span>                           <span class="c1"># Demonstrate: mypy failure w/out str</span>
+            <span class="n">results</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="nb">str</span><span class="p">(</span><span class="n">number</span><span class="p">))</span>
+
+    <span class="k">return</span> <span class="n">results</span>
+
+<span class="k">def</span> <span class="nf">main</span><span class="p">(</span><span class="n">arguments</span><span class="p">:</span> <span class="nb">list</span><span class="p">[</span><span class="nb">str</span><span class="p">]</span><span class="o">=</span><span class="n">sys</span><span class="o">.</span><span class="n">argv</span><span class="p">[</span><span class="mi">1</span><span class="p">:])</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
+    <span class="o">...</span>                                 <span class="c1"># Discuss: Looping over list</span>
+    <span class="k">for</span> <span class="n">number</span> <span class="ow">in</span> <span class="n">fizzbuzz</span><span class="p">(</span><span class="n">start</span><span class="p">,</span> <span class="n">stop</span><span class="p">):</span>
+        <span class="nb">print</span><span class="p">(</span><span class="n">word</span><span class="p">)</span>
+
+    <span class="o">...</span>                                 <span class="c1"># Discuss: Join list of strings</span>
+    <span class="nb">print</span><span class="p">(</span><span class="s1">&#39;</span><span class="se">\n</span><span class="s1">&#39;</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">fizzbuzz</span><span class="p">(</span><span class="n">start</span><span class="p">,</span> <span class="n">stop</span><span class="p">)))</span>
+</code></pre></div>
+
+<div class="codehilite"><pre><span></span><code><span class="c1"># Run unit tests</span>
+$<span class="w"> </span>./fizzbuzz.test<span class="w"> </span>-v
+</code></pre></div>
+
+<h2 id="python-anagrams-count_letters">Python: <span class="gold">Anagrams</span> (<i class="muted">count_letters</i>)<a class="headerlink" href="#python-anagrams-count_letters" title="Permanent link">&para;</a></h2>
+<div class="codehilite"><pre><span></span><code><span class="k">def</span> <span class="nf">count_letters</span><span class="p">(</span><span class="n">string</span><span class="p">:</span> <span class="nb">str</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">dict</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="nb">int</span><span class="p">]:</span>
+<span class="w">    </span><span class="sd">&#39;&#39;&#39; Returns a dictionary containing counts of each letter in string</span>
+
+<span class="sd">    &gt;&gt;&gt; count_letters(&#39;aaa bb c&#39;)</span>
+<span class="sd">    {&#39;a&#39;: 3, &#39;b&#39;: 2, &#39;c&#39;: 1}</span>
+<span class="sd">    &#39;&#39;&#39;</span>
+    <span class="n">counts</span> <span class="o">=</span> <span class="p">{}</span>                       <span class="c1"># Discuss: counting pattern</span>
+
+    <span class="k">for</span> <span class="n">letter</span> <span class="ow">in</span> <span class="n">string</span><span class="p">:</span>
+        <span class="k">if</span> <span class="ow">not</span> <span class="n">letter</span><span class="o">.</span><span class="n">isspace</span><span class="p">():</span>      <span class="c1"># Discuss: isspace</span>
+            <span class="k">if</span> <span class="n">letter</span> <span class="ow">in</span> <span class="n">counts</span><span class="p">:</span>
+                <span class="n">counts</span><span class="p">[</span><span class="n">letter</span><span class="p">]</span> <span class="o">+=</span> <span class="mi">1</span>
+            <span class="k">else</span><span class="p">:</span>
+                <span class="n">counts</span><span class="p">[</span><span class="n">letter</span><span class="p">]</span>  <span class="o">=</span> <span class="mi">0</span>   <span class="c1"># Discuss: get method</span>
+            <span class="c1"># counts[letter] = counts.get(letter, 0) + 1</span>
+
+    <span class="k">return</span> <span class="n">counts</span>
+</code></pre></div>
+
+<div class="codehilite"><pre><span></span><code><span class="c1"># Demonstrate: testing specific function</span>
+$<span class="w"> </span>doctestfn<span class="w"> </span>anagram.py<span class="w"> </span>count_letters<span class="w"> </span>-v
+</code></pre></div>
+
+<h2 id="python-anagrams-is_anagram">Python: <span class="gold">Anagrams</span> (<i class="muted">is_anagram</i>)<a class="headerlink" href="#python-anagrams-is_anagram" title="Permanent link">&para;</a></h2>
+<div class="codehilite"><pre><span></span><code><span class="k">def</span> <span class="nf">is_anagram</span><span class="p">(</span><span class="n">word1</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span> <span class="n">word2</span><span class="p">:</span> <span class="nb">str</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">bool</span><span class="p">:</span>
+<span class="w">    </span><span class="sd">&#39;&#39;&#39; Returns whether or not word1 and word2 are anagrams</span>
+
+<span class="sd">    &gt;&gt;&gt; is_anagram(&#39;dormitory&#39;, &#39;dirty room&#39;)</span>
+<span class="sd">    True</span>
+
+<span class="sd">    &gt;&gt;&gt; is_anagram(&#39;asdf&#39;, &#39;asdfg&#39;)</span>
+<span class="sd">    False</span>
+<span class="sd">    &#39;&#39;&#39;</span>
+
+    <span class="n">counts1</span> <span class="o">=</span> <span class="n">count_letters</span><span class="p">(</span><span class="n">word1</span><span class="p">)</span>
+    <span class="n">counts2</span> <span class="o">=</span> <span class="n">count_letters</span><span class="p">(</span><span class="n">word2</span><span class="p">)</span>
+
+    <span class="c1"># Discuss: items(), formatting</span>
+    <span class="k">for</span> <span class="n">letter</span><span class="p">,</span> <span class="n">counts</span> <span class="ow">in</span> <span class="n">count1</span><span class="o">.</span><span class="n">items</span><span class="p">():</span>
+        <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s1">&#39;</span><span class="si">{</span><span class="n">count</span><span class="si">:</span><span class="s1">&gt;7</span><span class="si">}</span><span class="s1"> </span><span class="si">{</span><span class="n">word</span><span class="si">}</span><span class="s1">&#39;</span><span class="p">)</span>
+
+    <span class="k">return</span> <span class="n">counts1</span> <span class="o">==</span> <span class="n">counts2</span>
+</code></pre></div>
+
+<h2 id="python-anagrams-main">Python: <span class="gold">Anagrams</span> (<i class="muted">main</i>)<a class="headerlink" href="#python-anagrams-main" title="Permanent link">&para;</a></h2>
+<div class="codehilite"><pre><span></span><code><span class="k">def</span> <span class="nf">main</span><span class="p">(</span><span class="n">arguments</span><span class="o">=</span><span class="n">sys</span><span class="o">.</span><span class="n">argv</span><span class="p">[</span><span class="mi">1</span><span class="p">:],</span> <span class="n">stream</span><span class="o">=</span><span class="n">sys</span><span class="o">.</span><span class="n">stdin</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
+    <span class="c1"># Parse command-line options</span>
+    <span class="n">ignorecase</span> <span class="o">=</span> <span class="kc">False</span>
+
+    <span class="c1"># Discuss: popping from queue</span>
+    <span class="k">while</span> <span class="n">arguments</span> <span class="ow">and</span> <span class="n">arguments</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="o">.</span><span class="n">startswith</span><span class="p">(</span><span class="s1">&#39;-&#39;</span><span class="p">):</span>
+        <span class="k">match</span> <span class="n">argument</span> <span class="o">:=</span> <span class="n">arguments</span><span class="o">.</span><span class="n">pop</span><span class="p">(</span><span class="mi">0</span><span class="p">):</span>
+            <span class="k">case</span> <span class="s1">&#39;-i&#39;</span><span class="p">:</span> <span class="n">ignorecase</span> <span class="o">=</span> <span class="kc">True</span>
+            <span class="k">case</span> <span class="s1">&#39;-h&#39;</span><span class="p">:</span> <span class="n">usage</span><span class="p">(</span><span class="mi">0</span><span class="p">)</span>
+            <span class="k">case</span><span class="w"> </span><span class="k">_</span>   <span class="p">:</span> <span class="n">usage</span><span class="p">(</span><span class="mi">1</span><span class="p">)</span>
+
+    <span class="c1"># Process standard input</span>
+    <span class="k">for</span> <span class="n">line</span> <span class="ow">in</span> <span class="n">stream</span><span class="p">:</span>
+        <span class="k">if</span> <span class="n">ignorecase</span><span class="p">:</span>
+            <span class="n">line</span> <span class="o">=</span> <span class="n">line</span><span class="o">.</span><span class="n">lower</span><span class="p">()</span>
+
+        <span class="c1"># Discuss: splitting string</span>
+        <span class="n">word1</span><span class="p">,</span> <span class="n">word2</span> <span class="o">=</span> <span class="n">line</span><span class="o">.</span><span class="n">split</span><span class="p">()</span>
+        <span class="k">if</span> <span class="n">is_anagram</span><span class="p">(</span><span class="n">word1</span><span class="p">,</span> <span class="n">word2</span><span class="p">):</span>
+            <span class="nb">print</span><span class="p">(</span><span class="s1">&#39;ANAGRAM!&#39;</span><span class="p">)</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="nb">print</span><span class="p">(</span><span class="s1">&#39;NOT ANAGRAM!&#39;</span><span class="p">)</span>
+</code></pre></div>
+
+<h2 id="python-data-structures">Python: <span class="gold">Data Structures</span><a class="headerlink" href="#python-data-structures" title="Permanent link">&para;</a></h2>
+<table class="bordered">
+<thead>
+    <th>Container</th>
+    <th>C</th>
+    <th>Python</th>
+    <th>Python Syntax</th>
+</thead>
+<tbody>
+    <tr class="success-bg">
+        <td class="centered">Sequence</td>
+        <td class="centered">DynamicArray, LinkedList</td>
+        <td class="centered">List</td>
+        <td class="centered">[a, b]</td>
+    </tr>
+    <tr class="caution-bg">
+        <td class="centered">Fixed</td>
+        <td class="centered">Array</td>
+        <td class="centered">Tuple</td>
+        <td class="centered">(a, b)</td>
+    </tr>
+    <tr class="warning-bg">
+        <td class="centered">Membership</td>
+        <td class="centered">ArraySet, ListSet, BitSet</td>
+        <td class="centered">Set</td>
+        <td class="centered">{a, b}</td>
+    </tr>
+    <tr class="danger-bg">
+        <td class="centered">Associative</td>
+        <td class="centered">HashTable</td>
+        <td class="centered">Dict</td>
+        <td class="centered">{a: 0, b: 1}</td>
+    </tr>
+</tbody>
+</table>
+</main>
+<footer>
+Built using <a href="https://python.org">Python</a>
+and <a href="https://jinja.palletsprojects.com">Jinja</a>
+with colors from 
+<a href="https://onmessage.nd.edu/university-branding/colors/">Notre Dame</a>, 
+<a href="https://spreadsheet.dev/how-to-get-the-hexadecimal-codes-of-colors-in-google-sheets">Google Docs</a>, and 
+<a href="https://nordtheme.com">Nord Theme</a>,
+and icons from <a href="https://pictogrammers.com/library/mdi/">Material Design Icons</a>.</footer>
+</body>
+</html>
