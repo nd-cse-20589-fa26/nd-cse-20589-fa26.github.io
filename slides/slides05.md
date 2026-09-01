@@ -488,18 +488,16 @@ for argument in sys.argv[1:]:   # Loop through each command line argument
 
 ---
 
-# Arguments: [sumup.py]
+# Example: [sumup.py]
 
-Write a program that **sums up** all the integer <strong class="primary">command line
-arguments</strong>:
+> Write a program that **sums up** all the integer <strong
+> class="primary">command line arguments</strong>:
 
 <div class="columns">
 
 <div>
 
 ```python
-#!/usr/bin/env python3
-
 import sys
 
 numbers = []
@@ -623,9 +621,9 @@ print(f'Hello, {name}!')
 
 ---
 
-# I/O: [leetspeak.py]
+# Example: [leetspeak.py]
 
-Write a [leetspeak] translator:
+> Write a [leetspeak] translator.
 
 <div class="columns">
 
@@ -718,9 +716,9 @@ class="primary">file</strong> for us when we leave its scope.
 
 ---
 
-# I/O: [anagram.py]
+# Example: [anagram.py]
 
-Given two words, determine if they are [anagrams].
+> Given two words, determine if they are [anagrams].
 
 ```bash
 $ ./anagram.py -i       # Ignore case
