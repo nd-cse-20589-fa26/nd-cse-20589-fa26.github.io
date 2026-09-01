@@ -1,0 +1,255 @@
+title:  "Notes 05: Data Structures, Arguments, I/O"
+body:   |
+
+  ## Logistics
+
+  - [Homework 02]: **Cut**, **WC** (*reinvent the wheel, understand how these tools work*)
+
+  - <div class="flex-col" markdown="1">
+
+      What stands out about **Python**?
+
+      - **Whitespace**
+      - **Simplicity**
+      - **Batteries included**
+
+  [Homework 02]: homework02.html
+
+  ## Python: <span class="gold">Fizz Buzz</span> (<i class="muted">Functions</i>)
+
+  ```python
+  $ $EDITOR fizzbuzz.py
+  #!/usr/bin/env python3
+
+  def fizzbuzz(start=1, stop=100):        # Discuss: keyword arguments
+      for number in range(start, stop + 1):
+          if number % 3 == 0 and number % 5 == 0:
+              print('FizzBuzz')
+          elif number % 3 == 0:
+              print('Fizz')
+          elif number % 5 == 0:
+              print('Buzz')
+          else:
+              print(number)
+
+  fizzbuzz(1, 20)
+  fizzbuzz()                              # Discuss: default arguments
+  fizzbuzz(end=5)
+  fizzbuzz(end=5, start=2)
+  ```
+
+  ## Python: <span class="gold">Fizz Buzz</span> (<i class="muted">Doctests</i>)
+
+  ```python
+  $ $EDITOR fizzbuzz.py
+  #!/usr/bin/env python3
+
+  def fizzbuzz(start=1, stop=100):        # Discuss: keyword arguments
+      ''' Print fizzbuzz from start to end.
+
+      >>> fizzbuzz(1, 5)                  # Discuss: docstring, doctest
+      1
+      2
+      Fizz
+      4
+      Buzz
+      '''
+      for number in range(start, stop + 1):
+          ...
+
+  if __name__ == '__main__':              # Demonstrate: import guard
+      fizzbuzz()                          # Demonstrate: default arguments
+
+  $ python3
+  ...
+  >>> import fizzbuzz                     # Demonstrate: importing module
+  >>> fizzbuzz.fizzbuzz(1, 5)             # Demonstrate: call imported function
+
+  $ python3 -m doctest fizzbuzz.py -v     # Demonstrate: checking doctests
+  ...
+  ```
+
+  ## Python: <span class="gold">Fizz Buzz</span> (<i class="muted">Arguments, Types</i>)
+
+  ```python
+  import sys
+  ...                                     # Discuss: types
+  def fizzbuzz(start: int=1, stop: int=100) -> None:
+  ...
+
+  def main(arguments: list[str]=sys.argv[1:]) -> None:
+      # Version 1: no checks
+      start = arguments[0]                # Demonstrate: mypy
+      end   = arguments[1]
+
+      # Version 2: try/except
+      try:
+          start = int(arguments[0])
+      except IndexError:                  # Discuss: exceptions
+          start = 1
+
+      try:
+          end = int(arguments[1])
+      except IndexError:
+          end = 100
+
+      # Version 3: ternary
+      start = int(arguments[0]) if len(arguments) >= 1 else 1
+      end   = int(arguments[1]) if len(arguments) >= 2 else 100
+
+      fizzbuzz(start, end)
+  ```
+
+  ## Python: <span class="gold">Fizz Buzz</span> (<i class="muted">Unit Tests, Lists</i>)
+
+  ```bash
+  # Use sftp to download file
+  $ sftp xavier.h4x0r.space
+  > get src/teaching/cse.20589.fa26/examples/slides04/fizzbuzz.test
+
+  # Use curl to download file
+  $ curl -LO https://github.com/nd-cse-20589-fa26/examples/raw/refs/heads/master/slides04/fizzbuzz.test
+  ```
+
+  ```python
+  def fizzbuzz(start: int=1, stop: int=100) -> list[str]:
+      ...
+      results = []
+      for number in range(start, stop + 1):
+          if number % 3 == 0 and number % 5 == 0:
+              results.append('FizzBuzz')
+          ...
+          else:                           # Demonstrate: mypy failure w/out str
+              results.append(str(number))
+
+      return results
+
+  def main(arguments: list[str]=sys.argv[1:]) -> None:
+      ...                                 # Discuss: Looping over list
+      for number in fizzbuzz(start, stop):
+          print(word)
+
+      ...                                 # Discuss: Join list of strings
+      print('\n'.join(fizzbuzz(start, stop)))
+  ```
+
+  ```bash
+  # Run unit tests
+  $ ./fizzbuzz.test -v
+  ```
+
+  ## Python: <span class="gold">Anagrams</span> (<i class="muted">count_letters</i>)
+
+  ```python
+  def count_letters(string: str) -> dict[str, int]:
+      ''' Returns a dictionary containing counts of each letter in string
+
+      >>> count_letters('aaa bb c')
+      {'a': 3, 'b': 2, 'c': 1}
+      '''
+      counts = {}                       # Discuss: counting pattern
+
+      for letter in string:
+          if not letter.isspace():      # Discuss: isspace
+              if letter in counts:
+                  counts[letter] += 1
+              else:
+                  counts[letter]  = 0   # Discuss: get method
+              # counts[letter] = counts.get(letter, 0) + 1
+
+      return counts
+  ```
+
+  ```bash
+  # Demonstrate: testing specific function
+  $ doctestfn anagram.py count_letters -v
+  ```
+
+  ## Python: <span class="gold">Anagrams</span> (<i class="muted">is_anagram</i>)
+
+  ```python
+  def is_anagram(word1: str, word2: str) -> bool:
+      ''' Returns whether or not word1 and word2 are anagrams
+
+      >>> is_anagram('dormitory', 'dirty room')
+      True
+
+      >>> is_anagram('asdf', 'asdfg')
+      False
+      '''
+
+      counts1 = count_letters(word1)
+      counts2 = count_letters(word2)
+
+      # Discuss: items(), formatting
+      for letter, counts in count1.items():
+          print(f'{count:>7} {word}')
+
+      return counts1 == counts2
+  ```
+
+  ## Python: <span class="gold">Anagrams</span> (<i class="muted">main</i>)
+
+  ```python
+  def main(arguments=sys.argv[1:], stream=sys.stdin) -> None:
+      # Parse command-line options
+      ignorecase = False
+
+      # Discuss: popping from queue
+      while arguments and arguments[0].startswith('-'):
+          match argument := arguments.pop(0):
+              case '-i': ignorecase = True
+              case '-h': usage(0)
+              case _   : usage(1)
+
+      # Process standard input
+      for line in stream:
+          if ignorecase:
+              line = line.lower()
+
+          # Discuss: splitting string
+          word1, word2 = line.split()
+          if is_anagram(word1, word2):
+              print('ANAGRAM!')
+          else:
+              print('NOT ANAGRAM!')
+  ```
+
+  ## Python: <span class="gold">Data Structures</span>
+
+  <table class="bordered">
+  <thead>
+      <th>Container</th>
+      <th>C</th>
+      <th>Python</th>
+      <th>Python Syntax</th>
+  </thead>
+  <tbody>
+      <tr class="success-bg">
+          <td class="centered">Sequence</td>
+          <td class="centered">DynamicArray, LinkedList</td>
+          <td class="centered">List</td>
+          <td class="centered">[a, b]</td>
+      </tr>
+      <tr class="caution-bg">
+          <td class="centered">Fixed</td>
+          <td class="centered">Array</td>
+          <td class="centered">Tuple</td>
+          <td class="centered">(a, b)</td>
+      </tr>
+      <tr class="warning-bg">
+          <td class="centered">Membership</td>
+          <td class="centered">ArraySet, ListSet, BitSet</td>
+          <td class="centered">Set</td>
+          <td class="centered">{a, b}</td>
+      </tr>
+      <tr class="danger-bg">
+          <td class="centered">Associative</td>
+          <td class="centered">HashTable</td>
+          <td class="centered">Dict</td>
+          <td class="centered">{a: 0, b: 1}</td>
+      </tr>
+  </tbody>
+  </table>
+
+
