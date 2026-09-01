@@ -674,6 +674,6 @@ div.footnote > hr {
     color: var(--nord15);
 }
 
-.mi, .s, .s1, .s2 {
+.mi, .s, .s1, .s2, .sd {
     color: var(--nord11);
 }
