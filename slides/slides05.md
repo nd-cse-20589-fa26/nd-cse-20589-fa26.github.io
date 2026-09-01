@@ -715,3 +715,22 @@ that it will automatically <strong class="danger">close</strong> the <strong
 class="primary">file</strong> for us when we leave its scope.
 
 [with]: https://docs.python.org/3/reference/compound_stmts.html#with
+
+---
+
+# I/O: [anagram.py]
+
+Given two words, determine if they are [anagrams].
+
+```bash
+$ ./anagram.py -i       # Ignore case
+listen silent
+ANAGRAM!
+army Mary
+ANAGRAM!
+card dare
+NOT ANAGRAM!
+```
+
+[anagrams]: https://en.wikipedia.org/wiki/Anagram
+[anagram.py]: https://github.com/nd-cse-20589-fa26/examples/blob/master/slides05/anagram.py
