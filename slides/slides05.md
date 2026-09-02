@@ -70,7 +70,7 @@ To create a <strong class="success">sequence</strong> of <strong
 class="primary">objects</strong>, we can use a [list], which internally is a
 <strong class="primary">dynamic array</strong>.
 
-<table class="bordered">
+<table class="bordered font-smaller">
 <thead>
     <th class="info-bg">Operation</th>
     <th class="caution-bg">C</th>
@@ -102,12 +102,17 @@ class="primary">objects</strong>, we can use a [list], which internally is a
     <td class="caution-bg font-small">array_pop(array, index)</td>
     <td class="success-bg font-small">array.pop(index)</td>
 </tr>
+<tr>
+    <td class="info-bg font-small">Search array for value</td>
+    <td class="caution-bg font-small">array_search(array, value)</td>
+    <td class="success-bg font-small">value in array OR array.index(value)</td>
+</tr>
 </tbody>
 </table>
 
-<br>
+<div class="font-small"><br></div>
 
-<div class="alert info-bg centered">
+<div class="alert info-bg centered font-smaller">
 
 **Note**: <strong class="success">Python</strong> [lists] support <strong
 class="danger">negative indices</strong>.
@@ -159,6 +164,10 @@ class="danger">negative indices</strong>.
 >>> data
 ['Donatello', 'Raphael',
  'Michelangelo', 'Splinter']
+
+# Search list for 'April'
+>>> 'April' in data
+False
 ```
 
 </div>
