@@ -44,6 +44,8 @@
         topics:         Data Structures, Arguments, I/O
         items:
           - name:       Slides 05
+          - name:       Panopto
+            link:       https://notredame.hosted.panopto.com/Panopto/Pages/Viewer.aspx?id=c50d0029-2929-44d4-9fc3-b4b9011594ae
 
       - date:           Fri 09/04
         topics:         Files, Processes, Requests
