@@ -1,0 +1,183 @@
+title:  "Notes 06: Data Structures, Arguments, I/O, Processes"
+body:   |
+
+  ## Review
+
+  - **Functions**: *defaults*, *keyword arguments*
+
+  - **Modules**: *import*, *import guard*
+
+  - **Testing**: *doctests*, *unit tests*
+
+  ## Python: <span class="gold">Anagrams</span> (<i class="muted">count_letters</i>)
+
+  ```python
+  def count_letters(string: str) -> dict[str, int]:
+      ''' Returns a dictionary containing counts of each letter in string
+
+      >>> count_letters('aaa bb c')
+      {'a': 3, 'b': 2, 'c': 1}
+      '''
+      counts = {}                       # Discuss: counting pattern
+
+      for letter in string:
+          if not letter.isspace():      # Discuss: isspace
+              if letter in counts:
+                  counts[letter] += 1
+              else:
+                  counts[letter]  = 0   # Discuss: get method
+              # counts[letter] = counts.get(letter, 0) + 1
+
+      return counts
+  ```
+
+  ```bash
+  # Demonstrate: testing specific function
+  $ doctestfn anagram.py count_letters -v
+  ```
+
+  ## Python: <span class="gold">Anagrams</span> (<i class="muted">is_anagram</i>)
+
+  ```python
+  def is_anagram(word1: str, word2: str) -> bool:
+      ''' Returns whether or not word1 and word2 are anagrams
+
+      >>> is_anagram('dormitory', 'dirty room')
+      True
+
+      >>> is_anagram('asdf', 'asdfg')
+      False
+      '''
+
+      counts1 = count_letters(word1)
+      counts2 = count_letters(word2)
+
+      # Discuss: items(), formatting
+      for letter, counts in count1.items():
+          print(f'{count:>7} {word}')
+
+      return counts1 == counts2
+  ```
+
+  ## Python: <span class="gold">Anagrams</span> (<i class="muted">main</i>)
+
+  ```python
+  def main(arguments=sys.argv[1:], stream=sys.stdin) -> None:
+      # Parse command-line options
+      ignorecase = False
+
+      # Discuss: popping from queue
+      while arguments and arguments[0].startswith('-'):
+          match argument := arguments.pop(0):
+              case '-i': ignorecase = True
+              case '-h': usage(0)     # Discuss: exit codes
+              case _   : usage(1)
+
+      # Process standard input
+      for line in stream:
+          if ignorecase:
+              line = line.lower()
+
+          # Discuss: splitting string
+          word1, word2 = line.split()
+          if is_anagram(word1, word2):
+              print('ANAGRAM!')
+          else:
+              print('NOT ANAGRAM!')
+  ```
+
+  ## Python: <span class="gold">Randomsay</span>
+
+  ```python
+  # Constants
+                                          # Discuss: set data structure
+  FORBIDDEN = {'bong', 'sodomized', 'kiss', 'head-in', 'satanic', 'telebears'}
+
+  # Main Execution
+
+  def main(arguments: list[str]=sys.argv[1:]):
+      cows = []                           # Discuss: os.popen
+      for index, line in enumerate(os.popen('cowsay -l')):
+          if not index:                   # Discuss: enumerate
+              continue
+
+          for cow in line.split():        # Review: str.split
+              if not cow in FORBIDDEN:    # Review: searching collection
+                  cows.append(cow)        # Review: list.append
+
+      command = ['cowsay', '-f', random.choice(cows)] + arguments
+      subprocess.run(command, check=True) # Variant: os.system
+  ```
+
+  ## Python: <span class="gold">Leetspeak</span>
+
+  ```python
+  def leetspeak(text: str, mapping: dict[str, str]) -> str:
+    ''' Translate each line of text into leetspeak '''
+    result = []                           # TODO: Add doctest???
+    for letter in text:                   # Discuss: get
+        result.append(mapping.get(letter.lower(), letter))
+    return ''.join(result)                # Discuss: join
+
+  # Main Execution
+
+  def main(arguments: list[str]=sys.argv[1:], stream=sys.stdin):
+      fr_chars = 'aeio'
+      to_chars = '4310'
+
+      while arguments and arguments[0].startswith('-'):
+          match argument := arguments.pop(0):
+              case '-f': fr_chars = arguments.pop(0)
+              case '-t': to_chars = arguments.pop(0)
+              case '-h': usage(0)
+              case _   : usage(1)
+
+      mapping = {}                        # Discuss: zip
+      for fr, to in zip(fr_chars, to_chars):
+          mapping[fr] = to
+
+      for line in stream:
+          print(leetspeak(line, mapping), end='')
+
+      # Variant: Stream output to cowsay process
+      with subprocess.Popen(['cowsay'], stdin=subprocess.PIPE, text=True) as process:
+          for line in stream:
+              process.stdin.write(leetspeak(line, mapping))
+  ```
+
+  ## Python: <span class="gold">Data Structures</span>
+
+  <table class="bordered">
+  <thead>
+      <th>Container</th>
+      <th>C</th>
+      <th>Python</th>
+      <th>Python Syntax</th>
+  </thead>
+  <tbody>
+      <tr class="success-bg">
+          <td class="centered">Sequence</td>
+          <td class="centered">DynamicArray, LinkedList</td>
+          <td class="centered">List</td>
+          <td class="centered">[a, b]</td>
+      </tr>
+      <tr class="caution-bg">
+          <td class="centered">Fixed</td>
+          <td class="centered">Array</td>
+          <td class="centered">Tuple</td>
+          <td class="centered">(a, b)</td>
+      </tr>
+      <tr class="warning-bg">
+          <td class="centered">Membership</td>
+          <td class="centered">ArraySet, ListSet, BitSet</td>
+          <td class="centered">Set</td>
+          <td class="centered">{a, b}</td>
+      </tr>
+      <tr class="danger-bg">
+          <td class="centered">Associative</td>
+          <td class="centered">HashTable</td>
+          <td class="centered">Dict</td>
+          <td class="centered">{a: 0, b: 1}</td>
+      </tr>
+  </tbody>
+  </table>
