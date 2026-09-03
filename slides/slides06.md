@@ -194,7 +194,7 @@ calls</strong>:
 
 # Example: [which.py]
 
-Write a <strong class="success">Python</strong> script that implements the
+> Write a <strong class="success">Python</strong> script that implements the
 `which` command (ie. *searches the paths in the `PATH` environment variable for
 the location of a program*).
 
@@ -271,18 +271,12 @@ sophisticated commands such as <strong class="success">pipelines</strong>.
 For more fine-grained control of executing commands, <strong
 class="success">Python</strong> provides the [subprocess] module:
 
-<div class="columns">
-
-<div>
-
 ```python
 # Execute ls -l
 subprocess.run(['ls', '-l'])
 ```
 
-</div>
-
-<div>
+<br>
 
 ```python
 # Execute and read from ls -l
@@ -292,9 +286,20 @@ for line in stdout.splitlines():
     print(line.rstrip())
 ```
 
-</div>
+[subprocess]: https://docs.python.org/3/library/subprocess.html#module-subprocess
 
-</div>
+---
+
+# Processes: <span class="gold">Subprocess</span> (<i class="muted">Pipes</i>)
+
+To interactively communicate with a command, we can use [subprocess.Popen]:
+
+```python
+# Execute cowsay and create pipe to its stdin
+with subprocess.Popen(['cowsay'], stdin=subprocess.PIPE, text=True) as process:
+    # Write to cowsay's stdin
+    process.stdin.write('hello, world!')
+```
 
 <br>
 
@@ -311,16 +316,15 @@ easily using [subprocess].  Additionally, you can have a command run in the
 
 </div>
 
-
-[subprocess]: https://docs.python.org/3/library/subprocess.html#module-subprocess
+[subprocess.Popen]: https://docs.python.org/3/library/subprocess.html#subprocess.Popen
 
 ---
 
 # Example: [randomsay.py]
 
-Write a <strong class="success">Python</strong> script that chooses a random
-<strong class="caution">cow</strong> from [cowsay] and then runs the command with the chosen
-<strong class="caution">cow</strong>.
+> Write a <strong class="success">Python</strong> script that chooses a random
+<strong class="caution">cow</strong> from [cowsay] and then runs the command
+with the chosen <strong class="caution">cow</strong>.
 
 ```bash
 $ ./randomsay.py hello, world
@@ -426,7 +430,7 @@ except requests.exceptions.Timeout as e:
 
 # Example: [catalog.py]
 
-Write a <strong class="success">Python</strong> script that queries
+> Write a <strong class="success">Python</strong> script that queries
 [catalog.cse.nd.edu] and displays all the machines with the specified
 attributes.
 
