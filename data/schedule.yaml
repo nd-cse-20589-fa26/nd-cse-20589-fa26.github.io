@@ -51,7 +51,7 @@
         topics:         Files, Processes, Requests
         items:
           - name:       Slides 06
-            name:       Panopto
+          - name:       Panopto
             link:       https://notredame.hosted.panopto.com/Panopto/Pages/Viewer.aspx?id=d07f5c1a-a878-4279-ab6c-b4bb0115778a
 
       - date:           Sat 09/05
