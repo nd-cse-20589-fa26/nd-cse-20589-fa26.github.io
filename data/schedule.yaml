@@ -67,12 +67,12 @@
           - name:       Slides 07
 
       - date:           Wed 09/09
-        topics:         CSV, JSON
+        topics:         CSV
         items:
           - name:       Slides 08
 
       - date:           Fri 09/11
-        topics:         HTML, XML
+        topics:         JSON
         items:
           - name:       Slides 09
 
