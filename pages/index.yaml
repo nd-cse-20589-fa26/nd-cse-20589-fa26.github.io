@@ -33,7 +33,7 @@ body:       |
     <div class="flex-row" markdown="1">
 
       <div class="centered">
-        <img src="static/img/software-systems.png" class="responsive" style="max-width: 420px; padding: 10px;">
+        <img src="static/img/software-systems.svg" class="responsive" style="max-width: 420px; padding: 10px;">
       </div>
 
       <div class="flex-col" markdown="1">
@@ -107,7 +107,7 @@ body:       |
     ### Office Hours
 
     <div class="centered">
-      <img src="static/img/office-hours.png" class="responsive">
+      <img src="static/img/office-hours.svg" class="responsive">
     </div>
 
     ## Schedule
