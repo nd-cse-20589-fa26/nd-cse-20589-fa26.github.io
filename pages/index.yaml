@@ -30,37 +30,29 @@ body:       |
     [Computer Science and Engineering]: http://cse.nd.edu
     [University of Notre Dame]: http://www.nd.edu
 
-    <div class="flex-row" markdown="1">
-
-      <div class="centered">
-        <img src="static/img/software-systems.svg" class="responsive" style="max-width: 420px; padding: 10px;">
-      </div>
-
-      <div class="flex-col" markdown="1">
-
-      Upon successful completion of this course, students will be able to:
-
-      - **Utilize** commands to navigate filesystems, manipulate files, manage
-      processes, and explore system resources.
-
-      - **Compose** scripts to process and manipulate data, to automate tasks,
-      and to communicate across the Internet.
-
-      - **Verify** the correctness of programs via unit and functional testing.
-
-      - **Install** and take advantage of third party libraries in addition to
-      creating custom software packages.
-
-      - **Design** a software system using software architectural patterns.
-
-      - **Build** a full stack application (ie. backend, database, frontend)
-      that employs multiple programming paradigms.
-
-      - **Deploy** applications to a cloud service for public access.
-
-      </div>
-
+    <div class="centered">
+        <img src="static/img/software-systems.svg" class="transparent responsive" style="max-width: 720px; padding: 10px;">
     </div>
+
+    Upon successful completion of this course, students will be able to:
+
+    - **Utilize** commands to navigate filesystems, manipulate files, manage
+    processes, and explore system resources.
+
+    - **Compose** scripts to process and manipulate data, to automate tasks,
+    and to communicate across the Internet.
+
+    - **Verify** the correctness of programs via unit and functional testing.
+
+    - **Install** and take advantage of third party libraries in addition to
+    creating custom software packages.
+
+    - **Design** a software system using software architectural patterns.
+
+    - **Build** a full stack application (ie. backend, database, frontend)
+    that employs multiple programming paradigms.
+
+    - **Deploy** applications to a cloud service for public access.
 
     ## Logistics
 
