@@ -16,12 +16,11 @@ import cut
 class CutTest(unittest.TestCase):
     Path   = 'cut.input'
     Input  = open(Path).read()
-    Total  = 9
-    Points = 0
 
     @classmethod
-    def setupClass(cls):
+    def setUpClass(cls):
         cls.Points = 0
+        cls.Total  = len([method for method in dir(cls) if method.startswith('test_')])
 
     @classmethod
     def tearDownClass(cls):
