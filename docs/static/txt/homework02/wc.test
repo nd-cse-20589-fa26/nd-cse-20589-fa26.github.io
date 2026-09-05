@@ -13,14 +13,13 @@ import wc
 # Unit Tests
 
 class WCTest(unittest.TestCase):
-    Path   = 'wc.input'
-    Input  = open(Path).read()
-    Total  = 18
-    Points = 0
+    Path  = 'wc.input'
+    Input = open(Path).read()
 
     @classmethod
-    def setupClass(cls):
+    def setUpClass(cls):
         cls.Points = 0
+        cls.Total  = len([method for method in dir(cls) if method.startswith('test_')])
 
     @classmethod
     def tearDownClass(cls):
