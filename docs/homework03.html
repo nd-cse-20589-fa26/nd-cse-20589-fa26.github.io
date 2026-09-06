@@ -1,0 +1,582 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<!-- Favicon -->
+<link rel="icon" type="image/png" sizes="32x32" href="static/ico/favicon-32x32.png">
+<link rel="icon" type="image/png" sizes="16x16" href="static/ico/favicon-16x16.png">
+<link rel="manifest" href="static/ico/site.webmanifest">
+<!-- Stylesheets -->
+<link rel="stylesheet" href="static/css/domer.css">
+<title>Homework 03: Weather, Campus</title>
+</head>
+<body>
+<header>
+<a class="logo" href="homework03.html">
+    <h1>Homework 03: Weather, Campus</h1>
+</a>
+<nav>
+    <ul>
+        <li><a href="index.html"><h4>Home</h4></a></li>
+        </ul>
+</nav></header>
+<main>
+<p>The goal of this homework assignment is to allow you to practice writing
+<a href="https://www.python.org/">Python</a> scripts that either extract data using <a href="https://en.wikipedia.org/wiki/Regular_expression">regular expressions</a> or
+manipulate structured data in <a href="https://json.org/">JSON</a> format.  In each script, you will build
+on your knowledge of <a href="https://en.wikipedia.org/wiki/Data_structure">data structures</a> such as <a href="https://docs.python.org/3/library/stdtypes.html#list">lists</a> and <a href="https://docs.python.org/3/library/stdtypes.html#dict">dicts</a> to process
+data you fetch via <a href="https://en.wikipedia.org/wiki/HTTP">HTTP</a> using <a href="https://requests.readthedocs.io/">requests</a>.</p>
+<p>For this assignment, record your scripts and any responses to the following
+activities in the <code>homework03</code> folder of your <strong>assignments</strong> <a href="https://github.com">GitHub</a>
+repository and push your work by <strong>noon Saturday, September 12</strong>.</p>
+<h2 id="activity-0-preparation">Activity 0: Preparation<a class="headerlink" href="#activity-0-preparation" title="Permanent link">&para;</a></h2>
+<p>Before starting this homework assignment, you should first perform a <code>git
+pull</code> to retrieve any changes in your remote <a href="https://github.com">GitHub</a> repository:</p>
+<div class="codehilite"><pre><span></span><code>$<span class="w"> </span><span class="nb">cd</span><span class="w"> </span>path/to/repository<span class="w">                   </span><span class="c1"># Go to assignments repository</span>
+
+$<span class="w"> </span>git<span class="w"> </span>switch<span class="w"> </span>master<span class="w">                       </span><span class="c1"># Make sure we are in master branch</span>
+
+$<span class="w"> </span>git<span class="w"> </span>pull<span class="w"> </span>--rebase<span class="w">                       </span><span class="c1"># Get any remote changes not present locally</span>
+</code></pre></div>
+
+<p>Next, create a new branch for this assignment:</p>
+<div class="codehilite"><pre><span></span><code>$<span class="w"> </span>git<span class="w"> </span>switch<span class="w"> </span>-c<span class="w"> </span>homework03<span class="w">                </span><span class="c1"># Create homework03 branch and check it out</span>
+</code></pre></div>
+
+<h3 id="task-1-skeleton-code">Task 1: Skeleton Code<a class="headerlink" href="#task-1-skeleton-code" title="Permanent link">&para;</a></h3>
+<p>To help you get started, the instructor has provided you with the following <strong>skeleton code</strong>:</p>
+<div class="codehilite"><pre><span></span><code><span class="c1"># Go to homework03 folder</span>
+$<span class="w"> </span><span class="nb">cd</span><span class="w"> </span>homework03
+
+<span class="c1"># Download Makefile</span>
+$<span class="w"> </span>curl<span class="w"> </span>-LO<span class="w"> </span>https://pnutz.h4x0r.space/courses/cse.20589.fa26/static/txt/homework03/Makefile
+
+<span class="c1"># Download Python skeleton code</span>
+$<span class="w"> </span>curl<span class="w"> </span>-LO<span class="w"> </span>https://pnutz.h4x0r.space/courses/cse.20589.fa26/static/txt/homework03/weather.py
+$<span class="w"> </span>curl<span class="w"> </span>-LO<span class="w"> </span>https://pnutz.h4x0r.space/courses/cse.20589.fa26/static/txt/homework03/campus.py
+</code></pre></div>
+
+<p>Once downloaded, you should see the following files in your <code>homework03</code> directory:</p>
+<div class="codehilite"><pre><span></span><code>homework03
+<span class="w">    </span><span class="se">\_</span><span class="w"> </span>Makefile<span class="w">     </span><span class="c1"># This is the Makefile building all the assignment artifacts</span>
+<span class="w">    </span><span class="se">\_</span><span class="w"> </span>campus.py<span class="w">    </span><span class="c1"># This is the Python script for the campus script</span>
+<span class="w">    </span><span class="se">\_</span><span class="w"> </span>weather.py<span class="w">   </span><span class="c1"># This is the Python script for the weather script</span>
+</code></pre></div>
+
+<div class="alert warning-bg">
+<h3 id="alert-embed_icon-doctests"><i class="icon icon-medium"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><title>alert</title><path d="M13 14H11V9H13M13 18H11V16H13M1 21H23L12 2L1 21Z" /></svg>
+</i> DocTests<a class="headerlink" href="#alert-embed_icon-doctests" title="Permanent link">&para;</a></h3>
+<p>You may notice that in addition to the usual comments and <code>TODOs</code>, the
+<a href="https://peps.python.org/pep-0257/">docstrings</a> of each method also contains a few <a href="https://docs.python.org/3/library/doctest.html">doctests</a>.</p>
+<p>You are <strong>not</strong> to modify these <a href="https://docs.python.org/3/library/doctest.html">doctests</a> and must keep them in-place. They
+are used to verify the correctness of your code.</p>
+<p>Your code goes <strong>below</strong> the <a href="https://peps.python.org/pep-0257/">docstrings</a>, where the <code>TODO</code> and <code>pass</code>
+commands are (you may remove the pass once you complete the method).</p>
+</div>
+<h3 id="task-2-initial-import">Task 2: Initial Import<a class="headerlink" href="#task-2-initial-import" title="Permanent link">&para;</a></h3>
+<p>Now that the files are downloaded into the <code>homework03</code> folder, you can
+<strong>commit</strong> them to your <a href="https://git-scm.com/">git</a> repository:</p>
+<div class="codehilite"><pre><span></span><code>$<span class="w"> </span>git<span class="w"> </span>add<span class="w"> </span>Makefile<span class="w">                            </span><span class="c1"># Mark changes for commit</span>
+$<span class="w"> </span>git<span class="w"> </span>add<span class="w"> </span>*.py
+$<span class="w"> </span>git<span class="w"> </span>commit<span class="w"> </span>-m<span class="w"> </span><span class="s2">&quot;Homework 03: Initial Import&quot;</span><span class="w"> </span><span class="c1"># Record changes</span>
+</code></pre></div>
+
+<h3 id="task-3-unit-tests">Task 3: Unit Tests<a class="headerlink" href="#task-3-unit-tests" title="Permanent link">&para;</a></h3>
+<p>After downloading these files, you can run the <code>make</code> command to run the
+tests.</p>
+<div class="codehilite"><pre><span></span><code><span class="c1"># Run all tests (will trigger automatic download)</span>
+$<span class="w"> </span>make
+</code></pre></div>
+
+<p>You will notice that the Makefile downloads these additional test data and scripts:</p>
+<div class="codehilite"><pre><span></span><code>homework03
+<span class="w">    </span><span class="se">\_</span><span class="w"> </span>campus.test<span class="w">  </span><span class="c1"># This is the Python test for the campus script</span>
+<span class="w">    </span><span class="se">\_</span><span class="w"> </span>weather.test<span class="w"> </span><span class="c1"># This is the Python test for the weather script</span>
+</code></pre></div>
+
+<p>In addition to the embedded <a href="https://docs.python.org/3/library/doctest.html">doctests</a> in the <strong>skeleton code</strong>, you will be
+using these <a href="https://en.wikipedia.org/wiki/Unit_testing">unit tests</a> to verify the correctness and behavior of your code.</p>
+<div class="alert info-bg">
+<h3 id="download-embed_icon-automatic-downloads"><i class="icon icon-medium"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><title>download</title><path d="M5,20H19V18H5M19,9H15V3H9V9H5L12,16L19,9Z" /></svg>
+</i> Automatic Downloads<a class="headerlink" href="#download-embed_icon-automatic-downloads" title="Permanent link">&para;</a></h3>
+<p>The <code>test</code> scripts are automatically downloaded by the <code>Makefile</code>, so any
+modifications you do to them will be lost when you run <code>make</code> again. Likewise,
+because they are automatically downloaded, you do not need to <code>add</code> or <code>commit</code>
+them to your <a href="https://git-scm.com/">git</a> repository.</p>
+</div>
+<p>The details on what you need to implement for this assignment are described
+in the following sections.</p>
+<h2 id="activity-1-weather-04-points">Activity 1: Weather (<em>0.4 Points</em>)<a class="headerlink" href="#activity-1-weather-04-points" title="Permanent link">&para;</a></h2>
+<p>Michael is not amused by heat and humidity on campus and longs for the cool
+breeze of Fall.  Obsessed with the weather, he compulsively checks
+<a href="https://www.weather.gov/">weather.gov</a>, which is a website by the <a href="https://www.weather.gov/">National Weather Service</a>.  While
+checking the weather for the fifth time on his phone during class, he
+realized that he could actually apply some of the things he is learning in
+class to his current obsession.</p>
+<p>For example, he realized that he can fetch the weather information for any
+<a href="https://en.wikipedia.org/wiki/ZIP_Code">zipcode</a>, using the following <a href="https://en.wikipedia.org/wiki/URL">URL</a>:</p>
+<div class="codehilite"><pre><span></span><code>$<span class="w"> </span>curl<span class="w"> </span>-sL<span class="w"> </span>https://forecast.weather.gov/zipcity.php?inputstring<span class="o">=</span><span class="nv">$ZIPCODE</span>
+</code></pre></div>
+
+<p>For instance, the weather information for Notre Dame, Indiana can be
+retrieved using:</p>
+<div class="codehilite"><pre><span></span><code>$<span class="w"> </span>curl<span class="w"> </span>-sL<span class="w"> </span>https://forecast.weather.gov/zipcity.php?inputstring<span class="o">=</span><span class="m">46556</span>
+</code></pre></div>
+
+<p>Looking at the data retrieved from the website, he notices that the forecast
+and temperature information is wrapped in [HTML] fields that contain the text
+"myforecast":</p>
+<div class="codehilite"><pre><span></span><code>...
+<span class="p">&lt;</span><span class="nt">p</span> <span class="na">class</span><span class="o">=</span><span class="s">&quot;myforecast-current&quot;</span><span class="p">&gt;</span>Overcast<span class="p">&lt;/</span><span class="nt">p</span><span class="p">&gt;</span>
+<span class="p">&lt;</span><span class="nt">p</span> <span class="na">class</span><span class="o">=</span><span class="s">&quot;myforecast-current-lrg&quot;</span><span class="p">&gt;</span>37<span class="ni">&amp;deg;</span>F<span class="p">&lt;/</span><span class="nt">p</span><span class="p">&gt;</span>
+<span class="p">&lt;</span><span class="nt">p</span> <span class="na">class</span><span class="o">=</span><span class="s">&quot;myforecast-current-sm&quot;</span><span class="p">&gt;</span>3<span class="ni">&amp;deg;</span>C<span class="p">&lt;/</span><span class="nt">p</span><span class="p">&gt;</span>
+...
+</code></pre></div>
+
+<p>Michael wants to make a <a href="https://www.python.org/">Python</a> script <code>weather.py</code> that will fetch the
+weather information for any specified <a href="https://en.wikipedia.org/wiki/ZIP_Code">zipcode</a> and extract the temperature
+and forecast.  Unfortunately, despite taking AP Computer Science in high
+school, he is still a bit confused about using <a href="https://requests.readthedocs.io/">requests</a> to fetch <a href="https://en.wikipedia.org/wiki/HTTP">HTTP</a>
+data and <a href="https://docs.python.org/3/library/re.html">re</a> to extract data using <a href="https://en.wikipedia.org/wiki/Regular_expression">regular expressions</a>.</p>
+<p>You decide that you could use some practice with <a href="https://www.python.org/">Python</a> and <a href="https://en.wikipedia.org/wiki/Regular_expression">regular
+expressions</a>, and so you help him complete the <code>weather.py</code> script such that
+it behaves as follows:</p>
+<div class="codehilite"><pre><span></span><code><span class="c1"># Display usage message</span>
+$<span class="w"> </span>./weather.py<span class="w"> </span>-h
+Usage:<span class="w"> </span>weather<span class="w"> </span><span class="o">[</span>-c<span class="o">]</span><span class="w"> </span>ZIPCODE
+<span class="w">    </span>-c<span class="w">    </span>Use<span class="w"> </span>Celsius<span class="w"> </span>degrees<span class="w"> </span>instead<span class="w"> </span>of<span class="w"> </span>Fahrenheit<span class="w"> </span><span class="k">for</span><span class="w"> </span>temperature
+
+If<span class="w"> </span>zipcode<span class="w"> </span>is<span class="w"> </span>not<span class="w"> </span>provided,<span class="w"> </span><span class="k">then</span><span class="w"> </span>it<span class="w"> </span>defaults<span class="w"> </span>to<span class="w"> </span><span class="m">46556</span>.
+
+<span class="c1"># Display temperature and forecast for default ZIPCODE (46556)</span>
+$<span class="w"> </span>./weather.py
+Temperature:<span class="w"> </span><span class="m">78</span>°F
+Forecast:<span class="w">    </span>Fair
+
+<span class="c1"># Display temperature and forecast for Orange, CA (92867)</span>
+$<span class="w"> </span>./weather.py<span class="w"> </span><span class="m">92867</span>
+Temperature:<span class="w"> </span><span class="m">69</span>°F
+Forecast:<span class="w">    </span>NA
+
+<span class="c1"># Display temperature and forecast for Eau Claire, WI (54701) in Celsius</span>
+$<span class="w"> </span>./weather.py<span class="w"> </span>-c<span class="w"> </span><span class="m">54701</span>
+Temperature:<span class="w"> </span><span class="m">28</span>°C
+Forecast:<span class="w">    </span>Fair
+</code></pre></div>
+
+<p>The <code>weather.py</code> script takes the following possible flags:</p>
+<ul>
+<li><code>-c</code>: This allows the user to specify that the <b>temperature</b> should be displayed in <b>Celsius</b> rather than <b>Fahrenheit</b>.</li>
+</ul>
+<p>If the user specifies an unknown flag, then the program should print the
+usage message and exit with a failure status.</p>
+<p>After the flags, the <code>weather.py</code> script accepts one positional argument as
+the <code>ZIPCODE</code>.  If none is given, then <code>46556</code> is used by default.</p>
+<h3 id="task-1-weatherpy">Task 1: <code>weather.py</code><a class="headerlink" href="#task-1-weatherpy" title="Permanent link">&para;</a></h3>
+<p>To build this script, you will need to complete the <code>weather.py</code> <a href="https://www.python.org/">Python</a> script
+by implementing the following functions:</p>
+<ol>
+<li>
+<div class="flex-col" markdown="1">
+<p><code>weather(zipcode: int, url: str=WEATHER_URL, celsius: bool=False) -&gt; tuple[Optional[str], Optional[str]]</code></p>
+<blockquote>
+<p>This function fetches the weather information for <code>zipcode</code>, extracts
+the <code>temperature</code> and <code>forecast</code>, and returns both.  If <code>celsius</code> is
+<code>True</code>, then it returns the <code>temperature</code> in <b>Celsius</b>; otherwise,
+it returns the degrees in <b>Fahrenheit</b>.</p>
+</blockquote>
+<div class="alert success-bg" markdown="1">
+<p><strong>Hint</strong>: Use <a href="https://requests.readthedocs.io/en/latest/api/#requests.get">requests.get</a> to fetch the data via <a href="https://en.wikipedia.org/wiki/HTTP">HTTP</a> and then use
+<a href="https://docs.python.org/3/library/re.html#re.findall">re.findall</a> or <a href="https://docs.python.org/3/library/re.html#re.search">re.search</a> to extract the <b>temperature</b> and
+<b>forecast</b> information using <a href="https://en.wikipedia.org/wiki/Regular_expression">regular expressions</a>.</p>
+</div>
+</li>
+<li>
+<div class="flex-col" markdown="1">
+<p><code>main(arguments: list[str]=sys.argv[1:]) -&gt; None</code></p>
+<blockquote>
+<p>This function processes the command-line <code>arguments</code> to determine
+whether or not the <b>temperature</b> should be in <b>Celsius</b> or
+<b>Fahrenheit</b> and which <b>ZIPCODE</b> to use (if none is specified
+then use <code>46556</code>).  Afterwards, it uses the <code>weather</code> function to
+retrieve the <b>temperature</b> and <b>forecast</b> information and then
+prints them both out.</p>
+</blockquote>
+<div class="alert success-bg" markdown="1">
+<p><strong>Hint</strong>: You can use the following format strings to print out the
+<b>temperature</b> and <b>forecast</b>:</p>
+<div class="codehilite"><pre><span></span><code><span class="sa">f</span><span class="s1">&#39;Temperature: </span><span class="si">{</span><span class="n">temperature</span><span class="si">}</span><span class="s1">&#39;</span>
+<span class="sa">f</span><span class="s1">&#39;Forecast:    </span><span class="si">{</span><span class="n">forecast</span><span class="si">}</span><span class="s1">&#39;</span>
+</code></pre></div>
+
+</div>
+</li>
+</ol>
+<h3 id="task-2-testing">Task 2: Testing<a class="headerlink" href="#task-2-testing" title="Permanent link">&para;</a></h3>
+<p>As you implement <code>weather.py</code>, you can use the provided <a href="https://docs.python.org/3/library/doctest.html">doctests</a> to verify the
+correctness of your code:</p>
+<div class="codehilite"><pre><span></span><code><span class="c1"># Run doctests</span>
+$<span class="w"> </span>python3<span class="w"> </span>-m<span class="w"> </span>doctest<span class="w"> </span>weather.py<span class="w"> </span>-v
+...
+<span class="m">2</span><span class="w"> </span>items<span class="w"> </span>had<span class="w"> </span>no<span class="w"> </span>tests:
+<span class="w">    </span>weather
+<span class="w">    </span>weather.usage
+<span class="m">2</span><span class="w"> </span>items<span class="w"> </span>passed<span class="w"> </span>all<span class="w"> </span>tests:
+<span class="w">  </span><span class="m">2</span><span class="w"> </span>tests<span class="w"> </span><span class="k">in</span><span class="w"> </span>weather.main
+<span class="w">  </span><span class="m">2</span><span class="w"> </span>tests<span class="w"> </span><span class="k">in</span><span class="w"> </span>weather.weather
+<span class="m">4</span><span class="w"> </span>tests<span class="w"> </span><span class="k">in</span><span class="w"> </span><span class="m">4</span><span class="w"> </span>items.
+<span class="m">4</span><span class="w"> </span>passed.
+Test<span class="w"> </span>passed.
+</code></pre></div>
+
+<p>You can also use <code>make</code> to run both the <a href="https://docs.python.org/3/library/doctest.html">doctests</a> and the <a href="https://en.wikipedia.org/wiki/Unit_testing">unit tests</a>:</p>
+<div class="codehilite"><pre><span></span><code><span class="c1"># Run unit tests (and doctests)</span>
+$<span class="w"> </span>make<span class="w"> </span>test-weather
+Testing<span class="w"> </span>Weather<span class="w"> </span>...
+test_00_doctest<span class="w"> </span><span class="o">(</span>__main__.WeatherTest.test_00_doctest<span class="o">)</span><span class="w"> </span>...<span class="w"> </span>ok
+test_01_mypy<span class="w"> </span><span class="o">(</span>__main__.WeatherTest.test_01_mypy<span class="o">)</span><span class="w"> </span>...<span class="w"> </span>ok
+test_02_weather_default<span class="w"> </span><span class="o">(</span>__main__.WeatherTest.test_02_weather_default<span class="o">)</span><span class="w"> </span>...<span class="w"> </span>ok
+test_03_weather_46637<span class="w"> </span><span class="o">(</span>__main__.WeatherTest.test_03_weather_46637<span class="o">)</span><span class="w"> </span>...<span class="w"> </span>ok
+test_04_weather_54701<span class="w"> </span><span class="o">(</span>__main__.WeatherTest.test_04_weather_54701<span class="o">)</span><span class="w"> </span>...<span class="w"> </span>ok
+test_05_weather_92867<span class="w"> </span><span class="o">(</span>__main__.WeatherTest.test_05_weather_92867<span class="o">)</span><span class="w"> </span>...<span class="w"> </span>ok
+test_06_main_usage<span class="w"> </span><span class="o">(</span>__main__.WeatherTest.test_06_main_usage<span class="o">)</span><span class="w"> </span>...<span class="w"> </span>ok
+test_07_main_default<span class="w"> </span><span class="o">(</span>__main__.WeatherTest.test_07_main_default<span class="o">)</span><span class="w"> </span>...<span class="w"> </span>ok
+test_08_main_46637<span class="w"> </span><span class="o">(</span>__main__.WeatherTest.test_08_main_46637<span class="o">)</span><span class="w"> </span>...<span class="w"> </span>ok
+test_09_main_54701<span class="w"> </span><span class="o">(</span>__main__.WeatherTest.test_09_main_54701<span class="o">)</span><span class="w"> </span>...<span class="w"> </span>ok
+test_10_main_92867<span class="w"> </span><span class="o">(</span>__main__.WeatherTest.test_10_main_92867<span class="o">)</span><span class="w"> </span>...<span class="w"> </span>ok
+
+<span class="w">   </span>Score<span class="w"> </span><span class="m">11</span>.00<span class="w"> </span>/<span class="w"> </span><span class="m">11</span>.00
+<span class="w">   </span>Grade<span class="w">  </span><span class="m">1</span>.00<span class="w"> </span>/<span class="w">  </span><span class="m">1</span>.00
+<span class="w">  </span>Status<span class="w"> </span>Success
+
+
+----------------------------------------------------------------------
+Ran<span class="w"> </span><span class="m">11</span><span class="w"> </span>tests<span class="w"> </span><span class="k">in</span><span class="w"> </span><span class="m">12</span>.829s
+
+OK
+</code></pre></div>
+
+<p>To just run the <a href="https://en.wikipedia.org/wiki/Unit_testing">unit tests</a>, you can do the following:</p>
+<div class="codehilite"><pre><span></span><code><span class="c1"># Run unit tests</span>
+$<span class="w"> </span>./weather.test<span class="w"> </span>-v
+...
+</code></pre></div>
+
+<p>To run a specific <a href="https://en.wikipedia.org/wiki/Unit_testing">unit test</a>, you can specify the <strong>method name</strong>:</p>
+<div class="codehilite"><pre><span></span><code><span class="c1"># Run only mypy unit test</span>
+$<span class="w"> </span>./weather.test<span class="w"> </span>-v<span class="w"> </span>WeatherTest.test_01_mypy
+...
+</code></pre></div>
+
+<p>To manually check your types, you can use <a href="https://mypy-lang.org/">mypy</a>:</p>
+<div class="codehilite"><pre><span></span><code><span class="c1"># Run mypy to check types</span>
+$<span class="w"> </span>mypy<span class="w"> </span>weather.py
+...
+</code></pre></div>
+
+<h2 id="activity-2-campus-04-points">Activity 2: Campus (<em>0.4 Points</em>)<a class="headerlink" href="#activity-2-campus-04-points" title="Permanent link">&para;</a></h2>
+<p>It's been a while since Anna has been on campus.  With so much construction
+in the last few years, it is difficult for even recent alumni to identify and
+locate all the buildings.  Fortunately, <a href="https://creative.nd.edu/">Notre Dame Creative</a> provides a
+<a href="https://map.nd.edu/">Campus Map</a> with an <a href="https://creative.nd.edu/services/web/website-design-development/apis/campus-map/">API</a> that returns <a href="https://json.org/">JSON</a> data.</p>
+<p>For example, accessing the following <a href="https://en.wikipedia.org/wiki/URL">URL</a> will give all the information
+about buildings named <code>dillon</code>:</p>
+<div class="codehilite"><pre><span></span><code><span class="c1"># Fetch JSON data about &quot;dillon&quot;</span>
+$<span class="w"> </span>curl<span class="w"> </span>-sL<span class="w"> </span>https://map.nd.edu/placemarks.json?q<span class="o">=</span>dillon
+<span class="o">[{</span><span class="s2">&quot;id&quot;</span>:86,<span class="s2">&quot;name&quot;</span>:<span class="s2">&quot;Dillon Hall&quot;</span>,<span class="s2">&quot;permanent_uid&quot;</span>:<span class="s2">&quot;1030&quot;</span>,<span class="s2">&quot;geometry&quot;</span>:<span class="w"> </span>...<span class="o">]</span>
+</code></pre></div>
+
+<p>As can been seen, this <a href="https://json.org/">JSON</a> object is quite large and complex... That said,
+the <a href="https://creative.nd.edu/services/web/website-design-development/apis/campus-map/">API</a> is nice in that it allows users to query buildings by <b>name</b>
+or by <b>tags</b> such as <code>tour</code> or <code>gameday</code>.</p>
+<p>Seeing the potential in helping alumni navigate campus, Anna wants your help
+in writing a <code>campus.py</code> script in <a href="https://www.python.org/">Python</a> that fetches this <a href="https://json.org/">JSON</a> data
+using <a href="https://requests.readthedocs.io/">requests</a> and then outputs the results in a more simplified format.</p>
+<p>Now that you have gotten some more practice with <a href="https://www.python.org/">Python</a>, you feel confident
+in your abilities to slice and dice <a href="https://en.wikipedia.org/wiki/Data_structure">data structures</a> such as <a href="https://docs.python.org/3/library/stdtypes.html#dict">dicts</a> and
+<a href="https://docs.python.org/3/library/stdtypes.html#list">lists</a>, so you decided to help Anna write the <code>campus.py</code> script with the
+following behavior:</p>
+<div class="codehilite"><pre><span></span><code><span class="c1"># Display usage message</span>
+$<span class="w"> </span>./campus.py
+Usage:<span class="w"> </span>campus<span class="w"> </span><span class="o">[</span>-n<span class="w"> </span>LIMIT<span class="w"> </span>-t<span class="w"> </span>TAGS<span class="o">]</span><span class="w"> </span>NAME
+<span class="w">    </span>-n<span class="w"> </span>LIMIT<span class="w">    </span>Only<span class="w"> </span>display<span class="w"> </span>up<span class="w"> </span>to<span class="w"> </span>LIMIT<span class="w"> </span>results
+<span class="w">    </span>-t<span class="w"> </span>TAGS<span class="w">     </span>Search<span class="w"> </span><span class="k">for</span><span class="w"> </span>specified<span class="w"> </span>TAGS
+
+You<span class="w"> </span>may<span class="w"> </span>either<span class="w"> </span>search<span class="w"> </span>by<span class="w"> </span>NAME<span class="w"> </span>or<span class="w"> </span>by<span class="w"> </span>TAGS,<span class="w"> </span>but<span class="w"> </span>not<span class="w"> </span>both<span class="w"> </span>at<span class="w"> </span>the<span class="w"> </span>same<span class="w"> </span>time.
+
+<span class="c1"># Search for buildings named cushing</span>
+$<span class="w"> </span>./campus.py<span class="w"> </span>cushing
+<span class="w">   </span><span class="m">1</span>.<span class="w"> </span>Cushing<span class="w"> </span>Hall<span class="w"> </span>of<span class="w"> </span>Engineering<span class="w"> </span><span class="o">(</span><span class="m">125</span><span class="o">)</span><span class="w"> </span><span class="o">[</span>building,core<span class="o">]</span>
+
+<span class="w">      </span>Opened<span class="w"> </span><span class="k">in</span><span class="w"> </span><span class="m">1933</span>,<span class="w"> </span>the<span class="w"> </span>exterior<span class="w"> </span>is<span class="w"> </span>embellished<span class="w"> </span>with<span class="w"> </span>the<span class="w"> </span>names<span class="w"> </span>of
+<span class="w">      </span>history<span class="err">&#39;</span>s<span class="w"> </span>great<span class="w"> </span>scientists<span class="w"> </span>and<span class="w"> </span>engineers,<span class="w"> </span>as<span class="w"> </span>well<span class="w"> </span>as<span class="w"> </span>traditional
+<span class="w">      </span>engineering<span class="w"> </span>tools.<span class="w"> </span>The<span class="w"> </span>lobby<span class="w"> </span>includes<span class="w"> </span>intricate<span class="w"> </span>mosaics<span class="w"> </span>and<span class="w"> </span>a
+<span class="w">      </span>ceiling<span class="w"> </span>decorated<span class="w"> </span>with<span class="w"> </span>botanical<span class="w"> </span>and<span class="w"> </span>geometric<span class="w"> </span>forms.
+
+<span class="c1"># Search for buildings tagged as food and gameday</span>
+$<span class="w"> </span>./campus<span class="w"> </span>-t<span class="w"> </span>food,gameday
+<span class="w">   </span><span class="m">1</span>.<span class="w"> </span>Bond<span class="w"> </span>Hall<span class="w"> </span><span class="o">(</span><span class="m">79</span><span class="o">)</span><span class="w"> </span><span class="o">[</span>tour,gameday,food,building,core<span class="o">]</span>
+
+<span class="w">      </span>Built<span class="w"> </span><span class="k">in</span><span class="w"> </span><span class="m">1917</span>,<span class="w"> </span>Bond<span class="w"> </span>Hall<span class="w"> </span>was<span class="w"> </span>originally<span class="w"> </span>the<span class="w"> </span>university<span class="w"> </span>library.
+<span class="w">      </span>Besides<span class="w"> </span>its<span class="w"> </span>library,<span class="w"> </span>auditorium,<span class="w"> </span>computer<span class="w"> </span>lab<span class="w"> </span>and<span class="w"> </span>studio<span class="w"> </span>space,
+<span class="w">      </span>the<span class="w"> </span>hall’s<span class="w"> </span>main<span class="w"> </span>staircase<span class="w"> </span>serves<span class="w"> </span>as<span class="w"> </span>the<span class="w"> </span>platform<span class="w"> </span><span class="k">for</span><span class="w"> </span>the<span class="w"> </span>Notre
+<span class="w">      </span>Dame<span class="w"> </span>Marching<span class="w"> </span>Band’s<span class="w"> </span>game-day<span class="w"> </span>concerts.
+
+<span class="c1"># Search for buildings named debartolo (limit results to 2)</span>
+$<span class="w"> </span>./campus<span class="w"> </span>-n<span class="w"> </span><span class="m">2</span><span class="w"> </span>debartolo
+<span class="w">   </span><span class="m">1</span>.<span class="w"> </span>DeBartolo<span class="w"> </span>Hall<span class="w"> </span><span class="o">(</span><span class="m">102</span><span class="o">)</span><span class="w"> </span><span class="o">[</span>tour,commencement,building,core<span class="o">]</span>
+
+<span class="w">      </span>This<span class="w"> </span>is<span class="w"> </span>an<span class="w"> </span>all-purpose<span class="w"> </span>classroom<span class="w"> </span>building.<span class="w"> </span>When<span class="w"> </span>it<span class="w"> </span>was<span class="w"> </span>built<span class="w"> </span><span class="k">in</span>
+<span class="w">      </span><span class="m">1992</span>,<span class="w"> </span>it<span class="w"> </span>more<span class="w"> </span>than<span class="w"> </span>doubled<span class="w"> </span>Notre<span class="w"> </span>Dame’s<span class="w"> </span>classroom<span class="w"> </span>space<span class="w"> </span>with<span class="w"> </span><span class="m">84</span>
+<span class="w">      </span>classrooms,<span class="w"> </span>lecture<span class="w"> </span>halls<span class="w"> </span>and<span class="w"> </span>auditoriums.<span class="w"> </span>Just<span class="w"> </span>inside<span class="w"> </span>the<span class="w"> </span>main
+<span class="w">      </span>entrance<span class="w"> </span><span class="o">(</span>the<span class="w"> </span>middle<span class="w"> </span>pavilion<span class="o">)</span><span class="w"> </span>is<span class="w"> </span>a<span class="w"> </span>statue<span class="w"> </span>of<span class="w"> </span>the<span class="w"> </span>Virgin<span class="w"> </span>Mary.
+<span class="w">      </span>It<span class="w"> </span>is<span class="w"> </span>the<span class="w"> </span>original<span class="w"> </span>version<span class="w"> </span>of<span class="w"> </span><span class="s2">&quot;Our Lady of the Universe&quot;</span>,<span class="w"> </span>carved
+<span class="w">      </span>by<span class="w"> </span>Rev.<span class="w"> </span>Anthony<span class="w"> </span>Lauck.
+
+<span class="w">  </span><span class="m">2</span>.<span class="w"> </span>DeBartolo<span class="w"> </span>Hall:<span class="w"> </span>East<span class="w"> </span>-<span class="w"> </span>North<span class="w"> </span><span class="o">(</span><span class="m">588</span><span class="o">)</span><span class="w"> </span><span class="o">[</span>a11y,entrance_a11y,core<span class="o">]</span>
+
+<span class="w">      </span>DeBartolo<span class="w"> </span>Hall<span class="w"> </span>accessible<span class="w"> </span>entrance<span class="w"> </span>East<span class="w"> </span>-<span class="w"> </span>North
+</code></pre></div>
+
+<p>The <code>campus.py</code> script takes the following possible flags:</p>
+<ul>
+<li>
+<p><code>-n</code>: This allows the user to specify the maximum number of results to show
+(default is <code>5</code>).</p>
+</li>
+<li>
+<div class="flex-col" markdown="1">
+<p><code>-t</code>: This allows the user to specify a list of <b>tags</b> (ie. <em>comma
+separated</em>) to match rather than a <b>name</b>.</p>
+<div class="alert warning-bg" markdown="1">
+<p><strong>Note</strong>: You should attempt to <strong>match all tags</strong> (ie. <code>AND</code>).</p>
+</div>
+</li>
+</ul>
+<p>After the flags, the <code>campus.py</code> script accepts one positional argument as
+the <code>NAME</code> to search.</p>
+<p>If the user does not specify a <b>NAME</b> or any <b>TAGS</b>, then the
+program should print the usage message and exit with a failure status.</p>
+<h3 id="task-1-campuspy">Task 1: <code>campus.py</code><a class="headerlink" href="#task-1-campuspy" title="Permanent link">&para;</a></h3>
+<p>To build this utility, you will need to complete the <code>campus.py</code> <a href="https://www.python.org/">Python</a>
+script by implementing the following functions:</p>
+<ol>
+<li>
+<div class="flex-col" markdown="1">
+<p><code>clean_description(html: str) -&gt; str:</code></p>
+<blockquote>
+<p>This function <em>cleans</em> the <code>html</code> description by doing the following:
+removing images, removing links, replacing newlines with spaces,
+removing [HTML] tags, and stripping the final result.</p>
+</blockquote>
+<div class="alert success-bg" markdown="1">
+<p><strong>Hint</strong>: You may want to use multiple instances of <a href="https://docs.python.org/3/library/re.html#re.sub">re.sub</a> and <a href="https://docs.python.org/3/library/stdtypes.html#str.replace">str.replace</a>.</p>
+</div>
+</li>
+<li>
+<div class="flex-col" markdown="1">
+<p><code>campus(query: str, tags: list[str], limit: int=5) -&gt; None</code></p>
+<blockquote>
+<p>This function uses the <a href="https://creative.nd.edu/services/web/website-design-development/apis/campus-map/">API</a> provided by <a href="https://map.nd.edu/">Campus Map</a> to search for
+either buildings matching <code>query</code> or buildings matching <strong>all</strong> of the
+<code>tags</code>.</p>
+</blockquote>
+<p>It displays up to <code>limit</code> results in the following format:</p>
+<div class="codehilite"><pre><span></span><code><span class="sa">f</span><span class="s1">&#39;</span><span class="si">{</span><span class="n">index</span><span class="si">:</span><span class="s1">4</span><span class="si">}</span><span class="s1">. </span><span class="si">{</span><span class="n">placemark_name</span><span class="si">}</span><span class="s1"> (</span><span class="si">{</span><span class="n">placemark_id</span><span class="si">}</span><span class="s1">) [</span><span class="si">{</span><span class="n">placemark_tags</span><span class="si">}</span><span class="s1">]</span><span class="se">\n\n</span><span class="si">{</span><span class="n">placemark_description</span><span class="si">}</span><span class="s1">&#39;</span>
+</code></pre></div>
+
+<div class="alert success-bg" markdown="1">
+<p><strong>Hints</strong>: You can use <a href="https://docs.python.org/3/library/stdtypes.html#str.join">str.join</a> to combine the list of <code>tags</code> into a single string.</p>
+<p>Likewise, to have the description wrap nicely, you can use <a href="https://docs.python.org/3/library/textwrap.html#textwrap.wrap">textwrap.wrap</a> as follows:</p>
+<div class="codehilite"><pre><span></span><code><span class="n">placemark_description</span> <span class="o">=</span> <span class="sa">f</span><span class="s1">&#39;</span><span class="se">\n</span><span class="s1">&#39;</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">textwrap</span><span class="o">.</span><span class="n">wrap</span><span class="p">(</span>
+    <span class="n">clean_description</span><span class="p">(</span><span class="n">placemark</span><span class="p">[</span><span class="s1">&#39;description&#39;</span><span class="p">]),</span>
+    <span class="n">initial_indent</span>    <span class="o">=</span> <span class="n">INDENT</span><span class="p">,</span>
+    <span class="n">subsequent_indent</span> <span class="o">=</span> <span class="n">INDENT</span><span class="p">,</span>
+<span class="p">))</span>
+</code></pre></div>
+
+<p>This uses <a href="https://docs.python.org/3/library/textwrap.html#textwrap.wrap">textwrap.wrap</a> to split the long description into a <a href="https://docs.python.org/3/library/stdtypes.html#list">list</a> of
+strings, and then recombines these indented strings back into a single
+description.</p>
+<p>To handle printing blank lines between entries (<em>rather than after each
+entry</em>), take a look at the approach used in the <a href="https://github.com/nd-cse-20589-fa26/examples/blob/master/slides09/wikipedia.py">wikipedia.py</a> example
+discussed in class.</p>
+</div>
+</li>
+<li>
+<div class="flex-col" markdown="1">
+<p><code>main(arguments: list[str]=sys.argv[1:]) -&gt; None</code></p>
+<blockquote>
+<p>This function processes the command-line <code>arguments</code> to determine which
+<code>NAME</code> or <code>TAGS</code> to use to query the <a href="https://creative.nd.edu/services/web/website-design-development/apis/campus-map/">API</a> of the <a href="https://map.nd.edu/">Campus Map</a> and then
+calls <code>campus</code> to output up to <code>LIMIT</code> results.</p>
+</blockquote>
+<div class="alert success-bg" markdown="1">
+<p><strong>Hint</strong>: You can use <a href="https://docs.python.org/3/library/stdtypes.html#sequence.extend">list.extend</a> to add an entire <a href="https://docs.python.org/3/library/stdtypes.html#list">list</a> to the end of another <a href="https://docs.python.org/3/library/stdtypes.html#list">list</a>.</p>
+</div>
+</li>
+</ol>
+<h3 id="task-2-testing_1">Task 2: Testing<a class="headerlink" href="#task-2-testing_1" title="Permanent link">&para;</a></h3>
+<p>As you implement <code>campus.py</code>, you can use the provided <a href="https://docs.python.org/3/library/doctest.html">doctests</a> to verify the
+correctness of your code:</p>
+<div class="codehilite"><pre><span></span><code><span class="c1"># Run doctests</span>
+$<span class="w"> </span>python3<span class="w"> </span>-m<span class="w"> </span>doctest<span class="w"> </span>campus.py<span class="w"> </span>-v
+...
+<span class="m">2</span><span class="w"> </span>items<span class="w"> </span>had<span class="w"> </span>no<span class="w"> </span>tests:
+<span class="w">    </span>campus
+<span class="w">    </span>campus.usage
+<span class="m">3</span><span class="w"> </span>items<span class="w"> </span>passed<span class="w"> </span>all<span class="w"> </span>tests:
+<span class="w">  </span><span class="m">1</span><span class="w"> </span><span class="nb">test</span><span class="w"> </span><span class="k">in</span><span class="w"> </span>campus.campus
+<span class="w">  </span><span class="m">1</span><span class="w"> </span><span class="nb">test</span><span class="w"> </span><span class="k">in</span><span class="w"> </span>campus.clean_description
+<span class="w">  </span><span class="m">1</span><span class="w"> </span><span class="nb">test</span><span class="w"> </span><span class="k">in</span><span class="w"> </span>campus.main
+<span class="m">3</span><span class="w"> </span>tests<span class="w"> </span><span class="k">in</span><span class="w"> </span><span class="m">5</span><span class="w"> </span>items.
+<span class="m">3</span><span class="w"> </span>passed.
+Test<span class="w"> </span>passed.
+</code></pre></div>
+
+<p>You can also use <code>make</code> to run both the <a href="https://docs.python.org/3/library/doctest.html">doctests</a> and the <a href="https://en.wikipedia.org/wiki/Unit_testing">unit tests</a>:</p>
+<div class="codehilite"><pre><span></span><code><span class="c1"># Run unit tests (and doctests)</span>
+$<span class="w"> </span>make<span class="w"> </span>test-campus
+test_00_doctest<span class="w"> </span><span class="o">(</span>__main__.CampusTest.test_00_doctest<span class="o">)</span><span class="w"> </span>...<span class="w"> </span>ok
+test_01_mypy<span class="w"> </span><span class="o">(</span>__main__.CampusTest.test_01_mypy<span class="o">)</span><span class="w"> </span>...<span class="w"> </span>ok
+test_02_campus_dillon<span class="w"> </span><span class="o">(</span>__main__.CampusTest.test_02_campus_dillon<span class="o">)</span><span class="w"> </span>...<span class="w"> </span>ok
+test_03_campus_welsh<span class="w"> </span><span class="o">(</span>__main__.CampusTest.test_03_campus_welsh<span class="o">)</span><span class="w"> </span>...<span class="w"> </span>ok
+test_04_campus_fitz<span class="w"> </span><span class="o">(</span>__main__.CampusTest.test_04_campus_fitz<span class="o">)</span><span class="w"> </span>...<span class="w"> </span>ok
+test_05_campus_cushing<span class="w"> </span><span class="o">(</span>__main__.CampusTest.test_05_campus_cushing<span class="o">)</span><span class="w"> </span>...<span class="w"> </span>ok
+test_06_campus_dpac<span class="w"> </span><span class="o">(</span>__main__.CampusTest.test_06_campus_dpac<span class="o">)</span><span class="w"> </span>...<span class="w"> </span>ok
+test_07_campus_greenspace<span class="w"> </span><span class="o">(</span>__main__.CampusTest.test_07_campus_greenspace<span class="o">)</span><span class="w"> </span>...<span class="w"> </span>ok
+test_08_campus_athletics<span class="w"> </span><span class="o">(</span>__main__.CampusTest.test_08_campus_athletics<span class="o">)</span><span class="w"> </span>...<span class="w"> </span>ok
+test_09_campus_food<span class="w"> </span><span class="o">(</span>__main__.CampusTest.test_09_campus_food<span class="o">)</span><span class="w"> </span>...<span class="w"> </span>ok
+test_10_campus_tour<span class="w"> </span><span class="o">(</span>__main__.CampusTest.test_10_campus_tour<span class="o">)</span><span class="w"> </span>...<span class="w"> </span>ok
+test_11_campus_food_tour<span class="w"> </span><span class="o">(</span>__main__.CampusTest.test_11_campus_food_tour<span class="o">)</span><span class="w"> </span>...<span class="w"> </span>ok
+test_12_campus_hall<span class="w"> </span><span class="o">(</span>__main__.CampusTest.test_12_campus_hall<span class="o">)</span><span class="w"> </span>...<span class="w"> </span>ok
+test_13_main_usage<span class="w"> </span><span class="o">(</span>__main__.CampusTest.test_13_main_usage<span class="o">)</span><span class="w"> </span>...<span class="w"> </span>ok
+test_14_main_dillon<span class="w"> </span><span class="o">(</span>__main__.CampusTest.test_14_main_dillon<span class="o">)</span><span class="w"> </span>...<span class="w"> </span>ok
+test_15_main_welsh<span class="w"> </span><span class="o">(</span>__main__.CampusTest.test_15_main_welsh<span class="o">)</span><span class="w"> </span>...<span class="w"> </span>ok
+test_16_main_fitz<span class="w"> </span><span class="o">(</span>__main__.CampusTest.test_16_main_fitz<span class="o">)</span><span class="w"> </span>...<span class="w"> </span>ok
+test_17_main_cushing<span class="w"> </span><span class="o">(</span>__main__.CampusTest.test_17_main_cushing<span class="o">)</span><span class="w"> </span>...<span class="w"> </span>ok
+test_18_main_dpac<span class="w"> </span><span class="o">(</span>__main__.CampusTest.test_18_main_dpac<span class="o">)</span><span class="w"> </span>...<span class="w"> </span>ok
+test_19_main_greenspace<span class="w"> </span><span class="o">(</span>__main__.CampusTest.test_19_main_greenspace<span class="o">)</span><span class="w"> </span>...<span class="w"> </span>ok
+test_20_main_athletics<span class="w"> </span><span class="o">(</span>__main__.CampusTest.test_20_main_athletics<span class="o">)</span><span class="w"> </span>...<span class="w"> </span>ok
+test_21_main_food<span class="w"> </span><span class="o">(</span>__main__.CampusTest.test_21_main_food<span class="o">)</span><span class="w"> </span>...<span class="w"> </span>ok
+test_22_main_tour<span class="w"> </span><span class="o">(</span>__main__.CampusTest.test_22_main_tour<span class="o">)</span><span class="w"> </span>...<span class="w"> </span>ok
+test_23_main_food_tour<span class="w"> </span><span class="o">(</span>__main__.CampusTest.test_23_main_food_tour<span class="o">)</span><span class="w"> </span>...<span class="w"> </span>ok
+test_24_main_food_halls<span class="w"> </span><span class="o">(</span>__main__.CampusTest.test_24_main_food_halls<span class="o">)</span><span class="w"> </span>...<span class="w"> </span>ok
+
+<span class="w">   </span>Score<span class="w"> </span><span class="m">25</span>.00<span class="w"> </span>/<span class="w"> </span><span class="m">25</span>.00
+<span class="w">   </span>Grade<span class="w">  </span><span class="m">1</span>.00<span class="w"> </span>/<span class="w">  </span><span class="m">1</span>.00
+<span class="w">  </span>Status<span class="w"> </span>Success
+
+
+----------------------------------------------------------------------
+Ran<span class="w"> </span><span class="m">25</span><span class="w"> </span>tests<span class="w"> </span><span class="k">in</span><span class="w"> </span><span class="m">3</span>.342s
+
+OK
+</code></pre></div>
+
+<p>To just run the <a href="https://en.wikipedia.org/wiki/Unit_testing">unit tests</a>, you can do the following:</p>
+<div class="codehilite"><pre><span></span><code><span class="c1"># Run unit tests</span>
+$<span class="w"> </span>./campus.test<span class="w"> </span>-v
+...
+</code></pre></div>
+
+<p>To run a specific <a href="https://en.wikipedia.org/wiki/Unit_testing">unit test</a>, you can specify the <strong>method name</strong>:</p>
+<div class="codehilite"><pre><span></span><code><span class="c1"># Run only mypy unit test</span>
+$<span class="w"> </span>./campus.test<span class="w"> </span>-v<span class="w"> </span>CampusTest.test_01_mypy
+...
+</code></pre></div>
+
+<p>To manually check your types, you can use <a href="https://mypy-lang.org/">mypy</a>:</p>
+<div class="codehilite"><pre><span></span><code><span class="c1"># Run mypy to check types</span>
+$<span class="w"> </span>mypy<span class="w"> </span>campus.py
+...
+</code></pre></div>
+
+<h2 id="activity-3-quiz-02-points">Activity 3: Quiz (<em>0.2 Points</em>)<a class="headerlink" href="#activity-3-quiz-02-points" title="Permanent link">&para;</a></h2>
+<p>Once you have completed all the activities above, you are to complete the
+following <strong>reflection quiz</strong>:</p>
+<div id="quiz-questions"></div>
+
+<div id="quiz-responses"></div>
+
+<script src="static/js/dredd-quiz.js"></script>
+<script>
+loadQuiz('static/json/homework03.json');
+</script>
+
+<pre style="display: none;" id="dr-container" class="codehilite"><code id="dredd-response"></code></pre>
+
+<p>As with <a href="reading01.html">Reading 01</a>, you will need to store your answers in a
+<code>homework03/answers.json</code> file.  You can use the form above to generate the
+contents of this file, or you can write the <a href="https://json.org/">JSON</a> by hand.</p>
+<p>To test your quiz, you can use the <code>check.py</code> script:</p>
+<div class="codehilite"><pre><span></span><code>$<span class="w"> </span>../.scripts/check.py
+Checking<span class="w"> </span>homework03<span class="w"> </span>quiz<span class="w"> </span>...
+<span class="w">     </span>Q01<span class="w">  </span><span class="m">2</span>.00<span class="w"> </span>/<span class="w">  </span><span class="m">2</span>.00
+<span class="w">     </span>Q02<span class="w">  </span><span class="m">2</span>.00<span class="w"> </span>/<span class="w">  </span><span class="m">2</span>.00
+<span class="w">     </span>Q03<span class="w">  </span><span class="m">4</span>.00<span class="w"> </span>/<span class="w">  </span><span class="m">4</span>.00
+<span class="w">     </span>Q04<span class="w">  </span><span class="m">4</span>.00<span class="w"> </span>/<span class="w">  </span><span class="m">4</span>.00
+<span class="w">  </span>--------------------
+<span class="w">   </span>Score<span class="w"> </span><span class="m">12</span>.00<span class="w"> </span>/<span class="w"> </span><span class="m">12</span>.00
+<span class="w">   </span>Grade<span class="w">  </span><span class="m">1</span>.00<span class="w"> </span>/<span class="w">  </span><span class="m">1</span>.00
+<span class="w">  </span>Status<span class="w"> </span>Success
+</code></pre></div>
+
+<h2 id="submission-1-point">Submission (<em>1 Point</em>)<a class="headerlink" href="#submission-1-point" title="Permanent link">&para;</a></h2>
+<p>To submit your assignment, please commit your work to the <code>homework03</code> folder
+of your <code>homework03</code> branch in your <strong>assignments</strong> <a href="https://github.com">GitHub</a> repository.
+Your <code>homework03</code> folder should <strong>only</strong> contain the following files:</p>
+<ul>
+<li><code>Makefile</code></li>
+<li><code>answers.json</code></li>
+<li><code>campus.py</code></li>
+<li><code>weather.py</code></li>
+</ul>
+<div class="alert caution-bg">
+<p><strong>Note</strong>: You do not need to commit the test scripts because the <code>Makefile</code>
+automatically downloads them.</p>
+</div>
+<div class="codehilite"><pre><span></span><code><span class="c1">#-----------------------------------------------------------------------</span>
+<span class="c1"># Make sure you have already completed Activity 0: Preparation</span>
+<span class="c1">#-----------------------------------------------------------------------</span>
+...
+$<span class="w"> </span>git<span class="w"> </span>add<span class="w"> </span>weather.py<span class="w">                                  </span><span class="c1"># Mark changes for commit</span>
+$<span class="w"> </span>git<span class="w"> </span>commit<span class="w"> </span>-m<span class="w"> </span><span class="s2">&quot;Homework 03: weather.py&quot;</span><span class="w">             </span><span class="c1"># Record changes</span>
+...
+$<span class="w"> </span>git<span class="w"> </span>add<span class="w"> </span>campus.py<span class="w">                                   </span><span class="c1"># Mark changes for commit</span>
+$<span class="w"> </span>git<span class="w"> </span>commit<span class="w"> </span>-m<span class="w"> </span><span class="s2">&quot;Homework 03: campus.py&quot;</span><span class="w">              </span><span class="c1"># Record changes</span>
+...
+$<span class="w"> </span>git<span class="w"> </span>add<span class="w"> </span>answers.json<span class="w">                                </span><span class="c1"># Mark changes for commit</span>
+$<span class="w"> </span>git<span class="w"> </span>commit<span class="w"> </span>-m<span class="w"> </span><span class="s2">&quot;Homework 03: Quiz&quot;</span><span class="w">                   </span><span class="c1"># Record changes</span>
+...
+$<span class="w"> </span>git<span class="w"> </span>push<span class="w"> </span>-u<span class="w"> </span>origin<span class="w"> </span>homework03<span class="w">                       </span><span class="c1"># Push branch to GitHub</span>
+</code></pre></div>
+
+<div class="alert warning-bg">
+<h3 id="lifebuoy-embed_icon-acknowledgments"><i class="icon icon-medium"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><title>lifebuoy</title><path d="M19.79,15.41C20.74,13.24 20.74,10.75 19.79,8.59L17.05,9.83C17.65,11.21 17.65,12.78 17.06,14.17L19.79,15.41M15.42,4.21C13.25,3.26 10.76,3.26 8.59,4.21L9.83,6.94C11.22,6.35 12.79,6.35 14.18,6.95L15.42,4.21M4.21,8.58C3.26,10.76 3.26,13.24 4.21,15.42L6.95,14.17C6.35,12.79 6.35,11.21 6.95,9.82L4.21,8.58M8.59,19.79C10.76,20.74 13.25,20.74 15.42,19.78L14.18,17.05C12.8,17.65 11.22,17.65 9.84,17.06L8.59,19.79M12,2A10,10 0 0,1 22,12A10,10 0 0,1 12,22A10,10 0 0,1 2,12A10,10 0 0,1 12,2M12,8A4,4 0 0,0 8,12A4,4 0 0,0 12,16A4,4 0 0,0 16,12A4,4 0 0,0 12,8Z" /></svg>
+</i> Acknowledgments<a class="headerlink" href="#lifebuoy-embed_icon-acknowledgments" title="Permanent link">&para;</a></h3>
+<p>If you collaborated with any other students, or received help from TAs or AI
+tools on this assignment, please record this support in the <code>README.md</code> in
+the <code>homework03</code> folder and include it with your <strong>Pull Request</strong>.</p>
+</div>
+<div class="alert success-bg">
+<h3 id="account-question-embed_icon-graders"><i class="icon icon-medium"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><title>account-question</title><path d="M13,8A4,4 0 0,1 9,12A4,4 0 0,1 5,8A4,4 0 0,1 9,4A4,4 0 0,1 13,8M17,18V20H1V18C1,15.79 4.58,14 9,14C13.42,14 17,15.79 17,18M20.5,14.5V16H19V14.5H20.5M18.5,9.5H17V9A3,3 0 0,1 20,6A3,3 0 0,1 23,9C23,9.97 22.5,10.88 21.71,11.41L21.41,11.6C20.84,12 20.5,12.61 20.5,13.3V13.5H19V13.3C19,12.11 19.6,11 20.59,10.35L20.88,10.16C21.27,9.9 21.5,9.47 21.5,9A1.5,1.5 0 0,0 20,7.5A1.5,1.5 0 0,0 18.5,9V9.5Z" /></svg>
+</i> Graders<a class="headerlink" href="#account-question-embed_icon-graders" title="Permanent link">&para;</a></h3>
+<p>Once you have committed your work and pushed it to <a href="https://github.com">GitHub</a>, remember to
+create a <strong>pull request</strong> and assign it to the appropriate <strong>teaching
+assistant</strong> from the <a href="reading03_tas.html">Reading 03 TA List</a>.</p>
+<p><strong>Note</strong>: this list changes each week, so be sure to consult the appropriate
+list for each assignment.</p>
+</div>
+</main>
+<footer>
+Built using <a href="https://python.org">Python</a>
+and <a href="https://jinja.palletsprojects.com">Jinja</a>
+with colors from 
+<a href="https://onmessage.nd.edu/university-branding/colors/">Notre Dame</a>, 
+<a href="https://spreadsheet.dev/how-to-get-the-hexadecimal-codes-of-colors-in-google-sheets">Google Docs</a>, and 
+<a href="https://nordtheme.com">Nord Theme</a>,
+and icons from <a href="https://pictogrammers.com/library/mdi/">Material Design Icons</a>.</footer>
+</body>
+</html>
