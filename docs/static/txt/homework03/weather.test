@@ -1,0 +1,202 @@
+#!/usr/bin/env python3
+
+import doctest
+import io
+import itertools
+import math
+import mypy.api
+import os
+import subprocess
+import unittest
+import unittest.mock
+
+import weather
+
+# Unit Tests
+
+class WeatherTest(unittest.TestCase):
+
+    @classmethod
+    def setUpClass(cls):
+        cls.Points = 0
+        cls.Total  = len([method for method in dir(cls) if method.startswith('test_')])
+
+    @classmethod
+    def tearDownClass(cls):
+        print()
+        print(f'   Score {cls.Points:5.2f} / {cls.Total:5.2f}')
+        print(f'   Grade {cls.Points/cls.Total:5.2f} / {1.0:5.2f}')
+        print(f'  Status {"Success" if math.isclose(cls.Points, cls.Total) else "Failure"}')
+        print()
+
+    @classmethod
+    def weather_sh(cls, zipcode: int, celsius: bool=False):
+        tmp_cmds = [
+            f'curl -sL "{weather.WEATHER_URL}?inputstring={zipcode}"',
+             'sed -En \'s/.*"myforecast-current-sm">(-?[0-9]+).*/\\1/p\'' if celsius else
+             'sed -En \'s/.*"myforecast-current-lrg">(-?[0-9]+).*/\\1/p\''
+        ]
+        with os.popen('|'.join(tmp_cmds)) as stream:
+            temperature = stream.read().strip() + ('°C' if celsius else '°F')
+
+        fct_cmds = [
+            f'curl -sL "{weather.WEATHER_URL}?inputstring={zipcode}"',
+             'sed -En \'s/.*"myforecast-current">([^<]+)<.*/\\1/p\'',
+        ]
+        with os.popen('|'.join(fct_cmds)) as stream:
+            forecast = stream.read().strip()
+        return temperature, forecast
+
+    def test_00_doctest(self):
+        failures, tests = doctest.testmod(weather, verbose=False)
+        self.assertEqual(failures, 0)
+        self.assertEqual(tests, 4)
+        WeatherTest.Points += 1.0
+
+    def test_01_mypy(self):
+        _, _, exit_status = mypy.api.run(['weather.py'])
+        self.assertTrue(exit_status == 0)
+        WeatherTest.Points += 1.0
+
+    def test_02_weather_default(self):
+        zipcode = weather.DEFAULT_ZIPCODE
+        self.assertEqual(
+            weather.weather(zipcode),
+            WeatherTest.weather_sh(zipcode)
+        )
+        WeatherTest.Points += 0.5
+
+        self.assertEqual(
+            weather.weather(zipcode, celsius=True),
+            WeatherTest.weather_sh(zipcode, celsius=True)
+        )
+        WeatherTest.Points += 0.5
+
+    def test_03_weather_46637(self):
+        zipcode = 46637
+        self.assertEqual(
+            weather.weather(zipcode),
+            WeatherTest.weather_sh(zipcode)
+        )
+        WeatherTest.Points += 0.5
+
+        self.assertEqual(
+            weather.weather(zipcode, celsius=True),
+            WeatherTest.weather_sh(zipcode, celsius=True)
+        )
+        WeatherTest.Points += 0.5
+
+    def test_04_weather_54701(self):
+        zipcode = 54701
+        self.assertEqual(
+            weather.weather(zipcode),
+            WeatherTest.weather_sh(zipcode)
+        )
+        WeatherTest.Points += 0.5
+
+        self.assertEqual(
+            weather.weather(zipcode, celsius=True),
+            WeatherTest.weather_sh(zipcode, celsius=True)
+        )
+        WeatherTest.Points += 0.5
+
+    def test_05_weather_92867(self):
+        zipcode = 92867
+        self.assertEqual(
+            weather.weather(zipcode),
+            WeatherTest.weather_sh(zipcode)
+        )
+        WeatherTest.Points += 0.5
+
+        self.assertEqual(
+            weather.weather(zipcode, celsius=True),
+            WeatherTest.weather_sh(zipcode, celsius=True)
+        )
+        WeatherTest.Points += 0.5
+
+    def test_06_main_usage(self):
+        with unittest.mock.patch('sys.stderr', new=io.StringIO()) as output:
+            with self.assertRaises(SystemExit) as context:
+                weather.main('-h'.split())
+            self.assertTrue('Usage' in output.getvalue())
+        self.assertEqual(str(context.exception), '0')
+        WeatherTest.Points += 0.5
+
+        with unittest.mock.patch('sys.stderr', new=io.StringIO()) as output:
+            with self.assertRaises(SystemExit) as context:
+                weather.main('-f'.split())
+            self.assertTrue('Usage' in output.getvalue())
+        self.assertEqual(str(context.exception), '1')
+
+        WeatherTest.Points += 0.5
+
+    def test_07_main_default(self):
+        zipcode    = weather.DEFAULT_ZIPCODE
+        temp, fore = WeatherTest.weather_sh(zipcode)
+        expected   = f'Temperature: {temp}\nForecast:    {fore}\n'
+        with unittest.mock.patch('sys.stdout', new=io.StringIO()) as output:
+            weather.main(''.split())
+        self.assertEqual(output.getvalue(), expected)
+        WeatherTest.Points += 0.5
+
+        temp, fore = WeatherTest.weather_sh(zipcode, celsius=True)
+        expected   = f'Temperature: {temp}\nForecast:    {fore}\n'
+        with unittest.mock.patch('sys.stdout', new=io.StringIO()) as output:
+            weather.main('-c'.split())
+        self.assertEqual(output.getvalue(), expected)
+        WeatherTest.Points += 0.5
+
+    def test_08_main_46637(self):
+        zipcode    = 46637
+        temp, fore = WeatherTest.weather_sh(zipcode)
+        expected   = f'Temperature: {temp}\nForecast:    {fore}\n'
+        with unittest.mock.patch('sys.stdout', new=io.StringIO()) as output:
+            weather.main(f'{zipcode}'.split())
+        self.assertEqual(output.getvalue(), expected)
+        WeatherTest.Points += 0.5
+
+        temp, fore = WeatherTest.weather_sh(zipcode, celsius=True)
+        expected   = f'Temperature: {temp}\nForecast:    {fore}\n'
+        with unittest.mock.patch('sys.stdout', new=io.StringIO()) as output:
+            weather.main(f'-c {zipcode}'.split())
+        self.assertEqual(output.getvalue(), expected)
+        WeatherTest.Points += 0.5
+
+    def test_09_main_54701(self):
+        zipcode    = 54701
+        temp, fore = WeatherTest.weather_sh(zipcode)
+        expected   = f'Temperature: {temp}\nForecast:    {fore}\n'
+        with unittest.mock.patch('sys.stdout', new=io.StringIO()) as output:
+            weather.main(f'{zipcode}'.split())
+        self.assertEqual(output.getvalue(), expected)
+        WeatherTest.Points += 0.5
+
+        temp, fore = WeatherTest.weather_sh(zipcode, celsius=True)
+        expected   = f'Temperature: {temp}\nForecast:    {fore}\n'
+        with unittest.mock.patch('sys.stdout', new=io.StringIO()) as output:
+            weather.main(f'-c {zipcode}'.split())
+        self.assertEqual(output.getvalue(), expected)
+        WeatherTest.Points += 0.5
+
+    def test_10_main_92867(self):
+        zipcode    = 92867
+        temp, fore = WeatherTest.weather_sh(zipcode)
+        expected   = f'Temperature: {temp}\nForecast:    {fore}\n'
+        with unittest.mock.patch('sys.stdout', new=io.StringIO()) as output:
+            weather.main(f'{zipcode}'.split())
+        self.assertEqual(output.getvalue(), expected)
+        WeatherTest.Points += 0.5
+
+        temp, fore = WeatherTest.weather_sh(zipcode, celsius=True)
+        expected   = f'Temperature: {temp}\nForecast:    {fore}\n'
+        with unittest.mock.patch('sys.stdout', new=io.StringIO()) as output:
+            weather.main(f'-c {zipcode}'.split())
+        self.assertEqual(output.getvalue(), expected)
+        WeatherTest.Points += 0.5
+
+# Main Execution
+
+if __name__ == '__main__':
+    unittest.main()
+
+# vim: set sts=4 sw=4 ts=8 expandtab ft=python:
