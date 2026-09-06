@@ -1,0 +1,223 @@
+#!/usr/bin/env python3
+
+import base64
+import doctest
+import io
+import itertools
+import math
+import mypy.api
+import os
+import requests
+import subprocess
+import unittest
+import unittest.mock
+
+import campus
+
+# Unit Tests
+
+class CampusTest(unittest.TestCase):
+
+    RESULTS_URL = 'https://pnutz.h4x0r.space/courses/cse.20589.fa26/static/txt/homework03/campus.json'
+
+    @classmethod
+    def setUpClass(cls):
+        cls.Points = 0
+        cls.Total  = len([method for method in dir(cls) if method.startswith('test_')])
+        cls.Campus = requests.get(cls.RESULTS_URL).json()
+
+    @classmethod
+    def tearDownClass(cls):
+        print()
+        print(f'   Score {cls.Points:5.2f} / {cls.Total:5.2f}')
+        print(f'   Grade {cls.Points/cls.Total:5.2f} / {1.0:5.2f}')
+        print(f'  Status {"Success" if math.isclose(cls.Points, cls.Total) else "Failure"}')
+        print()
+
+    def test_00_doctest(self):
+        failures, tests = doctest.testmod(campus, verbose=False)
+        self.assertEqual(failures, 0)
+        self.assertEqual(tests, 3)
+        CampusTest.Points += 1.0
+
+    def test_01_mypy(self):
+        _, _, exit_status = mypy.api.run(['campus.py'])
+        self.assertTrue(exit_status == 0)
+        CampusTest.Points += 1.0
+
+    def test_02_campus_dillon(self):
+        expected = base64.b64decode(self.Campus['dillon']).decode()
+        with unittest.mock.patch('sys.stdout', new=io.StringIO()) as output:
+            campus.campus('dillon', [])
+        self.assertEqual(output.getvalue(), expected)
+        CampusTest.Points += 1.0
+
+    def test_03_campus_welsh(self):
+        expected = base64.b64decode(self.Campus['welsh']).decode()
+        with unittest.mock.patch('sys.stdout', new=io.StringIO()) as output:
+            campus.campus('welsh', [], limit=1)
+        self.assertEqual(output.getvalue(), expected)
+        CampusTest.Points += 1.0
+
+    def test_04_campus_fitz(self):
+        expected = base64.b64decode(self.Campus['fitz']).decode()
+        with unittest.mock.patch('sys.stdout', new=io.StringIO()) as output:
+            campus.campus('fitz', [])
+        self.assertEqual(output.getvalue(), expected)
+        CampusTest.Points += 1.0
+
+    def test_05_campus_cushing(self):
+        expected = base64.b64decode(self.Campus['cushing']).decode()
+        with unittest.mock.patch('sys.stdout', new=io.StringIO()) as output:
+            campus.campus('cushing', [])
+        self.assertEqual(output.getvalue(), expected)
+        CampusTest.Points += 1.0
+
+    def test_06_campus_dpac(self):
+        expected = base64.b64decode(self.Campus['dpac']).decode()
+        with unittest.mock.patch('sys.stdout', new=io.StringIO()) as output:
+            campus.campus('dpac', [])
+        self.assertEqual(output.getvalue(), expected)
+        CampusTest.Points += 1.0
+
+    def test_07_campus_greenspace(self):
+        expected = base64.b64decode(self.Campus['greenspace']).decode()
+        with unittest.mock.patch('sys.stdout', new=io.StringIO()) as output:
+            campus.campus('', ['greenspace'])
+        self.assertEqual(output.getvalue(), expected)
+        CampusTest.Points += 1.0
+
+    def test_08_campus_athletics(self):
+        expected = base64.b64decode(self.Campus['athletics']).decode()
+        with unittest.mock.patch('sys.stdout', new=io.StringIO()) as output:
+            campus.campus('', ['athletics'], limit=10)
+        self.assertEqual(output.getvalue(), expected)
+        CampusTest.Points += 1.0
+
+    def test_09_campus_food(self):
+        expected = base64.b64decode(self.Campus['food']).decode()
+        with unittest.mock.patch('sys.stdout', new=io.StringIO()) as output:
+            campus.campus('', ['food'], limit=20)
+        self.assertEqual(output.getvalue(), expected)
+        CampusTest.Points += 1.0
+
+    def test_10_campus_tour(self):
+        expected = base64.b64decode(self.Campus['tour']).decode()
+        with unittest.mock.patch('sys.stdout', new=io.StringIO()) as output:
+            campus.campus('', ['tour'], limit=30)
+        self.assertEqual(output.getvalue(), expected)
+        CampusTest.Points += 1.0
+
+    def test_11_campus_food_tour(self):
+        expected = base64.b64decode(self.Campus['food_tour']).decode()
+        with unittest.mock.patch('sys.stdout', new=io.StringIO()) as output:
+            campus.campus('', ['food', 'tour'], limit=20)
+        self.assertEqual(output.getvalue(), expected)
+        CampusTest.Points += 1.0
+
+    def test_12_campus_hall(self):
+        expected = base64.b64decode(self.Campus['halls']).decode()
+        with unittest.mock.patch('sys.stdout', new=io.StringIO()) as output:
+            campus.campus('', ['residence hall'], limit=40)
+        self.assertEqual(output.getvalue(), expected)
+        CampusTest.Points += 1.0
+
+    def test_13_main_usage(self):
+        with unittest.mock.patch('sys.stderr', new=io.StringIO()) as output:
+            with self.assertRaises(SystemExit) as context:
+                campus.main('-h'.split())
+            self.assertTrue('Usage' in output.getvalue())
+        self.assertEqual(str(context.exception), '0')
+        CampusTest.Points += 0.5
+
+        with unittest.mock.patch('sys.stderr', new=io.StringIO()) as output:
+            with self.assertRaises(SystemExit) as context:
+                campus.main('-f'.split())
+            self.assertTrue('Usage' in output.getvalue())
+        self.assertEqual(str(context.exception), '1')
+
+        CampusTest.Points += 0.5
+
+    def test_14_main_dillon(self):
+        expected = base64.b64decode(self.Campus['dillon']).decode()
+        with unittest.mock.patch('sys.stdout', new=io.StringIO()) as output:
+            campus.main(['dillon'])
+        self.assertEqual(output.getvalue(), expected)
+        CampusTest.Points += 1.0
+
+    def test_15_main_welsh(self):
+        expected = base64.b64decode(self.Campus['welsh']).decode()
+        with unittest.mock.patch('sys.stdout', new=io.StringIO()) as output:
+            campus.main(['-n', '1', 'welsh'])
+        self.assertEqual(output.getvalue(), expected)
+        CampusTest.Points += 1.0
+
+    def test_16_main_fitz(self):
+        expected = base64.b64decode(self.Campus['fitz']).decode()
+        with unittest.mock.patch('sys.stdout', new=io.StringIO()) as output:
+            campus.main(['fitz'])
+        self.assertEqual(output.getvalue(), expected)
+        CampusTest.Points += 1.0
+
+    def test_17_main_cushing(self):
+        expected = base64.b64decode(self.Campus['cushing']).decode()
+        with unittest.mock.patch('sys.stdout', new=io.StringIO()) as output:
+            campus.main(['cushing'])
+        self.assertEqual(output.getvalue(), expected)
+        CampusTest.Points += 1.0
+
+    def test_18_main_dpac(self):
+        expected = base64.b64decode(self.Campus['dpac']).decode()
+        with unittest.mock.patch('sys.stdout', new=io.StringIO()) as output:
+            campus.main(['dpac'])
+        self.assertEqual(output.getvalue(), expected)
+        CampusTest.Points += 1.0
+
+    def test_19_main_greenspace(self):
+        expected = base64.b64decode(self.Campus['greenspace']).decode()
+        with unittest.mock.patch('sys.stdout', new=io.StringIO()) as output:
+            campus.main(['-t', 'greenspace'])
+        self.assertEqual(output.getvalue(), expected)
+        CampusTest.Points += 1.0
+
+    def test_20_main_athletics(self):
+        expected = base64.b64decode(self.Campus['athletics']).decode()
+        with unittest.mock.patch('sys.stdout', new=io.StringIO()) as output:
+            campus.main(['-n', '10', '-t', 'athletics'])
+        self.assertEqual(output.getvalue(), expected)
+        CampusTest.Points += 1.0
+
+    def test_21_main_food(self):
+        expected = base64.b64decode(self.Campus['food']).decode()
+        with unittest.mock.patch('sys.stdout', new=io.StringIO()) as output:
+            campus.main(['-n', '20', '-t', 'food'])
+        self.assertEqual(output.getvalue(), expected)
+        CampusTest.Points += 1.0
+
+    def test_22_main_tour(self):
+        expected = base64.b64decode(self.Campus['tour']).decode()
+        with unittest.mock.patch('sys.stdout', new=io.StringIO()) as output:
+            campus.main(['-n', '30', '-t', 'tour'])
+        self.assertEqual(output.getvalue(), expected)
+        CampusTest.Points += 1.0
+
+    def test_23_main_food_tour(self):
+        expected = base64.b64decode(self.Campus['food_tour']).decode()
+        with unittest.mock.patch('sys.stdout', new=io.StringIO()) as output:
+            campus.main(['-n', '20', '-t', 'food,tour'])
+        self.assertEqual(output.getvalue(), expected)
+        CampusTest.Points += 1.0
+
+    def test_24_main_food_halls(self):
+        expected = base64.b64decode(self.Campus['halls']).decode()
+        with unittest.mock.patch('sys.stdout', new=io.StringIO()) as output:
+            campus.main(['-n', '40', '-t', 'residence hall'])
+        self.assertEqual(output.getvalue(), expected)
+        CampusTest.Points += 1.0
+
+# Main Execution
+
+if __name__ == '__main__':
+    unittest.main()
+
+# vim: set sts=4 sw=4 ts=8 expandtab ft=python:
