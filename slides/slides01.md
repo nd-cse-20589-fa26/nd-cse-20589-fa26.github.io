@@ -638,12 +638,12 @@ class="caution">process streams of text</strong>.
 
 <strong class="success">This is the Unix Philosophy</strong>
 
-Write programs that do <strong class="caution">one thing</strong> and <strong
+Write programs that <strong class="caution">do one thing</strong> and <strong
 class="caution">do it well</strong>.
 
-Write programs to <strong class="caution">work together</strong>.
+Write programs that <strong class="caution">work together</strong>.
 
-Write programs to handle <strong class="caution">text streams</strong>, because
-that is a universal interface.
+Write programs that <strong class="caution">handle text streams</strong>,
+because that is a universal interface.
 
 </div>
