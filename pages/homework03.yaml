@@ -1,0 +1,683 @@
+title:      "Homework 03: Weather, Campus"
+body:       |
+
+  The goal of this homework assignment is to allow you to practice writing
+  [Python] scripts that either extract data using [regular expressions] or
+  manipulate structured data in [JSON] format.  In each script, you will build
+  on your knowledge of [data structures] such as [lists] and [dicts] to process
+  data you fetch via [HTTP] using [requests].
+
+  For this assignment, record your scripts and any responses to the following
+  activities in the `homework03` folder of your **assignments** [GitHub]
+  repository and push your work by **noon Saturday, September 12**.
+
+  [Python]: https://www.python.org/
+  [data structures]: https://en.wikipedia.org/wiki/Data_structure
+  [list]: https://docs.python.org/3/library/stdtypes.html#list
+  [lists]: https://docs.python.org/3/library/stdtypes.html#list
+  [dicts]: https://docs.python.org/3/library/stdtypes.html#dict
+  [dict]: https://docs.python.org/3/library/stdtypes.html#dict
+  [Unix]: https://en.wikipedia.org/wiki/Unix
+  [regular expressions]: https://en.wikipedia.org/wiki/Regular_expression
+  [HTTP]: https://en.wikipedia.org/wiki/HTTP
+  [requests]: https://requests.readthedocs.io/
+
+  ## Activity 0: Preparation
+
+  Before starting this homework assignment, you should first perform a `git
+  pull` to retrieve any changes in your remote [GitHub] repository:
+
+      :::bash
+      $ cd path/to/repository                   # Go to assignments repository
+
+      $ git switch master                       # Make sure we are in master branch
+
+      $ git pull --rebase                       # Get any remote changes not present locally
+
+  Next, create a new branch for this assignment:
+
+      :::bash
+      $ git switch -c homework03                # Create homework03 branch and check it out
+
+  ### Task 1: Skeleton Code
+
+  To help you get started, the instructor has provided you with the following **skeleton code**:
+
+      ::bash
+      # Go to homework03 folder
+      $ cd homework03
+
+      # Download Makefile
+      $ curl -LO https://pnutz.h4x0r.space/courses/cse.20589.fa26/static/txt/homework03/Makefile
+
+      # Download Python skeleton code
+      $ curl -LO https://pnutz.h4x0r.space/courses/cse.20589.fa26/static/txt/homework03/weather.py
+      $ curl -LO https://pnutz.h4x0r.space/courses/cse.20589.fa26/static/txt/homework03/campus.py
+
+  Once downloaded, you should see the following files in your `homework03` directory:
+
+      :::bash
+      homework03
+          \_ Makefile     # This is the Makefile building all the assignment artifacts
+          \_ campus.py    # This is the Python script for the campus script
+          \_ weather.py   # This is the Python script for the weather script
+
+  <div class="alert warning-bg" markdown="1">
+
+  ### <i class="icon icon-medium">{{ "alert" | embed_icon }}</i> DocTests
+
+  You may notice that in addition to the usual comments and `TODOs`, the
+  [docstrings] of each method also contains a few [doctests].
+
+  You are **not** to modify these [doctests] and must keep them in-place. They
+  are used to verify the correctness of your code.
+
+  Your code goes **below** the [docstrings], where the `TODO` and `pass`
+  commands are (you may remove the pass once you complete the method).
+
+  </div>
+
+  [docstrings]: https://peps.python.org/pep-0257/
+  [doctests]: https://docs.python.org/3/library/doctest.html
+
+  ### Task 2: Initial Import
+
+  Now that the files are downloaded into the `homework03` folder, you can
+  **commit** them to your [git] repository:
+
+      :::bash
+      $ git add Makefile                            # Mark changes for commit
+      $ git add *.py
+      $ git commit -m "Homework 03: Initial Import" # Record changes
+
+  ### Task 3: Unit Tests
+
+  After downloading these files, you can run the `make` command to run the
+  tests.
+
+      :::bash
+      # Run all tests (will trigger automatic download)
+      $ make
+
+  You will notice that the Makefile downloads these additional test data and scripts:
+
+      :::bash
+      homework03
+          \_ campus.test  # This is the Python test for the campus script
+          \_ weather.test # This is the Python test for the weather script
+
+  In addition to the embedded [doctests] in the **skeleton code**, you will be
+  using these [unit tests] to verify the correctness and behavior of your code.
+
+  <div class="alert info-bg" markdown="1">
+
+  ### <i class="icon icon-medium">{{ "download" | embed_icon }}</i> Automatic Downloads
+
+  The `test` scripts are automatically downloaded by the `Makefile`, so any
+  modifications you do to them will be lost when you run `make` again. Likewise,
+  because they are automatically downloaded, you do not need to `add` or `commit`
+  them to your [git] repository.
+
+  </div>
+
+  The details on what you need to implement for this assignment are described
+  in the following sections.
+
+  ## Activity 1: Weather (*0.4 Points*)
+
+  Michael is not amused by heat and humidity on campus and longs for the cool
+  breeze of Fall.  Obsessed with the weather, he compulsively checks
+  [weather.gov], which is a website by the [National Weather Service].  While
+  checking the weather for the fifth time on his phone during class, he
+  realized that he could actually apply some of the things he is learning in
+  class to his current obsession.
+
+  For example, he realized that he can fetch the weather information for any
+  [zipcode], using the following [URL]:
+
+      :::bash
+      $ curl -sL https://forecast.weather.gov/zipcity.php?inputstring=$ZIPCODE
+
+  For instance, the weather information for Notre Dame, Indiana can be
+  retrieved using:
+
+      :::bash
+      $ curl -sL https://forecast.weather.gov/zipcity.php?inputstring=46556
+
+  Looking at the data retrieved from the website, he notices that the forecast
+  and temperature information is wrapped in [HTML] fields that contain the text
+  "myforecast":
+
+      :::html
+      ...
+      <p class="myforecast-current">Overcast</p>
+      <p class="myforecast-current-lrg">37&deg;F</p>
+      <p class="myforecast-current-sm">3&deg;C</p>
+      ...
+
+  Michael wants to make a [Python] script `weather.py` that will fetch the
+  weather information for any specified [zipcode] and extract the temperature
+  and forecast.  Unfortunately, despite taking AP Computer Science in high
+  school, he is still a bit confused about using [requests] to fetch [HTTP]
+  data and [re] to extract data using [regular expressions].
+
+  You decide that you could use some practice with [Python] and [regular
+  expressions], and so you help him complete the `weather.py` script such that
+  it behaves as follows:
+
+      :::bash
+      # Display usage message
+      $ ./weather.py -h
+      Usage: weather [-c] ZIPCODE
+          -c    Use Celsius degrees instead of Fahrenheit for temperature
+
+      If zipcode is not provided, then it defaults to 46556.
+
+      # Display temperature and forecast for default ZIPCODE (46556)
+      $ ./weather.py
+      Temperature: 78°F
+      Forecast:    Fair
+
+      # Display temperature and forecast for Orange, CA (92867)
+      $ ./weather.py 92867
+      Temperature: 69°F
+      Forecast:    NA
+
+      # Display temperature and forecast for Eau Claire, WI (54701) in Celsius
+      $ ./weather.py -c 54701
+      Temperature: 28°C
+      Forecast:    Fair
+
+  The `weather.py` script takes the following possible flags:
+
+  - `-c`: This allows the user to specify that the <b>temperature</b> should be displayed in <b>Celsius</b> rather than <b>Fahrenheit</b>.
+
+  If the user specifies an unknown flag, then the program should print the
+  usage message and exit with a failure status.
+
+  After the flags, the `weather.py` script accepts one positional argument as
+  the `ZIPCODE`.  If none is given, then `46556` is used by default.
+
+  [weather.gov]: https://www.weather.gov/
+  [National Weather Service]: https://www.weather.gov/
+  [zipcode]: https://en.wikipedia.org/wiki/ZIP_Code
+  [URL]: https://en.wikipedia.org/wiki/URL
+  [re]: https://docs.python.org/3/library/re.html
+
+  ### Task 1: `weather.py`
+
+  To build this script, you will need to complete the `weather.py` [Python] script
+  by implementing the following functions:
+
+  1.  <div class="flex-col" markdown="1">
+
+      `weather(zipcode: int, url: str=WEATHER_URL, celsius: bool=False) -> tuple[Optional[str], Optional[str]]`
+
+      > This function fetches the weather information for `zipcode`, extracts
+      the `temperature` and `forecast`, and returns both.  If `celsius` is
+      `True`, then it returns the `temperature` in <b>Celsius</b>; otherwise,
+      it returns the degrees in <b>Fahrenheit</b>.
+
+      <div class="alert success-bg" markdown="1">
+
+      **Hint**: Use [requests.get] to fetch the data via [HTTP] and then use
+      [re.findall] or [re.search] to extract the <b>temperature</b> and
+      <b>forecast</b> information using [regular expressions].
+
+      </div>
+
+  2.  <div class="flex-col" markdown="1">
+
+      `main(arguments: list[str]=sys.argv[1:]) -> None`
+
+      > This function processes the command-line `arguments` to determine
+      whether or not the <b>temperature</b> should be in <b>Celsius</b> or
+      <b>Fahrenheit</b> and which <b>ZIPCODE</b> to use (if none is specified
+      then use `46556`).  Afterwards, it uses the `weather` function to
+      retrieve the <b>temperature</b> and <b>forecast</b> information and then
+      prints them both out.
+
+      <div class="alert success-bg" markdown="1">
+
+      **Hint**: You can use the following format strings to print out the
+      <b>temperature</b> and <b>forecast</b>:
+
+          :::python
+          f'Temperature: {temperature}'
+          f'Forecast:    {forecast}'
+
+      </div>
+
+  [requests.get]: https://requests.readthedocs.io/en/latest/api/#requests.get
+  [re.findall]: https://docs.python.org/3/library/re.html#re.findall
+  [re.search]: https://docs.python.org/3/library/re.html#re.search
+
+  ### Task 2: Testing
+
+  As you implement `weather.py`, you can use the provided [doctests] to verify the
+  correctness of your code:
+
+      :::bash
+      # Run doctests
+      $ python3 -m doctest weather.py -v
+      ...
+      2 items had no tests:
+          weather
+          weather.usage
+      2 items passed all tests:
+        2 tests in weather.main
+        2 tests in weather.weather
+      4 tests in 4 items.
+      4 passed.
+      Test passed.
+
+  You can also use `make` to run both the [doctests] and the [unit tests]:
+
+      :::bash
+      # Run unit tests (and doctests)
+      $ make test-weather
+      Testing Weather ...
+      test_00_doctest (__main__.WeatherTest.test_00_doctest) ... ok
+      test_01_mypy (__main__.WeatherTest.test_01_mypy) ... ok
+      test_02_weather_default (__main__.WeatherTest.test_02_weather_default) ... ok
+      test_03_weather_46637 (__main__.WeatherTest.test_03_weather_46637) ... ok
+      test_04_weather_54701 (__main__.WeatherTest.test_04_weather_54701) ... ok
+      test_05_weather_92867 (__main__.WeatherTest.test_05_weather_92867) ... ok
+      test_06_main_usage (__main__.WeatherTest.test_06_main_usage) ... ok
+      test_07_main_default (__main__.WeatherTest.test_07_main_default) ... ok
+      test_08_main_46637 (__main__.WeatherTest.test_08_main_46637) ... ok
+      test_09_main_54701 (__main__.WeatherTest.test_09_main_54701) ... ok
+      test_10_main_92867 (__main__.WeatherTest.test_10_main_92867) ... ok
+
+         Score 11.00 / 11.00
+         Grade  1.00 /  1.00
+        Status Success
+
+
+      ----------------------------------------------------------------------
+      Ran 11 tests in 12.829s
+
+      OK
+
+  To just run the [unit tests], you can do the following:
+
+      :::bash
+      # Run unit tests
+      $ ./weather.test -v
+      ...
+
+  To run a specific [unit test], you can specify the **method name**:
+
+      :::bash
+      # Run only mypy unit test
+      $ ./weather.test -v WeatherTest.test_01_mypy
+      ...
+
+  To manually check your types, you can use [mypy]:
+
+      :::bash
+      # Run mypy to check types
+      $ mypy weather.py
+      ...
+
+  [I/O redirection]: https://en.wikipedia.org/wiki/Redirection_(computing)
+  [mypy]: https://mypy-lang.org/
+
+  ## Activity 2: Campus (*0.4 Points*)
+
+  It's been a while since Anna has been on campus.  With so much construction
+  in the last few years, it is difficult for even recent alumni to identify and
+  locate all the buildings.  Fortunately, [Notre Dame Creative] provides a
+  [Campus Map] with an [API] that returns [JSON] data.
+
+  For example, accessing the following [URL] will give all the information
+  about buildings named `dillon`:
+
+      :::bash
+      # Fetch JSON data about "dillon"
+      $ curl -sL https://map.nd.edu/placemarks.json?q=dillon
+      [{"id":86,"name":"Dillon Hall","permanent_uid":"1030","geometry": ...]
+
+  As can been seen, this [JSON] object is quite large and complex... That said,
+  the [API] is nice in that it allows users to query buildings by <b>name</b>
+  or by <b>tags</b> such as `tour` or `gameday`.
+
+  Seeing the potential in helping alumni navigate campus, Anna wants your help
+  in writing a `campus.py` script in [Python] that fetches this [JSON] data
+  using [requests] and then outputs the results in a more simplified format.
+
+  Now that you have gotten some more practice with [Python], you feel confident
+  in your abilities to slice and dice [data structures] such as [dicts] and
+  [lists], so you decided to help Anna write the `campus.py` script with the
+  following behavior:
+
+      :::bash
+      # Display usage message
+      $ ./campus.py
+      Usage: campus [-n LIMIT -t TAGS] NAME
+          -n LIMIT    Only display up to LIMIT results
+          -t TAGS     Search for specified TAGS
+
+      You may either search by NAME or by TAGS, but not both at the same time.
+
+      # Search for buildings named cushing
+      $ ./campus.py cushing
+         1. Cushing Hall of Engineering (125) [building,core]
+
+            Opened in 1933, the exterior is embellished with the names of
+            history's great scientists and engineers, as well as traditional
+            engineering tools. The lobby includes intricate mosaics and a
+            ceiling decorated with botanical and geometric forms.
+
+      # Search for buildings tagged as food and gameday
+      $ ./campus -t food,gameday
+         1. Bond Hall (79) [tour,gameday,food,building,core]
+
+            Built in 1917, Bond Hall was originally the university library.
+            Besides its library, auditorium, computer lab and studio space,
+            the hall’s main staircase serves as the platform for the Notre
+            Dame Marching Band’s game-day concerts.
+
+      # Search for buildings named debartolo (limit results to 2)
+      $ ./campus -n 2 debartolo
+         1. DeBartolo Hall (102) [tour,commencement,building,core]
+
+            This is an all-purpose classroom building. When it was built in
+            1992, it more than doubled Notre Dame’s classroom space with 84
+            classrooms, lecture halls and auditoriums. Just inside the main
+            entrance (the middle pavilion) is a statue of the Virgin Mary.
+            It is the original version of "Our Lady of the Universe", carved
+            by Rev. Anthony Lauck.
+
+        2. DeBartolo Hall: East - North (588) [a11y,entrance_a11y,core]
+
+            DeBartolo Hall accessible entrance East - North
+
+  The `campus.py` script takes the following possible flags:
+
+  - `-n`: This allows the user to specify the maximum number of results to show
+  (default is `5`).
+
+  -   <div class="flex-col" markdown="1">
+
+      `-t`: This allows the user to specify a list of <b>tags</b> (ie. *comma
+      separated*) to match rather than a <b>name</b>.
+
+      <div class="alert warning-bg" markdown="1">
+
+      **Note**: You should attempt to **match all tags** (ie. `AND`).
+
+      </div>
+
+
+  After the flags, the `campus.py` script accepts one positional argument as
+  the `NAME` to search.
+
+  If the user does not specify a <b>NAME</b> or any <b>TAGS</b>, then the
+  program should print the usage message and exit with a failure status.
+
+  [Notre Dame Creative]: https://creative.nd.edu/
+  [Campus Map]: https://map.nd.edu/
+  [API]: https://creative.nd.edu/services/web/website-design-development/apis/campus-map/
+
+  ### Task 1: `campus.py`
+
+  To build this utility, you will need to complete the `campus.py` [Python]
+  script by implementing the following functions:
+
+  1.  <div class="flex-col" markdown="1">
+
+      `clean_description(html: str) -> str:`
+
+      > This function *cleans* the `html` description by doing the following:
+      > removing images, removing links, replacing newlines with spaces,
+      > removing [HTML] tags, and stripping the final result.
+
+      <div class="alert success-bg" markdown="1">
+
+      **Hint**: You may want to use multiple instances of [re.sub] and [str.replace].
+
+      </div>
+
+  2.  <div class="flex-col" markdown="1">
+
+      `campus(query: str, tags: list[str], limit: int=5) -> None`
+
+      > This function uses the [API] provided by [Campus Map] to search for
+      either buildings matching `query` or buildings matching **all** of the
+      `tags`.
+
+      It displays up to `limit` results in the following format:
+
+          :::python
+          f'{index:4}. {placemark_name} ({placemark_id}) [{placemark_tags}]\n\n{placemark_description}'
+
+      <div class="alert success-bg" markdown="1">
+
+      **Hints**: You can use [str.join] to combine the list of `tags` into a single string.
+
+      Likewise, to have the description wrap nicely, you can use [textwrap.wrap] as follows:
+
+          :::python
+          placemark_description = f'\n'.join(textwrap.wrap(
+              clean_description(placemark['description']),
+              initial_indent    = INDENT,
+              subsequent_indent = INDENT,
+          ))
+
+      This uses [textwrap.wrap] to split the long description into a [list] of
+      strings, and then recombines these indented strings back into a single
+      description.
+
+      To handle printing blank lines between entries (*rather than after each
+      entry*), take a look at the approach used in the [wikipedia.py] example
+      discussed in class.
+
+      </div>
+
+  3.  <div class="flex-col" markdown="1">
+
+      `main(arguments: list[str]=sys.argv[1:]) -> None`
+
+      > This function processes the command-line `arguments` to determine which
+      `NAME` or `TAGS` to use to query the [API] of the [Campus Map] and then
+      calls `campus` to output up to `LIMIT` results.
+
+      <div class="alert success-bg" markdown="1">
+
+      **Hint**: You can use [list.extend] to add an entire [list] to the end of another [list].
+
+      </div>
+
+  [re.sub]: https://docs.python.org/3/library/re.html#re.sub
+  [str.join]: https://docs.python.org/3/library/stdtypes.html#str.join
+  [str.replace]: https://docs.python.org/3/library/stdtypes.html#str.replace
+  [textwrap.wrap]: https://docs.python.org/3/library/textwrap.html#textwrap.wrap
+  [wikipedia.py]: https://github.com/nd-cse-20589-fa26/examples/blob/master/slides09/wikipedia.py
+  [list.extend]: https://docs.python.org/3/library/stdtypes.html#sequence.extend
+
+  ### Task 2: Testing
+
+  As you implement `campus.py`, you can use the provided [doctests] to verify the
+  correctness of your code:
+
+      :::bash
+      # Run doctests
+      $ python3 -m doctest campus.py -v
+      ...
+      2 items had no tests:
+          campus
+          campus.usage
+      3 items passed all tests:
+        1 test in campus.campus
+        1 test in campus.clean_description
+        1 test in campus.main
+      3 tests in 5 items.
+      3 passed.
+      Test passed.
+
+  You can also use `make` to run both the [doctests] and the [unit tests]:
+
+      :::bash
+      # Run unit tests (and doctests)
+      $ make test-campus
+      test_00_doctest (__main__.CampusTest.test_00_doctest) ... ok
+      test_01_mypy (__main__.CampusTest.test_01_mypy) ... ok
+      test_02_campus_dillon (__main__.CampusTest.test_02_campus_dillon) ... ok
+      test_03_campus_welsh (__main__.CampusTest.test_03_campus_welsh) ... ok
+      test_04_campus_fitz (__main__.CampusTest.test_04_campus_fitz) ... ok
+      test_05_campus_cushing (__main__.CampusTest.test_05_campus_cushing) ... ok
+      test_06_campus_dpac (__main__.CampusTest.test_06_campus_dpac) ... ok
+      test_07_campus_greenspace (__main__.CampusTest.test_07_campus_greenspace) ... ok
+      test_08_campus_athletics (__main__.CampusTest.test_08_campus_athletics) ... ok
+      test_09_campus_food (__main__.CampusTest.test_09_campus_food) ... ok
+      test_10_campus_tour (__main__.CampusTest.test_10_campus_tour) ... ok
+      test_11_campus_food_tour (__main__.CampusTest.test_11_campus_food_tour) ... ok
+      test_12_campus_hall (__main__.CampusTest.test_12_campus_hall) ... ok
+      test_13_main_usage (__main__.CampusTest.test_13_main_usage) ... ok
+      test_14_main_dillon (__main__.CampusTest.test_14_main_dillon) ... ok
+      test_15_main_welsh (__main__.CampusTest.test_15_main_welsh) ... ok
+      test_16_main_fitz (__main__.CampusTest.test_16_main_fitz) ... ok
+      test_17_main_cushing (__main__.CampusTest.test_17_main_cushing) ... ok
+      test_18_main_dpac (__main__.CampusTest.test_18_main_dpac) ... ok
+      test_19_main_greenspace (__main__.CampusTest.test_19_main_greenspace) ... ok
+      test_20_main_athletics (__main__.CampusTest.test_20_main_athletics) ... ok
+      test_21_main_food (__main__.CampusTest.test_21_main_food) ... ok
+      test_22_main_tour (__main__.CampusTest.test_22_main_tour) ... ok
+      test_23_main_food_tour (__main__.CampusTest.test_23_main_food_tour) ... ok
+      test_24_main_food_halls (__main__.CampusTest.test_24_main_food_halls) ... ok
+
+         Score 25.00 / 25.00
+         Grade  1.00 /  1.00
+        Status Success
+
+
+      ----------------------------------------------------------------------
+      Ran 25 tests in 3.342s
+
+      OK
+
+  To just run the [unit tests], you can do the following:
+
+      :::bash
+      # Run unit tests
+      $ ./campus.test -v
+      ...
+
+  To run a specific [unit test], you can specify the **method name**:
+
+      :::bash
+      # Run only mypy unit test
+      $ ./campus.test -v CampusTest.test_01_mypy
+      ...
+
+  To manually check your types, you can use [mypy]:
+
+      :::bash
+      # Run mypy to check types
+      $ mypy campus.py
+      ...
+
+  ## Activity 3: Quiz (*0.2 Points*)
+
+  Once you have completed all the activities above, you are to complete the
+  following **reflection quiz**:
+
+  <div id="quiz-questions"></div>
+
+  <div id="quiz-responses"></div>
+
+  <script src="static/js/dredd-quiz.js"></script>
+  <script>
+  loadQuiz('static/json/homework03.json');
+  </script>
+
+  <pre style="display: none;" id="dr-container" class="codehilite"><code id="dredd-response"></code></pre>
+
+  As with [Reading 01], you will need to store your answers in a
+  `homework03/answers.json` file.  You can use the form above to generate the
+  contents of this file, or you can write the [JSON] by hand.
+
+  To test your quiz, you can use the `check.py` script:
+
+      :::bash
+      $ ../.scripts/check.py
+      Checking homework03 quiz ...
+           Q01  2.00 /  2.00
+           Q02  2.00 /  2.00
+           Q03  4.00 /  4.00
+           Q04  4.00 /  4.00
+        --------------------
+         Score 12.00 / 12.00
+         Grade  1.00 /  1.00
+        Status Success
+
+  ## Submission (*1 Point*)
+
+  To submit your assignment, please commit your work to the `homework03` folder
+  of your `homework03` branch in your **assignments** [GitHub] repository.
+  Your <code>homework03</code> folder should **only** contain the following files:
+
+  - <code>Makefile</code>
+  - <code>answers.json</code>
+  - <code>campus.py</code>
+  - <code>weather.py</code>
+
+  <div class="alert caution-bg" markdown="1">
+  **Note**: You do not need to commit the test scripts because the `Makefile`
+  automatically downloads them.
+  </div>
+
+      :::bash
+      #-----------------------------------------------------------------------
+      # Make sure you have already completed Activity 0: Preparation
+      #-----------------------------------------------------------------------
+      ...
+      $ git add weather.py                                  # Mark changes for commit
+      $ git commit -m "Homework 03: weather.py"             # Record changes
+      ...
+      $ git add campus.py                                   # Mark changes for commit
+      $ git commit -m "Homework 03: campus.py"              # Record changes
+      ...
+      $ git add answers.json                                # Mark changes for commit
+      $ git commit -m "Homework 03: Quiz"                   # Record changes
+      ...
+      $ git push -u origin homework03                       # Push branch to GitHub
+
+  <div class="alert warning-bg" markdown="1">
+
+  ### <i class="icon icon-medium">{{ "lifebuoy" | embed_icon }}</i> Acknowledgments
+
+  If you collaborated with any other students, or received help from TAs or AI
+  tools on this assignment, please record this support in the `README.md` in
+  the `homework03` folder and include it with your **Pull Request**.
+
+  </div>
+
+  <div class="alert success-bg" markdown="1">
+
+  ### <i class="icon icon-medium">{{ "account-question" | embed_icon }}</i> Graders
+
+  Once you have committed your work and pushed it to [GitHub], remember to
+  create a **pull request** and assign it to the appropriate **teaching
+  assistant** from the [Reading 03 TA List].
+
+  **Note**: this list changes each week, so be sure to consult the appropriate
+  list for each assignment.
+
+  </div>
+
+  [git]: https://git-scm.com/
+  [clone]: https://git-scm.com/docs/git-clone
+  [commit]: https://git-scm.com/docs/git-commit
+  [push]: https://git-scm.com/docs/git-push
+  [GitHub]: https://github.com
+  [Linux]: https://kernel.org
+  [add]: https://git-scm.com/docs/git-add
+  [Reading 01]: reading01.html
+  [Reading 03 TA List]: reading03_tas.html
+  [curl]: http://man7.org/linux/man-pages/man1/curl.1.html
+  [wget]: http://man7.org/linux/man-pages/man1/wget.1.html
+  [JSON]: https://json.org/
+  [unit tests]: https://en.wikipedia.org/wiki/Unit_testing
+  [unit test]: https://en.wikipedia.org/wiki/Unit_testing
