@@ -18,7 +18,7 @@ theme: domer-slides
 # Regular Expressions: <span class="gold">Overview</span>
 
 A <strong class="success">regular expression</strong> (*aka. <strong
-class="success">regex</strong>*) is a sequence of characters that define a
+class="success">regex</strong>*) is a sequence of characters that defines a
 search **pattern** that is used to match text.
 
 ```bash
