@@ -1,0 +1,30 @@
+{
+    "q01": {
+        "type": "multiple",
+        "question": "\n<p>Reflecting on your <code>weather.py</code>, which of the following\nstatements is <b>true</b> (<i>choose all that apply</i>).</p>\n",
+        "responses": {
+            "inputstring": "The <code>ZIPCODE</code> command line argument is sent to the server as the value of the <code>inputstring</code> parameter in the <b>HTTP</b> request.",
+            "multiple": "Multiple <b>HTTP</b> requests must be made to extract the <b>temperature</b> and <b>forecast</b> information.",
+            "separate": "Extracting the <b>Celsius</b> and <b>Fahrenheit</b> temperatures requires two separate <b>regular expressions</b>.",
+            "unescape": "To translate <code>&amp;deg;</code> into <code>\u00b0</code>, you can use <code>html.unescape</code>."
+        }
+    },
+    "q02": {
+        "type": "multiple",
+        "question": "\n<p>Reflecting on your <code>campus.py</code>, which of the following\nstatements is <b>true</b> (<i>choose all that apply</i>).</p>\n",
+        "responses": {
+            "name": "The <code>NAME</code> command line argument is sent to the server as the value of the <code>name</code> parameter in the <b>HTTP</b> request.",
+            "sub": "To find and replace patterns in the <code>clean_description</code> function, you can use <code>re.sub</code>.",
+            "json": "We must use <code>json.loads</code> on the <code>Response</code> object to convert the <code>text</code> into <b>Python</b> objects.",
+            "match_all": "To tell the <b>HTTP</b> server to match all tags, we must set the <code>match_all_tags</code> parameter to <code>\"1\"</code>."
+        }
+    },
+    "q03": {
+        "type": "blank",
+        "question": "\n<p>Using your <code>campus.py</code>, answer the following questions:</p>\n\n<ol>\n\n  <li>How many <b>buildings</b> are tagged as <b>residence halls</b> and <b>tour</b>? ____</li>\n  <li>How many <b>accessible entrances</b> does <b>Alumni Hall</b> have? ____</li>\n  <li>How many <b>accessible entrances</b> does <b>Alumni Stadium</b> have? ____</li>\n  <li>Which building is tagged <b>tour</b>, <b>commencement</b>, and <b>gameday</b> but not <b>green</b>? ____</li>\n\n</ol>\n"
+    },
+    "q04": {
+        "type": "blank",
+        "question": "\n<p>Given the list of words located at <code><a\nhref=\"https://yld.me/raw/a9bD\">https://yld.me/raw/a9bD</a></code>, use the\n<a href=\"https://requests.readthedocs.io/\">requests</a> and <a\nhref=\"https://docs.python.org/3/library/re.html\">re</a> libraries to\nperform the following tasks:</p>\n\n<p><b>Note:</b> For each of these, enter in the <b>count</b>.<p>\n\n<ol>\n\n<li><div class=\"flex-col\">\n\n<p><b>Count</b> the number of words that <b>end with the letters \"est\"</b>.\n____</p>\n\n<pre>\nabbest\nabdest\nablest\nabruptest\nabsolutest\n...\n</pre>\n</div></li>\n\n<li><div class=\"flex-col\">\n\n<p>Ignoring case, <b>count</b> the number of words that <b>start with the\nletter \"j\"</b>. ____</p>\n\n<pre>\n...\nJynginae\njyngine\nJynx\njynx\nJyoti\n</pre>\n</div></li>\n\n<li><div class=\"flex-col\">\n\n<p>Ignoring case, <b>count</b> the number of <b>unique</b>\n<b>five-character</b> words that have at least <b>three consecutive\nvowels</b> (ie. <code>a, e, i, o, u</code>).  ____</p>\n\n<pre>\n...\nzoeae\nzoeal\nzoeas\nzooid\nzuian\n</pre>\n</div></li>\n\n<li><div class=\"flex-col\">\n\n<p>Ignoring case, <b>count</b> the number of <b>unique</b>\n<b>six-character</b> words that <b>contain the pattern\n\"vowel-character-character-vowel\"</b>, where \"vowel\" and \"character\"\nrefer to the same character respectively.  ____</p>\n\n<pre>\n...\nyobbos\nyvette\nzaffar\nzimmis\nzinnia\n</pre>\n</div></li>\n\n</ol>\n"
+    }
+}
