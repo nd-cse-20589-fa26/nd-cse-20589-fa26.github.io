@@ -67,6 +67,8 @@
           - Reading 03
         items:
           - name:       Slides 07
+          - name:       Panopto
+            link:       https://notredame.hosted.panopto.com/Panopto/Pages/Viewer.aspx?id=fac04899-2451-4418-8d6f-b4be01130f0f
 
       - date:           Wed 09/09
         topics:         CSV
