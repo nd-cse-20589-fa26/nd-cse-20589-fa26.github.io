@@ -1,0 +1,280 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<!-- Favicon -->
+<link rel="icon" type="image/png" sizes="32x32" href="static/ico/favicon-32x32.png">
+<link rel="icon" type="image/png" sizes="16x16" href="static/ico/favicon-16x16.png">
+<link rel="manifest" href="static/ico/site.webmanifest">
+<!-- Stylesheets -->
+<link rel="stylesheet" href="static/css/domer.css">
+<title>Notes 07: Regular Expressions, Processes, Requests</title>
+</head>
+<body>
+<header>
+<a class="logo" href="notes07.html">
+    <h1>Notes 07: Regular Expressions, Processes, Requests</h1>
+</a>
+<nav>
+    <ul>
+        <li><a href="index.html"><h4>Home</h4></a></li>
+        </ul>
+</nav></header>
+<main>
+<h2 id="logistics">Logistics<a class="headerlink" href="#logistics" title="Permanent link">&para;</a></h2>
+<ul>
+<li><a href="reading03.html">Reading 03</a> error in Q3, Part 3 regarding <code>split</code> (<em>now fixed</em>)</li>
+<li>
+<p><a href="homework03.html">Homework 03</a> warning about live data (<em>services may slow or not respond</em>)</p>
+</li>
+<li>
+<p>Please remember to <code>git switch master</code> before creating new branch.</p>
+</li>
+</ul>
+<blockquote>
+<p>Thank you for <strong>patience</strong> and <strong>understanding</strong> and for efforts on working
+on the assignments.</p>
+</blockquote>
+<h2 id="review-unix-philosophy">Review: <span class="gold">Unix Philosophy</span><a class="headerlink" href="#review-unix-philosophy" title="Permanent link">&para;</a></h2>
+<div class="centered">
+<p>Write programs that <strong class="success">do one thing</strong> and <strong
+class="success">do it well</strong>.</p>
+<p><br></p>
+<p>Write programs that <strong class="success">work together</strong>.</p>
+<p><br></p>
+<p>Write programs that <strong class="success">handle text streams</strong>,
+because that is a universal interface.</p>
+</div>
+<blockquote>
+<p>We've experienced this power in the previous assignments...</p>
+</blockquote>
+<div class="codehilite"><pre><span></span><code><span class="c1"># Get all the users running a process on the current system</span>
+$<span class="w"> </span>ps<span class="w"> </span>aux<span class="w"> </span><span class="p">|</span><span class="w"> </span>cut<span class="w"> </span>-d<span class="w"> </span><span class="s1">&#39; &#39;</span><span class="w"> </span>-f<span class="w"> </span><span class="m">1</span>
+
+<span class="c1"># Count all the processes</span>
+$<span class="w"> </span>ps<span class="w"> </span>aux<span class="w"> </span><span class="p">|</span><span class="w"> </span>wc<span class="w"> </span>-l
+
+<span class="c1"># Count all the processes per user</span>
+$<span class="w"> </span>ps<span class="w"> </span>aux<span class="w"> </span><span class="p">|</span><span class="w"> </span>cut<span class="w"> </span>-d<span class="w"> </span><span class="s1">&#39; &#39;</span><span class="w"> </span>-f<span class="w"> </span><span class="m">1</span><span class="w"> </span><span class="p">|</span><span class="w"> </span>sort<span class="w"> </span><span class="p">|</span><span class="w"> </span>uniq<span class="w"> </span>-c
+</code></pre></div>
+
+<h2 id="review-data-structures">Review: <span class="gold">Data Structures</span><a class="headerlink" href="#review-data-structures" title="Permanent link">&para;</a></h2>
+<blockquote>
+<p>To implement these tools, we need <a href="https://en.wikipedia.org/wiki/Data_structure">data structures</a>.</p>
+</blockquote>
+<table class="bordered">
+<thead>
+    <th>Container</th>
+    <th>C</th>
+    <th>Python</th>
+    <th>Python Syntax</th>
+</thead>
+<tbody>
+    <tr class="success-bg">
+        <td class="centered">Sequence</td>
+        <td class="centered">DynamicArray, LinkedList</td>
+        <td class="centered">List</td>
+        <td class="centered">[a, b]</td>
+    </tr>
+    <tr class="caution-bg">
+        <td class="centered">Fixed</td>
+        <td class="centered">Array</td>
+        <td class="centered">Tuple</td>
+        <td class="centered">(a, b)</td>
+    </tr>
+    <tr class="warning-bg">
+        <td class="centered">Membership</td>
+        <td class="centered">ArraySet, ListSet, BitSet</td>
+        <td class="centered">Set</td>
+        <td class="centered">{a, b}</td>
+    </tr>
+    <tr class="danger-bg">
+        <td class="centered">Associative</td>
+        <td class="centered">HashTable</td>
+        <td class="centered">Dict</td>
+        <td class="centered">{a: 0, b: 1}</td>
+    </tr>
+</tbody>
+</table>
+
+<h2 id="regular-expressions-overview">Regular Expressions: <span class="gold">Overview</span><a class="headerlink" href="#regular-expressions-overview" title="Permanent link">&para;</a></h2>
+<blockquote>
+<p><a href="https://man7.org/linux/man-pages/man1/grep.1.html">grep</a> and <a href="https://man7.org/linux/man-pages/man1/sed.1.html">sed</a> are examples of <a href="https://en.wikipedia.org/wiki/Unix">Unix</a> tools (aka. <em>filters</em>) that use
+<a href="https://en.wikipedia.org/wiki/Regular_expression">regular expressions</a> to search text for <strong>patterns</strong>.</p>
+</blockquote>
+<div class="flex-row">
+<div class="flex-col">
+<div class="centered">
+<p>A <strong class="success">regular expression</strong> (<em>aka. <strong
+class="success">regex</strong></em>) is a sequence of characters that defines a
+search <strong>pattern</strong> that is used to match text.</p>
+</div>
+<div class="codehilite"><pre><span></span><code><span class="c1"># Use grep to search with regular expression</span>
+$<span class="w"> </span>grep<span class="w"> </span>-E<span class="w"> </span><span class="s1">&#39;2[0-9]*8&#39;</span><span class="w"> </span>/etc/passwd
+</code></pre></div>
+
+</div>
+<div class="flex-col">
+<p><img src="static/img/slides07-regex-theory.svg" class="transparent"></p>
+</div>
+</div>
+<h2 id="regular-expressions-syntax">Regular Expressions: <span class="gold">Syntax</span><a class="headerlink" href="#regular-expressions-syntax" title="Permanent link">&para;</a></h2>
+<table class="bordered">
+<thead>
+    <th class="info-bg">Metacharacter</th>
+    <th class="info-bg">Description</th>
+</thead>
+<tbody>
+    <tr class="success-bg"><td class="centered"><b>.</b></td><td>Match any single character</td></tr>
+    <tr class="success-bg"><td class="centered"><b>[]</b></td><td>Match a single character contained in bracket</td></tr>
+    <tr class="success-bg"><td class="centered"><b>[^]</b></td><td>Match a single character not contained in bracket</td></tr>
+    <tr class="caution-bg"><td class="centered"><b>[a-z]</b></td><td>Match any lowercase letter</td></tr>
+    <tr class="caution-bg"><td class="centered"><b>[0-9]</b></td><td>Match any numeric digit</td></tr>
+    <tr class="warning-bg"><td class="centered"><b>*</b></td><td>Match preceding set zero or more times</td></tr>
+    <tr class="warning-bg"><td class="centered"><b>?</b></td><td>Match preceding set zero or one time</td></tr>
+    <tr class="warning-bg"><td class="centered"><b>+</b></td><td>Match preceding set one or more times</td></tr>
+    <tr class="warning-bg"><td class="centered"><b>{m, n}</b></td><td>Match preceding set between m to n times</td></tr>
+    <tr class="danger-bg"><td class="centered"><b>^</b></td><td>Match the starting position within a string</td></tr>
+    <tr class="danger-bg"><td class="centered"><b>$</b></td><td>Match the ending position of a string</td></tr>
+    <tr class="special-bg"><td class="centered"><b>()</b></td><td>Marks subexpression that can be recalled later</td></tr>
+    <tr class="special-bg"><td class="centered"><b>\n</b></td><td>Match the nth marked subexpression matched</td></tr>
+</tbody>
+</table>
+
+<div class="codehilite"><pre><span></span><code>$<span class="w"> </span>cat<span class="w"> </span>tas.txt<span class="w"> </span><span class="p">|</span><span class="w"> </span>grep<span class="w"> </span>-E<span class="w"> </span><span class="s1">&#39;.*&#39;</span><span class="w">          </span><span class="c1"># Match all letters</span>
+$<span class="w"> </span>cat<span class="w"> </span>tas.txt<span class="w"> </span><span class="p">|</span><span class="w"> </span>grep<span class="w"> </span>-E<span class="w"> </span><span class="s1">&#39;e*&#39;</span><span class="w">          </span><span class="c1"># Match zero or more e&#39;s</span>
+$<span class="w"> </span>cat<span class="w"> </span>tas.txt<span class="w"> </span><span class="p">|</span><span class="w"> </span>grep<span class="w"> </span>-E<span class="w"> </span><span class="s1">&#39;e+&#39;</span><span class="w">          </span><span class="c1"># Match one or more e&#39;s</span>
+$<span class="w"> </span>cat<span class="w"> </span>tas.txt<span class="w"> </span><span class="p">|</span><span class="w"> </span>grep<span class="w"> </span>-E<span class="w"> </span><span class="s1">&#39;f{2}&#39;</span><span class="w">        </span><span class="c1"># Match exactly 2 f&#39;s</span>
+$<span class="w"> </span>cat<span class="w"> </span>tas.txt<span class="w"> </span><span class="p">|</span><span class="w"> </span>grep<span class="w"> </span>-E<span class="w"> </span><span class="s1">&#39;[aei]+&#39;</span><span class="w">      </span><span class="c1"># Match one or more of a,e,i</span>
+$<span class="w"> </span>cat<span class="w"> </span>tas.txt<span class="w"> </span><span class="p">|</span><span class="w"> </span>grep<span class="w"> </span>-E<span class="w"> </span><span class="s1">&#39;[^aei]+&#39;</span><span class="w">     </span><span class="c1"># Match everything but a,e,i</span>
+$<span class="w"> </span>cat<span class="w"> </span>tas.txt<span class="w"> </span><span class="p">|</span><span class="w"> </span>grep<span class="w"> </span>-E<span class="w"> </span><span class="s1">&#39;^[aei]&#39;</span><span class="w">      </span><span class="c1"># Match start</span>
+$<span class="w"> </span>cat<span class="w"> </span>tas.txt<span class="w"> </span><span class="p">|</span><span class="w"> </span>grep<span class="w"> </span>-E<span class="w"> </span><span class="s1">&#39;[aei]$&#39;</span><span class="w">      </span><span class="c1"># Match end</span>
+$<span class="w"> </span>cat<span class="w"> </span>tas.txt<span class="w"> </span><span class="p">|</span><span class="w"> </span>grep<span class="w"> </span>-E<span class="w"> </span><span class="s1">&#39;([aei]).*\1&#39;</span><span class="w"> </span><span class="c1"># Match w/ group references</span>
+</code></pre></div>
+
+<h2 id="example-pokemon">Example: <span class="gold">Pokemon</span><a class="headerlink" href="#example-pokemon" title="Permanent link">&para;</a></h2>
+<div class="flex-row">
+<div class="flex-col-25">
+<p><strong>Given</strong>:</p>
+<div class="codehilite"><pre><span></span><code>pikachu
+bulbasaur
+charmander
+chespin
+squirtle
+meowth
+togepi
+oshawott
+abra
+jigglypuff
+</code></pre></div>
+
+</div>
+<div class="flex-col">
+<blockquote>
+<p>Write a <strong class="success">regex</strong> to match:</p>
+</blockquote>
+<ol>
+<li>
+<p><strong>All</strong> the strings</p>
+</li>
+<li>
+<p>Only <strong>charmander</strong> and <strong>chespin</strong></p>
+</li>
+<li>
+<p>All the words with <strong>two t's</strong></p>
+</li>
+<li>
+<p>Words that <strong>don't start with a vowel</strong></p>
+</li>
+<li>
+<p>All words with <strong>two consecutive vowels</strong></p>
+</li>
+<li>
+<p>All words with <strong>two consecutive letters (same)</strong></p>
+</li>
+<li>
+<p>All words that <strong>begin</strong> and <strong>end with the same letter</strong></p>
+</li>
+<li>
+<p>All words with <strong>exactly 2 of r, s, or t</strong></p>
+</li>
+</ol>
+</div>
+</div>
+<div class="codehilite"><pre><span></span><code><span class="ch">#!/usr/bin/env python3</span>
+
+<span class="kn">import</span> <span class="nn">re</span>
+
+<span class="c1"># 0. Read in pokemon data</span>
+
+<span class="k">with</span> <span class="nb">open</span><span class="p">(</span><span class="s1">&#39;pokemon.txt&#39;</span><span class="p">)</span> <span class="k">as</span> <span class="n">stream</span><span class="p">:</span>
+    <span class="n">pokemon</span> <span class="o">=</span> <span class="n">stream</span><span class="o">.</span><span class="n">read</span><span class="p">()</span>
+
+<span class="c1"># 1. All the strings</span>
+
+<span class="nb">print</span><span class="p">(</span><span class="s1">&#39;1. All the strings&#39;</span><span class="p">)</span>
+<span class="k">for</span> <span class="n">p</span> <span class="ow">in</span> <span class="n">re</span><span class="o">.</span><span class="n">findall</span><span class="p">(</span><span class="sa">r</span><span class="s1">&#39;^.+$&#39;</span><span class="p">,</span> <span class="n">pokemon</span><span class="p">,</span> <span class="n">flags</span><span class="o">=</span><span class="n">re</span><span class="o">.</span><span class="n">MULTILINE</span><span class="p">):</span>
+    <span class="nb">print</span><span class="p">(</span><span class="n">p</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">()</span>
+
+<span class="c1"># 2. Only charmander and chespin</span>
+
+<span class="nb">print</span><span class="p">(</span><span class="s1">&#39;2. Only charmander and chespin&#39;</span><span class="p">)</span>
+<span class="k">for</span> <span class="n">p</span> <span class="ow">in</span> <span class="n">re</span><span class="o">.</span><span class="n">findall</span><span class="p">(</span><span class="sa">r</span><span class="s1">&#39;^ch.*$&#39;</span><span class="p">,</span> <span class="n">pokemon</span><span class="p">,</span> <span class="n">flags</span><span class="o">=</span><span class="n">re</span><span class="o">.</span><span class="n">MULTILINE</span><span class="p">):</span>
+    <span class="nb">print</span><span class="p">(</span><span class="n">p</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">()</span>
+
+<span class="c1"># 3. All the words with two t&#39;s</span>
+
+<span class="nb">print</span><span class="p">(</span><span class="s1">&#39;3. All the words with two t</span><span class="se">\&#39;</span><span class="s1">s&#39;</span><span class="p">)</span>
+<span class="k">for</span> <span class="n">p</span> <span class="ow">in</span> <span class="n">re</span><span class="o">.</span><span class="n">findall</span><span class="p">(</span><span class="sa">r</span><span class="s1">&#39;^.*t</span><span class="si">{2}</span><span class="s1">.*$&#39;</span><span class="p">,</span> <span class="n">pokemon</span><span class="p">,</span> <span class="n">flags</span><span class="o">=</span><span class="n">re</span><span class="o">.</span><span class="n">MULTILINE</span><span class="p">):</span>
+    <span class="nb">print</span><span class="p">(</span><span class="n">p</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">()</span>
+
+<span class="c1"># 4. Words that don&#39;t start with a vowel</span>
+
+<span class="nb">print</span><span class="p">(</span><span class="s1">&#39;4. Words that don</span><span class="se">\&#39;</span><span class="s1">t start with a vowel&#39;</span><span class="p">)</span>
+<span class="k">for</span> <span class="n">p</span> <span class="ow">in</span> <span class="n">re</span><span class="o">.</span><span class="n">findall</span><span class="p">(</span><span class="sa">r</span><span class="s1">&#39;^[^aeiou].*$&#39;</span><span class="p">,</span> <span class="n">pokemon</span><span class="p">,</span> <span class="n">flags</span><span class="o">=</span><span class="n">re</span><span class="o">.</span><span class="n">MULTILINE</span><span class="p">):</span>
+    <span class="nb">print</span><span class="p">(</span><span class="n">p</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">()</span>
+
+<span class="c1"># 5. All words with two consecutive vowels</span>
+
+<span class="nb">print</span><span class="p">(</span><span class="s1">&#39;5. All words with two consecutive vowels&#39;</span><span class="p">)</span>
+<span class="k">for</span> <span class="n">p</span> <span class="ow">in</span> <span class="n">re</span><span class="o">.</span><span class="n">findall</span><span class="p">(</span><span class="sa">r</span><span class="s1">&#39;^.*[aeiou]</span><span class="si">{2}</span><span class="s1">.*$&#39;</span><span class="p">,</span> <span class="n">pokemon</span><span class="p">,</span> <span class="n">flags</span><span class="o">=</span><span class="n">re</span><span class="o">.</span><span class="n">MULTILINE</span><span class="p">):</span>
+    <span class="nb">print</span><span class="p">(</span><span class="n">p</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">()</span>
+
+<span class="c1"># 6. All words with two consecutive letters (same)</span>
+<span class="nb">print</span><span class="p">(</span><span class="s1">&#39;6. All words with two consecutive letters (same)&#39;</span><span class="p">)</span>
+<span class="k">for</span> <span class="n">p</span> <span class="ow">in</span> <span class="n">pokemon</span><span class="o">.</span><span class="n">splitlines</span><span class="p">():</span>
+    <span class="k">if</span> <span class="n">matched</span> <span class="o">:=</span> <span class="n">re</span><span class="o">.</span><span class="n">search</span><span class="p">(</span><span class="sa">r</span><span class="s1">&#39;(.)\1&#39;</span><span class="p">,</span> <span class="n">p</span><span class="p">):</span>
+        <span class="nb">print</span><span class="p">(</span><span class="n">p</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">()</span>
+
+<span class="c1"># 7. All words that begin and end with the same letter</span>
+<span class="nb">print</span><span class="p">(</span><span class="s1">&#39;7. All words that begin and end with the same letter&#39;</span><span class="p">)</span>
+<span class="k">for</span> <span class="n">p</span> <span class="ow">in</span> <span class="n">pokemon</span><span class="o">.</span><span class="n">splitlines</span><span class="p">():</span>
+    <span class="k">if</span> <span class="n">matched</span> <span class="o">:=</span> <span class="n">re</span><span class="o">.</span><span class="n">search</span><span class="p">(</span><span class="sa">r</span><span class="s1">&#39;^(.).*\1$&#39;</span><span class="p">,</span> <span class="n">p</span><span class="p">):</span>
+        <span class="nb">print</span><span class="p">(</span><span class="n">p</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">()</span>
+
+<span class="c1"># 8. All words with exactly 2 of r, s, or t</span>
+<span class="nb">print</span><span class="p">(</span><span class="s1">&#39;8. All words with exactly 2 of r, s, or t&#39;</span><span class="p">)</span>
+<span class="k">for</span> <span class="n">p</span> <span class="ow">in</span> <span class="n">pokemon</span><span class="o">.</span><span class="n">splitlines</span><span class="p">():</span>
+    <span class="k">if</span> <span class="n">matched</span> <span class="o">:=</span> <span class="n">re</span><span class="o">.</span><span class="n">search</span><span class="p">(</span><span class="sa">r</span><span class="s1">&#39;^[^rst]*[rst][^rst]*[rst][^rst]*$&#39;</span><span class="p">,</span> <span class="n">p</span><span class="p">):</span>
+        <span class="nb">print</span><span class="p">(</span><span class="n">p</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">()</span>
+</code></pre></div>
+</main>
+<footer>
+Built using <a href="https://python.org">Python</a>
+and <a href="https://jinja.palletsprojects.com">Jinja</a>
+with colors from 
+<a href="https://onmessage.nd.edu/university-branding/colors/">Notre Dame</a>, 
+<a href="https://spreadsheet.dev/how-to-get-the-hexadecimal-codes-of-colors-in-google-sheets">Google Docs</a>, and 
+<a href="https://nordtheme.com">Nord Theme</a>,
+and icons from <a href="https://pictogrammers.com/library/mdi/">Material Design Icons</a>.</footer>
+</body>
+</html>
