@@ -14,6 +14,8 @@ THEME_CSS=	static/css/domer-slides.css
 build:	$(SLIDES_HTML)
 	@$(YASB)
 
+pdfs:	$(SLIDES_PDF)
+
 install:	build
 	@rsync -av --progress --delete $(DOCROOT)/. $(WWWROOT)/.
 
