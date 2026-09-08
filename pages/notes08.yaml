@@ -1,0 +1,276 @@
+title:  "Notes 08: Processes, Requests, JSON"
+body:   |
+
+  ## Review: <span class="gold">Regular Expressions</span>
+
+  <div class="flex-row" markdown="1">
+
+  <div class="flex-col" markdown="1">
+
+  <div class="centered" markdown="1">
+
+  A <strong class="success">regular expression</strong> (*aka. <strong
+  class="success">regex</strong>*) is a sequence of characters that defines a
+  search **pattern** that is used to match text.
+
+  </div>
+
+  > [grep] and [sed] are examples of [Unix] tools (aka. *filters*) that use
+  [regular expressions] to search text for **patterns**.
+
+  </div>
+
+  <div class="flex-col" markdown="1">
+
+  <img src="static/img/slides07-regex-theory.svg" class="transparent responsive">
+
+  </div>
+
+  </div>
+
+  [grep]: https://man7.org/linux/man-pages/man1/grep.1.html
+  [sed]: https://man7.org/linux/man-pages/man1/sed.1.html
+  [Unix]: https://en.wikipedia.org/wiki/Unix
+  [regular expressions]: https://en.wikipedia.org/wiki/Regular_expression
+
+  ## Regular Expressions: <span class="gold">Pokemon</span>
+
+  <div class="flex-row" markdown="1">
+
+  <div class="flex-col-25" markdown="1">
+
+  **Given**:
+
+  ```
+  pikachu
+  bulbasaur
+  charmander
+  chespin
+  squirtle
+  meowth
+  togepi
+  oshawott
+  abra
+  jigglypuff
+  ```
+
+  </div>
+
+  <div class="flex-col" markdown="1">
+
+  > Write a <strong class="success">regex</strong> to match:
+
+  1. **All** the strings
+
+  2. Only **charmander** and **chespin**
+
+  3. All the words with **two t's**
+
+  4. Words that **don't start with a vowel**
+
+  5. All words with **two consecutive vowels**
+
+  6. All words with **two consecutive letters (same)**
+
+  7. All words that **begin** and **end with the same letter**
+
+  8. All words with **exactly 2 of r, s, or t**
+
+  </div>
+
+  </div>
+
+  ```python
+  #!/usr/bin/env python3
+
+  import re
+
+  # 0. Read in pokemon data
+  # TODO: Review open (read data from file)
+  # TODO: Review with (closes file stream when done)
+
+  with open('pokemon.txt') as stream:
+      pokemon = stream.read()
+
+  # 5. All words with two consecutive vowels
+  # TODO: Review re.findall (returns list of matches)
+  # TODO: Review re.MULTILINE (^, $ match beginning and end of lines)
+
+  print('5. All words with two consecutive vowels')
+  for p in re.findall(r'^.*[aeiou]{2}.*$', pokemon, flags=re.MULTILINE):
+      print(p)
+  print()
+
+  # 6. All words with two consecutive letters (same)
+  print('6. All words with two consecutive letters (same)')
+  for p in pokemon.splitlines():
+      if matched := re.search(r'(.)\1', p):
+          print(p)
+  print()
+
+  # 7. All words that begin and end with the same letter
+  print('7. All words that begin and end with the same letter')
+  for p in pokemon.splitlines():
+      if matched := re.search(r'^(.).*\1$', p):
+          print(p)
+  print()
+
+  # 8. All words with exactly 2 of r, s, or t
+  print('8. All words with exactly 2 of r, s, or t')
+  for p in pokemon.splitlines():
+      if matched := re.search(r'^[^rst]*[rst][^rst]*[rst][^rst]*$', p):
+          print(p)
+  print()
+  ```
+
+  ## Processes: <span class="gold">Life Cycle</span>
+
+  <div class="flex-row" markdown="1">
+
+  <div class="flex-col-25" markdown="1">
+
+  A <strong class="success">process</strong> is a <strong>loaded instance of a
+  program</strong>; it is a <strong>unit of allocation</strong>.
+
+  ```python
+  import os
+
+  # Parent:
+  #   fork -> wait
+  # Child:
+  #   exec -> exit
+  os.system('ls -l')
+
+  # Parent can read Child's stdout
+  for line in os.popen('ls -l'):
+      print(line)
+  ```
+
+  </div>
+
+  <div class="flex-col" markdown="1">
+
+  <img src="static/img/notebook08-process-life-cycle.svg" class="transparent responsive">
+
+  </div>
+
+  </div>
+
+  ## Requests: <span class="gold">Web Scraping</span>
+
+  > Write [Python] code that does the following:
+  >
+  >   - Extract the [HTML] title from a [URL].
+  >   - Extract the image sources from a [URL].
+  >
+
+  [Python]: https://python.org
+  [HTML]: https://en.wikipedia.org/wiki/HTML
+  [URL]: https://en.wikipedia.org/wiki/URL
+
+  ```python
+  # Constants
+
+  URL = 'https://pnutz.h4x0r.space/courses/cse.20589.fa26'
+
+  # 0. Fetch data using curl
+
+  import os
+
+  with os.popen(f'curl -sL {URL}') as stream:
+      text = stream.read()
+
+  # 1. Fetch data using requests
+
+  import requests
+
+  response = requests.get(URL)
+  text     = response.text
+
+  # 2. Extract title using regex
+
+  import re
+
+  if matched := re.search(r'<title>([^<]+)</title>', text):
+      print(f'Title is: {matched[1]}')
+
+  # 3. Extract images using regex
+
+  for img_source in re.findall(r'<img src="([^"]+)"[^>]*>', text):
+      print(img_source)
+  ```
+
+  ## JSON: <span class="gold">Wikipedia</span>
+
+  > Write a script that lists all the [Wikipedia] entries for a particular search
+  > term:
+
+  ```bash
+  $ ./wikipedia.py python
+    1.   Python
+          Look up Python or python in Wiktionary, the free dictionary. Python may
+          refer to: Pythonidae, a family of nonvenomous snakes found in Africa,
+          Asia, and
+
+    2.   Python (codename)
+          Python was a Cold War contingency plan of the British Government for
+          the continuity of government in the event of nuclear war. Following the
+          report of
+  ...
+  ```
+
+  ```python
+  import pprint
+  import re
+  import sys
+
+  import requests
+
+  # Constants
+
+  HEADERS  = {'User-Agent': __name__}
+  URL      = 'https://en.wikipedia.org/w/api.php' # Discuss: APIs
+  PARAMS   = {
+      'action'  : 'query',
+      'list'    : 'search',
+      'format'  : 'json',
+      'srsearch': sys.argv[1]
+  }
+
+  # Main Execution
+
+  def main():
+      # Review: keyword arguments
+      result   = requests.get(URL, params=PARAMS, headers=HEADERS)
+      # Discuss: json
+      data     = result.json()
+
+      # Discuss: pretty printing
+      #pprint.pprint(data)
+
+      # Discuss: chaining operators
+      articles = data['query']['search']
+
+      # Discuss: sorting by key, lambda
+      articles = sorted(data['query']['search'], key=lambda o: o['wordcount'])
+
+      # Review: slicing, enumerate
+      for index, entry in enumerate(articles[:5], 1):
+          # Discuss: fence pattern
+          if index > 1:
+              print()
+
+          title   = entry['title']
+
+          # Discuss: re.sub
+          snippet = re.sub(r'<[^>]+>', '', entry['snippet'])
+
+          # Discuss: formatting
+          print(f'{index:4}.\t{title}\n\t{snippet}')
+
+  if __name__ == '__main__':
+      main()
+  ```
+
+  [Wikipedia]: https://www.wikipedia.org/
+  [wikipedia.py]: https://github.com/nd-cse-20589-fa26/examples/blob/master/slides09/wikipedia.py
