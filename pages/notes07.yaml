@@ -1,0 +1,273 @@
+title:  "Notes 07: Regular Expressions, Processes, Requests"
+body:   |
+
+  ## Logistics
+
+  - [Reading 03] error in Q3, Part 3 regarding `split` (*now fixed*)
+  - [Homework 03] warning about live data (*services may slow or not respond*)
+
+  - Please remember to `git switch master` before creating new branch.
+
+  > Thank you for **patience** and **understanding** and for efforts on working
+  on the assignments.
+
+  [Reading 03]: reading03.html
+  [Homework 03]: homework03.html
+
+  ## Review: <span class="gold">Unix Philosophy</span>
+
+  <div class="centered" markdown="1">
+
+  Write programs that <strong class="success">do one thing</strong> and <strong
+  class="success">do it well</strong>.
+
+  <br>
+
+  Write programs that <strong class="success">work together</strong>.
+
+  <br>
+
+  Write programs that <strong class="success">handle text streams</strong>,
+  because that is a universal interface.
+
+  </div>
+
+  > We've experienced this power in the previous assignments...
+
+  ```bash
+  # Get all the users running a process on the current system
+  $ ps aux | cut -d ' ' -f 1
+
+  # Count all the processes
+  $ ps aux | wc -l
+
+  # Count all the processes per user
+  $ ps aux | cut -d ' ' -f 1 | sort | uniq -c
+  ```
+
+  ## Review: <span class="gold">Data Structures</span>
+
+  > To implement these tools, we need [data structures].
+
+  <table class="bordered">
+  <thead>
+      <th>Container</th>
+      <th>C</th>
+      <th>Python</th>
+      <th>Python Syntax</th>
+  </thead>
+  <tbody>
+      <tr class="success-bg">
+          <td class="centered">Sequence</td>
+          <td class="centered">DynamicArray, LinkedList</td>
+          <td class="centered">List</td>
+          <td class="centered">[a, b]</td>
+      </tr>
+      <tr class="caution-bg">
+          <td class="centered">Fixed</td>
+          <td class="centered">Array</td>
+          <td class="centered">Tuple</td>
+          <td class="centered">(a, b)</td>
+      </tr>
+      <tr class="warning-bg">
+          <td class="centered">Membership</td>
+          <td class="centered">ArraySet, ListSet, BitSet</td>
+          <td class="centered">Set</td>
+          <td class="centered">{a, b}</td>
+      </tr>
+      <tr class="danger-bg">
+          <td class="centered">Associative</td>
+          <td class="centered">HashTable</td>
+          <td class="centered">Dict</td>
+          <td class="centered">{a: 0, b: 1}</td>
+      </tr>
+  </tbody>
+  </table>
+
+  [data structures]: https://en.wikipedia.org/wiki/Data_structure
+
+  ## Regular Expressions: <span class="gold">Overview</span>
+
+  > [grep] and [sed] are examples of [Unix] tools (aka. *filters*) that use
+  [regular expressions] to search text for **patterns**.
+
+  <div class="flex-row" markdown="1">
+
+  <div class="flex-col" markdown="1">
+
+  <div class="centered" markdown="1">
+
+  A <strong class="success">regular expression</strong> (*aka. <strong
+  class="success">regex</strong>*) is a sequence of characters that defines a
+  search **pattern** that is used to match text.
+
+  </div>
+
+      :::bash
+      # Use grep to search with regular expression
+      $ grep -E '2[0-9]*8' /etc/passwd
+
+  </div>
+
+  <div class="flex-col" markdown="1">
+
+  <img src="static/img/slides07-regex-theory.svg" class="transparent">
+
+  </div>
+
+  </div>
+
+  [grep]: https://man7.org/linux/man-pages/man1/grep.1.html
+  [sed]: https://man7.org/linux/man-pages/man1/sed.1.html
+  [Unix]: https://en.wikipedia.org/wiki/Unix
+  [regular expressions]: https://en.wikipedia.org/wiki/Regular_expression
+
+  ## Regular Expressions: <span class="gold">Syntax</span>
+
+  <table class="bordered">
+  <thead>
+      <th class="info-bg">Metacharacter</th>
+      <th class="info-bg">Description</th>
+  </thead>
+  <tbody>
+      <tr class="success-bg"><td class="centered"><b>.</b></td><td>Match any single character</td></tr>
+      <tr class="success-bg"><td class="centered"><b>[]</b></td><td>Match a single character contained in bracket</td></tr>
+      <tr class="success-bg"><td class="centered"><b>[^]</b></td><td>Match a single character not contained in bracket</td></tr>
+      <tr class="caution-bg"><td class="centered"><b>[a-z]</b></td><td>Match any lowercase letter</td></tr>
+      <tr class="caution-bg"><td class="centered"><b>[0-9]</b></td><td>Match any numeric digit</td></tr>
+      <tr class="warning-bg"><td class="centered"><b>*</b></td><td>Match preceding set zero or more times</td></tr>
+      <tr class="warning-bg"><td class="centered"><b>?</b></td><td>Match preceding set zero or one time</td></tr>
+      <tr class="warning-bg"><td class="centered"><b>+</b></td><td>Match preceding set one or more times</td></tr>
+      <tr class="warning-bg"><td class="centered"><b>{m, n}</b></td><td>Match preceding set between m to n times</td></tr>
+      <tr class="danger-bg"><td class="centered"><b>^</b></td><td>Match the starting position within a string</td></tr>
+      <tr class="danger-bg"><td class="centered"><b>$</b></td><td>Match the ending position of a string</td></tr>
+      <tr class="special-bg"><td class="centered"><b>()</b></td><td>Marks subexpression that can be recalled later</td></tr>
+      <tr class="special-bg"><td class="centered"><b>\n</b></td><td>Match the nth marked subexpression matched</td></tr>
+  </tbody>
+  </table>
+
+      :::bash
+      $ cat tas.txt | grep -E '.*'          # Match all letters
+      $ cat tas.txt | grep -E 'e*'          # Match zero or more e's
+      $ cat tas.txt | grep -E 'e+'          # Match one or more e's
+      $ cat tas.txt | grep -E 'f{2}'        # Match exactly 2 f's
+      $ cat tas.txt | grep -E '[aei]+'      # Match one or more of a,e,i
+      $ cat tas.txt | grep -E '[^aei]+'     # Match everything but a,e,i
+      $ cat tas.txt | grep -E '^[aei]'      # Match start
+      $ cat tas.txt | grep -E '[aei]$'      # Match end
+      $ cat tas.txt | grep -E '([aei]).*\1' # Match w/ group references
+
+  ## Example: <span class="gold">Pokemon</span>
+
+  <div class="flex-row" markdown="1">
+
+  <div class="flex-col-25" markdown="1">
+
+  **Given**:
+
+  ```
+  pikachu
+  bulbasaur
+  charmander
+  chespin
+  squirtle
+  meowth
+  togepi
+  oshawott
+  abra
+  jigglypuff
+  ```
+
+  </div>
+
+  <div class="flex-col" markdown="1">
+
+  > Write a <strong class="success">regex</strong> to match:
+
+  1. **All** the strings
+
+  2. Only **charmander** and **chespin**
+
+  3. All the words with **two t's**
+
+  4. Words that **don't start with a vowel**
+
+  5. All words with **two consecutive vowels**
+
+  6. All words with **two consecutive letters (same)**
+
+  7. All words that **begin** and **end with the same letter**
+
+  8. All words with **exactly 2 of r, s, or t**
+
+  </div>
+
+  </div>
+
+  ```python
+  #!/usr/bin/env python3
+
+  import re
+
+  # 0. Read in pokemon data
+
+  with open('pokemon.txt') as stream:
+      pokemon = stream.read()
+
+  # 1. All the strings
+
+  print('1. All the strings')
+  for p in re.findall(r'^.+$', pokemon, flags=re.MULTILINE):
+      print(p)
+  print()
+
+  # 2. Only charmander and chespin
+
+  print('2. Only charmander and chespin')
+  for p in re.findall(r'^ch.*$', pokemon, flags=re.MULTILINE):
+      print(p)
+  print()
+
+  # 3. All the words with two t's
+
+  print('3. All the words with two t\'s')
+  for p in re.findall(r'^.*t{2}.*$', pokemon, flags=re.MULTILINE):
+      print(p)
+  print()
+
+  # 4. Words that don't start with a vowel
+
+  print('4. Words that don\'t start with a vowel')
+  for p in re.findall(r'^[^aeiou].*$', pokemon, flags=re.MULTILINE):
+      print(p)
+  print()
+
+  # 5. All words with two consecutive vowels
+
+  print('5. All words with two consecutive vowels')
+  for p in re.findall(r'^.*[aeiou]{2}.*$', pokemon, flags=re.MULTILINE):
+      print(p)
+  print()
+
+  # 6. All words with two consecutive letters (same)
+  print('6. All words with two consecutive letters (same)')
+  for p in pokemon.splitlines():
+      if matched := re.search(r'(.)\1', p):
+          print(p)
+  print()
+
+  # 7. All words that begin and end with the same letter
+  print('7. All words that begin and end with the same letter')
+  for p in pokemon.splitlines():
+      if matched := re.search(r'^(.).*\1$', p):
+          print(p)
+  print()
+
+  # 8. All words with exactly 2 of r, s, or t
+  print('8. All words with exactly 2 of r, s, or t')
+  for p in pokemon.splitlines():
+      if matched := re.search(r'^[^rst]*[rst][^rst]*[rst][^rst]*$', p):
+          print(p)
+  print()
+  ```
+
