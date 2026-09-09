@@ -9,12 +9,12 @@
 <link rel="manifest" href="static/ico/site.webmanifest">
 <!-- Stylesheets -->
 <link rel="stylesheet" href="static/css/domer.css">
-<title>Reading 03: Regular Expressions, CSV, JSON</title>
+<title>Reading 03: Regular Expressions, Requests, CSV, JSON</title>
 </head>
 <body>
 <header>
 <a class="logo" href="reading03.html">
-    <h1>Reading 03: Regular Expressions, CSV, JSON</h1>
+    <h1>Reading 03: Regular Expressions, Requests, CSV, JSON</h1>
 </a>
 <nav>
     <ul>
@@ -25,13 +25,14 @@
 <p><strong>Everyone</strong>:</p>
 <p>Next week, we will continue exploring scripting in <a href="https://www.python.org/">Python</a> by using the
 programming language to process data in a variety of formats.  In particular,
-we will examine using <a href="https://en.wikipedia.org/wiki/Regular_expression">regular expressions</a> on plain text, discuss using data
-in <a href="https://en.wikipedia.org/wiki/Comma-separated_values">CSV</a> and <a href="https://en.wikipedia.org/wiki/JSON">JSON</a>, and then take a brief look at <a href="https://en.wikipedia.org/wiki/HTML">HTML</a> and <a href="https://en.wikipedia.org/wiki/XML">XML</a>.</p>
+we will examine using <a href="https://en.wikipedia.org/wiki/Regular_expression">regular expressions</a> on plain text, fetching <a href="https://en.wikipedia.org/wiki/HTTP">HTTP</a>
+data using <a href="https://requests.readthedocs.io/">requests</a>, and handling data in <a href="https://en.wikipedia.org/wiki/Comma-separated_values">CSV</a> and <a href="https://en.wikipedia.org/wiki/JSON">JSON</a> format.</p>
 <div class="alert info-bg">
 <h3 id="book-embed_icon-tldr"><i class="icon icon-medium"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><title>book</title><path d="M18,22A2,2 0 0,0 20,20V4C20,2.89 19.1,2 18,2H12V9L9.5,7.5L7,9V2H6A2,2 0 0,0 4,4V20A2,2 0 0,0 6,22H18Z" /></svg>
 </i> TL;DR<a class="headerlink" href="#book-embed_icon-tldr" title="Permanent link">&para;</a></h3>
 <p>The focus of this reading is to introduce processing data in <a href="https://www.python.org/">Python</a> using
-<a href="https://en.wikipedia.org/wiki/Regular_expression">regular expressions</a> and libraries for <a href="https://en.wikipedia.org/wiki/Comma-separated_values">CSV</a> and <a href="https://en.wikipedia.org/wiki/JSON">JSON</a> formats.</p>
+<a href="https://en.wikipedia.org/wiki/Regular_expression">regular expressions</a> and libraries for making <a href="https://requests.readthedocs.io/">requests</a> and processing
+<a href="https://en.wikipedia.org/wiki/Comma-separated_values">CSV</a> and <a href="https://en.wikipedia.org/wiki/JSON">JSON</a> formats.</p>
 </div>
 <h2 id="readings">Readings<a class="headerlink" href="#readings" title="Permanent link">&para;</a></h2>
 <div class="flex-row">
@@ -42,7 +43,12 @@ in <a href="https://en.wikipedia.org/wiki/Comma-separated_values">CSV</a> and <a
 <div class="flex-col">
 <p><a href="https://realpython.com/">Real Python</a></p>
 <ul>
-<li><a href="https://realpython.com/regex-python/">Regular Expressions: Regexes in Python (Part 1)</a></li>
+<li>
+<p><a href="https://realpython.com/regex-python/">Regular Expressions: Regexes in Python (Part 1)</a></p>
+</li>
+<li>
+<p><a href="https://realpython.com/python-requests/">Python's Requests Library (Guide)</a></p>
+</li>
 <li>
 <p><a href="https://realpython.com/python-csv/">Reading and Writing CSV Files in Python</a></p>
 </li>
@@ -65,6 +71,9 @@ in <a href="https://en.wikipedia.org/wiki/Comma-separated_values">CSV</a> and <a
 <li><a href="https://docs.python.org/3/library/json.html">json</a></li>
 <li><a href="https://docs.python.org/3/library/re.html">re</a></li>
 </ul>
+</li>
+<li>
+<p><a href="https://requests.readthedocs.io">Requests: HTTP for Humans</a></p>
 </li>
 <li>
 <p><a href="https://regexone.com/">RegexOne</a></p>
