@@ -90,6 +90,7 @@
       - date:           Mon 09/14
         items:
           - name:       Checklist 01
+            link:       checklist01.html
 
       - date:           Wed 09/16
         items:
