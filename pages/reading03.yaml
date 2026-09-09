@@ -1,19 +1,20 @@
-title:      "Reading 03: Regular Expressions, CSV, JSON"
+title:      "Reading 03: Regular Expressions, Requests, CSV, JSON"
 body:       |
 
   **Everyone**:
 
   Next week, we will continue exploring scripting in [Python] by using the
   programming language to process data in a variety of formats.  In particular,
-  we will examine using [regular expressions] on plain text, discuss using data
-  in [CSV] and [JSON], and then take a brief look at [HTML] and [XML].
+  we will examine using [regular expressions] on plain text, fetching [HTTP]
+  data using [requests], and handling data in [CSV] and [JSON] format.
 
   <div class="alert info-bg" markdown="1">
 
   ### <i class="icon icon-medium">{{ "book" | embed_icon }}</i> TL;DR
 
   The focus of this reading is to introduce processing data in [Python] using
-  [regular expressions] and libraries for [CSV] and [JSON] formats.
+  [regular expressions] and libraries for making [requests] and processing
+  [CSV] and [JSON] formats.
 
   </div>
 
@@ -21,7 +22,8 @@ body:       |
   [CSV]: https://en.wikipedia.org/wiki/Comma-separated_values
   [JSON]: https://en.wikipedia.org/wiki/JSON
   [HTML]: https://en.wikipedia.org/wiki/HTML
-  [XML]: https://en.wikipedia.org/wiki/XML
+  [HTTP]: https://en.wikipedia.org/wiki/HTTP
+  [requests]: https://requests.readthedocs.io/
 
   ## Readings
 
@@ -36,6 +38,9 @@ body:       |
       [Real Python]
 
       - [Regular Expressions: Regexes in Python (Part 1)](https://realpython.com/regex-python/)
+
+      - [Python's Requests Library (Guide)](https://realpython.com/python-requests/)
+
       - [Reading and Writing CSV Files in Python](https://realpython.com/python-csv/)
 
       - [Working With JSON Data in Python](https://realpython.com/python-json/)
@@ -56,7 +61,9 @@ body:       |
       - [json](https://docs.python.org/3/library/json.html)
       - [re](https://docs.python.org/3/library/re.html)
 
-  2. [RegexOne](https://regexone.com/)
+  2. [Requests: HTTP for Humans](https://requests.readthedocs.io)
+
+  3. [RegexOne](https://regexone.com/)
 
   </div>
 
