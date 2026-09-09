@@ -74,6 +74,8 @@
         topics:         CSV
         items:
           - name:       Slides 08
+          - name:       Panopto
+            link:       https://notredame.hosted.panopto.com/Panopto/Pages/Viewer.aspx?id=a80719c6-60ba-4225-881b-b4c001173112
 
       - date:           Fri 09/11
         topics:         JSON
