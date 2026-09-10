@@ -86,6 +86,8 @@ body:       |
 
     - You should be familiar with using [os.popen] to read output from another program.
 
+    - You should be familiar with using [with] to manage resources properly.
+
     - You should be familiar with using [re.search] to match [regular expressions].
 
     - You should be familiar with using [doctest] to verify the functionality
@@ -104,6 +106,7 @@ body:       |
     [doctest]: https://docs.python.org/3/library/doctest.html
     [Python]: https://python.org
     [mypy]: https://mypy-lang.org/
+    [with]: https://docs.python.org/3/reference/compound_stmts.html#with
 
     <div class="alert warning-bg" markdown="1">
 
