@@ -1,0 +1,209 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<!-- Favicon -->
+<link rel="icon" type="image/png" sizes="32x32" href="static/ico/favicon-32x32.png">
+<link rel="icon" type="image/png" sizes="16x16" href="static/ico/favicon-16x16.png">
+<link rel="manifest" href="static/ico/site.webmanifest">
+<!-- Stylesheets -->
+<link rel="stylesheet" href="static/css/domer.css">
+<title>Notes 09: Requests, CSV, JSON</title>
+</head>
+<body>
+<header>
+<a class="logo" href="notes09.html">
+    <h1>Notes 09: Requests, CSV, JSON</h1>
+</a>
+<nav>
+    <ul>
+        <li><a href="index.html"><h4>Home</h4></a></li>
+        </ul>
+</nav></header>
+<main>
+<h2 id="logistics">Logistics<a class="headerlink" href="#logistics" title="Permanent link">&para;</a></h2>
+<ul>
+<li><a href="interview01.html">Interview 01</a>: Sign up (<em>double check times and locations</em>), <code>practice01.py</code>.</li>
+<li><a href="checklist01.html">Checklist 01</a>: Test will not cover <a href="https://requests.readthedocs.io">requests</a>, <a href="https://docs.python.org/3/library/csv.html">csv</a>, <a href="https://docs.python.org/3/library/json.html">json</a>.</li>
+<li><a href="homework03.html">Homework 03</a>: Extension to <strong>Monday, September 14</strong>.</li>
+</ul>
+<h2 id="requests-http">Requests: <span class="gold">HTTP</span><a class="headerlink" href="#requests-http" title="Permanent link">&para;</a></h2>
+<div class="centered">
+
+<img src="static/img/notes09-requests-http.svg" class="transparent responsive">
+
+</div>
+
+<h2 id="requests-web-scraping">Requests: <span class="gold">Web Scraping</span><a class="headerlink" href="#requests-web-scraping" title="Permanent link">&para;</a></h2>
+<blockquote>
+<p>Write <a href="https://python.org">Python</a> code that does the following:</p>
+<ul>
+<li>Extract the <a href="https://en.wikipedia.org/wiki/HTML">HTML</a> title from a <a href="https://en.wikipedia.org/wiki/URL">URL</a>.</li>
+<li>Extract the image sources from a <a href="https://en.wikipedia.org/wiki/URL">URL</a>.
+</li>
+</ul>
+</blockquote>
+<div class="codehilite"><pre><span></span><code><span class="c1"># Constants</span>
+
+<span class="n">URL</span> <span class="o">=</span> <span class="s1">&#39;https://pnutz.h4x0r.space/courses/cse.20589.fa26&#39;</span>
+
+<span class="c1"># 0. Fetch data using curl</span>
+
+<span class="kn">import</span> <span class="nn">os</span>
+
+<span class="k">with</span> <span class="n">os</span><span class="o">.</span><span class="n">popen</span><span class="p">(</span><span class="sa">f</span><span class="s1">&#39;curl -sL </span><span class="si">{</span><span class="n">URL</span><span class="si">}</span><span class="s1">&#39;</span><span class="p">)</span> <span class="k">as</span> <span class="n">stream</span><span class="p">:</span>
+    <span class="n">text</span> <span class="o">=</span> <span class="n">stream</span><span class="o">.</span><span class="n">read</span><span class="p">()</span>
+
+<span class="c1"># 1. Fetch data using requests</span>
+
+<span class="kn">import</span> <span class="nn">requests</span>
+
+<span class="n">response</span> <span class="o">=</span> <span class="n">requests</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="n">URL</span><span class="p">)</span>
+<span class="n">text</span>     <span class="o">=</span> <span class="n">response</span><span class="o">.</span><span class="n">text</span>
+
+<span class="c1"># 2. Extract title using regex      (REVIEW)</span>
+
+<span class="kn">import</span> <span class="nn">re</span>
+
+<span class="k">if</span> <span class="n">matched</span> <span class="o">:=</span> <span class="n">re</span><span class="o">.</span><span class="n">search</span><span class="p">(</span><span class="sa">r</span><span class="s1">&#39;&lt;title&gt;([^&lt;]+)&lt;/title&gt;&#39;</span><span class="p">,</span> <span class="n">text</span><span class="p">):</span>
+    <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s1">&#39;Title is: </span><span class="si">{</span><span class="n">matched</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span><span class="si">}</span><span class="s1">&#39;</span><span class="p">)</span>
+
+<span class="c1"># 3. Extract images using regex     (RESUME)</span>
+
+<span class="k">for</span> <span class="n">img_source</span> <span class="ow">in</span> <span class="n">re</span><span class="o">.</span><span class="n">findall</span><span class="p">(</span><span class="sa">r</span><span class="s1">&#39;&lt;img src=&quot;([^&quot;]+)&quot;[^&gt;]*&gt;&#39;</span><span class="p">,</span> <span class="n">text</span><span class="p">):</span>
+    <span class="nb">print</span><span class="p">(</span><span class="n">img_source</span><span class="p">)</span>
+</code></pre></div>
+
+<h2 id="csv-wikipedia">CSV: <span class="gold">Wikipedia</span><a class="headerlink" href="#csv-wikipedia" title="Permanent link">&para;</a></h2>
+<blockquote>
+<p>Write a script that parses the <a href="https://docs.python.org/3/library/csv.html">CSV</a> data at
+<a href="https://yld.me/raw/bA7.csv">https://yld.me/raw/bA7.csv</a> and then lists the
+professors' netid and phone numbers.</p>
+</blockquote>
+<div class="codehilite"><pre><span></span><code>$<span class="w"> </span>./professors.py
+<span class="w">     </span>jbb<span class="w"> </span><span class="m">574</span>-631-8810
+<span class="w"> </span>skumar5<span class="w"> </span><span class="m">574</span>-631-7381
+<span class="w">    </span>pbui<span class="w"> </span><span class="m">574</span>-631-1467
+...
+adingler<span class="w"> </span><span class="m">574</span>-631-8752
+<span class="w">   </span>tjung<span class="w"> </span><span class="m">574</span>-631-8322
+wtheisen<span class="w"> </span><span class="m">419</span>-905-6474
+</code></pre></div>
+
+<div class="codehilite"><pre><span></span><code><span class="kn">import</span> <span class="nn">csv</span>
+<span class="kn">import</span> <span class="nn">requests</span>
+
+<span class="n">URL</span> <span class="o">=</span> <span class="s1">&#39;https://yld.me/raw/bA7.csv&#39;</span>
+
+<span class="c1"># 0. Download data</span>
+
+<span class="n">response</span> <span class="o">=</span> <span class="n">requests</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="n">URL</span><span class="p">)</span>            <span class="c1"># Review: Requests</span>
+<span class="n">lines</span>    <span class="o">=</span> <span class="n">response</span><span class="o">.</span><span class="n">text</span><span class="o">.</span><span class="n">splitlines</span><span class="p">()</span>   <span class="c1"># Review: splitlines</span>
+
+<span class="c1"># 1. With split</span>
+
+<span class="k">for</span> <span class="n">index</span><span class="p">,</span> <span class="n">line</span> <span class="ow">in</span> <span class="nb">enumerate</span><span class="p">(</span><span class="n">lines</span><span class="p">):</span>    <span class="c1"># Review: enumerate</span>
+    <span class="k">if</span> <span class="n">index</span> <span class="o">==</span> <span class="mi">0</span><span class="p">:</span>
+        <span class="k">continue</span>
+
+    <span class="c1"># Discuss: destructuring assignment</span>
+    <span class="n">netid</span><span class="p">,</span> <span class="n">last</span><span class="p">,</span> <span class="n">first</span><span class="p">,</span> <span class="n">phone</span> <span class="o">=</span> <span class="n">line</span><span class="o">.</span><span class="n">split</span><span class="p">(</span><span class="s1">&#39;,&#39;</span><span class="p">)</span>
+    <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s1">&#39;</span><span class="si">{</span><span class="n">netid</span><span class="si">:</span><span class="s1">&gt;8</span><span class="si">}</span><span class="s1"> </span><span class="si">{</span><span class="n">phone</span><span class="si">}</span><span class="s1">&#39;</span><span class="p">)</span>
+
+<span class="nb">print</span><span class="p">()</span>
+
+<span class="c1"># 2. With csv.reader</span>
+
+<span class="k">for</span> <span class="n">professor</span> <span class="ow">in</span> <span class="n">csv</span><span class="o">.</span><span class="n">reader</span><span class="p">(</span><span class="n">lines</span><span class="p">[</span><span class="mi">1</span><span class="p">:]):</span> <span class="c1"># Discuss: csv.reader</span>
+    <span class="n">netid</span><span class="p">,</span> <span class="n">last</span><span class="p">,</span> <span class="n">first</span><span class="p">,</span> <span class="n">phone</span> <span class="o">=</span> <span class="n">professor</span>
+    <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s1">&#39;</span><span class="si">{</span><span class="n">netid</span><span class="si">:</span><span class="s1">&gt;8</span><span class="si">}</span><span class="s1"> </span><span class="si">{</span><span class="n">phone</span><span class="si">}</span><span class="s1">&#39;</span><span class="p">)</span>
+
+<span class="nb">print</span><span class="p">()</span>
+
+<span class="c1"># 2. With csv.DictReader</span>
+
+<span class="k">for</span> <span class="n">professor</span> <span class="ow">in</span> <span class="n">csv</span><span class="o">.</span><span class="n">DictReader</span><span class="p">(</span><span class="n">lines</span><span class="p">):</span> <span class="c1"># Discuss: csv.DictReader</span>
+    <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s1">&#39;</span><span class="si">{</span><span class="n">professor</span><span class="p">[</span><span class="s2">&quot;netid&quot;</span><span class="p">]</span><span class="si">:</span><span class="s1">&gt;8</span><span class="si">}</span><span class="s1"> </span><span class="si">{</span><span class="n">professor</span><span class="p">[</span><span class="s2">&quot;phone&quot;</span><span class="p">]</span><span class="si">}</span><span class="s1">&#39;</span><span class="p">)</span>
+</code></pre></div>
+
+<h2 id="json-wikipedia">JSON: <span class="gold">Wikipedia</span><a class="headerlink" href="#json-wikipedia" title="Permanent link">&para;</a></h2>
+<blockquote>
+<p>Write a script that lists all the <a href="https://www.wikipedia.org/">Wikipedia</a> entries for a particular search
+term:</p>
+</blockquote>
+<div class="codehilite"><pre><span></span><code>$<span class="w"> </span>./wikipedia.py<span class="w"> </span>python
+<span class="w">  </span><span class="m">1</span>.<span class="w">   </span>Python
+<span class="w">        </span>Look<span class="w"> </span>up<span class="w"> </span>Python<span class="w"> </span>or<span class="w"> </span>python<span class="w"> </span><span class="k">in</span><span class="w"> </span>Wiktionary,<span class="w"> </span>the<span class="w"> </span>free<span class="w"> </span>dictionary.<span class="w"> </span>Python<span class="w"> </span>may
+<span class="w">        </span>refer<span class="w"> </span>to:<span class="w"> </span>Pythonidae,<span class="w"> </span>a<span class="w"> </span>family<span class="w"> </span>of<span class="w"> </span>nonvenomous<span class="w"> </span>snakes<span class="w"> </span>found<span class="w"> </span><span class="k">in</span><span class="w"> </span>Africa,
+<span class="w">        </span>Asia,<span class="w"> </span>and
+
+<span class="w">  </span><span class="m">2</span>.<span class="w">   </span>Python<span class="w"> </span><span class="o">(</span>codename<span class="o">)</span>
+<span class="w">        </span>Python<span class="w"> </span>was<span class="w"> </span>a<span class="w"> </span>Cold<span class="w"> </span>War<span class="w"> </span>contingency<span class="w"> </span>plan<span class="w"> </span>of<span class="w"> </span>the<span class="w"> </span>British<span class="w"> </span>Government<span class="w"> </span><span class="k">for</span>
+<span class="w">        </span>the<span class="w"> </span>continuity<span class="w"> </span>of<span class="w"> </span>government<span class="w"> </span><span class="k">in</span><span class="w"> </span>the<span class="w"> </span>event<span class="w"> </span>of<span class="w"> </span>nuclear<span class="w"> </span>war.<span class="w"> </span>Following<span class="w"> </span>the
+<span class="w">        </span>report<span class="w"> </span>of
+...
+</code></pre></div>
+
+<div class="codehilite"><pre><span></span><code><span class="kn">import</span> <span class="nn">pprint</span>
+<span class="kn">import</span> <span class="nn">re</span>
+<span class="kn">import</span> <span class="nn">sys</span>
+
+<span class="kn">import</span> <span class="nn">requests</span>
+
+<span class="c1"># Constants</span>
+
+<span class="n">HEADERS</span>  <span class="o">=</span> <span class="p">{</span><span class="s1">&#39;User-Agent&#39;</span><span class="p">:</span> <span class="vm">__name__</span><span class="p">}</span>
+<span class="n">URL</span>      <span class="o">=</span> <span class="s1">&#39;https://en.wikipedia.org/w/api.php&#39;</span> <span class="c1"># Discuss: APIs</span>
+<span class="n">PARAMS</span>   <span class="o">=</span> <span class="p">{</span>
+    <span class="s1">&#39;action&#39;</span>  <span class="p">:</span> <span class="s1">&#39;query&#39;</span><span class="p">,</span>
+    <span class="s1">&#39;list&#39;</span>    <span class="p">:</span> <span class="s1">&#39;search&#39;</span><span class="p">,</span>
+    <span class="s1">&#39;format&#39;</span>  <span class="p">:</span> <span class="s1">&#39;json&#39;</span><span class="p">,</span>
+    <span class="s1">&#39;srsearch&#39;</span><span class="p">:</span> <span class="n">sys</span><span class="o">.</span><span class="n">argv</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span>
+<span class="p">}</span>
+
+<span class="c1"># Main Execution</span>
+
+<span class="k">def</span> <span class="nf">main</span><span class="p">():</span>
+    <span class="c1"># Review: keyword arguments</span>
+    <span class="n">result</span>   <span class="o">=</span> <span class="n">requests</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="n">URL</span><span class="p">,</span> <span class="n">params</span><span class="o">=</span><span class="n">PARAMS</span><span class="p">,</span> <span class="n">headers</span><span class="o">=</span><span class="n">HEADERS</span><span class="p">)</span>
+    <span class="c1"># Discuss: json</span>
+    <span class="n">data</span>     <span class="o">=</span> <span class="n">result</span><span class="o">.</span><span class="n">json</span><span class="p">()</span>
+
+    <span class="c1"># Discuss: pretty printing</span>
+    <span class="c1">#pprint.pprint(data)</span>
+
+    <span class="c1"># Discuss: chaining operators</span>
+    <span class="n">articles</span> <span class="o">=</span> <span class="n">data</span><span class="p">[</span><span class="s1">&#39;query&#39;</span><span class="p">][</span><span class="s1">&#39;search&#39;</span><span class="p">]</span>
+
+    <span class="c1"># Discuss: sorting by key, lambda</span>
+    <span class="n">articles</span> <span class="o">=</span> <span class="nb">sorted</span><span class="p">(</span><span class="n">data</span><span class="p">[</span><span class="s1">&#39;query&#39;</span><span class="p">][</span><span class="s1">&#39;search&#39;</span><span class="p">],</span> <span class="n">key</span><span class="o">=</span><span class="k">lambda</span> <span class="n">o</span><span class="p">:</span> <span class="n">o</span><span class="p">[</span><span class="s1">&#39;wordcount&#39;</span><span class="p">])</span>
+
+    <span class="c1"># Review: slicing, enumerate</span>
+    <span class="k">for</span> <span class="n">index</span><span class="p">,</span> <span class="n">entry</span> <span class="ow">in</span> <span class="nb">enumerate</span><span class="p">(</span><span class="n">articles</span><span class="p">[:</span><span class="mi">5</span><span class="p">],</span> <span class="mi">1</span><span class="p">):</span>
+        <span class="c1"># Discuss: fence pattern</span>
+        <span class="k">if</span> <span class="n">index</span> <span class="o">&gt;</span> <span class="mi">1</span><span class="p">:</span>
+            <span class="nb">print</span><span class="p">()</span>
+
+        <span class="n">title</span>   <span class="o">=</span> <span class="n">entry</span><span class="p">[</span><span class="s1">&#39;title&#39;</span><span class="p">]</span>
+
+        <span class="c1"># Discuss: re.sub</span>
+        <span class="n">snippet</span> <span class="o">=</span> <span class="n">re</span><span class="o">.</span><span class="n">sub</span><span class="p">(</span><span class="sa">r</span><span class="s1">&#39;&lt;[^&gt;]+&gt;&#39;</span><span class="p">,</span> <span class="s1">&#39;&#39;</span><span class="p">,</span> <span class="n">entry</span><span class="p">[</span><span class="s1">&#39;snippet&#39;</span><span class="p">])</span>
+
+        <span class="c1"># Discuss: formatting</span>
+        <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s1">&#39;</span><span class="si">{</span><span class="n">index</span><span class="si">:</span><span class="s1">4</span><span class="si">}</span><span class="s1">.</span><span class="se">\t</span><span class="si">{</span><span class="n">title</span><span class="si">}</span><span class="se">\n\t</span><span class="si">{</span><span class="n">snippet</span><span class="si">}</span><span class="s1">&#39;</span><span class="p">)</span>
+
+<span class="k">if</span> <span class="vm">__name__</span> <span class="o">==</span> <span class="s1">&#39;__main__&#39;</span><span class="p">:</span>
+    <span class="n">main</span><span class="p">()</span>
+</code></pre></div>
+</main>
+<footer>
+Built using <a href="https://python.org">Python</a>
+and <a href="https://jinja.palletsprojects.com">Jinja</a>
+with colors from 
+<a href="https://onmessage.nd.edu/university-branding/colors/">Notre Dame</a>, 
+<a href="https://spreadsheet.dev/how-to-get-the-hexadecimal-codes-of-colors-in-google-sheets">Google Docs</a>, and 
+<a href="https://nordtheme.com">Nord Theme</a>,
+and icons from <a href="https://pictogrammers.com/library/mdi/">Material Design Icons</a>.</footer>
+</body>
+</html>
