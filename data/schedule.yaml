@@ -81,6 +81,8 @@
         topics:         JSON
         items:
           - name:       Slides 09
+          - name:       Panopto
+            link:       https://notredame.hosted.panopto.com/Panopto/Pages/Viewer.aspx?id=1ce1498c-261e-4208-8a84-b4c20116b0cd
 
       - date:           Sat 09/12
         topics:         '<i class="muted">Weather, Mastodon</i>'
