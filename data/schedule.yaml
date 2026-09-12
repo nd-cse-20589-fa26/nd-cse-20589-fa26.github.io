@@ -101,55 +101,55 @@
           - Interview 01
 
       - date:           Fri 09/18
-        topics:         Object-oriented Programming
+        topics:         Sorting
         items:
           - name:       Slides 10
 
-- name:     Object-oriented Programming
+- name:     Functional Programming
   days:
       - date:           Mon 09/21
-        topics:         Structural Design Patterns
+        topics:         Functional Programming, List Comprehensions
         assignments:
           - Reading 04
         items:
           - name:       Slides 11
 
       - date:           Wed 09/23
-        topics:         Behavior Design Patterns
+        topics:         Generators
         items:
           - name:       Slides 12
 
       - date:           Fri 09/25
-        topics:         Creational Design Patterns
+        topics:         Concurrency and Parallelism
         items:
           - name:       Slides 13
 
       - date:           Sat 09/26
-        topics:         '<i class="muted">Du, Find</i>'
+        topics:         '<i class="muted">Permutations, Hulk</i>'
         assignments:
           - Homework 04
 
-- name:     Functional Programming
+- name:     Object-Oriented Programming
   days:
       - date:           Mon 09/28
-        topics:         Sorting, Functional Programming
+        topics:         Object-Oriented Programming
         assignments:
           - Reading 05
         items:
           - name:       Slides 14
 
       - date:           Wed 09/30
-        topics:         List Comprehensions, Generators
+        topics:         Structural Design Patterns
         items:
           - name:       Slides 15
 
       - date:           Fri 10/02
-        topics:         Concurrency and Parallelism
+        topics:         Behavior Design Patterns
         items:
           - name:       Slides 16
 
       - date:           Sat 10/03
-        topics:         '<i class="muted">Hulk, Miles</i>'
+        topics:         '<i class="muted">Perfect Squares, Find</i>'
         assignments:
           - Homework 05
 
