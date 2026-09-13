@@ -125,7 +125,7 @@ retrieved using:</p>
 </code></pre></div>
 
 <p>Looking at the data retrieved from the website, he notices that the forecast
-and temperature information is wrapped in [HTML] fields that contain the text
+and temperature information is wrapped in <a href="https://en.wikipedia.org/wiki/HTML">HTML</a> fields that contain the text
 "myforecast":</p>
 <div class="codehilite"><pre><span></span><code>...
 <span class="p">&lt;</span><span class="nt">p</span> <span class="na">class</span><span class="o">=</span><span class="s">&quot;myforecast-current&quot;</span><span class="p">&gt;</span>Overcast<span class="p">&lt;/</span><span class="nt">p</span><span class="p">&gt;</span>
@@ -285,6 +285,9 @@ about buildings named <code>dillon</code>:</p>
 <div class="codehilite"><pre><span></span><code><span class="c1"># Fetch JSON data about &quot;dillon&quot;</span>
 $<span class="w"> </span>curl<span class="w"> </span>-sL<span class="w"> </span>https://map.nd.edu/placemarks.json?q<span class="o">=</span>dillon
 <span class="o">[{</span><span class="s2">&quot;id&quot;</span>:86,<span class="s2">&quot;name&quot;</span>:<span class="s2">&quot;Dillon Hall&quot;</span>,<span class="s2">&quot;permanent_uid&quot;</span>:<span class="s2">&quot;1030&quot;</span>,<span class="s2">&quot;geometry&quot;</span>:<span class="w"> </span>...<span class="o">]</span>
+
+<span class="c1"># Fetch JSON data about placemarks tagged &quot;building&quot; and &quot;core&quot;</span>
+$<span class="w"> </span>curl<span class="w"> </span>-sL<span class="w"> </span>https://map.nd.edu/placemarks.json?tags<span class="o">=</span>building,core<span class="p">&amp;</span><span class="nv">match_all_tags</span><span class="o">=</span><span class="m">1</span>
 </code></pre></div>
 
 <p>As can been seen, this <a href="https://json.org/">JSON</a> object is quite large and complex... That said,
@@ -368,7 +371,7 @@ script by implementing the following functions:</p>
 <blockquote>
 <p>This function <em>cleans</em> the <code>html</code> description by doing the following:
 removing images, removing links, replacing newlines with spaces,
-removing [HTML] tags, and stripping the final result.</p>
+removing <a href="https://en.wikipedia.org/wiki/HTML">HTML</a> tags, and stripping the final result.</p>
 </blockquote>
 <div class="alert success-bg" markdown="1">
 <p><strong>Hint</strong>: You may want to use multiple instances of <a href="https://docs.python.org/3/library/re.html#re.sub">re.sub</a> and <a href="https://docs.python.org/3/library/stdtypes.html#str.replace">str.replace</a>.</p>
