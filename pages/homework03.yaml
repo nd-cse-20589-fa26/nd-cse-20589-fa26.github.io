@@ -203,6 +203,7 @@ body:       |
   [zipcode]: https://en.wikipedia.org/wiki/ZIP_Code
   [URL]: https://en.wikipedia.org/wiki/URL
   [re]: https://docs.python.org/3/library/re.html
+  [HTML]: https://en.wikipedia.org/wiki/HTML
 
   ### Task 1: `weather.py`
 
@@ -337,6 +338,9 @@ body:       |
       # Fetch JSON data about "dillon"
       $ curl -sL https://map.nd.edu/placemarks.json?q=dillon
       [{"id":86,"name":"Dillon Hall","permanent_uid":"1030","geometry": ...]
+
+      # Fetch JSON data about placemarks tagged "building" and "core"
+      $ curl -sL https://map.nd.edu/placemarks.json?tags=building,core&match_all_tags=1
 
   As can been seen, this [JSON] object is quite large and complex... That said,
   the [API] is nice in that it allows users to query buildings by <b>name</b>
