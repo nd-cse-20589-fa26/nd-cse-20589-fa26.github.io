@@ -65,7 +65,7 @@ body:       |
 
     - <div class="flex-col" markdown="1">
 
-        [ ] the `$NETID.py` script such that:
+        [ ] Modify the `$NETID.py` script such that it:
 
         - [ ] Properly parses command-line arguments.
         - [ ] Reads data from another program using [os.popen].
