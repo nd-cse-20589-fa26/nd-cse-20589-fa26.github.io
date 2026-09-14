@@ -46,6 +46,10 @@ body:       |
     [git]: https://git-scm.com/
     [lists]: https://docs.python.org/3/library/stdtypes.html#list
     [dicts]: https://docs.python.org/3/library/stdtypes.html#dict
+    [list]: https://docs.python.org/3/library/stdtypes.html#list
+    [dict]: https://docs.python.org/3/library/stdtypes.html#dict
+    [str]: https://docs.python.org/3/library/stdtypes.html#str
+    [int]: https://docs.python.org/3/builtins/functions.html#int
     [requests]: https://requests.readthedocs.io/
     [csv]: https://docs.python.org/3/library/csv.html
     [json]: https://docs.python.org/3/library/json.html
@@ -385,6 +389,11 @@ body:       |
         - Using [doctest]
         - Using [unittest]
         - Using [mypy]
+
+    4. <div class="flex-col" markdown="1">
+
+        How do we add **type annotations** to a [Python] script.  (ie. [list],
+        [dict], [str], [int]).
 
     [Python]:               https://www.python.org/
     [Bourne shell]:         https://en.wikipedia.org/wiki/Bourne_shell
