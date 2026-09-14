@@ -95,6 +95,8 @@
         items:
           - name:       Checklist 01
             link:       checklist01.html
+          - name:       Panopto
+            link:       https://notredame.hosted.panopto.com/Panopto/Pages/Viewer.aspx?id=90691288-8948-496a-9083-b4c50114bf68
 
       - date:           Wed 09/16
         items:
