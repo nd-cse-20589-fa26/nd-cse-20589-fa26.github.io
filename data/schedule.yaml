@@ -105,79 +105,80 @@
           - Interview 01
 
       - date:           Fri 09/18
-        topics:         Sorting
+        topics:         Networking
         items:
           - name:       Slides 10
 
-- name:     Functional Programming
+- name:     Filters
   days:
       - date:           Mon 09/21
-        topics:         Functional Programming, List Comprehensions
+        topics:         Pipelines
+        comment:
         assignments:
           - Reading 04
         items:
           - name:       Slides 11
 
       - date:           Wed 09/23
-        topics:         Generators
+        topics:         Filters
         items:
           - name:       Slides 12
 
       - date:           Fri 09/25
-        topics:         Concurrency and Parallelism
+        topics:         Sorting
         items:
           - name:       Slides 13
 
       - date:           Sat 09/26
-        topics:         '<i class="muted">Permutations, Hulk</i>'
+        topics:         '<i class="muted">Oracle</i>'
         assignments:
           - Homework 04
 
-- name:     Object-Oriented Programming
+- name:     Functional Programming
   days:
       - date:           Mon 09/28
-        topics:         Object-Oriented Programming
+        topics:         Functional Programming
         assignments:
           - Reading 05
         items:
           - name:       Slides 14
 
       - date:           Wed 09/30
-        topics:         Structural Design Patterns
+        topics:         Iterators, Generators
         items:
           - name:       Slides 15
 
       - date:           Fri 10/02
-        topics:         Behavior Design Patterns
+        topics:         Concurrency and Parallelism
         items:
           - name:       Slides 16
 
       - date:           Sat 10/03
-        topics:         '<i class="muted">Perfect Squares, Find</i>'
+        topics:         '<i class="muted">Hulk</i>'
         assignments:
           - Homework 05
 
-- name:     Networking
+- name:     Processes
   days:
       - date:           Mon 10/05
-        topics:         Networking, Sockets
+        topics:         System Calls
         assignments:
           - Reading 06
         items:
           - name:       Slides 17
 
       - date:           Wed 10/07
-        topics:         HTTP Client
+        topics:         Processes
         items:
           - name:       Slides 18
 
       - date:           Fri 10/09
-        topics:         HTTP Server
+        topics:         Signals
         items:
           - name:       Slides 19
 
       - date:           Sat 10/10
-        topics:         '<i class="muted">Thor, Loki</i>'
+        topics:         '<i class="muted">Miles</i>'
         assignments:
           - Homework 06
 
@@ -200,159 +201,148 @@
 
 - name:   "Fall Break"
 
-- name:    Web Application
+- name:    Files, Directories, I/O
   days:
       - date:           Mon 10/26
-        topics:         Web Application
+        topics:         Files, Directories
         assignments:
           - Reading 07
         items:
           - name:       Slides 21
 
       - date:           Wed 10/28
-        topics:         REST
+        topics:         I/O
         items:
           - name:       Slides 22
 
       - date:           Fri 10/30
-        topics:         MVC
+        topics:         Unit Tests
         items:
           - name:       Slides 23
 
       - date:           Sat 10/31
-        topics:         '<i class="muted">REST API</i>'
+        topics:         '<i class="muted">Findit</i>'
         assignments:
-          - Project M1
+          - Homework 07
 
-- name:     Databases
+- name:     Networking
   days:
       - date:           Mon 11/02
-        topics:         Databases, DBM, Pickling
+        topics:         Sockets
         assignments:
           - Reading 08
         items:
           - name:       Slides 24
 
       - date:           Wed 11/04
-        topics:         SQLite, SQL
+        topics:         HTTP Client
         items:
           - name:       Slides 25
 
       - date:           Fri 11/06
-        topics:         Data Modeling
+        topics:         HTTP Server
         items:
           - name:       Slides 26
 
       - date:           Sat 11/07
-        topics:         '<i class="muted">Back-end</i>'
+        topics:         '<i class="muted">ScanIt, Curlit</i>'
         assignments:
-          - Project M2
+          - Homework 08
 
-- name:     HTML
+- name:     Object-Oriented Programming
   days:
       - date:           Mon 11/09
-        topics:         HTML
+        topics:         Object-Oriented Programming
         assignments:
           - Reading 09
         items:
           - name:       Slides 27
 
       - date:           Wed 11/11
-        topics:         CSS
+        topics:         Structural Design Patterns
         items:
           - name:       Slides 28
-        assignments:
-          - Code Review 01
 
       - date:           Fri 11/13
-        topics:         Templates
+        topics:         Behavorial Design Patterns
         items:
           - name:       Slides 29
 
       - date:           Sat 11/14
-        topics:         '<i class="muted">Front-end (Static)</i>'
+        topics:         '<i class="muted">CacheIt</i>'
         assignments:
-          - Project M3
+          - Homework 09
 
-- name:     JavaScript
+- name:     Exam 03
   days:
       - date:           Mon 11/16
-        topics:         JavaScript
+        items:
+          - name:       Checklist 03
+
+      - date:           Wed 11/18
+        items:
+          - name:       Exam 03
         assignments:
-          - Reading 10
+          - Interview 03
+
+      - date:           Fri 11/20
+        topics:         Web Application
         items:
           - name:       Slides 30
 
-      - date:           Wed 11/18
-        topics:         DOM
-        items:
-          - name:       Slides 31
-
-      - date:           Fri 11/20
-        topics:         AJAX
-        items:
-          - name:       Slides 32
-
-      - date:           Sat 11/21
-        topics:         '<i class="muted">Front-end (Interactive)</i>'
-        assignments:
-          - Project M4
-
-- name:     Hosting
+- name:     Web Application
   days:
       - date:           Mon 11/23
-        topics:         SaaS
+        topics:         REST
         items:
-          - name:       Slides 33
+          - name:       Slides 31
         assignments:
-          - Reading 11
+          - Reading 10
 
       - date:           Wed 11/25
         topics:         <i class="muted">Thanksgiving</i>
-        assignments:
-          - Code Review 02
 
       - date:           Fri 11/27
         topics:         <i class="muted">Thanksgiving</i>
 
-- name:     Self-Hosting
+- name:     HTML
 
   days:
       - date:           Mon 11/30
-        topics:         VPS
+        topics:         HTML, Templates
         items:
-          - name:       Slides 34
+          - name:       Slides 32
         assignments:
-          - Reading 12
+          - Reading 11
 
       - date:           Wed 12/02
-        topics:         Docker
+        topics:         Forms
         items:
-          - name:       Slides 35
+          - name:       Slides 33
 
       - date:           Fri 12/04
-        topics:         System Administration
+        topics:         CSS
         items:
-          - name:       Slides 36
+          - name:       Slides 34
 
       - date:           Sat 12/05
-        topics:         '<i class="muted">Deployment</i>'
+        topics:         '<i class="muted">WebApp</i>'
         assignments:
-          - Project M5
+          - Homework 10
 
-- name:     Exam 03
+- name:     Exam 04
   days:
       - date:           Mon 12/07
         items:
-          - name:       Checklist 03
+          - name:       Checklist 04
 
       - date:           Wed 12/09
         topics:         The Hacker Ethic
         items:
-          - name:       Slides 37
+          - name:       Slides 35
         assignments:
-          - Code Review 03
+          - Interview 04
 
       - date:           Wed 12/16
         items:
-          - name:       Exam 03
+          - name:       Exam 04

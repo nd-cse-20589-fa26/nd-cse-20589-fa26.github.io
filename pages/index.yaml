@@ -225,32 +225,22 @@ body:       |
         <tr class="caution-bg">
           <td class="centered"><span class="badge caution-btn">Homeworks</span></td>
           <td>Weekly homework assignments.</td>
-          <td class="centered">6 &times; 1</td>
+          <td class="centered">10 &times; 1</td>
         </tr>
         <tr class="warning-bg">
           <td class="centered"><span class="badge warning-btn">Interviews</span></td>
           <td>Periodic in-person interviews.</td>
-          <td class="centered">2 &times; 1</td>
-        </tr>
-        <tr class="warning-bg">
-          <td class="centered"><span class="badge warning-btn">Code Reviews</span></td>
-          <td>Periodic in-person code reviews.</td>
-          <td class="centered">3 &times; 2</td>
-        </tr>
-        <tr class="special-bg">
-          <td class="centered"><span class="badge special-btn">Project</span></td>
-          <td>Final course project.</td>
-          <td class="centered">5 &times; 1</td>
+          <td class="centered">4 &times; 1</td>
         </tr>
         <tr class="danger-bg">
           <td class="centered"><span class="badge danger-btn">Exams</span></td>
           <td>In-person written exams.</td>
-          <td class="centered">2 &times; 10, 12</td>
+          <td class="centered">3 &times; 12, 16</td>
         </tr>
         <tr class="success-bg">
           <td class="centered" style="font-weight: bold;">Total</td>
           <td></td>
-          <td class="centered" style="font-weight: bold;">60</td>
+          <td class="centered" style="font-weight: bold;">75</td>
         </tr>
       </tbody>
     </table>
