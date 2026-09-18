@@ -1,0 +1,197 @@
+title:  "Notes 10: Networking"
+body:   |
+
+  ## Logistics
+
+  -   <div class="flex-col" markdown="1">
+
+      **Exam 01**: Grades are on **Canvas**, will pass back on **Monday**,
+      after last person takes it.
+
+      - **Grades are not important**, work hard, keep improving
+      - **No shortcuts**: practice, practice, practice
+      - [Extra Credit 01](extracredit01.html)
+
+  -   <div class="flex-col" markdown="1">
+
+      **New Schedule**: Slow down to focus on fundamentals of **Software
+      Systems** (*how to use and how they work*).
+
+      - We will still build a *small one* at the end.
+      - Provide **scaffolding**, **structure**, and **opportunities** to develop skills.
+      - [Reading 04](reading04.html) finally out!
+      - [Homework 04](homework04.html) later this weekend...
+
+  ## Networking: <span class="gold">Internet</span>
+
+  <div class="centered">
+
+  <img src="static/img/notebook10-internet.svg" class="transparent responsive">
+
+  </div>
+
+  - **Router** is like the **mailman** in **dorm** (*directs messages*)
+  - **Internet** is a **network** of **networks** (*graph*)
+
+  ## Networking: <span class="gold">Client / Server</span>
+
+  <div class="centered">
+
+  <img src="static/img/notebook10-client-server.svg" class="transparent responsive">
+
+  </div>
+
+  ### What is my IP address?
+
+  <div class="flex-row" markdown="1">
+
+  <div class="flex-col" markdown="1">
+
+  ```bash
+  $ ip addr
+  $ ip -br addr
+  $ ifconfig
+  ```
+
+  </div>
+
+  <div class="flex-col" markdown="1">
+
+  - **Discuss**: **IPv4** has `4` `8`-bit (`0`-`255`) integers ~ `4` **billion** possible IPs.
+  - **Discuss**: Almost every machine has `localhost` (ie. `127.0.0.1`).
+  - **Discuss**: Private addresses (ie. `192.168.x.x`, `10.x.x.x`).
+
+  </div>
+
+  </div>
+
+  ### What is the IP address of another machine?
+
+  <div class="flex-row" markdown="1">
+
+  <div class="flex-col" markdown="1">
+
+  ```bash
+  $ host google.com
+  $ dig nd.edu
+  ```
+
+  </div>
+
+  <div class="flex-col" markdown="1">
+
+  - **Discuss**: **DNS** is like the phonebook, `/etc/hosts`.
+  - **Demonstrate**: Open **IP address** in web browser.
+
+  </div>
+
+  </div>
+
+  ### What services are running?
+
+  <div class="flex-row" markdown="1">
+
+  <div class="flex-col" markdown="1">
+
+  ```bash
+  # Show listening ports (current host)
+  $ ss -tlpn
+  ```
+
+  </div>
+
+  <div class="flex-col" markdown="1">
+
+  ```bash
+  # Scan listening ports (another host)
+  $ nmap -v -Pn student11.cse.nd.edu
+  $ nmap -v -Pn -p 1000-2000 student11.cse.nd.edu
+  ```
+
+  </div>
+
+  </div>
+
+  ### How do I retrieve something from the web?
+
+  <div class="flex-row" markdown="1">
+
+  <div class="flex-col" markdown="1">
+
+  ```bash
+  # Start HTTP server and then connect via web browser
+  $ echo Hello, World > index.txt
+  $ python3 -m http.server 9999
+  ```
+
+  ```bash
+  # Connect to host and talk to HTTP directly
+  $ nc localhost 9999
+  GET / HTTP/1.0
+  ...
+
+  # Connect to host and talk to HTTP directly
+  $ nc google.com 80
+  GET / HTTP/1.0
+  Host: www.google.com
+  ...
+  ```
+  </div>
+
+  <div class="flex-col" markdown="1">
+
+  - **Discuss**: Unix Philosophy!
+  - **Discuss**: View Page Source
+
+  </div>
+
+  </div>
+
+  ```bash
+  # Download linux kernel
+  $ wget https://cdn.kernel.org...
+  $ curl -LO https://cdn.kernel.org...
+
+  # Write HTTP response to stdout
+  $ curl -sL https://www.example.com
+  ```
+
+  ## Networking: <span class="gold">Bandwidth / Latency</span>
+
+  <div class="centered">
+
+  <img src="static/img/notebook10-bandwidth-latency.svg" class="transparent responsive">
+
+  </div>
+
+  - <strong class="success">Latency</strong>: Delay or lag (*ms*)
+  - <strong class="danger">Bandwidth</strong>: Capacity (*MB/s*)
+
+  ### How do I measure bandwidth (capacity) vs latency (delay)?
+
+  ```bash
+  # Measure latency (response time)
+  $ ping google.com
+  $ ping 4chan.org
+  $ ping baidu.com
+
+  # Measure how many hops
+  $ traceroute google.com
+  $ traceroute 4chan.org
+  ```
+
+  ### How do I transfer files between machines?
+
+  ```bash
+  # Copy file to remote host
+  $ sftp pbui@student10.cse.nd.edu
+  > put /etc/hosts
+  > ls
+  > get hosts
+
+  # Copy file to remote host (scp)
+  $ scp /etc/hosts pbui@student10.cse.nd.edu:test.txt
+
+  # Copy file to remote host (rsync)
+  $ rsync -av --progress /etc/hosts student10.cse.nd.edu:test.txt
+  ```
