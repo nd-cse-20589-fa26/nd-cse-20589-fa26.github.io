@@ -1,0 +1,196 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<!-- Favicon -->
+<link rel="icon" type="image/png" sizes="32x32" href="static/ico/favicon-32x32.png">
+<link rel="icon" type="image/png" sizes="16x16" href="static/ico/favicon-16x16.png">
+<link rel="manifest" href="static/ico/site.webmanifest">
+<!-- Stylesheets -->
+<link rel="stylesheet" href="static/css/domer.css">
+<title>Notes 10: Networking</title>
+</head>
+<body>
+<header>
+<a class="logo" href="notes10.html">
+    <h1>Notes 10: Networking</h1>
+</a>
+<nav>
+    <ul>
+        <li><a href="index.html"><h4>Home</h4></a></li>
+        </ul>
+</nav></header>
+<main>
+<h2 id="logistics">Logistics<a class="headerlink" href="#logistics" title="Permanent link">&para;</a></h2>
+<ul>
+<li>
+<div class="flex-col" markdown="1">
+<p><strong>Exam 01</strong>: Grades are on <strong>Canvas</strong>, will pass back on <strong>Monday</strong>,
+after last person takes it.</p>
+<ul>
+<li><strong>Grades are not important</strong>, work hard, keep improving</li>
+<li><strong>No shortcuts</strong>: practice, practice, practice</li>
+<li><a href="extracredit01.html">Extra Credit 01</a></li>
+</ul>
+</li>
+<li>
+<div class="flex-col" markdown="1">
+<p><strong>New Schedule</strong>: Slow down to focus on fundamentals of <strong>Software
+Systems</strong> (<em>how to use and how they work</em>).</p>
+<ul>
+<li>We will still build a <em>small one</em> at the end.</li>
+<li>Provide <strong>scaffolding</strong>, <strong>structure</strong>, and <strong>opportunities</strong> to develop skills.</li>
+<li><a href="reading04.html">Reading 04</a> finally out!</li>
+<li><a href="homework04.html">Homework 04</a> later this weekend...</li>
+</ul>
+</li>
+</ul>
+<h2 id="networking-internet">Networking: <span class="gold">Internet</span><a class="headerlink" href="#networking-internet" title="Permanent link">&para;</a></h2>
+<div class="centered">
+
+<img src="static/img/notebook10-internet.svg" class="transparent responsive">
+
+</div>
+
+<ul>
+<li><strong>Router</strong> is like the <strong>mailman</strong> in <strong>dorm</strong> (<em>directs messages</em>)</li>
+<li><strong>Internet</strong> is a <strong>network</strong> of <strong>networks</strong> (<em>graph</em>)</li>
+</ul>
+<h2 id="networking-client-server">Networking: <span class="gold">Client / Server</span><a class="headerlink" href="#networking-client-server" title="Permanent link">&para;</a></h2>
+<div class="centered">
+
+<img src="static/img/notebook10-client-server.svg" class="transparent responsive">
+
+</div>
+
+<h3 id="what-is-my-ip-address">What is my IP address?<a class="headerlink" href="#what-is-my-ip-address" title="Permanent link">&para;</a></h3>
+<div class="flex-row">
+<div class="flex-col">
+<div class="codehilite"><pre><span></span><code>$<span class="w"> </span>ip<span class="w"> </span>addr
+$<span class="w"> </span>ip<span class="w"> </span>-br<span class="w"> </span>addr
+$<span class="w"> </span>ifconfig
+</code></pre></div>
+
+</div>
+<div class="flex-col">
+<ul>
+<li><strong>Discuss</strong>: <strong>IPv4</strong> has <code>4</code> <code>8</code>-bit (<code>0</code>-<code>255</code>) integers ~ <code>4</code> <strong>billion</strong> possible IPs.</li>
+<li><strong>Discuss</strong>: Almost every machine has <code>localhost</code> (ie. <code>127.0.0.1</code>).</li>
+<li><strong>Discuss</strong>: Private addresses (ie. <code>192.168.x.x</code>, <code>10.x.x.x</code>).</li>
+</ul>
+</div>
+</div>
+<h3 id="what-is-the-ip-address-of-another-machine">What is the IP address of another machine?<a class="headerlink" href="#what-is-the-ip-address-of-another-machine" title="Permanent link">&para;</a></h3>
+<div class="flex-row">
+<div class="flex-col">
+<div class="codehilite"><pre><span></span><code>$<span class="w"> </span>host<span class="w"> </span>google.com
+$<span class="w"> </span>dig<span class="w"> </span>nd.edu
+</code></pre></div>
+
+</div>
+<div class="flex-col">
+<ul>
+<li><strong>Discuss</strong>: <strong>DNS</strong> is like the phonebook, <code>/etc/hosts</code>.</li>
+<li><strong>Demonstrate</strong>: Open <strong>IP address</strong> in web browser.</li>
+</ul>
+</div>
+</div>
+<h3 id="what-services-are-running">What services are running?<a class="headerlink" href="#what-services-are-running" title="Permanent link">&para;</a></h3>
+<div class="flex-row">
+<div class="flex-col">
+<div class="codehilite"><pre><span></span><code><span class="c1"># Show listening ports (current host)</span>
+$<span class="w"> </span>ss<span class="w"> </span>-tlpn
+</code></pre></div>
+
+</div>
+<div class="flex-col">
+<div class="codehilite"><pre><span></span><code><span class="c1"># Scan listening ports (another host)</span>
+$<span class="w"> </span>nmap<span class="w"> </span>-v<span class="w"> </span>-Pn<span class="w"> </span>student11.cse.nd.edu
+$<span class="w"> </span>nmap<span class="w"> </span>-v<span class="w"> </span>-Pn<span class="w"> </span>-p<span class="w"> </span><span class="m">1000</span>-2000<span class="w"> </span>student11.cse.nd.edu
+</code></pre></div>
+
+</div>
+</div>
+<h3 id="how-do-i-retrieve-something-from-the-web">How do I retrieve something from the web?<a class="headerlink" href="#how-do-i-retrieve-something-from-the-web" title="Permanent link">&para;</a></h3>
+<div class="flex-row">
+<div class="flex-col">
+<div class="codehilite"><pre><span></span><code><span class="c1"># Start HTTP server and then connect via web browser</span>
+$<span class="w"> </span><span class="nb">echo</span><span class="w"> </span>Hello,<span class="w"> </span>World<span class="w"> </span>&gt;<span class="w"> </span>index.txt
+$<span class="w"> </span>python3<span class="w"> </span>-m<span class="w"> </span>http.server<span class="w"> </span><span class="m">9999</span>
+</code></pre></div>
+
+<div class="codehilite"><pre><span></span><code><span class="c1"># Connect to host and talk to HTTP directly</span>
+$<span class="w"> </span>nc<span class="w"> </span>localhost<span class="w"> </span><span class="m">9999</span>
+GET<span class="w"> </span>/<span class="w"> </span>HTTP/1.0
+...
+
+<span class="c1"># Connect to host and talk to HTTP directly</span>
+$<span class="w"> </span>nc<span class="w"> </span>google.com<span class="w"> </span><span class="m">80</span>
+GET<span class="w"> </span>/<span class="w"> </span>HTTP/1.0
+Host:<span class="w"> </span>www.google.com
+...
+</code></pre></div>
+
+</div>
+<div class="flex-col">
+<ul>
+<li><strong>Discuss</strong>: Unix Philosophy!</li>
+<li><strong>Discuss</strong>: View Page Source</li>
+</ul>
+</div>
+</div>
+<div class="codehilite"><pre><span></span><code><span class="c1"># Download linux kernel</span>
+$<span class="w"> </span>wget<span class="w"> </span>https://cdn.kernel.org...
+$<span class="w"> </span>curl<span class="w"> </span>-LO<span class="w"> </span>https://cdn.kernel.org...
+
+<span class="c1"># Write HTTP response to stdout</span>
+$<span class="w"> </span>curl<span class="w"> </span>-sL<span class="w"> </span>https://www.example.com
+</code></pre></div>
+
+<h2 id="networking-bandwidth-latency">Networking: <span class="gold">Bandwidth / Latency</span><a class="headerlink" href="#networking-bandwidth-latency" title="Permanent link">&para;</a></h2>
+<div class="centered">
+
+<img src="static/img/notebook10-bandwidth-latency.svg" class="transparent responsive">
+
+</div>
+
+<ul>
+<li><strong class="success">Latency</strong>: Delay or lag (<em>ms</em>)</li>
+<li><strong class="danger">Bandwidth</strong>: Capacity (<em>MB/s</em>)</li>
+</ul>
+<h3 id="how-do-i-measure-bandwidth-capacity-vs-latency-delay">How do I measure bandwidth (capacity) vs latency (delay)?<a class="headerlink" href="#how-do-i-measure-bandwidth-capacity-vs-latency-delay" title="Permanent link">&para;</a></h3>
+<div class="codehilite"><pre><span></span><code><span class="c1"># Measure latency (response time)</span>
+$<span class="w"> </span>ping<span class="w"> </span>google.com
+$<span class="w"> </span>ping<span class="w"> </span>4chan.org
+$<span class="w"> </span>ping<span class="w"> </span>baidu.com
+
+<span class="c1"># Measure how many hops</span>
+$<span class="w"> </span>traceroute<span class="w"> </span>google.com
+$<span class="w"> </span>traceroute<span class="w"> </span>4chan.org
+</code></pre></div>
+
+<h3 id="how-do-i-transfer-files-between-machines">How do I transfer files between machines?<a class="headerlink" href="#how-do-i-transfer-files-between-machines" title="Permanent link">&para;</a></h3>
+<div class="codehilite"><pre><span></span><code><span class="c1"># Copy file to remote host</span>
+$<span class="w"> </span>sftp<span class="w"> </span>pbui@student10.cse.nd.edu
+&gt;<span class="w"> </span>put<span class="w"> </span>/etc/hosts
+&gt;<span class="w"> </span>ls
+&gt;<span class="w"> </span>get<span class="w"> </span>hosts
+
+<span class="c1"># Copy file to remote host (scp)</span>
+$<span class="w"> </span>scp<span class="w"> </span>/etc/hosts<span class="w"> </span>pbui@student10.cse.nd.edu:test.txt
+
+<span class="c1"># Copy file to remote host (rsync)</span>
+$<span class="w"> </span>rsync<span class="w"> </span>-av<span class="w"> </span>--progress<span class="w"> </span>/etc/hosts<span class="w"> </span>student10.cse.nd.edu:test.txt
+</code></pre></div>
+</main>
+<footer>
+Built using <a href="https://python.org">Python</a>
+and <a href="https://jinja.palletsprojects.com">Jinja</a>
+with colors from 
+<a href="https://onmessage.nd.edu/university-branding/colors/">Notre Dame</a>, 
+<a href="https://spreadsheet.dev/how-to-get-the-hexadecimal-codes-of-colors-in-google-sheets">Google Docs</a>, and 
+<a href="https://nordtheme.com">Nord Theme</a>,
+and icons from <a href="https://pictogrammers.com/library/mdi/">Material Design Icons</a>.</footer>
+</body>
+</html>
