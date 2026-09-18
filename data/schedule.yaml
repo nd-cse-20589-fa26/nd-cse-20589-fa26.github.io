@@ -108,6 +108,8 @@
         topics:         Networking
         items:
           - name:       Slides 10
+          - name:       Panopto
+            link:       https://notredame.hosted.panopto.com/Panopto/Pages/Viewer.aspx?id=8540adb6-ff76-4159-ab49-b4c90112b58f
 
 - name:     Filters
   days:
