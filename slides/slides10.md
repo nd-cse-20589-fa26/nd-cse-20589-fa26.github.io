@@ -348,9 +348,24 @@ Host: www.google.com
 
 </div>
 
+---
+
+# Networking: <span class="gold">HTTP</span> (<i class="muted">Python</i>)
+
 ```python
-# Using requests in Python
->>> requests.get('https://www.google.com').text
+# Client: download using requests in Python
+>>> import requests
+>>> response = requests.get('https://www.google.com')
+>>> response.text
+```
+
+<br>
+
+```bash
+# Server: share files in current directory over HTTP 
+# using Python on port 9999
+$ python3 -m http.server 9999
+Serving HTTP on 0.0.0.0 port 9999 (http://0.0.0.0:9999/) ...
 ```
 
 ---
