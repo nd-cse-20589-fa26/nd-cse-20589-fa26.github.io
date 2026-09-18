@@ -1,0 +1,144 @@
+title:      "Reading 04: Networking, Pipelines, Filters"
+body:       |
+
+  **Everyone**:
+
+  Next week, we will unlock the true power of the **Unix philosophy** by
+  studying how to combine common **Unix** utilities together to form
+  sophisticated **pipelines** for filtering text.  Additionally, we will also
+  review how to wield [regular expressions] to create nifty pattern matching
+  tools.
+
+  <div class="alert info-bg" markdown="1">
+
+  ### <i class="icon icon-medium">{{ "book" | embed_icon }}</i> TL;DR
+
+  The focus of this reading is to revisit [regular expressions] while exploring
+  [filters] and [pipelines].
+
+  </div>
+
+  [filters]: https://en.wikipedia.org/wiki/Filter_(software)#Unix
+  [pipelines]: https://en.wikipedia.org/wiki/Pipeline_(Unix)
+  [regular expressions]: https://en.wikipedia.org/wiki/Regular_expression
+
+  ## Readings
+
+  <div class="flex-row" markdown="1">
+
+  <div class="flex-col" markdown="1">
+
+  The readings for this week are:
+
+  1.  <div class="flex-col">
+
+      [The Linux Command Line]
+
+      - Chapter 16 - Networking
+      - Chapter 19 - Regular Expressions
+      - Chapter 20 - Text Processing
+
+  </div>
+
+  <div class="flex-col" markdown="1">
+
+  ### Optional Resources
+
+  Here are some additional resources:
+
+  - [Regular Expressions - User Guide](https://zytrax.com/tech/web/regex.htm)
+  - [21 Basic Linux Networking Commands You Should Know](https://itsfoss.com/basic-linux-networking-commands/)
+
+  </div>
+
+  <div class="flex-col-25 centered" markdown="1">
+    <img src="static/img/tlcl.jpg">
+  </div>
+
+  </div>
+
+  [The Linux Command Line]: http://linuxcommand.org/tlcl.php
+
+  ## Quiz
+
+  Once you have completed the readings, answer the following [Reading 04 Quiz] questions:
+
+  <div id="quiz-questions"></div>
+
+  <div id="quiz-responses"></div>
+
+  <script src="static/js/dredd-quiz.js"></script>
+
+  <script>
+  loadQuiz('static/json/reading04.json');
+  </script>
+
+  <pre style="display: none;" id="dr-container" class="codehilite"><code id="dredd-response"></code></pre>
+
+  To submit your work, follow the same process outlined in [Reading 01]:
+
+      :::bash
+      $ git switch master                   # Make sure we are in master branch
+      $ git pull --rebase                   # Make sure we are up-to-date with GitHub
+
+      $ git switch -c reading04             # Create reading04 branch and check it out
+
+      $ cd reading04                        # Go into reading04 folder
+      $ $EDITOR answers.json                # Edit your answers.json file
+
+      $ ../.scripts/check.py                # Check reading04 quiz
+      Checking reading04 quiz ...
+            Q1 10.00 / 10.00
+            Q2 10.00 / 10.00
+            Q3  7.00 /  7.00
+            Q4  3.00 /  3.00
+        --------------------
+         Score 30.00 / 30.00
+         Grade  1.00 /  1.00
+        Status Success
+
+      $ git add answers.json                # Add answers.json to staging area
+      $ git commit -m "Reading 04: Quiz"    # Commit work
+
+      $ git push -u origin reading04        # Push branch to GitHub
+
+  <div class="alert warning-bg" markdown="1">
+
+  ### <i class="icon icon-medium">{{ "lifebuoy" | embed_icon }}</i> Acknowledgments
+
+  If you collaborated with any other students, or received help from TAs or AI
+  tools on this assignment, please record this support in the `README.md` in
+  the `reading04` folder and include it with your **Pull Request**.
+
+  </div>
+
+  <div class="alert success-bg" markdown="1">
+
+  ### <i class="icon icon-medium">{{ "account-question" | embed_icon }}</i> Graders
+
+  Once you have committed your work and pushed it to [GitHub], remember to
+  create a **pull request** and assign it to the appropriate **teaching
+  assistant** from the [Reading 04 TA List].
+
+  **Note**: this list changes each week, so be sure to consult the appropriate
+  list for each assignment.
+
+  </div>
+
+  [git]: https://git-scm.com/
+  [clone]: https://git-scm.com/docs/git-clone
+  [commit]: https://git-scm.com/docs/git-commit
+  [push]: https://git-scm.com/docs/git-push
+  [GitHub]: https://github.com
+  [Reading 01]: reading01.html
+  [Reading 04]: reading04.html
+  [Reading 04 TA List]: reading04_tas.html
+  [dredd]: https://dredd.h4x0r.space
+  [Reading 04 quiz]: static/json/reading04.json
+
+  [The Linux Command Line]: http://linuxcommand.org/tlcl.php
+  [Unix]: https://en.wikipedia.org/wiki/Unix
+  [Unix Shell]: https://en.wikipedia.org/wiki/Unix_shell
+  [Git]: https://git-scm.com/
+  [Bash]: https://www.gnu.org/software/bash/
+  [shell scripting]: https://en.wikipedia.org/wiki/Shell_script
