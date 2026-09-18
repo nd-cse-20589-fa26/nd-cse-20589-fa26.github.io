@@ -1,0 +1,42 @@
+{
+    "q1": {
+        "type": "order",
+        "question": "\n<p>\nOrder the following <b>networking</b> utilities to match the descriptions\nbelow.\n</p>\n\n<p>\n<ol>\n\n  <li>Find the <b>IP address</b> of all the networking devices on the current\n  machine.</li>\n\n  <li>Find the <b>IP address</b> of a remote machine along with other DNS\n  records.</li>\n\n  <li>Measure the <i>latency</i> to a remote machine or check if another\n  machine is responsive.</li>\n\n  <li>Securely <b>transfer</b> a file from one machine to another.</li>\n\n  <li><b>Synchronize</b> files between machines.</li>\n\n  <li><b>Download</b> a file from a website.</li>\n\n  <li>List what <b>ports</b> or <b>services</b> are available on the current machine.</li>\n\n  <li>Scan a remote machine to see what <b>ports</b> are open.</li>\n\n  <li>Make <i>arbitrary</i> network connections to a remote machine.</li>\n\n  <li>List the machines <i>traversed</i> in a network connection.</li>\n\n</ol>\n</p>\n\n<div class=\"alert warning-bg\">\n\n<p><b>Note</b>: You may need to lookup additional resources for some of\nthese commands.</p>\n\n</div>\n",
+        "responses": {
+            "host": "host",
+            "scp": "scp",
+            "curl": "curl",
+            "rsync": "rsync",
+            "nmap": "nmap",
+            "nc": "nc",
+            "ping": "ping",
+            "ip": "ip",
+            "ss": "ss",
+            "traceroute": "traceroute"
+        }
+    },
+    "q2": {
+        "type": "order",
+        "question": "\n<p>\nOrder the following text <b>filtering</b> utilities to match the\ndescriptions below.\n</p>\n\n<p>\n<ol>\n\n<li>Display <b>first</b> few lines of stream.</li>\n<li>Display <b>last</b> few lines of stream.</li>\n<li><b>Compare</b> the changes between two files.</li>\n<li><b>Translate</b> characters in a stream.</li>\n<li><b>Extract</b> delimited field from stream.</li>\n<li><b>Search</b> stream for pattern.</li>\n<li><b>Edit</b> and transform stream.</li>\n<li><b>Order</b> or rank items in stream.</li>\n<li>Remove <b>duplicates</b> from stream.</li>\n<li>Scan and <b>process</b> stream programmatically.</li>\n\n</ol>\n</p>\n\n<div class=\"alert warning-bg\">\n\n<p><b>Note</b>: You may need to lookup additional resource for some of\nthese commands.</p>\n\n</div>\n",
+        "responses": {
+            "grep": "grep",
+            "sort": "sort",
+            "uniq": "uniq",
+            "awk": "awk",
+            "cut": "cut",
+            "diff": "diff",
+            "tr": "tr",
+            "head": "head",
+            "tail": "tail",
+            "sed": "sed"
+        }
+    },
+    "q3": {
+        "type": "blank",
+        "question": "\n<p>Complete the following <code>head.py</code> script, which is a simple\nimplementation of the <code>head</code> utility that displays for first\n<code>N</code> lines of <strong>standard input</strong>:</p>\n\n<pre>\n#!/usr/bin/env python3\n\nimport sys\n\n# Functions\n\ndef usage(status: int=0) -> None:\n    print(f'Usage: head.py [-n N] file')\n    exit(status)\n\ndef head(stream, n: int=10) -> None:\n    for index, line in ____(stream):    # 1.\n        if ____:                        # 2.\n            ____                        # 3.\n\n        print(____, end='')             # 4.\n\n# Main Execution\n\ndef main(arguments: list[str]=sys.argv[1:]) -> None:\n    # Parse command line arguments\n    n = 10\n\n    while arguments and arguments[0].startswith('-'):\n        match argument := ____:         # 5.\n            case '-n': ____             # 6.\n            case '-h': usage(0)\n            case _   : usage(1)\n\n    # Display n first lines of standard input\n    ____                                # 7.\n\nif __name__ == '__main__':\n    main()\n</pre>\n"
+    },
+    "q4": {
+        "type": "blank",
+        "question": "\n<p>Once you have completed the <code>head.py</code>, use it to answer the\nfollowing questions:</p>\n\n<ol>\n\n  <li>How would you use <code>head.py</code> to show the first\n  <code>10</code> lines of <code>/etc/hosts</code>? ____</li>\n\n  <li>How would you use <code>head.py</code> to show only its\n  <b>she-bang</b>?  ____</li>\n\n  <li>How would you use <code>head.py</code> to show the first\n  <code>5</code> results of <strong>listing all the <code>python3</code>\n  processes</strong> on the current system? ____</li>\n\n</ol>\n"
+    }
+}
