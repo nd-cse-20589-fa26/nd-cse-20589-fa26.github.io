@@ -1,5 +1,5 @@
 ---
-title: "Slides 11: Filters"
+title: "Slides 12: Filters"
 description: "Filters"
 author: Peter Bui
 keywords: lecture,sos,filters
