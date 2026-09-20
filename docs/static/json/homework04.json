@@ -1,0 +1,18 @@
+{
+    "q1": {
+        "type": "blank",
+        "question": "\n<p>What is the <b>domain name</b> of the <b>IP address</b>:\n  <code>129.74.154.147</code>? <b>(1)</b> ____ </p>\n"
+    },
+    "q2": {
+        "type": "blank",
+        "question": "\n<p>How many hops does it take to go from a student machine to each of the\nfollowing machines?</p>\n\n<ul>\n  <li><code>kernel.org</code>: <b>(1)</b> ____</li>\n  <li><code>chatgpt.com</code>: <b>(2)</b> ____</li>\n</ul>\n"
+    },
+    "q3": {
+        "type": "blank",
+        "question": "\n<p>In <code>measure-latency.py</code>, the command-line arguments we looped\nover was represented by: <b>(1)</b> ____.</p>\n\n<p>In <code>find-doorman.py</code>, we removed the first argument from the\ncommand-line arguments using: <b>(2)</b> ____.</p>\n"
+    },
+    "q4": {
+        "type": "blank",
+        "question": "\n<p>In <code>crack.sh</code>, to indicate <b>success</b>, we <b>exited</b>\nwith the following <b>status code</b>: <b>(1)</b> ____.</p>\n"
+    }
+}
