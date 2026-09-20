@@ -90,6 +90,26 @@ and <strong class="success">concurrency</strong>.</i>
 
 ---
 
+# Pipelines: <span class="gold">subprocess</span>
+
+In <strong class="success">Python</strong>, we can create a <strong
+class="primary">pipeline</strong> by using functions from the [subprocess]
+module to *chain* <strong class="warning">proceses</strong>:
+
+```python
+from subprocess import Popen, PIPE, DEVNULL, run
+
+ps   = Popen(['ps', 'aux'], stdout=PIPE, stderr=DEVNULL)
+grep = Popen(['grep', 'pbui'], stdin=ps.stdout, stdout=PIPE)
+wc   = run(['wc', '-l'], stdin=grep.stdout, stdout=PIPE)
+
+print(wc.stdout.decode(), end='')
+```
+
+[subprocess]: https://docs.python.org/3/library/subprocess.html
+
+---
+
 # Pipelines: <span class="gold">Demonstration</span> (<i class="muted">1</i>)
 
 > How many `bash` <strong class="success">processes</strong> are on there on
