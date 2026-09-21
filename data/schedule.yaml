@@ -120,6 +120,8 @@
           - Reading 04
         items:
           - name:       Slides 11
+          - name:       Panopto
+            link:       https://notredame.hosted.panopto.com/Panopto/Pages/Viewer.aspx?id=9182ef50-da0a-40a1-aaab-b4cc01129545
 
       - date:           Wed 09/23
         topics:         Filters
