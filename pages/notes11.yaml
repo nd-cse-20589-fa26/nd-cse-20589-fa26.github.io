@@ -1,0 +1,190 @@
+title:  "Notes 11: Pipelines"
+body:   |
+
+  ## Logistics
+
+  - [Extra Credit 01]: **Exam 01** corrections, and **Shell** customizations
+  - [Homework 04]: Journey that will involve **pipelines** and **Python scripts**.
+
+  [Extra Credit 01]: extracredit01.html
+  [Homework 04]: homework04.html
+
+  ## Pipelines: <span class="gold">Unix Philosophy</span>
+
+  <div class="centered" markdown="1">
+
+  Write programs that <strong class="success">do one thing</strong> and <strong
+  class="success">do it well</strong>.
+
+  <br>
+
+  Write programs that <strong class="success">work together</strong>.
+
+  <br>
+
+  Write programs that <strong class="success">handle text streams</strong>,
+  because that is a universal interface.
+
+  </div>
+
+  <div class="alert warning-bg" markdown="1">
+
+  **Discuss**: binary vs plain text
+
+  - `vim` /bin/ls
+  - `strings` /bin/ls
+
+  </div>
+
+  ## Pipelines: <span class="gold">Assembly Line</span>
+
+  > **Demonstration**: How many red candies?
+
+  <div class="flex-row" markdown="1">
+
+  <div class="col-row" markdown="1">
+
+  <div class="alert info-bg centered" markdown="1">
+
+  **Stage 1**: Gather / Read
+
+  </div>
+
+  </div>
+
+  <div class="col-row" markdown="1">
+
+  <div class="alert success-bg centered" markdown="1">
+
+  **Stage 2**: Filter / Select
+
+  </div>
+
+  </div>
+
+  <div class="col-row" markdown="1">
+
+  <div class="alert warning-bg centered" markdown="1">
+
+  **Stage 3**: Aggregate / Count
+
+  </div>
+
+  </div>
+
+  </div>
+
+  **Observations**:
+
+  - Can be **inefficient** because of **overhead** of communication.
+
+  - Can allow us to **scale** up when we have a lot of data.
+
+  - Allow for **specialization**, **debugging**, **extension**,
+  **concurrency**.
+
+  <div class="alert success-bg" markdown="1">
+
+  **Analogy**: Chipotle!
+
+  </div>
+
+  ## Pipelines: <span class="gold">subprocess</span>
+
+  In <strong class="success">Python</strong>, we can create a <strong
+  class="primary">pipeline</strong> by using functions from the [subprocess]
+  module to *chain* <strong class="warning">proceses</strong>:
+
+  ```bash
+  # Pipeline in Shell
+  ps aux | grep pbui | wc -l
+  ```
+
+  ```python
+  # Pipeline in Python
+  from subprocess import Popen, PIPE, DEVNULL, run
+
+  ps   = Popen(['ps', 'aux'], stdout=PIPE, stderr=DEVNULL)
+  grep = Popen(['grep', 'pbui'], stdin=ps.stdout, stdout=PIPE)
+  wc   = run(['wc', '-l'], stdin=grep.stdout, stdout=PIPE)
+
+  print(wc.stdout.decode(), end='')
+  ```
+
+  [subprocess]: https://docs.python.org/3/library/subprocess.html
+
+  ## Pipelines: <span class="gold">Demonstration</span> (<i class="muted">1</i>)
+
+  > How many `bash` <strong class="success">processes</strong> are on there on
+  > <strong class="info">student10.cse.nd.edu</strong>?
+
+  ```python
+  # Python Solution
+
+  count = 0
+  for line in os.popen('ps aux'):
+      if 'bash' in line:
+          count += 1
+  print(count)
+  ```
+
+  ```bash
+  # Pipeline Solution
+
+  ps aux | grep -v grep | grep bash \
+         | wc -l
+  ```
+
+  ## Pipelines: <span class="gold">Demonstration</span> (<i class="muted">2</i>)
+
+  > How many different users <strong class="success">processes</strong> are on there on
+  > <strong class="info">student10.cse.nd.edu</strong>?
+
+  ```python
+  # Python Solution
+
+  users = set()
+  for line in os.popen('ps aux'):
+      user = line.split()[0]
+      users.add(user)
+
+  print(len(users))
+  ```
+
+  ```bash
+  # Pipeline Solution
+
+  ps aux | awk '{print $1}' \
+         | sort | uniq \
+         | wc -l
+  ```
+
+  ## Pipelines: <span class="gold">Demonstration</span> (<i class="muted">3</i>)
+
+  > Who has the most <strong class="success">processes</strong> on
+  > <strong class="info">student10.cse.nd.edu</strong>?
+
+  ```python
+  # Python Solution
+
+  counts = {}
+  for line in os.popen('ps aux'):
+      user = line.split()[0]
+      counts[user] = counts.get(user, 0) + 1
+
+  max_user = None
+  for user, count in counts.items():
+      if count > counts.get(max_user, 0):
+          max_user = user
+
+  print(max_user)
+  ```
+
+  ```bash
+  # Pipeline Solution
+
+  ps aux | awk '{print $1}' \
+         | sort | uniq -c \
+         | sort -rn | head -n 1 \
+         | awk '{print $2}'
+  ```
