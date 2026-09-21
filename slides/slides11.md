@@ -201,9 +201,9 @@ for line in os.popen('ps aux'):
     user = line.split()[0]
     counts[user] = counts.get(user, 0) + 1
 
-max_user = list(counts.keys())[0]
+max_user = None
 for user, count in counts.items():
-    if count > counts[max_user]:
+    if count > counts.get(max_user, 0):
         max_user = user
 
 print(max_user)
