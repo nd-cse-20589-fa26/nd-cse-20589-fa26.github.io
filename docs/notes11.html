@@ -1,0 +1,181 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<!-- Favicon -->
+<link rel="icon" type="image/png" sizes="32x32" href="static/ico/favicon-32x32.png">
+<link rel="icon" type="image/png" sizes="16x16" href="static/ico/favicon-16x16.png">
+<link rel="manifest" href="static/ico/site.webmanifest">
+<!-- Stylesheets -->
+<link rel="stylesheet" href="static/css/domer.css">
+<title>Notes 11: Pipelines</title>
+</head>
+<body>
+<header>
+<a class="logo" href="notes11.html">
+    <h1>Notes 11: Pipelines</h1>
+</a>
+<nav>
+    <ul>
+        <li><a href="index.html"><h4>Home</h4></a></li>
+        </ul>
+</nav></header>
+<main>
+<h2 id="logistics">Logistics<a class="headerlink" href="#logistics" title="Permanent link">&para;</a></h2>
+<ul>
+<li><a href="extracredit01.html">Extra Credit 01</a>: <strong>Exam 01</strong> corrections, and <strong>Shell</strong> customizations</li>
+<li><a href="homework04.html">Homework 04</a>: Journey that will involve <strong>pipelines</strong> and <strong>Python scripts</strong>.</li>
+</ul>
+<h2 id="pipelines-unix-philosophy">Pipelines: <span class="gold">Unix Philosophy</span><a class="headerlink" href="#pipelines-unix-philosophy" title="Permanent link">&para;</a></h2>
+<div class="centered">
+<p>Write programs that <strong class="success">do one thing</strong> and <strong
+class="success">do it well</strong>.</p>
+<p><br></p>
+<p>Write programs that <strong class="success">work together</strong>.</p>
+<p><br></p>
+<p>Write programs that <strong class="success">handle text streams</strong>,
+because that is a universal interface.</p>
+</div>
+<div class="alert warning-bg">
+<p><strong>Discuss</strong>: binary vs plain text</p>
+<ul>
+<li><code>vim</code> /bin/ls</li>
+<li><code>strings</code> /bin/ls</li>
+</ul>
+</div>
+<h2 id="pipelines-assembly-line">Pipelines: <span class="gold">Assembly Line</span><a class="headerlink" href="#pipelines-assembly-line" title="Permanent link">&para;</a></h2>
+<blockquote>
+<p><strong>Demonstration</strong>: How many red candies?</p>
+</blockquote>
+<div class="flex-row">
+<div class="col-row">
+<div class="alert info-bg centered">
+<p><strong>Stage 1</strong>: Gather / Read</p>
+</div>
+</div>
+<div class="col-row">
+<div class="alert success-bg centered">
+<p><strong>Stage 2</strong>: Filter / Select</p>
+</div>
+</div>
+<div class="col-row">
+<div class="alert warning-bg centered">
+<p><strong>Stage 3</strong>: Aggregate / Count</p>
+</div>
+</div>
+</div>
+<p><strong>Observations</strong>:</p>
+<ul>
+<li>
+<p>Can be <strong>inefficient</strong> because of <strong>overhead</strong> of communication.</p>
+</li>
+<li>
+<p>Can allow us to <strong>scale</strong> up when we have a lot of data.</p>
+</li>
+<li>
+<p>Allow for <strong>specialization</strong>, <strong>debugging</strong>, <strong>extension</strong>,
+<strong>concurrency</strong>.</p>
+</li>
+</ul>
+<div class="alert success-bg">
+<p><strong>Analogy</strong>: Chipotle!</p>
+</div>
+<h2 id="pipelines-subprocess">Pipelines: <span class="gold">subprocess</span><a class="headerlink" href="#pipelines-subprocess" title="Permanent link">&para;</a></h2>
+<p>In <strong class="success">Python</strong>, we can create a <strong
+class="primary">pipeline</strong> by using functions from the <a href="https://docs.python.org/3/library/subprocess.html">subprocess</a>
+module to <em>chain</em> <strong class="warning">proceses</strong>:</p>
+<div class="codehilite"><pre><span></span><code><span class="c1"># Pipeline in Shell</span>
+ps<span class="w"> </span>aux<span class="w"> </span><span class="p">|</span><span class="w"> </span>grep<span class="w"> </span>pbui<span class="w"> </span><span class="p">|</span><span class="w"> </span>wc<span class="w"> </span>-l
+</code></pre></div>
+
+<div class="codehilite"><pre><span></span><code><span class="c1"># Pipeline in Python</span>
+<span class="kn">from</span> <span class="nn">subprocess</span> <span class="kn">import</span> <span class="n">Popen</span><span class="p">,</span> <span class="n">PIPE</span><span class="p">,</span> <span class="n">DEVNULL</span><span class="p">,</span> <span class="n">run</span>
+
+<span class="n">ps</span>   <span class="o">=</span> <span class="n">Popen</span><span class="p">([</span><span class="s1">&#39;ps&#39;</span><span class="p">,</span> <span class="s1">&#39;aux&#39;</span><span class="p">],</span> <span class="n">stdout</span><span class="o">=</span><span class="n">PIPE</span><span class="p">,</span> <span class="n">stderr</span><span class="o">=</span><span class="n">DEVNULL</span><span class="p">)</span>
+<span class="n">grep</span> <span class="o">=</span> <span class="n">Popen</span><span class="p">([</span><span class="s1">&#39;grep&#39;</span><span class="p">,</span> <span class="s1">&#39;pbui&#39;</span><span class="p">],</span> <span class="n">stdin</span><span class="o">=</span><span class="n">ps</span><span class="o">.</span><span class="n">stdout</span><span class="p">,</span> <span class="n">stdout</span><span class="o">=</span><span class="n">PIPE</span><span class="p">)</span>
+<span class="n">wc</span>   <span class="o">=</span> <span class="n">run</span><span class="p">([</span><span class="s1">&#39;wc&#39;</span><span class="p">,</span> <span class="s1">&#39;-l&#39;</span><span class="p">],</span> <span class="n">stdin</span><span class="o">=</span><span class="n">grep</span><span class="o">.</span><span class="n">stdout</span><span class="p">,</span> <span class="n">stdout</span><span class="o">=</span><span class="n">PIPE</span><span class="p">)</span>
+
+<span class="nb">print</span><span class="p">(</span><span class="n">wc</span><span class="o">.</span><span class="n">stdout</span><span class="o">.</span><span class="n">decode</span><span class="p">(),</span> <span class="n">end</span><span class="o">=</span><span class="s1">&#39;&#39;</span><span class="p">)</span>
+</code></pre></div>
+
+<h2 id="pipelines-demonstration-1">Pipelines: <span class="gold">Demonstration</span> (<i class="muted">1</i>)<a class="headerlink" href="#pipelines-demonstration-1" title="Permanent link">&para;</a></h2>
+<blockquote>
+<p>How many <code>bash</code> <strong class="success">processes</strong> are on there on
+<strong class="info">student10.cse.nd.edu</strong>?</p>
+</blockquote>
+<div class="codehilite"><pre><span></span><code><span class="c1"># Python Solution</span>
+
+<span class="n">count</span> <span class="o">=</span> <span class="mi">0</span>
+<span class="k">for</span> <span class="n">line</span> <span class="ow">in</span> <span class="n">os</span><span class="o">.</span><span class="n">popen</span><span class="p">(</span><span class="s1">&#39;ps aux&#39;</span><span class="p">):</span>
+    <span class="k">if</span> <span class="s1">&#39;bash&#39;</span> <span class="ow">in</span> <span class="n">line</span><span class="p">:</span>
+        <span class="n">count</span> <span class="o">+=</span> <span class="mi">1</span>
+<span class="nb">print</span><span class="p">(</span><span class="n">count</span><span class="p">)</span>
+</code></pre></div>
+
+<div class="codehilite"><pre><span></span><code><span class="c1"># Pipeline Solution</span>
+
+ps<span class="w"> </span>aux<span class="w"> </span><span class="p">|</span><span class="w"> </span>grep<span class="w"> </span>-v<span class="w"> </span>grep<span class="w"> </span><span class="p">|</span><span class="w"> </span>grep<span class="w"> </span>bash<span class="w"> </span><span class="se">\</span>
+<span class="w">       </span><span class="p">|</span><span class="w"> </span>wc<span class="w"> </span>-l
+</code></pre></div>
+
+<h2 id="pipelines-demonstration-2">Pipelines: <span class="gold">Demonstration</span> (<i class="muted">2</i>)<a class="headerlink" href="#pipelines-demonstration-2" title="Permanent link">&para;</a></h2>
+<blockquote>
+<p>How many different users <strong class="success">processes</strong> are on there on
+<strong class="info">student10.cse.nd.edu</strong>?</p>
+</blockquote>
+<div class="codehilite"><pre><span></span><code><span class="c1"># Python Solution</span>
+
+<span class="n">users</span> <span class="o">=</span> <span class="nb">set</span><span class="p">()</span>
+<span class="k">for</span> <span class="n">line</span> <span class="ow">in</span> <span class="n">os</span><span class="o">.</span><span class="n">popen</span><span class="p">(</span><span class="s1">&#39;ps aux&#39;</span><span class="p">):</span>
+    <span class="n">user</span> <span class="o">=</span> <span class="n">line</span><span class="o">.</span><span class="n">split</span><span class="p">()[</span><span class="mi">0</span><span class="p">]</span>
+    <span class="n">users</span><span class="o">.</span><span class="n">add</span><span class="p">(</span><span class="n">user</span><span class="p">)</span>
+
+<span class="nb">print</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">users</span><span class="p">))</span>
+</code></pre></div>
+
+<div class="codehilite"><pre><span></span><code><span class="c1"># Pipeline Solution</span>
+
+ps<span class="w"> </span>aux<span class="w"> </span><span class="p">|</span><span class="w"> </span>awk<span class="w"> </span><span class="s1">&#39;{print $1}&#39;</span><span class="w"> </span><span class="se">\</span>
+<span class="w">       </span><span class="p">|</span><span class="w"> </span>sort<span class="w"> </span><span class="p">|</span><span class="w"> </span>uniq<span class="w"> </span><span class="se">\</span>
+<span class="w">       </span><span class="p">|</span><span class="w"> </span>wc<span class="w"> </span>-l
+</code></pre></div>
+
+<h2 id="pipelines-demonstration-3">Pipelines: <span class="gold">Demonstration</span> (<i class="muted">3</i>)<a class="headerlink" href="#pipelines-demonstration-3" title="Permanent link">&para;</a></h2>
+<blockquote>
+<p>Who has the most <strong class="success">processes</strong> on
+<strong class="info">student10.cse.nd.edu</strong>?</p>
+</blockquote>
+<div class="codehilite"><pre><span></span><code><span class="c1"># Python Solution</span>
+
+<span class="n">counts</span> <span class="o">=</span> <span class="p">{}</span>
+<span class="k">for</span> <span class="n">line</span> <span class="ow">in</span> <span class="n">os</span><span class="o">.</span><span class="n">popen</span><span class="p">(</span><span class="s1">&#39;ps aux&#39;</span><span class="p">):</span>
+    <span class="n">user</span> <span class="o">=</span> <span class="n">line</span><span class="o">.</span><span class="n">split</span><span class="p">()[</span><span class="mi">0</span><span class="p">]</span>
+    <span class="n">counts</span><span class="p">[</span><span class="n">user</span><span class="p">]</span> <span class="o">=</span> <span class="n">counts</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="n">user</span><span class="p">,</span> <span class="mi">0</span><span class="p">)</span> <span class="o">+</span> <span class="mi">1</span>
+
+<span class="n">max_user</span> <span class="o">=</span> <span class="kc">None</span>
+<span class="k">for</span> <span class="n">user</span><span class="p">,</span> <span class="n">count</span> <span class="ow">in</span> <span class="n">counts</span><span class="o">.</span><span class="n">items</span><span class="p">():</span>
+    <span class="k">if</span> <span class="n">count</span> <span class="o">&gt;</span> <span class="n">counts</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="n">max_user</span><span class="p">,</span> <span class="mi">0</span><span class="p">):</span>
+        <span class="n">max_user</span> <span class="o">=</span> <span class="n">user</span>
+
+<span class="nb">print</span><span class="p">(</span><span class="n">max_user</span><span class="p">)</span>
+</code></pre></div>
+
+<div class="codehilite"><pre><span></span><code><span class="c1"># Pipeline Solution</span>
+
+ps<span class="w"> </span>aux<span class="w"> </span><span class="p">|</span><span class="w"> </span>awk<span class="w"> </span><span class="s1">&#39;{print $1}&#39;</span><span class="w"> </span><span class="se">\</span>
+<span class="w">       </span><span class="p">|</span><span class="w"> </span>sort<span class="w"> </span><span class="p">|</span><span class="w"> </span>uniq<span class="w"> </span>-c<span class="w"> </span><span class="se">\</span>
+<span class="w">       </span><span class="p">|</span><span class="w"> </span>sort<span class="w"> </span>-rn<span class="w"> </span><span class="p">|</span><span class="w"> </span>head<span class="w"> </span>-n<span class="w"> </span><span class="m">1</span><span class="w"> </span><span class="se">\</span>
+<span class="w">       </span><span class="p">|</span><span class="w"> </span>awk<span class="w"> </span><span class="s1">&#39;{print $2}&#39;</span>
+</code></pre></div>
+</main>
+<footer>
+Built using <a href="https://python.org">Python</a>
+and <a href="https://jinja.palletsprojects.com">Jinja</a>
+with colors from 
+<a href="https://onmessage.nd.edu/university-branding/colors/">Notre Dame</a>, 
+<a href="https://spreadsheet.dev/how-to-get-the-hexadecimal-codes-of-colors-in-google-sheets">Google Docs</a>, and 
+<a href="https://nordtheme.com">Nord Theme</a>,
+and icons from <a href="https://pictogrammers.com/library/mdi/">Material Design Icons</a>.</footer>
+</body>
+</html>
