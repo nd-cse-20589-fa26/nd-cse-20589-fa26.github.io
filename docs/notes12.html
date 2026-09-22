@@ -1,0 +1,417 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<!-- Favicon -->
+<link rel="icon" type="image/png" sizes="32x32" href="static/ico/favicon-32x32.png">
+<link rel="icon" type="image/png" sizes="16x16" href="static/ico/favicon-16x16.png">
+<link rel="manifest" href="static/ico/site.webmanifest">
+<!-- Stylesheets -->
+<link rel="stylesheet" href="static/css/domer.css">
+<title>Notes 12: Filters</title>
+</head>
+<body>
+<header>
+<a class="logo" href="notes12.html">
+    <h1>Notes 12: Filters</h1>
+</a>
+<nav>
+    <ul>
+        <li><a href="index.html"><h4>Home</h4></a></li>
+        </ul>
+</nav></header>
+<main>
+<h2 id="logistics">Logistics<a class="headerlink" href="#logistics" title="Permanent link">&para;</a></h2>
+<ul>
+<li><a href="extracredit01.html">Extra Credit 01</a>: <strong>Exam 01</strong> corrections, and <strong>Shell</strong> customizations</li>
+</ul>
+<h2 id="filters-overview">Filters: <span class="gold">Overview</span><a class="headerlink" href="#filters-overview" title="Permanent link">&para;</a></h2>
+<p><strong class="danger">Unix</strong> includes many utilities that perform the
+following:</p>
+<ol>
+<li>
+<p><strong class="info">Read</strong> data from <strong>standard input</strong>.</p>
+</li>
+<li>
+<p><strong class="success">Perform</strong> some operation on the data.</p>
+</li>
+<li>
+<p><strong class="caution">Write</strong> results of operation to <strong>standard output</strong>.</p>
+</li>
+</ol>
+<div class="centered">
+
+<img src="static/img/slides11-pipeline.svg" class="transparent responsive">
+
+</div>
+
+<div class="centered">
+<p><i>We call these utilities <strong class="success">filters</strong> since they
+<strong>transform</strong> their inputs in some manner.  Additionally, we can combine
+multiple <strong class="success">filters</strong> together to form <strong
+class="primary">pipelines</strong>.</i></p>
+</div>
+<h2 id="filters-transformers-selectors">Filters: <span class="gold">Transformers / Selectors</span><a class="headerlink" href="#filters-transformers-selectors" title="Permanent link">&para;</a></h2>
+<table class="bordered">
+<thead>
+    <th>Filter</th>
+    <th>Description</th>
+</thead>
+<tbody>
+<tr class="info-bg">
+    <td class="centered"><b>tr</b></td>
+    <td width="900px">Translate from one set of characters to another</td>
+</tr>
+<tr class="success-bg">
+    <td class="centered"><b>cut/awk</b></td>
+    <td width="900px">Extract portions from each line</td>
+</tr>
+<tr class="warning-bg">
+    <td class="centered"><b>grep</b></td>
+    <td width="900px">Search text using regular expressions</td>
+</tr>
+<tr class="danger-bg">
+    <td class="centered"><b>sed</b></td>
+    <td width="900px">Search and replace text using regular expresssions</td>
+</tr>
+</tbody>
+</table>
+
+<h3 id="filters-tr">Filters: <span class="gold">tr</span><a class="headerlink" href="#filters-tr" title="Permanent link">&para;</a></h3>
+<p><a href="https://man7.org/linux/man-pages/man1/tr.1.html">tr</a> allows us to <strong>translate</strong> from one set of characters to another set in
+a stream of text.</p>
+<div class="flex-row">
+<div class="flex-col">
+<div class="codehilite"><pre><span></span><code><span class="c1"># Shell</span>
+
+$<span class="w"> </span><span class="nv">TEXT</span><span class="o">=</span><span class="s1">&#39;burn this city&#39;</span>
+
+<span class="c1"># Translate from a to x, from b to y, from c to z</span>
+$<span class="w"> </span><span class="nb">echo</span><span class="w"> </span><span class="nv">$TEXT</span><span class="w"> </span><span class="p">|</span><span class="w"> </span>tr<span class="w"> </span>abc<span class="w"> </span>xyz
+yurn<span class="w"> </span>this<span class="w"> </span>zity
+
+<span class="c1"># Uppercase all letters</span>
+$<span class="w"> </span><span class="nb">echo</span><span class="w"> </span><span class="nv">$TEXT</span><span class="w"> </span><span class="p">|</span><span class="w"> </span>tr<span class="w"> </span>a-z<span class="w"> </span>A-Z
+BURN<span class="w"> </span>THIS<span class="w"> </span>CITY
+
+<span class="c1"># Delete all spaces</span>
+$<span class="w"> </span><span class="nb">echo</span><span class="w"> </span><span class="nv">$TEXT</span><span class="w"> </span><span class="p">|</span><span class="w"> </span>tr<span class="w"> </span>-d<span class="w"> </span><span class="s1">&#39; &#39;</span>
+burnthiscity
+</code></pre></div>
+
+</div>
+<div class="flex-col">
+<div class="codehilite"><pre><span></span><code><span class="c1"># Python</span>
+
+<span class="o">&gt;&gt;&gt;</span> <span class="n">text</span> <span class="o">=</span> <span class="s1">&#39;burn this city&#39;</span>
+
+<span class="c1"># Translate from a to x, from b to y, from c to z</span>
+<span class="o">&gt;&gt;&gt;</span> <span class="n">text</span><span class="o">.</span><span class="n">translate</span><span class="p">(</span><span class="nb">str</span><span class="o">.</span><span class="n">maketrans</span><span class="p">(</span><span class="s1">&#39;abc&#39;</span><span class="p">,</span> <span class="s1">&#39;xyz&#39;</span><span class="p">))</span>
+<span class="s1">&#39;yurn this zity&#39;</span>
+
+<span class="c1"># Uppercase all letters</span>
+<span class="o">&gt;&gt;&gt;</span> <span class="n">text</span><span class="o">.</span><span class="n">upper</span><span class="p">()</span>
+<span class="s1">&#39;BURN THIS CITY&#39;</span>
+
+<span class="c1"># Delete all spaces</span>
+<span class="o">&gt;&gt;&gt;</span> <span class="n">text</span><span class="o">.</span><span class="n">replace</span><span class="p">(</span><span class="s1">&#39; &#39;</span><span class="p">,</span> <span class="s1">&#39;&#39;</span><span class="p">)</span>
+<span class="s1">&#39;burnthiscity&#39;</span>
+</code></pre></div>
+
+</div>
+</div>
+<h3 id="filters-cutawk">Filters: <span class="gold">cut/awk</span><a class="headerlink" href="#filters-cutawk" title="Permanent link">&para;</a></h3>
+<p><a href="https://man7.org/linux/man-pages/man1/cut.1.html">cut</a> and <a href="https://man7.org/linux/man-pages/man1/awk.1.html">awk</a> allow us to <strong>extract</strong> portions from each line in a stream of
+text.</p>
+<div class="flex-row">
+<div class="flex-col">
+<div class="codehilite"><pre><span></span><code><span class="c1"># Shell</span>
+
+$<span class="w"> </span><span class="nv">TEXT</span><span class="o">=</span><span class="s1">&#39;burn this city&#39;</span>
+
+<span class="c1"># Extract first field of each line</span>
+$<span class="w"> </span><span class="nb">echo</span><span class="w"> </span><span class="nv">$TEXT</span><span class="w"> </span><span class="p">|</span><span class="w"> </span>cut<span class="w"> </span>-d<span class="w"> </span><span class="s1">&#39; &#39;</span><span class="w"> </span>-f<span class="w"> </span><span class="m">1</span>
+$<span class="w"> </span><span class="nb">echo</span><span class="w"> </span><span class="nv">$TEXT</span><span class="w"> </span><span class="p">|</span><span class="w"> </span>awk<span class="w"> </span><span class="s1">&#39;{print $1}&#39;</span>
+burn
+
+<span class="c1"># Extract first and third fields of each line</span>
+$<span class="w"> </span><span class="nb">echo</span><span class="w"> </span><span class="nv">$TEXT</span><span class="w"> </span><span class="p">|</span><span class="w"> </span>cut<span class="w"> </span>-d<span class="w"> </span><span class="s1">&#39; &#39;</span><span class="w"> </span>-f<span class="w"> </span><span class="m">1</span>,3
+$<span class="w"> </span><span class="nb">echo</span><span class="w"> </span><span class="nv">$TEXT</span><span class="w"> </span><span class="p">|</span><span class="w"> </span>awk<span class="w"> </span><span class="s1">&#39;{print $1, $3}&#39;</span>
+burn<span class="w"> </span>city
+
+<span class="c1"># Extract 2nd through 4th characters of each line</span>
+$<span class="w"> </span><span class="nb">echo</span><span class="w"> </span><span class="nv">$TEXT</span><span class="w"> </span><span class="p">|</span><span class="w"> </span>cut<span class="w"> </span>-c<span class="w"> </span><span class="m">2</span>-4
+urn
+</code></pre></div>
+
+</div>
+<div class="flex-col">
+<div class="codehilite"><pre><span></span><code><span class="c1"># Python</span>
+
+<span class="o">&gt;&gt;&gt;</span> <span class="n">text</span> <span class="o">=</span> <span class="s1">&#39;burn this city&#39;</span>
+
+<span class="c1"># Extract first field of each line</span>
+<span class="o">&gt;&gt;&gt;</span> <span class="n">text</span><span class="o">.</span><span class="n">split</span><span class="p">()[</span><span class="mi">0</span><span class="p">]</span>
+<span class="n">burn</span>
+
+<span class="c1"># Extract first and third fields of each line</span>
+<span class="o">&gt;&gt;&gt;</span> <span class="s1">&#39; &#39;</span><span class="o">.</span><span class="n">join</span><span class="p">([</span><span class="n">text</span><span class="o">.</span><span class="n">split</span><span class="p">()[</span><span class="mi">0</span><span class="p">],</span> <span class="n">text</span><span class="o">.</span><span class="n">split</span><span class="p">()[</span><span class="mi">2</span><span class="p">]])</span>
+<span class="s1">&#39;burn city&#39;</span>
+
+<span class="c1"># Extract 2nd through 4th characters of each line</span>
+<span class="o">&gt;&gt;&gt;</span> <span class="n">text</span><span class="p">[</span><span class="mi">1</span><span class="p">:</span><span class="mi">4</span><span class="p">]</span>
+<span class="n">urn</span>
+</code></pre></div>
+
+</div>
+</div>
+<h3 id="filters-grep">Filters: <span class="gold">Grep</span><a class="headerlink" href="#filters-grep" title="Permanent link">&para;</a></h3>
+<p><a href="https://man7.org/linux/man-pages/man1/grep.1.html">grep</a> allows us to <strong>search</strong> streams of text using <strong
+class="success">regular expressions</strong>.</p>
+<div class="flex-row">
+<div class="flex-col">
+<div class="codehilite"><pre><span></span><code><span class="c1"># Shell: Find all five letter words that</span>
+<span class="c1"># begin with a or o and end with the same letter.</span>
+
+$<span class="w"> </span>cat<span class="w"> </span>/usr/share/dict/words<span class="w"> </span><span class="se">\</span>
+<span class="w">    </span><span class="p">|</span><span class="w"> </span>grep<span class="w"> </span>-E<span class="w"> </span><span class="s1">&#39;^([ao]).{3}\1$&#39;</span>
+aloha
+alpha
+ameba
+aorta
+arena
+aroma
+atria
+outdo
+outgo
+</code></pre></div>
+
+</div>
+<div class="flex-col">
+<div class="codehilite"><pre><span></span><code><span class="c1"># Python: Find all five letter words that</span>
+<span class="c1"># begin with a or o and end with the same letter.</span>
+
+<span class="n">path</span> <span class="o">=</span> <span class="s1">&#39;/usr/share/dict/words&#39;</span>
+<span class="n">rx</span>   <span class="o">=</span> <span class="sa">r</span><span class="s1">&#39;^([ao]).</span><span class="si">{3}</span><span class="s1">\1$&#39;</span>
+
+<span class="k">with</span> <span class="nb">open</span><span class="p">(</span><span class="n">path</span><span class="p">)</span> <span class="k">as</span> <span class="n">stream</span><span class="p">:</span>
+    <span class="k">for</span> <span class="n">line</span> <span class="ow">in</span> <span class="n">stream</span><span class="p">:</span>
+        <span class="k">if</span> <span class="n">m</span> <span class="o">:=</span> <span class="n">re</span><span class="o">.</span><span class="n">search</span><span class="p">(</span><span class="n">rx</span><span class="p">,</span> <span class="n">line</span><span class="p">):</span>
+            <span class="nb">print</span><span class="p">(</span><span class="n">m</span><span class="p">[</span><span class="mi">0</span><span class="p">])</span>
+</code></pre></div>
+
+</div>
+</div>
+<h3 id="filters-sed">Filters: <span class="gold">Sed</span><a class="headerlink" href="#filters-sed" title="Permanent link">&para;</a></h3>
+<p><a href="https://man7.org/linux/man-pages/man1/sed.1.html">sed</a> allows us to <strong>modify</strong> streams of text using <strong
+class="success">regular expressions</strong>.</p>
+<div class="flex-row">
+<div class="flex-col">
+<div class="codehilite"><pre><span></span><code><span class="c1"># Shell: replace all numbers in IP address with</span>
+<span class="c1"># a single x</span>
+
+$<span class="w"> </span>cat<span class="w"> </span>/etc/hosts<span class="w"> </span><span class="p">|</span><span class="w"> </span>sed<span class="w"> </span>-E<span class="w"> </span><span class="s1">&#39;s/[0-9]{1,3}/x/g&#39;</span>
+...
+x.x.x.x<span class="w"> </span>weasel
+x.x.x.x<span class="w"> </span>banshee
+x.x.x.x<span class="w"> </span>xavier
+x.x.x.x<span class="w"> </span>momo
+</code></pre></div>
+
+</div>
+<div class="flex-col">
+<div class="codehilite"><pre><span></span><code><span class="c1"># Python: replace all numbers in IP address with</span>
+<span class="c1"># a single x</span>
+
+<span class="n">path</span> <span class="o">=</span> <span class="s1">&#39;/etc/hosts&#39;</span>
+<span class="n">rx</span>   <span class="o">=</span> <span class="sa">r</span><span class="s1">&#39;[0-9]{1,3}&#39;</span>
+
+<span class="k">with</span> <span class="nb">open</span><span class="p">(</span><span class="n">path</span><span class="p">)</span> <span class="k">as</span> <span class="n">stream</span><span class="p">:</span>
+    <span class="k">for</span> <span class="n">line</span> <span class="ow">in</span> <span class="n">stream</span><span class="p">:</span>
+        <span class="nb">print</span><span class="p">(</span><span class="n">re</span><span class="o">.</span><span class="n">sub</span><span class="p">(</span><span class="n">rx</span><span class="p">,</span> <span class="s1">&#39;x&#39;</span><span class="p">,</span> <span class="n">line</span><span class="p">),</span> <span class="n">end</span><span class="o">=</span><span class="s1">&#39;&#39;</span><span class="p">)</span>
+</code></pre></div>
+
+</div>
+</div>
+<h2 id="example-tmntpy">Example: <a href="https://github.com/nd-cse-20589-fa26/examples/blob/master/slides12/tmnt.py">tmnt.py</a><a class="headerlink" href="#example-tmntpy" title="Permanent link">&para;</a></h2>
+<p>Given the file <code>tmnt.txt</code>, which contains:</p>
+<div class="codehilite"><pre><span></span><code>Leonardo      blue    katana
+Donatello     purple  bo
+Raphael       red     sai
+Michelangelo  orange  nunchucks
+</code></pre></div>
+
+<ol>
+<li>
+<p>List only the <strong>colors</strong> of the turtles.</p>
+</li>
+<li>
+<p>List only the <strong>turtles</strong> whose names end in lo.</p>
+</li>
+<li>
+<p>List the <strong>weapons</strong> that don't end with a vowel.</p>
+</li>
+</ol>
+<div class="codehilite"><pre><span></span><code><span class="ch">#!/usr/bin/env python3</span>
+
+<span class="kn">import</span> <span class="nn">os</span>
+<span class="kn">import</span> <span class="nn">re</span>
+
+<span class="n">path</span> <span class="o">=</span> <span class="s1">&#39;tmnt.txt&#39;</span>
+
+<span class="c1"># 1. List only the **colors** of the turtles.</span>
+
+<span class="n">os</span><span class="o">.</span><span class="n">system</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;cat </span><span class="si">{</span><span class="n">path</span><span class="si">}</span><span class="s2"> | awk &#39;</span><span class="si">{</span><span class="nb">print</span><span class="w"> </span><span class="err">$</span><span class="mi">2</span><span class="si">}</span><span class="s2">&#39;&quot;</span><span class="p">)</span>
+
+<span class="k">with</span> <span class="nb">open</span><span class="p">(</span><span class="n">path</span><span class="p">)</span> <span class="k">as</span> <span class="n">stream</span><span class="p">:</span>
+    <span class="k">for</span> <span class="n">line</span> <span class="ow">in</span> <span class="n">stream</span><span class="p">:</span>
+        <span class="nb">print</span><span class="p">(</span><span class="n">line</span><span class="o">.</span><span class="n">split</span><span class="p">()[</span><span class="mi">1</span><span class="p">])</span>
+
+<span class="c1"># 2. List only the **turtles** whose names end in lo.</span>
+
+<span class="n">os</span><span class="o">.</span><span class="n">system</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;cat </span><span class="si">{</span><span class="n">path</span><span class="si">}</span><span class="s2"> | awk &#39;</span><span class="si">{</span><span class="nb">print</span><span class="w"> </span><span class="err">$</span><span class="mi">1</span><span class="si">}</span><span class="s2">&#39; | grep -E &#39;lo$&#39;&quot;</span><span class="p">)</span>
+
+<span class="k">with</span> <span class="nb">open</span><span class="p">(</span><span class="n">path</span><span class="p">)</span> <span class="k">as</span> <span class="n">stream</span><span class="p">:</span>
+    <span class="k">for</span> <span class="n">line</span> <span class="ow">in</span> <span class="n">stream</span><span class="p">:</span>
+        <span class="n">turtle</span> <span class="o">=</span> <span class="n">line</span><span class="o">.</span><span class="n">split</span><span class="p">()[</span><span class="mi">0</span><span class="p">]</span>
+        <span class="k">if</span> <span class="n">turtle</span><span class="o">.</span><span class="n">endswith</span><span class="p">(</span><span class="s1">&#39;lo&#39;</span><span class="p">):</span>
+            <span class="nb">print</span><span class="p">(</span><span class="n">turtle</span><span class="p">)</span>
+
+<span class="c1"># 3. List the **colors** that don&#39;t end with a vowel.</span>
+
+<span class="n">os</span><span class="o">.</span><span class="n">system</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;cat </span><span class="si">{</span><span class="n">path</span><span class="si">}</span><span class="s2"> | awk &#39;</span><span class="si">{</span><span class="nb">print</span><span class="w"> </span><span class="err">$</span><span class="mi">3</span><span class="si">}</span><span class="s2">&#39; | grep -E &#39;[^aeiou]$&#39;&quot;</span><span class="p">)</span>
+
+<span class="k">with</span> <span class="nb">open</span><span class="p">(</span><span class="n">path</span><span class="p">)</span> <span class="k">as</span> <span class="n">stream</span><span class="p">:</span>
+    <span class="k">for</span> <span class="n">line</span> <span class="ow">in</span> <span class="n">stream</span><span class="p">:</span>
+        <span class="n">weapon</span> <span class="o">=</span> <span class="n">line</span><span class="o">.</span><span class="n">split</span><span class="p">()[</span><span class="mi">2</span><span class="p">]</span>
+        <span class="k">if</span> <span class="n">m</span> <span class="o">:=</span> <span class="n">re</span><span class="o">.</span><span class="n">search</span><span class="p">(</span><span class="sa">r</span><span class="s1">&#39;[^aeiou]$&#39;</span><span class="p">,</span> <span class="n">weapon</span><span class="p">):</span>
+            <span class="nb">print</span><span class="p">(</span><span class="n">weapon</span><span class="p">)</span>
+</code></pre></div>
+
+<h2 id="filters-aggregators">Filters: <span class="gold">Aggregators</span><a class="headerlink" href="#filters-aggregators" title="Permanent link">&para;</a></h2>
+<table class="bordered">
+<thead>
+    <th>Filter</th>
+    <th>Description</th>
+</thead>
+<tbody>
+<tr class="info-bg">
+    <td class="centered"><b>head</b></td>
+    <td width="900px">Display first lines</td>
+</tr>
+<tr class="success-bg">
+    <td class="centered"><b>tail</b></td>
+    <td width="900px">Display last lines</td>
+</tr>
+<tr class="warning-bg">
+    <td class="centered"><b>wc</b></td>
+    <td width="900px">Count words, lines, or bytes</td>
+</tr>
+<tr class="danger-bg">
+    <td class="centered"><b>uniq</b></td>
+    <td width="900px">Remove duplicates</td>
+</tr>
+</tbody>
+</table>
+
+<div class="flex-row">
+<div class="flex-col">
+<div class="codehilite"><pre><span></span><code><span class="c1"># Shell</span>
+
+<span class="c1"># List first three lines of /etc/hosts</span>
+$<span class="w"> </span>cat<span class="w"> </span>/etc/hosts<span class="w"> </span><span class="p">|</span><span class="w"> </span>head<span class="w"> </span>-n<span class="w"> </span><span class="m">3</span>
+
+<span class="c1"># List last three lines of /etc/hosts</span>
+$<span class="w"> </span>cat<span class="w"> </span>/etc/hosts<span class="w"> </span><span class="p">|</span><span class="w"> </span>tail<span class="w"> </span>-n<span class="w"> </span><span class="m">3</span>
+
+<span class="c1"># Print total number of lines in /etc/hosts</span>
+$<span class="w"> </span>cat<span class="w"> </span>/etc/hosts<span class="w"> </span><span class="p">|</span><span class="w"> </span>wc<span class="w"> </span>-l
+
+<span class="c1"># Print total number of unique lines in /etc/hosts</span>
+$<span class="w"> </span>cat<span class="w"> </span>/etc/hosts<span class="w"> </span><span class="p">|</span><span class="w"> </span>sort<span class="w"> </span><span class="p">|</span><span class="w"> </span>uniq<span class="w"> </span><span class="p">|</span><span class="w"> </span>wc<span class="w"> </span>-l
+</code></pre></div>
+
+</div>
+<div class="flex-col">
+<div class="codehilite"><pre><span></span><code><span class="c1"># Python</span>
+
+<span class="o">&gt;&gt;&gt;</span> <span class="k">with</span> <span class="nb">open</span><span class="p">(</span><span class="s1">&#39;/etc/hosts&#39;</span><span class="p">)</span> <span class="k">as</span> <span class="n">stream</span><span class="p">:</span>
+        <span class="n">lines</span> <span class="o">=</span> <span class="n">stream</span><span class="o">.</span><span class="n">readlines</span><span class="p">()</span>
+
+<span class="c1"># List first three lines of /etc/hosts</span>
+<span class="o">&gt;&gt;&gt;</span> <span class="s1">&#39;&#39;</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">lines</span><span class="p">[:</span><span class="mi">3</span><span class="p">]</span>
+
+<span class="c1"># List last three lines of /etc/hosts</span>
+<span class="o">&gt;&gt;&gt;</span> <span class="s1">&#39;&#39;</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">lines</span><span class="p">[</span><span class="o">-</span><span class="mi">3</span><span class="p">:])</span>
+
+<span class="c1"># Print total number of lines in /etc/hosts</span>
+<span class="o">&gt;&gt;&gt;</span> <span class="nb">len</span><span class="p">(</span><span class="n">lines</span><span class="p">)</span>
+
+<span class="c1"># Print total number of unique lines in /etc/hosts</span>
+<span class="o">&gt;&gt;&gt;</span> <span class="nb">len</span><span class="p">(</span><span class="nb">set</span><span class="p">(</span><span class="n">lines</span><span class="p">))</span>
+</code></pre></div>
+
+</div>
+</div>
+<h2 id="example-cse-curriculumpy">Example: <a href="https://github.com/nd-cse-20589-fa26/examples/blob/master/slides12/cse-curriculum.py">cse-curriculum.py</a><a class="headerlink" href="#example-cse-curriculumpy" title="Permanent link">&para;</a></h2>
+<p>Given the <a href="https://cse.nd.edu/undergraduate/computer-science-curriculum-fall-2025-beyond/">Computer Science Curriculum</a> (<i><a href="https://yld.me/mbfL">yld.me/mbfL</a></i>):</p>
+<ol>
+<li>
+<p>How many <code>MATH</code> vs <code>PHYS</code> vs <code>CSE</code> courses?</p>
+</li>
+<li>
+<p>How many sophomore <code>CSE</code> courses?</p>
+</li>
+</ol>
+<div class="codehilite"><pre><span></span><code><span class="ch">#!/usr/bin/env python3</span>
+
+<span class="kn">import</span> <span class="nn">os</span>
+<span class="kn">import</span> <span class="nn">re</span>
+<span class="kn">import</span> <span class="nn">requests</span>
+
+<span class="n">URL</span> <span class="o">=</span> <span class="s1">&#39;https://yld.me/mbfL&#39;</span>
+
+<span class="c1"># 1. How many MATH vs PHYS vs CSE courses?</span>
+
+<span class="n">os</span><span class="o">.</span><span class="n">system</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;&quot;&quot;</span>
+<span class="s2">curl -sL </span><span class="si">{</span><span class="n">URL</span><span class="si">}</span><span class="s2"> </span><span class="se">\</span>
+<span class="s2">        | grep -Eo &#39;(MATH|PHYS|CSE) [0-9]</span><span class="si">{</span><span class="mi">5</span><span class="si">}</span><span class="s2">&#39; </span><span class="se">\</span>
+<span class="s2">        | awk &#39;</span><span class="si">{</span><span class="nb">print</span><span class="w"> </span><span class="err">$</span><span class="mi">1</span><span class="si">}</span><span class="s2">&#39; </span><span class="se">\</span>
+<span class="s2">        | sort | uniq -c</span>
+<span class="s2">&quot;&quot;&quot;</span><span class="p">)</span>
+
+<span class="n">response</span> <span class="o">=</span> <span class="n">requests</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="n">URL</span><span class="p">)</span>
+<span class="n">counts</span>   <span class="o">=</span> <span class="p">{}</span>
+
+<span class="k">for</span> <span class="n">line</span> <span class="ow">in</span> <span class="n">response</span><span class="o">.</span><span class="n">text</span><span class="o">.</span><span class="n">splitlines</span><span class="p">():</span>
+    <span class="k">for</span> <span class="n">department</span> <span class="ow">in</span> <span class="n">re</span><span class="o">.</span><span class="n">findall</span><span class="p">(</span><span class="sa">r</span><span class="s1">&#39;(MATH|PHYS|CSE) [0-9]</span><span class="si">{5}</span><span class="s1">&#39;</span><span class="p">,</span> <span class="n">line</span><span class="p">):</span>
+        <span class="n">counts</span><span class="p">[</span><span class="n">department</span><span class="p">]</span> <span class="o">=</span> <span class="n">counts</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="n">department</span><span class="p">,</span> <span class="mi">0</span><span class="p">)</span> <span class="o">+</span> <span class="mi">1</span>
+
+<span class="k">for</span> <span class="n">department</span><span class="p">,</span> <span class="n">count</span> <span class="ow">in</span> <span class="nb">sorted</span><span class="p">(</span><span class="n">counts</span><span class="o">.</span><span class="n">items</span><span class="p">()):</span>
+    <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s1">&#39;</span><span class="si">{</span><span class="n">count</span><span class="si">:</span><span class="s1">&gt;7</span><span class="si">}</span><span class="s1"> </span><span class="si">{</span><span class="n">department</span><span class="si">}</span><span class="s1">&#39;</span><span class="p">)</span>
+
+<span class="c1"># 2. How many sophomore CSE courses?</span>
+
+<span class="n">os</span><span class="o">.</span><span class="n">system</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;&quot;&quot;</span>
+<span class="s2">curl -sL </span><span class="si">{</span><span class="n">URL</span><span class="si">}</span><span class="s2"> </span><span class="se">\</span>
+<span class="s2">        | grep -Eo &#39;CSE 2[0-9]</span><span class="si">{</span><span class="mi">4</span><span class="si">}</span><span class="s2">&#39; </span><span class="se">\</span>
+<span class="s2">        | awk &#39;</span><span class="si">{</span><span class="nb">print</span><span class="w"> </span><span class="err">$</span><span class="mi">1</span><span class="si">}</span><span class="s2">&#39; </span><span class="se">\</span>
+<span class="s2">        | wc -l</span>
+<span class="s2">&quot;&quot;&quot;</span><span class="p">)</span>
+
+<span class="n">response</span> <span class="o">=</span> <span class="n">requests</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="n">URL</span><span class="p">)</span>
+<span class="n">courses</span>  <span class="o">=</span> <span class="n">re</span><span class="o">.</span><span class="n">findall</span><span class="p">(</span><span class="sa">r</span><span class="s1">&#39;CSE 2[0-9]</span><span class="si">{4}</span><span class="s1">&#39;</span><span class="p">,</span> <span class="n">response</span><span class="o">.</span><span class="n">text</span><span class="p">,</span> <span class="n">flags</span><span class="o">=</span><span class="n">re</span><span class="o">.</span><span class="n">MULTILINE</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">courses</span><span class="p">))</span>
+</code></pre></div>
+</main>
+<footer>
+Built using <a href="https://python.org">Python</a>
+and <a href="https://jinja.palletsprojects.com">Jinja</a>
+with colors from 
+<a href="https://onmessage.nd.edu/university-branding/colors/">Notre Dame</a>, 
+<a href="https://spreadsheet.dev/how-to-get-the-hexadecimal-codes-of-colors-in-google-sheets">Google Docs</a>, and 
+<a href="https://nordtheme.com">Nord Theme</a>,
+and icons from <a href="https://pictogrammers.com/library/mdi/">Material Design Icons</a>.</footer>
+</body>
+</html>
