@@ -127,6 +127,8 @@
         topics:         Filters
         items:
           - name:       Slides 12
+          - name:       Panopto
+            link:       https://notredame.hosted.panopto.com/Panopto/Pages/Viewer.aspx?id=f9295d76-5824-45a1-a9b8-b4ce0117d4fb
 
       - date:           Fri 09/25
         topics:         Sorting
