@@ -72,7 +72,7 @@ Instead of create a new [list], we can <strong class="danger">order</strong> a
 # Sorting: <span class="gold">Reverse</span>
 
 By default, <strong class="success">Python</strong> orders values in
-**ascending** order (*ie. from smallest to largest**).  To order in
+**ascending** order (*ie. from smallest to largest*).  To order in
 **descending** order, set the `reverse` keyword argument in [sorted] or
 [list.sort] to `True`:
 
