@@ -1,0 +1,334 @@
+title:  "Notes 13: Sorting"
+body:   |
+
+  ## Logistics
+
+  - [Homework 04](homework04.html): [Reasons](http://xavier.h4x0r.space:9313/reason/all)
+  - [Extra Credit 01](extracredit01.html): Due **Monday, September 28**
+
+  ## Filters: <span class="gold">Transformers / Selectors</span>
+
+  <table class="bordered">
+  <thead>
+      <th>Filter</th>
+      <th>Python Analog</th>
+  </thead>
+  <tbody>
+  <tr class="info-bg">
+      <td class="centered"><b>tr</b></td>
+      <td width="900px">line.translate(str.maketrans('abc', 'xyz'))</td>
+  </tr>
+  <tr class="success-bg">
+      <td class="centered"><b>cut/awk</b></td>
+      <td width="900px">line.split()[1]</td>
+  </tr>
+  <tr class="warning-bg">
+      <td class="centered"><b>grep</b></td>
+      <td width="900px">re.search(rx, line)</td>
+  </tr>
+  <tr class="danger-bg">
+      <td class="centered"><b>sed</b></td>
+      <td width="900px">re.sub(rx, needle, haystack)</td>
+  </tr>
+  </tbody>
+  </table>
+
+  ### Filters: <span class="gold">Sed</span>
+
+  [sed] allows us to **modify** streams of text using <strong
+  class="success">regular expressions</strong>.
+
+  <div class="flex-row" markdown="1">
+
+  <div class="flex-col" markdown="1">
+
+  ```bash
+  # Shell: replace all numbers in IP address with
+  # a single x
+
+  $ cat /etc/hosts | sed -E 's/[0-9]{1,3}/x/g'
+  ...
+  x.x.x.x weasel
+  x.x.x.x banshee
+  x.x.x.x xavier
+  x.x.x.x momo
+  ```
+
+  </div>
+
+  <div class="flex-col" markdown="1">
+
+  ```python
+  # Python: replace all numbers in IP address with
+  # a single x
+
+  path = '/etc/hosts'
+  rx   = r'[0-9]{1,3}'
+
+  with open(path) as stream:
+      for line in stream:
+          print(re.sub(rx, 'x', line), end='')
+  ```
+
+  </div>
+
+  </div>
+
+  [sed]: https://man7.org/linux/man-pages/man1/sed.1.html
+
+  ## Filters: <span class="gold">Aggregators</span>
+
+  <table class="bordered">
+  <thead>
+      <th>Filter</th>
+      <th>Python Analog</th>
+  </thead>
+  <tbody>
+  <tr class="info-bg">
+      <td class="centered"><b>head</b></td>
+      <td width="900px">lines[:n]</td>
+  </tr>
+  <tr class="success-bg">
+      <td class="centered"><b>tail</b></td>
+      <td width="900px">lines[-n:]</td>
+  </tr>
+  <tr class="warning-bg">
+      <td class="centered"><b>wc</b></td>
+      <td width="900px">len()</td>
+  </tr>
+  <tr class="danger-bg">
+      <td class="centered"><b>uniq</b></td>
+      <td width="900px">set()</td>
+  </tr>
+  </tbody>
+  </table>
+
+  <div class="flex-row" markdown="1">
+
+  <div class="flex-col" markdown="1">
+
+  ```bash
+  # Shell
+
+  # List first three lines of /etc/hosts
+  $ cat /etc/hosts | head -n 3
+
+  # List last three lines of /etc/hosts
+  $ cat /etc/hosts | tail -n 3
+
+  # Print total number of lines in /etc/hosts
+  $ cat /etc/hosts | wc -l
+
+  # Print total number of unique lines in /etc/hosts
+  $ cat /etc/hosts | sort | uniq | wc -l
+  ```
+
+  </div>
+
+  <div class="flex-col" markdown="1">
+
+  ```python
+  # Python
+
+  >>> with open('/etc/hosts') as stream:
+          lines = stream.readlines()
+
+  # List first three lines of /etc/hosts
+  >>> ''.join(lines[:3]
+
+  # List last three lines of /etc/hosts
+  >>> ''.join(lines[-3:])
+
+  # Print total number of lines in /etc/hosts
+  >>> len(lines)
+
+  # Print total number of unique lines in /etc/hosts
+  >>> len(set(lines))
+  ```
+
+  </div>
+
+  </div>
+
+  ## Example: [cse-curriculum.py]
+
+  Given the [Computer Science Curriculum](https://cse.nd.edu/undergraduate/computer-science-curriculum-fall-2025-beyond/) (<i>[yld.me/mbfL](https://yld.me/mbfL)</i>):
+
+  1. How many `MATH` vs `PHYS` vs `CSE` courses?
+
+  2. How many sophomore `CSE` courses?
+
+  ```python
+  #!/usr/bin/env python3
+
+  import os
+  import re
+  import requests
+
+  URL = 'https://yld.me/mbfL'
+
+  # 1. How many MATH vs PHYS vs CSE courses?
+
+  os.system(f"""
+  curl -sL {URL} \
+          | grep -Eo '(MATH|PHYS|CSE) [0-9]{5}' \
+          | awk '{print $1}' \
+          | sort | uniq -c
+  """)
+
+  response = requests.get(URL)
+  counts   = {}
+
+  for line in response.text.splitlines():
+      for department in re.findall(r'(MATH|PHYS|CSE) [0-9]{5}', line):
+          counts[department] = counts.get(department, 0) + 1
+
+  for department, count in sorted(counts.items()):
+      print(f'{count:>7} {department}')
+
+  # 2. How many sophomore CSE courses?
+
+  os.system(f"""
+  curl -sL {URL} \
+          | grep -Eo 'CSE 2[0-9]{4}' \
+          | awk '{print $1}' \
+          | wc -l
+  """)
+
+  response = requests.get(URL)
+  courses  = re.findall(r'CSE 2[0-9]{4}', response.text, flags=re.MULTILINE)
+  print(len(courses))
+  ```
+
+  [cse-curriculum.py]: https://github.com/nd-cse-20589-fa26/examples/blob/master/slides12/cse-curriculum.py
+
+  ## Sorting: <span class="gold">Overview</span>
+
+  To <strong class="danger">order</strong> a <strong
+  class="caution">sequence</strong> of values in <strong
+  class="success">Python</strong>, we can use the [sorted] function on the
+  <strong class="caution">sequence</strong> to get a new [list]:
+
+  - Uses [TimSort] (which is a *hybrid* algorithm: [merge sort], [insertion sort])
+
+  - `O(nlogn)` time complexity
+
+  - [Stable] ordering
+
+  ```python
+  # Make a list of numbers
+  >>> numbers = [5, 4, 7, 0, 1]
+
+  # Make a new list with values in ascending order
+  >>> sorted(numbers)
+  [0, 1, 4, 5, 7]
+
+  # Original list is unmodified
+  >>> number
+  [5, 4, 7, 0, 1]
+  ```
+
+  ### Sorting: <span class="gold">In-Place</span>
+
+  ```python
+  # Make a list of numbers
+  >>> numbers = [5, 4, 7, 0, 1]
+
+  # Sort values in ascending order in-place
+  >>> numbers.sort()
+
+  # Original list is modified
+  >>> numbers
+  [0, 1, 4, 5, 7]
+  ```
+
+  ### Sorting: <span class="gold">Reverse</span>
+
+  ```python
+  # Make a list of numbers
+  >>> numbers = [5, 4, 7, 0, 1]
+
+  # Make a new list with values in descending order
+  >>> sorted(numbers, reverse=True)
+  [7, 5, 4, 1, 0]
+  ```
+
+  ### Sorting: <span class="gold">Key, Lambda</span>
+
+  ```python
+  # Make a list of words
+  >>> words = 'notre dame go irish'.split()
+
+  # Sort words alphabetically
+  >>> sorted(words)
+  ['dame', 'go', 'irish', 'notre']
+
+  # Sort words by length
+  >>> sorted(words, key=len)
+  ['go', 'dame', 'notre', 'irish']
+  ```
+
+  ```python
+  # Make a list of words
+  >>> words = 'notre dame go irish'.split()
+
+  # Function that returns last letter
+  >>> def last(w): return w[-1]
+
+  # Sort words by last letter using function
+  >>> sorted(words, key=last)
+  ['notre', 'dame', 'irish', 'go']
+
+  # Sort words by last letter using lambda
+  >>> sorted(words, key=lambda w: w[-1])
+  ['notre', 'dame', 'irish', 'go']
+  ```
+
+  ### Sorting: <span class="gold">Multi-Factor</span>
+
+  Since <strong class="success">Python</strong> uses [TimSort], which is a
+  [stable] sorting algorithm, to order values by multiple factors, we can either
+  do:
+
+  <strong class="special">Multiple Sorts</strong> (*lowest priority to highest priority*)
+
+  ```python
+  # Make a list of words
+  >>> words = 'notre dame go irish'.split()
+
+  # Sort alphabetically and then by length
+  >>> sorted(sorted(words), key=len)
+  ['go', 'dame', 'irish', 'notre']
+  ```
+
+  <strong class="gold">Complex Comparison</strong> (*highest priority to lowest priority*)
+
+  ```python
+  # Make a list of words
+  >>> words = 'notre dame go irish'.split()
+
+  # Compare by length, then alphabetically
+  >>> sorted(words, key=lambda w: (len(w), w))
+  ```
+
+  ### Sorting: <span class="gold">Min, Max</span>
+
+  ```python
+  # Make a list of words
+  >>> words = 'notre dame go irish'.split()
+
+  # Get smallest and largest words (alphabetically)
+  >>> min(words), max(words)
+  ('dame', 'notre')
+
+  # Get smallest and largest words (by length)
+  >>> min(words, key=len), max(words, key=len)
+  ('go', 'notre')
+  ```
+
+  [sorted]: https://docs.python.org/3/builtins/functions.html#sorted
+  [list]: https://docs.python.org/3/builtins/stdtypes.html#typesseq-list
+  [merge sort]: https://en.wikipedia.org/wiki/Merge_sort
+  [insertion sort]: https://en.wikipedia.org/wiki/Insertion_sort
+  [TimSort]: https://en.wikipedia.org/wiki/Timsort
+  [stable]: https://en.wikipedia.org/wiki/Category:Stable_sorts
