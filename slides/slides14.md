@@ -463,6 +463,8 @@ map(compute, stream)
 
 </div>
 
+<br>
+
 </div>
 
 <div class="alert warning-bg centered">
@@ -480,9 +482,23 @@ not necessarily*) be <strong class="danger">parallelizable</strong>.
 <strong class="success">Functional programming</strong> maps well to problems that exhibit
 [data parallelism]:
 
+<div class="columns">
+
+<div class="middled">
+
 > <strong class="warning">Concurrent</strong> execution of the <strong
 > class="success">same task</strong> across the elements of a <strong
 > class="caution">dataset</strong>.
+
+</div>
+
+<div class="centered">
+
+<img src="static/img/slides16-data-parallelism.svg">
+
+</div>
+
+</div>
 
 <br>
 

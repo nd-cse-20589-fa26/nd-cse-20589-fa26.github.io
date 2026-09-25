@@ -313,9 +313,25 @@ replace the `[]` with `()`:
 <strong class="success">Generators</strong> support problems that exhibit [task
 parallelism]:
 
+<div class="columns">
+
+<div class="middled">
+
 > <strong class="warning">Concurrent</strong> execution of the <strong
 > class="success">different tasks</strong> on same or different <strong
 > class="caution">datasets</strong>.
+
+</div>
+
+<div class="centered">
+
+<br>
+
+<img src="static/img/slides16-task-parallelism.svg">
+
+</div>
+
+</div>
 
 <br>
 
@@ -323,7 +339,7 @@ parallelism]:
 
 In such situations, the <strong class="warning">different tasks</strong>
 usually must <strong class="danger">communicate</strong> and <strong
-class="danger">coordinate</strong> with each other.  The <strong
+class="danger">coordinate</strong> with each other.<br>The <strong
 class="warning">concurrent</strong> execution of such tasks are <strong
 class="special">interleaved</strong> throughout the execution of the
 application.
