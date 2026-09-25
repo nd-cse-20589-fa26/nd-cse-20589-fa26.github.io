@@ -273,6 +273,14 @@ class="danger">Time<sub>parallel</sub></strong>
 
 **Example**:
 
+<div class="font-large centered">
+
+<strong class="success">Speedup</strong> = <strong
+class="warning">48.982 s</strong> / <strong
+class="danger">4.411 s</strong> = <strong>11.10x</strong>
+
+</div>
+
 ---
 
 # Concurrency: <span class="gold">Amdahl's Law</span>
