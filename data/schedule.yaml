@@ -134,6 +134,8 @@
         topics:         Sorting
         items:
           - name:       Slides 13
+          - name:       Panopto
+            link:       https://notredame.hosted.panopto.com/Panopto/Pages/Viewer.aspx?id=aa4b5613-77e8-46cc-9e44-b4d0011322bc
 
       - date:           Sat 09/26
         topics:         '<i class="muted">Oracle</i>'
