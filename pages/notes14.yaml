@@ -256,7 +256,7 @@ body:   |
 
   [filter]: https://docs.python.org/3/builtins/functions.html#filter
 
-  ## Imperative vs Functional Programming
+  ## Functional Programming: <span class="gold">Paradigms</span>
 
   <table class="bordered">
   <thead>
@@ -352,3 +352,33 @@ body:   |
   [data parallelism]: https://en.wikipedia.org/wiki/Data_parallelism
   [data independence]: https://en.wikipedia.org/wiki/Data_independence
 
+  ## Functional Programming: <span class="gold">Concurrent Futures</span>
+
+  Once our program is structured to use [map], we can use the
+  [concurrent.futures] module to perform <strong class="danger">parallel</strong>
+  execution:
+
+  ```python
+  import hashlib
+  import os
+  import concurrent.futures
+  import sys
+
+  # Hash Function
+
+  def sha1sum(p):
+      with open(p) as stream:
+          return hashlib.sha1(stream.read().encode()).hexdigest()
+
+  # Create a pool of processes and compute hash in parallel
+
+  arguments = sys.argv[1:]
+
+  with concurrent.futures.ProcessPoolExecutor(4) as executor:
+      hashes = executor.map(sha1sum, arguments)
+
+  for p, h in zip(arguments, hashes):
+      print(f'{h}  {p}')
+  ```
+
+  [concurrent.futures]: https://docs.python.org/3/library/concurrent.futures.html
