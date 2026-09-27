@@ -1,0 +1,355 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<!-- Favicon -->
+<link rel="icon" type="image/png" sizes="32x32" href="static/ico/favicon-32x32.png">
+<link rel="icon" type="image/png" sizes="16x16" href="static/ico/favicon-16x16.png">
+<link rel="manifest" href="static/ico/site.webmanifest">
+<!-- Stylesheets -->
+<link rel="stylesheet" href="static/css/domer.css">
+<title>Notes 14: Functional Programming</title>
+</head>
+<body>
+<header>
+<a class="logo" href="notes14.html">
+    <h1>Notes 14: Functional Programming</h1>
+</a>
+<nav>
+    <ul>
+        <li><a href="index.html"><h4>Home</h4></a></li>
+        </ul>
+</nav></header>
+<main>
+<h2 id="logistics">Logistics<a class="headerlink" href="#logistics" title="Permanent link">&para;</a></h2>
+<ul>
+<li>
+<p><a href="homework05.html">Homework 05</a>: Not a lot of code... but conceptually deep.</p>
+</li>
+<li>
+<p><a href="extracredit01.html">Extra Credit 01</a>: Due <strong>today</strong>!</p>
+</li>
+</ul>
+<h3 id="overview">Overview<a class="headerlink" href="#overview" title="Permanent link">&para;</a></h3>
+<ul>
+<li>
+<p><strong class="special">Programming Paradigms</strong>: Take ideas and
+apply them.</p>
+</li>
+<li>
+<p><strong class="success">Functional Programming</strong> is something you
+already know (<em>Unix Philosophy</em>).</p>
+</li>
+</ul>
+<blockquote>
+<p>Challenge today is <strong class="info">Multi-Core</strong> World: <strong
+class="success">Functional Programming</strong> is a way to harness these
+resources by <strong>restructuring our programs</strong>.</p>
+</blockquote>
+<h2 id="object-oriented-programming-class">Object-oriented Programming: <span class="gold">Class</span><a class="headerlink" href="#object-oriented-programming-class" title="Permanent link">&para;</a></h2>
+<p><strong class="info">Object-oriented programming</strong> is a <strong
+class="special">programming paradigm</strong> that encourages combining
+<strong class="primary">functions</strong> with their associated <strong
+class="caution">data</strong>.</p>
+<div class="codehilite"><pre><span></span><code><span class="c1"># Discuss: Class as templates</span>
+
+<span class="k">class</span> <span class="nc">Person</span><span class="p">:</span>
+    <span class="c1"># Discuss: Constructor</span>
+    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">first</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span> <span class="n">last</span><span class="p">:</span> <span class="nb">str</span><span class="p">):</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">first</span> <span class="o">=</span> <span class="n">first</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">last</span>  <span class="o">=</span> <span class="n">last</span>
+
+<span class="c1"># Review: tuple</span>
+
+<span class="n">People</span> <span class="o">=</span> <span class="p">(</span>
+    <span class="n">Person</span><span class="p">(</span><span class="s1">&#39;Peter&#39;</span>      <span class="p">,</span> <span class="s1">&#39;Parker&#39;</span><span class="p">),</span>
+    <span class="n">Person</span><span class="p">(</span><span class="s1">&#39;Mary Jane&#39;</span>  <span class="p">,</span> <span class="s1">&#39;Watson&#39;</span><span class="p">),</span>
+    <span class="n">Person</span><span class="p">(</span><span class="s1">&#39;Gwen&#39;</span>       <span class="p">,</span> <span class="s1">&#39;Stacy&#39;</span><span class="p">),</span>
+    <span class="n">Person</span><span class="p">(</span><span class="s1">&#39;Peter&#39;</span>      <span class="p">,</span> <span class="s1">&#39;Bui&#39;</span><span class="p">),</span>
+    <span class="n">Person</span><span class="p">(</span><span class="s1">&#39;Joshua&#39;</span>     <span class="p">,</span> <span class="s1">&#39;Bui&#39;</span><span class="p">),</span>
+<span class="p">)</span>
+
+<span class="c1"># Review: number of people, first, last</span>
+
+<span class="nb">print</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">People</span><span class="p">))</span>
+<span class="nb">print</span><span class="p">(</span><span class="n">People</span><span class="p">[</span><span class="mi">0</span><span class="p">])</span>
+<span class="nb">print</span><span class="p">(</span><span class="n">People</span><span class="p">[</span><span class="o">-</span><span class="mi">1</span><span class="p">])</span>
+
+<span class="c1"># Review: sorting -&gt; Error because no __lt__</span>
+
+<span class="k">for</span> <span class="n">p</span> <span class="ow">in</span> <span class="nb">sorted</span><span class="p">(</span><span class="n">People</span><span class="p">):</span>
+    <span class="nb">print</span><span class="p">(</span><span class="n">p</span><span class="o">.</span><span class="n">first</span><span class="p">,</span> <span class="n">p</span><span class="o">.</span><span class="n">last</span><span class="p">)</span>
+</code></pre></div>
+
+<h2 id="review-sorting-lambda">Review: <span class="gold">Sorting, Lambda</span><a class="headerlink" href="#review-sorting-lambda" title="Permanent link">&para;</a></h2>
+<p>To quickly define short <strong class="primary">functions</strong>, we can
+use the <a href="https://docs.python.org/3/reference/expressions.html#lambda">lambda</a> expression which allows us to create one-line <strong
+class="primary">functions</strong> that consist of a single <strong
+class="caution">expression</strong>.</p>
+<div class="codehilite"><pre><span></span><code><span class="k">def</span> <span class="nf">last_name</span><span class="p">(</span><span class="n">p</span><span class="p">):</span>
+    <span class="k">return</span> <span class="n">p</span><span class="o">.</span><span class="n">last</span>
+
+<span class="nb">print</span><span class="p">(</span><span class="n">last_name</span><span class="p">(</span><span class="n">People</span><span class="p">[</span><span class="o">-</span><span class="mi">1</span><span class="p">]))</span>
+
+<span class="c1"># Sort by last name</span>
+
+<span class="k">for</span> <span class="n">p</span> <span class="ow">in</span> <span class="nb">sorted</span><span class="p">(</span><span class="n">People</span><span class="p">,</span> <span class="n">key</span><span class="o">=</span><span class="n">last_name</span><span class="p">):</span>
+    <span class="nb">print</span><span class="p">(</span><span class="n">p</span><span class="o">.</span><span class="n">first</span><span class="p">,</span> <span class="n">p</span><span class="o">.</span><span class="n">last</span><span class="p">)</span>
+
+<span class="c1"># Sort by last name using lambda</span>
+
+<span class="k">for</span> <span class="n">p</span> <span class="ow">in</span> <span class="nb">sorted</span><span class="p">(</span><span class="n">People</span><span class="p">,</span> <span class="n">key</span><span class="o">=</span><span class="k">lambda</span> <span class="n">p</span><span class="p">:</span> <span class="n">p</span><span class="o">.</span><span class="n">last</span><span class="p">):</span>
+    <span class="nb">print</span><span class="p">(</span><span class="n">p</span><span class="o">.</span><span class="n">first</span><span class="p">,</span> <span class="n">p</span><span class="o">.</span><span class="n">last</span><span class="p">)</span>
+
+<span class="c1"># Sort by last name then first name using lambda</span>
+
+<span class="k">for</span> <span class="n">p</span> <span class="ow">in</span> <span class="nb">sorted</span><span class="p">(</span><span class="n">People</span><span class="p">,</span> <span class="n">key</span><span class="o">=</span><span class="k">lambda</span> <span class="n">p</span><span class="p">:</span> <span class="p">(</span><span class="n">p</span><span class="o">.</span><span class="n">last</span><span class="p">,</span> <span class="n">p</span><span class="o">.</span><span class="n">first</span><span class="p">):</span>
+    <span class="nb">print</span><span class="p">(</span><span class="n">p</span><span class="o">.</span><span class="n">first</span><span class="p">,</span> <span class="n">p</span><span class="o">.</span><span class="n">last</span><span class="p">)</span>
+
+<span class="c1"># Sort after defining __lt__</span>
+
+<span class="k">class</span> <span class="nc">Person</span><span class="p">:</span>
+    <span class="o">...</span>
+    <span class="c1"># Discuss: Magic/Dunder methods</span>
+    <span class="k">def</span> <span class="fm">__lt__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">other</span><span class="p">):</span>
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">last</span> <span class="o">==</span> <span class="n">other</span><span class="o">.</span><span class="n">last</span><span class="p">:</span>
+            <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">first</span> <span class="o">&lt;</span> <span class="n">other</span><span class="o">.</span><span class="n">first</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">last</span> <span class="o">&lt;</span> <span class="n">other</span><span class="o">.</span><span class="n">last</span>
+
+<span class="k">for</span> <span class="n">p</span> <span class="ow">in</span> <span class="nb">sorted</span><span class="p">(</span><span class="n">People</span><span class="p">):</span>
+    <span class="nb">print</span><span class="p">(</span><span class="n">p</span><span class="o">.</span><span class="n">first</span><span class="p">,</span> <span class="n">p</span><span class="o">.</span><span class="n">last</span><span class="p">)</span>
+</code></pre></div>
+
+<h2 id="review-requests-csv">Review: <span class="gold">Requests, CSV</span><a class="headerlink" href="#review-requests-csv" title="Permanent link">&para;</a></h2>
+<div class="codehilite"><pre><span></span><code><span class="ch">#!/usr/bin/env python3</span>
+
+<span class="kn">import</span> <span class="nn">csv</span>
+<span class="kn">import</span> <span class="nn">requests</span>
+
+<span class="n">URL</span> <span class="o">=</span> <span class="s1">&#39;https://yld.me/raw/hqQS.csv&#39;</span>
+<span class="n">MAX</span> <span class="o">=</span> <span class="mi">40</span>
+
+<span class="c1"># Review: Fetching Data</span>
+
+<span class="n">data</span> <span class="o">=</span> <span class="n">requests</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="n">URL</span><span class="p">)</span><span class="o">.</span><span class="n">text</span><span class="o">.</span><span class="n">splitlines</span><span class="p">()</span>
+
+<span class="c1"># Compute Individual Scores - Imperative</span>
+<span class="c1"># Discuss: csv.reader, high-level goal</span>
+<span class="c1"># Discuss: common pattern</span>
+
+<span class="n">scores</span> <span class="o">=</span> <span class="p">[]</span>
+<span class="k">for</span> <span class="n">student</span> <span class="ow">in</span> <span class="n">csv</span><span class="o">.</span><span class="n">reader</span><span class="p">(</span><span class="n">data</span><span class="p">):</span>
+    <span class="n">points</span> <span class="o">=</span> <span class="p">[]</span>
+    <span class="k">for</span> <span class="n">point</span> <span class="ow">in</span> <span class="n">student</span><span class="p">:</span>
+        <span class="n">points</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="nb">float</span><span class="p">(</span><span class="n">point</span><span class="p">))</span>
+    <span class="n">scores</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="nb">sum</span><span class="p">(</span><span class="n">points</span><span class="p">))</span>
+
+<span class="nb">print</span><span class="p">(</span><span class="nb">sum</span><span class="p">(</span><span class="n">scores</span><span class="p">))</span>
+</code></pre></div>
+
+<h2 id="functional-programming-map">Functional Programming: <span class="gold">Map</span><a class="headerlink" href="#functional-programming-map" title="Permanent link">&para;</a></h2>
+<p>To transform a <strong class="caution">sequence</strong> into another <strong
+class="caution">sequence</strong>, we can use the <a href="https://docs.python.org/3/builtins/functions.html#map">map</a> <strong
+class="primary">higher order function</strong>:</p>
+<div class="codehilite"><pre><span></span><code><span class="nb">map</span><span class="p">(</span><span class="n">func</span><span class="p">,</span> <span class="n">seq</span><span class="p">)</span>
+</code></pre></div>
+
+<div class="alert info-bg centered">
+<p><a href="https://docs.python.org/3/builtins/functions.html#map">map</a> takes a <strong class="primary">function</strong> <code>func</code> <strong
+class="success">applies</strong> it to each of the elements in the <strong
+class="caution">sequence</strong> <code>seq</code>.</p>
+</div>
+<div class="codehilite"><pre><span></span><code><span class="c1"># Compute Individual Scores - Functional v1</span>
+<span class="c1"># Discuss: map, generator</span>
+
+<span class="n">scores</span> <span class="o">=</span> <span class="p">[]</span>
+<span class="k">for</span> <span class="n">student</span> <span class="ow">in</span> <span class="n">csv</span><span class="o">.</span><span class="n">reader</span><span class="p">(</span><span class="n">data</span><span class="p">):</span>
+    <span class="n">points</span> <span class="o">=</span> <span class="nb">sum</span><span class="p">(</span><span class="nb">map</span><span class="p">(</span><span class="nb">float</span><span class="p">,</span> <span class="n">student</span><span class="p">))</span>
+    <span class="n">scores</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">points</span><span class="p">)</span>
+
+<span class="nb">print</span><span class="p">(</span><span class="nb">sum</span><span class="p">(</span><span class="n">scores</span><span class="p">))</span>
+
+<span class="c1"># Compute Individual Scores - Functional v2</span>
+
+<span class="n">scores</span> <span class="o">=</span> <span class="nb">map</span><span class="p">(</span>
+    <span class="k">lambda</span> <span class="n">student</span><span class="p">:</span> <span class="nb">sum</span><span class="p">(</span><span class="nb">map</span><span class="p">(</span><span class="nb">float</span><span class="p">,</span> <span class="n">student</span><span class="p">)),</span>
+    <span class="n">csv</span><span class="o">.</span><span class="n">reader</span><span class="p">(</span><span class="n">data</span><span class="p">)</span>
+<span class="p">)</span>
+
+<span class="nb">print</span><span class="p">(</span><span class="nb">sum</span><span class="p">(</span><span class="n">scores</span><span class="p">))</span>
+</code></pre></div>
+
+<h2 id="functional-programming-list-comprehensions">Functional Programming: <span class="gold">List Comprehensions</span><a class="headerlink" href="#functional-programming-list-comprehensions" title="Permanent link">&para;</a></h2>
+<p>Because <a href="https://docs.python.org/3/builtins/functions.html#map">map</a> and <a href="https://docs.python.org/3/builtins/functions.html#filter">filter</a> is so common and <a href="https://docs.python.org/3/reference/expressions.html#lambda">lambdas</a> can be a bit tricky to
+use, <strong class="success">Python</strong> provides some <strong
+class="special">syntactic sugar</strong> called <a href="https://docs.python.org/3/tutorial/datastructures.html#list-comprehensions">list comprehensions</a> which
+allow us to concisely construct new <a href="https://docs.python.org/3/builtins/stdtypes.html#typesseq-list">lists</a>.</p>
+<div class="codehilite"><pre><span></span><code><span class="c1"># List Comprehension Structure</span>
+
+<span class="n">list_comprehension</span> <span class="o">=</span> <span class="p">[</span>
+    <span class="n">element</span>
+    <span class="k">for</span> <span class="n">element</span> <span class="ow">in</span> <span class="n">seq</span>
+    <span class="k">if</span> <span class="n">condition</span>
+<span class="p">]</span>
+</code></pre></div>
+
+<div class="codehilite"><pre><span></span><code><span class="c1"># Compute Individual Scores - List Comprehension v1</span>
+<span class="c1"># Discuss: list comprehension</span>
+
+<span class="n">scores</span> <span class="o">=</span> <span class="p">[</span>
+    <span class="nb">sum</span><span class="p">(</span><span class="nb">map</span><span class="p">(</span><span class="nb">float</span><span class="p">,</span> <span class="n">student</span><span class="p">))</span>
+    <span class="k">for</span> <span class="n">student</span> <span class="ow">in</span> <span class="n">csv</span><span class="o">.</span><span class="n">reader</span><span class="p">(</span><span class="n">data</span><span class="p">)</span>
+<span class="p">]</span>
+
+<span class="nb">print</span><span class="p">(</span><span class="nb">sum</span><span class="p">(</span><span class="n">scores</span><span class="p">))</span>
+
+<span class="c1"># Compute Individual Scores - List Comprehension v2</span>
+
+<span class="n">scores</span> <span class="o">=</span> <span class="p">[</span>
+    <span class="nb">sum</span><span class="p">([</span><span class="nb">float</span><span class="p">(</span><span class="n">point</span><span class="p">)</span> <span class="k">for</span> <span class="n">point</span> <span class="ow">in</span> <span class="n">student</span><span class="p">])</span>
+    <span class="k">for</span> <span class="n">student</span> <span class="ow">in</span> <span class="n">csv</span><span class="o">.</span><span class="n">reader</span><span class="p">(</span><span class="n">data</span><span class="p">)</span>
+<span class="p">]</span>
+
+<span class="nb">print</span><span class="p">(</span><span class="nb">sum</span><span class="p">(</span><span class="n">scores</span><span class="p">))</span>
+</code></pre></div>
+
+<h2 id="functional-programming-filter">Functional Programming: <span class="gold">Filter</span><a class="headerlink" href="#functional-programming-filter" title="Permanent link">&para;</a></h2>
+<p>To traverse a <strong class="caution">sequence</strong> of values and <strong
+class="warning">extract</strong> a few particular values, <strong
+class="success">Python</strong> provides the <a href="https://docs.python.org/3/builtins/functions.html#filter">filter</a> function:</p>
+<div class="codehilite"><pre><span></span><code><span class="nb">filter</span><span class="p">(</span><span class="n">func</span><span class="p">,</span> <span class="n">seq</span><span class="p">)</span>
+</code></pre></div>
+
+<div class="alert info-bg centered">
+<p><a href="https://docs.python.org/3/builtins/functions.html#filter">filter</a> takes a <strong class="primary">function</strong> <code>func</code> <strong
+class="success">applies</strong> it to each of the elements in the <strong
+class="caution">sequence</strong> <code>seq</code>.  If the result is <code>True</code>, then the
+element is included in the resulting <strong class="caution">sequence</strong>.</p>
+</div>
+<div class="codehilite"><pre><span></span><code><span class="c1"># Filter scores - Imperative</span>
+
+<span class="n">Bs</span> <span class="o">=</span> <span class="p">[]</span>
+<span class="k">for</span> <span class="n">score</span> <span class="ow">in</span> <span class="n">scores</span><span class="p">:</span>
+    <span class="k">if</span> <span class="mf">.8</span><span class="o">*</span><span class="n">MAX</span> <span class="o">&lt;=</span> <span class="n">score</span> <span class="o">&lt;</span> <span class="mf">.9</span><span class="o">*</span><span class="n">MAX</span><span class="p">:</span>
+        <span class="n">Bs</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">score</span><span class="p">)</span>
+
+<span class="nb">print</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">Bs</span><span class="p">))</span>
+
+<span class="c1"># Filter scores - Functional</span>
+
+<span class="n">Bs</span> <span class="o">=</span> <span class="nb">filter</span><span class="p">(</span><span class="k">lambda</span> <span class="n">score</span><span class="p">:</span> <span class="mf">.8</span><span class="o">*</span><span class="n">MAX</span> <span class="o">&lt;=</span> <span class="n">score</span> <span class="o">&lt;</span> <span class="mf">.9</span><span class="o">*</span><span class="n">MAX</span><span class="p">,</span> <span class="n">scores</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="nb">list</span><span class="p">(</span><span class="n">Bs</span><span class="p">)))</span>
+
+<span class="c1"># Filter scores - List Comprehension</span>
+
+<span class="n">Bs</span> <span class="o">=</span> <span class="p">[</span><span class="n">score</span> <span class="k">for</span> <span class="n">score</span> <span class="ow">in</span> <span class="n">scores</span> <span class="k">if</span> <span class="mf">.8</span><span class="o">*</span><span class="n">MAX</span> <span class="o">&lt;=</span> <span class="n">score</span> <span class="o">&lt;</span> <span class="mf">.9</span><span class="o">*</span><span class="n">MAX</span><span class="p">]</span>
+<span class="nb">print</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">Bs</span><span class="p">))</span>
+</code></pre></div>
+
+<h2 id="functional-programming-paradigms">Functional Programming: <span class="gold">Paradigms</span><a class="headerlink" href="#functional-programming-paradigms" title="Permanent link">&para;</a></h2>
+<table class="bordered">
+<thead>
+  <th class="danger-bg">Imperative</th>
+  <th class="success-bg">Functional</th>
+</thead>
+<tbody>
+  <tr>
+    <td class="danger-bg">Programs as a <strong class="danger">sequence</strong> of instructions</td>
+    <td class="success-bg">Programs as a <strong class="success">composition</strong> of functions (<strong class="caution">2</strong>)</td>
+  </tr>
+  <tr>
+    <td class="danger-bg"><strong class="danger">Change state</strong> and <strong class="danger">mutate</strong> data (<i>variables<i>)</td>
+    <td class="success-bg"><strong class="success">Minimize</strong> state and side-effects (<i>idempotent</i>) (<strong class="caution">1</strong>)</td>
+  </tr>
+  <tr>
+    <td class="danger-bg"><strong class="danger">Explicitly enumerate order</strong> of operations</td>
+    <td class="success-bg"><strong class="success">Transform</strong> streams of data (<strong class="caution">3</strong>)</td>
+  </tr>
+</tbody>
+</table>
+
+<h2 id="functional-programming-implicit-concurrency">Functional Programming: <span class="gold">Implicit Concurrency</span><a class="headerlink" href="#functional-programming-implicit-concurrency" title="Permanent link">&para;</a></h2>
+<p>If we modify our programs to use a <strong class="success">functional
+programming</strong> approach via <a href="https://docs.python.org/3/builtins/functions.html#map">map</a>, we get <strong
+class="success">concurrency</strong> as a <strong
+class="danger">side-effect</strong> for free:</p>
+<div class="flex-row">
+<div class="flex-col">
+<div class="codehilite"><pre><span></span><code><span class="c1"># Instead of this</span>
+<span class="k">for</span> <span class="n">item</span> <span class="ow">in</span> <span class="n">stream</span><span class="p">:</span>
+    <span class="n">compute</span><span class="p">(</span><span class="n">item</span><span class="p">)</span>
+</code></pre></div>
+
+<p><br></p>
+<div class="alert danger-bg centered">
+<p><i>Inherently <strong>sequential</strong></i></p>
+</div>
+</div>
+<div class="flex-col">
+<div class="codehilite"><pre><span></span><code><span class="c1"># Do this</span>
+<span class="nb">map</span><span class="p">(</span><span class="n">compute</span><span class="p">,</span> <span class="n">stream</span><span class="p">)</span>
+</code></pre></div>
+
+<p><br>
+<br></p>
+<div class="alert success-bg centered">
+<p><i>Possibly <strong>concurrent</strong></i></p>
+</div>
+</div>
+</div>
+<h2 id="functional-programming-data-parallelism">Functional Programming: <span class="gold">Data Parallelism</span><a class="headerlink" href="#functional-programming-data-parallelism" title="Permanent link">&para;</a></h2>
+<p><strong class="success">Functional programming</strong> maps well to problems that exhibit
+<a href="https://en.wikipedia.org/wiki/Data_parallelism">data parallelism</a>:</p>
+<div class="centered">
+
+<img src="static/img/slides16-data-parallelism.svg" class="transparent responsive">
+
+</div>
+
+<blockquote>
+<p><strong class="warning">Concurrent</strong> execution of the <strong
+class="success">same task</strong> across the elements of a <strong
+class="caution">dataset</strong>.</p>
+</blockquote>
+<div class="alert warning-bg centered">
+<p>In such situations, the <strong class="caution">dataset</strong> normally
+exhibits <a href="https://en.wikipedia.org/wiki/Data_independence">data independence</a>, meaning each element can be processed <strong
+class="special">independently</strong> of the other.</p>
+</div>
+<h2 id="functional-programming-concurrent-futures">Functional Programming: <span class="gold">Concurrent Futures</span><a class="headerlink" href="#functional-programming-concurrent-futures" title="Permanent link">&para;</a></h2>
+<p>Once our program is structured to use <a href="https://docs.python.org/3/builtins/functions.html#map">map</a>, we can use the
+<a href="https://docs.python.org/3/library/concurrent.futures.html">concurrent.futures</a> module to perform <strong class="danger">parallel</strong>
+execution:</p>
+<div class="codehilite"><pre><span></span><code><span class="kn">import</span> <span class="nn">hashlib</span>
+<span class="kn">import</span> <span class="nn">os</span>
+<span class="kn">import</span> <span class="nn">concurrent.futures</span>
+<span class="kn">import</span> <span class="nn">sys</span>
+
+<span class="c1"># Hash Function</span>
+
+<span class="k">def</span> <span class="nf">sha1sum</span><span class="p">(</span><span class="n">p</span><span class="p">):</span>
+    <span class="k">with</span> <span class="nb">open</span><span class="p">(</span><span class="n">p</span><span class="p">)</span> <span class="k">as</span> <span class="n">stream</span><span class="p">:</span>
+        <span class="k">return</span> <span class="n">hashlib</span><span class="o">.</span><span class="n">sha1</span><span class="p">(</span><span class="n">stream</span><span class="o">.</span><span class="n">read</span><span class="p">()</span><span class="o">.</span><span class="n">encode</span><span class="p">())</span><span class="o">.</span><span class="n">hexdigest</span><span class="p">()</span>
+
+<span class="c1"># Create a pool of processes and compute hash in parallel</span>
+
+<span class="n">arguments</span> <span class="o">=</span> <span class="n">sys</span><span class="o">.</span><span class="n">argv</span><span class="p">[</span><span class="mi">1</span><span class="p">:]</span>
+
+<span class="k">with</span> <span class="n">concurrent</span><span class="o">.</span><span class="n">futures</span><span class="o">.</span><span class="n">ProcessPoolExecutor</span><span class="p">(</span><span class="mi">4</span><span class="p">)</span> <span class="k">as</span> <span class="n">executor</span><span class="p">:</span>
+    <span class="n">hashes</span> <span class="o">=</span> <span class="n">executor</span><span class="o">.</span><span class="n">map</span><span class="p">(</span><span class="n">sha1sum</span><span class="p">,</span> <span class="n">arguments</span><span class="p">)</span>
+
+<span class="k">for</span> <span class="n">p</span><span class="p">,</span> <span class="n">h</span> <span class="ow">in</span> <span class="nb">zip</span><span class="p">(</span><span class="n">arguments</span><span class="p">,</span> <span class="n">hashes</span><span class="p">):</span>
+    <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s1">&#39;</span><span class="si">{</span><span class="n">h</span><span class="si">}</span><span class="s1">  </span><span class="si">{</span><span class="n">p</span><span class="si">}</span><span class="s1">&#39;</span><span class="p">)</span>
+</code></pre></div>
+</main>
+<footer>
+Built using <a href="https://python.org">Python</a>
+and <a href="https://jinja.palletsprojects.com">Jinja</a>
+with colors from 
+<a href="https://onmessage.nd.edu/university-branding/colors/">Notre Dame</a>, 
+<a href="https://spreadsheet.dev/how-to-get-the-hexadecimal-codes-of-colors-in-google-sheets">Google Docs</a>, and 
+<a href="https://nordtheme.com">Nord Theme</a>,
+and icons from <a href="https://pictogrammers.com/library/mdi/">Material Design Icons</a>.</footer>
+</body>
+</html>
