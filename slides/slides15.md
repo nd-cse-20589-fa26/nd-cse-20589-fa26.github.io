@@ -159,6 +159,60 @@ It even provides a library called [itertools] with all sorts of interesting
 
 ---
 
+# Iterators: <span class="gold">Protocol</span>
+
+The <strong class="warning">iterator protocol</strong> is the underlying mechanism that
+powers all iterations in <strong class="success">Python</strong>.  An object complies with
+the <strong class="warning">iterator protocol</strong> if it implements `__iter__()` and
+`__next__()` methods:
+
+<div class="columns">
+
+<div>
+
+```python
+class Countdown:
+    def __init__(self, n: int=10):
+        self.n = n
+
+    def __iter__(self):
+        # Called by iter() -> returns iterable
+        return self
+
+    def __next__(self):
+        # Called by next() -> returns next value
+        if self.n == 0:
+            raise StopIteration
+        self.n -= 1
+        return self.n
+```
+
+</div>
+
+<div>
+
+```python
+# Construct countdown with initial value of 5
+>>> countdown = Countdown(5)
+
+# Get next item
+>>> next(countdown)
+4
+
+# Iterate through remaining items
+>>> for c in countdown: print(c)
+3
+2
+1
+0
+```
+
+</div>
+
+</div>
+
+---
+
 # Iterators: <span class="gold">Trade-Offs</span>
 
 Generally, looping over an <strong class="caution">iterator</strong> in <strong
