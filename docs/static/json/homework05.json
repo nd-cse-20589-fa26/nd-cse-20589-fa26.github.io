@@ -1,0 +1,41 @@
+{
+    "q1": {
+        "type": "multiple",
+        "question": "\n<p>Which of the following statements regarding <b>iterators</b> and\n<b>generators</b> are <code>true</code> (<i>choose all that apply</i>)?</p>\n",
+        "responses": {
+            "generators": "All <b>generators</b> are <b>iterators</b>.",
+            "iterators": "All <b>iterators</b> are <b>generators</b>.",
+            "yield": "The only way to create a <b>generator</b> is explicitly using <code>yield</code>.",
+            "next": "<code>next</code> is used to get the subsequent item from an <b>iterator</b>."
+        }
+    },
+    "q2": {
+        "type": "blank",
+        "question": "\n<p>In <code>hulk.py</code>, you implemented your own version of\n<code>permutations</code> using <b>recursion</b>.  Suppose you were allowed\nto use <code>itertools</code> from the <b>Python</b> standard library.\nFill in the blanks below to re-implement the <code>permutations</code> in\n<code>hulk.py</code> using one of the <b>combinatoric iterators</b> from\n<code>itertools</code>:</p>\n\n<pre>\nfor p in ____:  # 1.\n    ____        # 2.\n</pre>\n"
+    },
+    "q3": {
+        "type": "blank",
+        "question": "\n<p>Use your <code>hulk.py</code> to answer the following questions:</p>\n\n<ol>\n  <li>How many passwords have a length of <b><code>4</code></b> and start with <b><code>s</code></b>? ____</li>\n  <li>How many passwords have a length of <b><code>5</code></b> and only contain <b>vowels</b>? ____</li>\n  <li>How many passwords have a length of <b><code>6</code></b>, start with <b><code>b</code></b>, and only contain the letters <b><code>abcdefghijklmnop</code></b>? ____</li>\n  <li>How many passwords have a length of <b><code>5</code></b>? ____</li>\n  <li>How many passwords have a length of <b><code>6</code></b>? ____</li>\n</ol>\n\n<p>Note, with <code>8</code> cores, length <code>5</code> should take less than\n<code>20</code> seconds on the <b>student</b> machines.  Likewise, with\n<code>8</code> cores, length <code>6</code> should take less than <code>10</code>\nminutes on the <b>student</b> machines.</p>\n"
+    },
+    "q4": {
+        "type": "multiple",
+        "question": "\n<p>Which of the following statements regarding <code>hulk.py</code>,\n<b>concurrency</b>, and <b>parallelism</b> are true (<i>choose all that\napply</i>)?</p>\n",
+        "responses": {
+            "serial": "<code>hulk.py</code> is inherently <b>serial</b>.",
+            "embarrassing": "<code>hulk.py</code> is an <b>embarrassingly parallel</b> problem.",
+            "task": "<code>hulk.py</code> exhibits <b>task parallelism</b>.",
+            "data": "<code>hulk.py</code> exhibits <b>data parallelism</b>.",
+            "scaling": "<code>hulk.py</code> <b>always</b> performs faster given more CPU <b>cores</b>."
+        }
+    },
+    "q5": {
+        "type": "multiple",
+        "question": "\n<p>Which of the following statements regarding passwords are true\n(<i>choose all that apply</i>)?</p>\n",
+        "responses": {
+            "alphabet": "To increase password strength, it is best to increase the complexity of the <b>alphabet</b>.",
+            "length": "To increase password strength, it is best to increase the <b>length</b> of the password.",
+            "complexity_al": "Brute-forcing passwords is <b><code>O(alphabet^length)</code></b>.",
+            "complexity_la": "Brute-forcing passwords is <b><code>O(length^alphabet)</code></b>."
+        }
+    }
+}
