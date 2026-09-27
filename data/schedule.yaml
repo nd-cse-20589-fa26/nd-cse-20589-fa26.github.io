@@ -166,10 +166,10 @@
         assignments:
           - Homework 05
 
-- name:     Processes
+- name:     Object-oriented Programming
   days:
       - date:           Mon 10/05
-        topics:         System Calls
+        topics:         Object-oriented Programming
         assignments:
           - Reading 06
         items:
@@ -186,7 +186,7 @@
           - name:       Slides 19
 
       - date:           Sat 10/10
-        topics:         '<i class="muted">Miles</i>'
+        topics:         '<i class="muted">Timeit</i>'
         assignments:
           - Homework 06
 
@@ -203,7 +203,7 @@
           - Interview 02
 
       - date:           Fri 10/16
-        topics:         Foreign Function Interfaces
+        topics:         Environments
         items:
           - name:       Slides 20
 
@@ -257,22 +257,22 @@
         assignments:
           - Homework 08
 
-- name:     Object-Oriented Programming
+- name:     Web Application
   days:
       - date:           Mon 11/09
-        topics:         Object-Oriented Programming
+        topics:         Web Application
         assignments:
           - Reading 09
         items:
           - name:       Slides 27
 
       - date:           Wed 11/11
-        topics:         Structural Design Patterns
+        topics:         REST
         items:
           - name:       Slides 28
 
       - date:           Fri 11/13
-        topics:         Behavorial Design Patterns
+        topics:         MVC
         items:
           - name:       Slides 29
 
@@ -294,14 +294,14 @@
           - Interview 03
 
       - date:           Fri 11/20
-        topics:         Web Application
+        topics:         Databases
         items:
           - name:       Slides 30
 
-- name:     Web Application
+- name:     Databases
   days:
       - date:           Mon 11/23
-        topics:         REST
+        topics:         SQLite
         items:
           - name:       Slides 31
         assignments:
