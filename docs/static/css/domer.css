@@ -468,6 +468,10 @@ div.footnote > hr {
     background-color: var(--primary);
 }
 
+.info {
+    color: var(--info);
+}
+
 .info-bg {
     border-color: var(--info);
     color: var(--info);
