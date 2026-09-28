@@ -1,0 +1,31 @@
+{
+    "q1": {
+        "type": "order",
+        "question": "\n<p>Similar to the <b>Unix Philosophy</b>, <b>object-oriented\nprogramming</b> is centered around <b>four tenets</b>.  Match the\ndescriptions below to the corresponding <b>principle</b>:</p>\n\n<ol>\n\n<li><p>This <b>principle</b> focuses on <b>hiding implementation</b>\ndetails and exposing only the essential functionality of an\nobject.</p></li>\n\n<li><p>This <b>principle</b> encourages <b>bundling data</b>\n(<i>attributes</i>) and <b>behaviors</b> (<i>methods</i>) to create a\ncohesive unit.</p></li>\n\n<li><p>This <b>principle</b> allows <b>treating objects of different types\nas instances of the same base type</b>, as long as they implement a common\ninterface or behavior.</p></li>\n\n<li><p>This <b>principle</b> enables creation <b>hierarchical\nrelationships</b> between units to allow for code reuse.</p></li>\n\n</ol>\n",
+        "responses": {
+            "encapsulation": "Encapsulation",
+            "inheritance": "Inheritance",
+            "abstraction": "Abstraction",
+            "polymorphism": "Polymorphism"
+        }
+    },
+    "q2": {
+        "type": "blank",
+        "question": "\n<p>The following is a simple implementation of a <code>Stack</code> class\nin <b>Python</b> that supports the <b>iterator protocol</b>.  Fill in the\nblanks to complete the code:</p>\n\n<pre>\n#!/usr/bin/env python3\n\nfrom typing import Any\n\nclass Stack:\n\n    def __init__(self, initial: list[Any]):\n        ''' Construct stack with initial data '''\n        self.data = ____                    # 1.\n\n    def __iter__(self):\n        ''' Return instance '''\n        return ____                         # 2.\n\n    def __next__(self) -> Any:\n        ''' Return next value from stack, raise StopIteration if empty '''\n        if ____:                            # 3.\n            raise ____                      # 4.\n        return ____                         # 5.\n\n    def push(self, value: Any):\n        ''' Add value to top of stack '''\n        ____                                # 6.\n\n    def pop(self) -> Any:\n        ''' Remove value from top of stack and return it '''\n        return ____                         # 7.\n\n    def top(self) -> Any:\n        ''' Return top of stack '''\n        return ____                         # 8.\n</pre>\n\n<p>After defining the <code>Stack</code> class, suppose we ran the following\ncode.  What would the outputs of each <code>print</code> be?</p>\n\n<pre>\ns = Stack([1, 2])\ns.push(3)\n\nprint(s.top())                              # 9.  ____\nprint([v for v in s])                       # 10. ____\n</pre>\n"
+    },
+    "q3": {
+        "type": "order",
+        "question": "\n<p>For each of the following descriptions, match the appropriate <b>system\ncall</b> you should use to accomplish the following <b>process</b> related\ntasks:</p>\n\n<ol>\n<li><b>Create</b> a new process.</li>\n<li><b>Replace</b> current process image with a new process image.</li>\n<li><b>Retrieve</b> the exit status of a child process.</li>\n<li><b>Terminate</b> current process.</li>\n<li><b>Send</b> a signal to a process.</li>\n</ol>\n",
+        "responses": {
+            "exec": "<code>exec()</code>",
+            "kill": "<code>kill()</code>",
+            "wait": "<code>wait()</code>",
+            "fork": "<code>fork()</code>",
+            "exit": "<code>exit()</code>"
+        }
+    },
+    "q4": {
+        "type": "blank",
+        "question": "\n<p>The following is a simple <b>Python</b> program that uses <b>system\ncalls</b> to create a <i>child</i> <b>process</b> that prints a message and\nexits while the <i>parent</i> <b>process</b> prints a message, retrieves\nthe exit status of the <i>child</i> and the prints out that status.  Fill\nin the blanks to complete the code:</p>\n\n<pre>\n#!/usr/bin/env python3\n\nimport os, sys\n\nmatch pid := ____:              # 1.\n    case ____:                  # 2.\n        print('Child')\n        sys.exit(0)\n    case ____:                  # 3.\n        print('Parent')\n        _, status = ____        # 4.\n        print(status)\n</pre>\n"
+    }
+}
