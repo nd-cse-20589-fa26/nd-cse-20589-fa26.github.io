@@ -1,0 +1,175 @@
+title:      "Reading 06: Object-Oriented Programming, Processes"
+body:       |
+
+  **Everyone**:
+
+  Next week, we will explore another programming paradigm called
+  [object-oriented programming], which we have been using implicitly anytime we
+  accessed *methods* or *attributes* of *objects* in [Python]:
+
+  > **Object-oriented programming (OOP)** is a **programming paradigm** based on
+  **objects** – software entities that **encapsulate data** and
+  **function(s)**.
+
+  Additionally, we dive deeper into the computing stack to understand how
+  something like [concurrent.futures] works by examining [system calls] that
+  create and manage [processes].
+
+  <div class="alert info-bg" markdown="1">
+
+  ### <i class="icon icon-medium">{{ "book" | embed_icon }}</i> TL;DR
+
+  The focus of this reading is to allow you to explore [object-oriented
+  programming] and using [processes] with low-level [system calls] in [Python].
+
+  </div>
+
+  [system calls]: https://en.wikipedia.org/wiki/System_call
+  [processes]: https://en.wikipedia.org/wiki/Process_(computing)
+  [object-oriented programming]: https://en.wikipedia.org/wiki/Object-oriented_programming
+  [concurrent.futures]: https://docs.python.org/3/library/concurrent.futures.html
+
+  ## Readings
+
+  <div class="flex-row" markdown="1">
+
+  <div class="flex-col" markdown="1">
+
+  The readings for this week are:
+
+  1.  <div class="flex-col" markdown="1">
+
+      [Real Python](https://realpython.com/)
+
+      - [Object-Oriented Programming (OOP) in Python](https://realpython.com/python3-object-oriented-programming/)
+
+  2.  <div class="flex-col" markdown="1">
+
+      [Operating Systems: Three Easy Pieces](http://pages.cs.wisc.edu/~remzi/OSTEP/)
+
+      -   <div class="flex-col" markdown="1">
+
+          [Processes](http://pages.cs.wisc.edu/~remzi/OSTEP/cpu-api.pdf)
+
+          This the textbook for the [Operating System Principles] course and
+          thus the examples are in [C]. Here are some of the examples translated
+          into [Python]:
+
+          - [ostep-p1.py](https://github.com/nd-cse-20589-fa26/examples/blob/master/slides18/ostep-p1.py)
+          - [ostep-p2.py](https://github.com/nd-cse-20589-fa26/examples/blob/master/slides18/ostep-p2.py)
+          - [ostep-p3.py](https://github.com/nd-cse-20589-fa26/examples/blob/master/slides18/ostep-p3.py)
+
+  </div>
+
+  <div class="flex-col-25">
+
+  <div class="centered">
+    <img src="https://upload.wikimedia.org/wikipedia/commons/thumb/3/31/Python-logo.png/250px-Python-logo.png" class="transparent">
+  </div>
+
+  </div>
+
+  </div>
+
+  [Operating System Principles]: https://pnutz.h4x0r.space/courses/cse.30341.fa26
+  [C]: https://www.c-language.org/
+  [Python]: https://python.org
+
+  ## Quiz
+
+  Once you have completed the readings, answer the following [Reading 06 Quiz]
+  questions:
+
+  <div id="quiz-questions"></div>
+
+  <div id="quiz-responses"></div>
+
+  <script src="static/js/dredd-quiz.js"></script>
+
+  <script>
+  loadQuiz('static/json/reading06.json');
+  </script>
+
+  <pre style="display: none;" id="dr-container" class="codehilite"><code id="dredd-response"></code></pre>
+
+  As with [Reading 01], you will need to store your answers in a
+  `reading06/answers.json` file. You can use the form above to generate the
+  contents of this file, or you can write the [JSON] by hand.
+
+  To test your quiz, you can use the `check.py` script:
+
+      :::bash
+      $ ../.scripts/check.py
+      Checking reading06 quiz ...
+            Q1  4.00 /  4.00
+            Q2 10.00 / 10.00
+            Q3  5.00 /  5.00
+            Q4  4.00 /  4.00
+        --------------------
+         Score 23.00 / 23.00
+         Grade  1.00 /  1.00
+        Status Success
+
+  ## Submission
+
+  To submit you work, follow the same process outlined in [Reading 01]:
+
+      :::bash
+      #--------------------------------------------------
+      # Make sure you have already completed Preparation
+      #--------------------------------------------------
+      ...
+      $ git add answers.json                # Mark changes for commit
+      $ git commit -m "Reading 06: Quiz"    # Record changes
+      ...
+      $ git push -u origin reading06        # Push branch to GitHub
+
+  <div class="alert warning-bg" markdown="1">
+
+  ### <i class="icon icon-medium">{{ "lifebuoy" | embed_icon }}</i> Acknowledgments
+
+  If you collaborated with any other students, or received help from TAs or AI
+  tools on this assignment, please record this support in the `README.md` in
+  the `reading06` folder and include it with your **Pull Request**.
+
+  </div>
+
+  <div class="alert success-bg" markdown="1">
+
+  ### <i class="icon icon-medium">{{ "account-question" | embed_icon }}</i> Graders
+
+  Once you have committed your work and pushed it to [GitHub], remember to
+  create a **pull request** and assign it to the appropriate **teaching
+  assistant** from the [Reading 06 TA List].
+
+  **Note**: this list changes each week, so be sure to consult the appropriate
+  list for each assignment.
+
+  </div>
+
+  [re.findall]: https://docs.python.org/3/library/re.html#re.findall
+  [requests]: https://requests.readthedocs.io/en/master/
+  [Python]: https://www.python.org/
+  [lists]: https://docs.python.org/3/library/stdtypes.html#sequence-types-list-tuple-range
+  [dictionaries]: https://docs.python.org/3/library/stdtypes.html#mapping-types-dict
+  [Cooperative Computing Lab]: http://ccl.cse.nd.edu/
+
+  [Markdown]: https://daringfireball.net/projects/markdown/
+  [git]: https://git-scm.com/
+  [clone]: https://git-scm.com/docs/git-clone
+  [commit]: https://git-scm.com/docs/git-commit
+  [push]: https://git-scm.com/docs/git-push
+  [GitHub]: https://github.com
+  [Reading 01]: reading01.html
+  [Reading 06 TA List]: reading06_tas.html
+  [dredd]: https://dredd.h4x0r.space
+  [Reading 06 Quiz]: static/json/reading06.json
+  [JSON]: https://json.org/
+
+  [The Linux Command Line]: http://linuxcommand.org/tlcl.php
+  [Unix]: https://en.wikipedia.org/wiki/Unix
+  [Unix Shell]: https://en.wikipedia.org/wiki/Unix_shell
+  [Git]: https://git-scm.com/
+  [Bash]: https://www.gnu.org/software/bash/
+  [shell scripting]: https://en.wikipedia.org/wiki/Shell_script
+  [Makefile]: https://pnutz.h4x0r.space/courses/cse.20589.fa26/static/txt/reading06/Makefile
