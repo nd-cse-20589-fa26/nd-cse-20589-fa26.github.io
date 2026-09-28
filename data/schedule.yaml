@@ -150,6 +150,8 @@
           - Reading 05
         items:
           - name:       Slides 14
+          - name:       Panopto
+            link:       https://notredame.hosted.panopto.com/Panopto/Pages/Viewer.aspx?id=9a684685-9eb2-4bae-9390-b4d30119015f
 
       - date:           Wed 09/30
         topics:         Iterators, Generators
