@@ -653,7 +653,7 @@ div.footnote > hr {
 
 /* Pygments */
 
-.c1, .cm {
+.c1, .ch, .cm {
     color: var(--nord08);
     font-style: italic;
 }
