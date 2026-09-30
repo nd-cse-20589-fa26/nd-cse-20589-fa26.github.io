@@ -157,6 +157,8 @@
         topics:         Iterators, Generators
         items:
           - name:       Slides 15
+          - name:       Panopto
+            link:       https://notredame.hosted.panopto.com/Panopto/Pages/Viewer.aspx?id=650e4cb5-f516-412b-93f4-b4d50118ba83
 
       - date:           Fri 10/02
         topics:         Concurrency and Parallelism
