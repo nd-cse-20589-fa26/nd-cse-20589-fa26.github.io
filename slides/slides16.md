@@ -40,10 +40,9 @@ theme: domer-slides
 
 ## <strong class="success">Concurrency</strong>
 
-- <strong class="warning">Composition</strong> of independently execution
-  computations.
+- <strong class="warning">Composition</strong> of multiple tasks.
 
-- Concerned about <strong class="special">structure</strong>.
+- Requires <strong class="special">structure</strong>.
 
 </div>
 
@@ -51,10 +50,9 @@ theme: domer-slides
 
 ## <strong class="danger">Parallelism</strong>
 
-- <strong class="caution">Simultaneous</strong> execution of (*possibly related*)
-  computations.
+- Simultaneous <strong class="caution">execution</strong> of multiple tasks.
 
-- Concerned with <strong class="info">execution</strong>.
+- Requires <strong class="info">hardware resources</strong>.
 
 </div>
 
@@ -229,7 +227,9 @@ from [Reading 05] multiple times:
 
 - <strong class="success">Sequential</strong>
 
-- <strong class="danger">Parallelism</strong>
+    <br>
+
+- <strong class="danger">Parallel</strong>
 
 </div>
 
