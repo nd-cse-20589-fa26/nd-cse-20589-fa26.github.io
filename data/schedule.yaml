@@ -164,6 +164,8 @@
         topics:         Concurrency and Parallelism
         items:
           - name:       Slides 16
+          - name:       Panopto
+            link:       https://notredame.hosted.panopto.com/Panopto/Pages/Viewer.aspx?id=ddb4d5f6-0e6d-4cce-82e6-b4d701161270
 
       - date:           Sat 10/03
         topics:         '<i class="muted">Hulk</i>'
