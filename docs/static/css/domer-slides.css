@@ -85,6 +85,7 @@
     --special: var(--purple-dark);
     --code: var(--nd-green);
     --link: var(--nd-gold);
+    --comment: var(--nord08);
     --border: light-dark(var(--nd-gold), var(--nd-gold-light));
     --muted: light-dark(var(--nd-gray), var(--nd-warm-white));
     --heading: light-dark(var(--nd-blue), var(--nd-green));
@@ -561,6 +562,28 @@ blockquote {
     background-color: var(--special);
 }
 
+.comment {
+    color: var(--comment);
+}
+
+.comment-bg {
+    border-color: var(--comment) !important;
+    color: var(--comment) !important;
+    background: color-mix(in srgb, var(--alert), var(--comment) 15%) !important;
+}
+
+.comment-bg .icon {
+    fill: var(--comment);
+}
+
+.comment-bg a {
+    color: var(--comment);
+}
+
+.comment-btn {
+    background-color: var(--comment);
+}
+
 .muted {
     color: var(--muted);
 }
@@ -568,8 +591,12 @@ blockquote {
 /* Syntax Highlighting */
 
 .hljs-comment {
-    color: var(--nord08);
+    color: var(--comment);
     font-style: italic;
+}
+
+.hljs-meta {
+    color: var(--comment);
 }
 
 .hljs-title, .hljs-params {
