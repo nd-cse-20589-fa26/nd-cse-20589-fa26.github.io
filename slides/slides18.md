@@ -21,7 +21,7 @@ theme: domer-slides
 
 1. What is a <strong class="success">process</strong>?
 
-2. What <strong class="info">system calls</strong> can we use with <strong
+2. What <strong class="warning">system calls</strong> can we use with <strong
    class="success">processes</strong>?
 
 </div>
