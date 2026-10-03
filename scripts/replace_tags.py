@@ -13,7 +13,7 @@ TAGS = {
     'special'   : 'special',
     'muted'     : 'muted',
     'gold'      : 'gold',
-    'comment'   : 'hljs-comment',
+    'comment'   : 'comment',
 }
 
 text = open(sys.argv[1]).read()
