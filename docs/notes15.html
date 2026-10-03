@@ -1,0 +1,298 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<!-- Favicon -->
+<link rel="icon" type="image/png" sizes="32x32" href="static/ico/favicon-32x32.png">
+<link rel="icon" type="image/png" sizes="16x16" href="static/ico/favicon-16x16.png">
+<link rel="manifest" href="static/ico/site.webmanifest">
+<!-- Stylesheets -->
+<link rel="stylesheet" href="static/css/domer.css">
+<title>Notes 15: Iterators, Generators</title>
+</head>
+<body>
+<header>
+<a class="logo" href="notes15.html">
+    <h1>Notes 15: Iterators, Generators</h1>
+</a>
+<nav>
+    <ul>
+        <li><a href="index.html"><h4>Home</h4></a></li>
+        </ul>
+</nav></header>
+<main>
+<h2 id="review-functional-programming">Review: <span class="gold">Functional Programming</span><a class="headerlink" href="#review-functional-programming" title="Permanent link">&para;</a></h2>
+<ul>
+<li>
+<div class="flex-col" markdown="1">
+<p>What is a <strong>programming paradigm</strong>?</p>
+<blockquote>
+<p>A way of <strong>problem solving</strong> based on certain <strong>principles</strong>.</p>
+</blockquote>
+</li>
+<li>
+<div class="flex-col" markdown="1">
+<p>What is <strong>functional programming</strong>?</p>
+<blockquote>
+<p>Construct programs as a <strong>composition</strong> of <strong>functions</strong> that
+<strong>transform streams</strong>.</p>
+</blockquote>
+</li>
+</ul>
+<h2 id="functional-programming-data-parallelism">Functional Programming: <span class="gold">Data Parallelism</span><a class="headerlink" href="#functional-programming-data-parallelism" title="Permanent link">&para;</a></h2>
+<p><strong class="success">Functional programming</strong> maps well to problems
+that exhibit <a href="https://en.wikipedia.org/wiki/Data_parallelism">data parallelism</a>:</p>
+<div class="centered">
+
+<img src="static/img/slides16-data-parallelism.svg" class="transparent responsive">
+
+</div>
+
+<blockquote>
+<p><strong class="warning">Concurrent</strong> execution of the <strong
+class="success">same task</strong> across the elements of a <strong
+class="caution">dataset</strong>.</p>
+</blockquote>
+<div class="alert warning-bg centered">
+<p>In such situations, the <strong class="caution">dataset</strong> normally
+exhibits <a href="https://en.wikipedia.org/wiki/Data_independence">data independence</a>, meaning each element can be processed <strong
+class="special">independently</strong> of the other.</p>
+</div>
+<div class="codehilite"><pre><span></span><code><span class="ch">#!/usr/bin/env python3</span>
+
+<span class="kn">import</span> <span class="nn">hashlib</span>
+<span class="kn">import</span> <span class="nn">os</span>
+<span class="kn">import</span> <span class="nn">sys</span>
+
+<span class="c1"># Hash Function</span>
+
+<span class="k">def</span> <span class="nf">sha1sum</span><span class="p">(</span><span class="n">path</span><span class="p">:</span> <span class="nb">str</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">&#39;&#39;&#39; Compute sha1sum digest of the contents of path. &#39;&#39;&#39;</span>
+    <span class="k">try</span><span class="p">:</span>    <span class="c1"># Discuss: rb, hashlib</span>
+      <span class="k">with</span> <span class="nb">open</span><span class="p">(</span><span class="n">path</span><span class="p">,</span> <span class="s1">&#39;rb&#39;</span><span class="p">)</span> <span class="k">as</span> <span class="n">stream</span><span class="p">:</span>
+            <span class="k">return</span> <span class="n">hashlib</span><span class="o">.</span><span class="n">sha1</span><span class="p">(</span><span class="n">stream</span><span class="o">.</span><span class="n">read</span><span class="p">())</span><span class="o">.</span><span class="n">hexdigest</span><span class="p">()</span>
+    <span class="k">except</span> <span class="ne">OSError</span><span class="p">:</span>
+        <span class="k">pass</span>
+
+<span class="c1"># Compute sha1sum of all arguments</span>
+<span class="c1"># Review: arguments, imperative</span>
+<span class="n">arguments</span> <span class="o">=</span> <span class="n">sys</span><span class="o">.</span><span class="n">argv</span><span class="p">[</span><span class="mi">1</span><span class="p">:]</span>
+
+<span class="c1"># Version 0: Imperative</span>
+<span class="n">digests</span> <span class="o">=</span> <span class="p">[]</span>
+<span class="k">for</span> <span class="n">argument</span> <span class="ow">in</span> <span class="n">arguments</span><span class="p">:</span>
+    <span class="n">digests</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">sha1sum</span><span class="p">(</span><span class="n">argument</span><span class="p">))</span>
+
+<span class="c1"># Version 1: List comprehension</span>
+<span class="n">digests</span> <span class="o">=</span> <span class="p">[</span><span class="n">sha1sum</span><span class="p">(</span><span class="n">argument</span><span class="p">)</span> <span class="k">for</span> <span class="n">argument</span> <span class="ow">in</span> <span class="n">arguments</span><span class="p">]</span>
+
+<span class="c1"># Version 2: Functional Programming</span>
+<span class="n">digests</span> <span class="o">=</span> <span class="nb">map</span><span class="p">(</span><span class="n">sha1sum</span><span class="p">,</span> <span class="n">arguments</span><span class="p">)</span>
+
+<span class="c1"># Version 3: Functional Programming (with Parallelism)</span>
+<span class="k">with</span> <span class="n">concurrent</span><span class="o">.</span><span class="n">futures</span><span class="o">.</span><span class="n">ProcessPoolExecutor</span><span class="p">()</span> <span class="k">as</span> <span class="n">executor</span><span class="p">:</span>
+    <span class="n">digests</span> <span class="o">=</span> <span class="n">executor</span><span class="o">.</span><span class="n">map</span><span class="p">(</span><span class="n">sha1sum</span><span class="p">,</span> <span class="n">arguments</span><span class="p">)</span>
+
+<span class="c1"># Display sha1sum of all arguments</span>
+<span class="c1"># Discuss: zip -&gt; iterator</span>
+<span class="k">for</span> <span class="n">argument</span><span class="p">,</span> <span class="n">digest</span> <span class="ow">in</span> <span class="nb">zip</span><span class="p">(</span><span class="n">arguments</span><span class="p">,</span> <span class="n">digests</span><span class="p">):</span>
+    <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s1">&#39;</span><span class="si">{</span><span class="n">digest</span><span class="si">}</span><span class="s1">  </span><span class="si">{</span><span class="n">argument</span><span class="si">}</span><span class="s1">&#39;</span><span class="p">)</span>
+</code></pre></div>
+
+<h2 id="iterators-perls-of-wisdom">Iterators: <span class="gold">Perls of Wisdom</span><a class="headerlink" href="#iterators-perls-of-wisdom" title="Permanent link">&para;</a></h2>
+<div class="centered">
+<p><img src="https://biwizard.wordpress.com/wp-content/uploads/2015/07/larry-wall.jpg"></p>
+<p><br></p>
+<p><i>"We will encourage you to develop the three great virtues of a programmer:
+<strong class="success">laziness</strong>, <strong
+class="warning">impatience</strong>, and <strong
+class="danger">hubris</strong>."  -- <a href="https://en.wikipedia.org/wiki/Larry_Wall">Larry Wall</a></i></p>
+</div>
+<h2 id="iterators-iterables">Iterators: <span class="gold">Iterables</span><a class="headerlink" href="#iterators-iterables" title="Permanent link">&para;</a></h2>
+<div class="codehilite"><pre><span></span><code><span class="c1"># Discuss: iterable is anything you can loop over</span>
+
+<span class="k">for</span> <span class="n">ta</span> <span class="ow">in</span> <span class="p">[</span><span class="s1">&#39;evan&#39;</span><span class="p">,</span> <span class="s1">&#39;kathryn&#39;</span><span class="p">,</span> <span class="s1">&#39;loise&#39;</span><span class="p">,</span> <span class="s1">&#39;will&#39;</span><span class="p">,</span> <span class="s1">&#39;hailey&#39;</span><span class="p">]:</span>
+    <span class="nb">print</span><span class="p">(</span><span class="n">ta</span><span class="p">)</span>
+
+<span class="c1"># Discuss: loop over any sequence</span>
+
+<span class="k">for</span> <span class="n">c</span> <span class="ow">in</span> <span class="s1">&#39;will&#39;</span><span class="p">:</span>
+    <span class="nb">print</span><span class="p">(</span><span class="n">c</span><span class="p">)</span>
+
+<span class="c1"># Review: loop through dictionary</span>
+
+<span class="k">for</span> <span class="n">key</span><span class="p">,</span> <span class="n">value</span> <span class="ow">in</span> <span class="n">os</span><span class="o">.</span><span class="n">environ</span><span class="o">.</span><span class="n">items</span><span class="p">():</span>
+    <span class="nb">print</span><span class="p">(</span><span class="n">key</span><span class="p">,</span> <span class="n">value</span><span class="p">)</span>
+
+<span class="c1"># Review: loop through file</span>
+
+<span class="k">for</span> <span class="n">line</span> <span class="ow">in</span> <span class="nb">open</span><span class="p">(</span><span class="s1">&#39;/etc/passwd&#39;</span><span class="p">):</span>
+    <span class="nb">print</span><span class="p">(</span><span class="n">line</span><span class="o">.</span><span class="n">rstrip</span><span class="p">())</span>
+</code></pre></div>
+
+<div class="alert warning-bg centered">
+<p>How does <strong class="success">Python</strong> know it is done
+<strong>iterating</strong>?</p>
+</div>
+<h2 id="iterators-protocol">Iterators: <span class="gold">Protocol</span><a class="headerlink" href="#iterators-protocol" title="Permanent link">&para;</a></h2>
+<div class="codehilite"><pre><span></span><code><span class="o">&gt;&gt;&gt;</span> <span class="n">r</span> <span class="o">=</span> <span class="nb">range</span><span class="p">(</span><span class="mi">5</span><span class="p">)</span>            <span class="c1"># Range object</span>
+<span class="o">&gt;&gt;&gt;</span> <span class="n">r</span>
+<span class="nb">range</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="mi">5</span><span class="p">)</span>
+
+<span class="o">&gt;&gt;&gt;</span> <span class="n">i</span> <span class="o">=</span> <span class="nb">iter</span><span class="p">(</span><span class="nb">range</span><span class="p">(</span><span class="mi">5</span><span class="p">))</span>      <span class="c1"># Explicitly create iterator</span>
+<span class="o">&gt;&gt;&gt;</span> <span class="n">i</span>
+<span class="o">&lt;</span><span class="n">range_iterator</span> <span class="nb">object</span> <span class="n">at</span> <span class="mh">0x7efc43d663a0</span><span class="o">&gt;</span>
+
+<span class="o">&gt;&gt;&gt;</span> <span class="nb">next</span><span class="p">(</span><span class="n">i</span><span class="p">)</span>                 <span class="c1"># Get next item from iterator</span>
+<span class="o">...</span>
+<span class="o">&gt;&gt;&gt;</span> <span class="nb">next</span><span class="p">(</span><span class="n">i</span><span class="p">)</span>                 <span class="c1"># Exception when we run out</span>
+<span class="ne">StopIteration</span>
+</code></pre></div>
+
+<h2 id="iterators-not-a-list">Iterators: <span class="gold">Not a List</span><a class="headerlink" href="#iterators-not-a-list" title="Permanent link">&para;</a></h2>
+<div class="codehilite"><pre><span></span><code><span class="o">&gt;&gt;&gt;</span> <span class="n">r</span> <span class="o">=</span> <span class="nb">reversed</span><span class="p">(</span><span class="nb">range</span><span class="p">(</span><span class="mi">5</span><span class="p">))</span>  <span class="c1"># Reverse iterator Range object</span>
+<span class="o">&gt;&gt;&gt;</span> <span class="n">r</span>
+<span class="o">&lt;</span><span class="n">range_iterator</span> <span class="nb">object</span> <span class="n">at</span> <span class="mh">0x7efc439a0bd0</span><span class="o">&gt;</span>
+
+<span class="o">&gt;&gt;&gt;</span> <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="n">r</span><span class="p">:</span> <span class="nb">print</span><span class="p">(</span><span class="n">i</span><span class="p">)</span>
+<span class="o">...</span>
+<span class="o">&gt;&gt;&gt;</span> <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="n">r</span><span class="p">:</span> <span class="nb">print</span><span class="p">(</span><span class="n">i</span><span class="p">)</span>    <span class="c1"># Already consumed!</span>
+
+<span class="o">&gt;&gt;&gt;</span> <span class="n">r</span> <span class="o">=</span> <span class="nb">reversed</span><span class="p">(</span><span class="nb">range</span><span class="p">(</span><span class="mi">5</span><span class="p">))</span>
+<span class="o">&gt;&gt;&gt;</span> <span class="n">r</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>                    <span class="c1"># IndexError</span>
+
+<span class="o">&gt;&gt;&gt;</span> <span class="n">r</span> <span class="o">=</span> <span class="nb">list</span><span class="p">(</span><span class="nb">reversed</span><span class="p">(</span><span class="nb">range</span><span class="p">(</span><span class="mi">5</span><span class="p">)))</span>
+<span class="o">&gt;&gt;&gt;</span> <span class="n">r</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>                    <span class="c1"># IndexError</span>
+</code></pre></div>
+
+<h2 id="iterators-protocol-oop">Iterators: <span class="gold">Protocol</span> (<i class="muted">OOP</i>)<a class="headerlink" href="#iterators-protocol-oop" title="Permanent link">&para;</a></h2>
+<div class="codehilite"><pre><span></span><code><span class="ch">#!/usr/bin/env python3</span>
+
+<span class="k">class</span> <span class="nc">Countdown</span><span class="p">:</span>
+
+    <span class="c1"># Review: Constructor</span>
+    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">n</span><span class="p">:</span> <span class="nb">int</span><span class="o">=</span><span class="mi">10</span><span class="p">):</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">n</span> <span class="o">=</span> <span class="n">n</span>
+
+    <span class="c1"># Discuss: iter()</span>
+    <span class="k">def</span> <span class="fm">__iter__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="k">return</span> <span class="bp">self</span>
+
+    <span class="c1"># Discuss: next()</span>
+    <span class="k">def</span> <span class="fm">__next__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">n</span> <span class="o">==</span> <span class="mi">0</span><span class="p">:</span>
+            <span class="k">raise</span> <span class="ne">StopIteration</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">n</span> <span class="o">-=</span> <span class="mi">1</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">n</span>
+
+<span class="n">countdown</span> <span class="o">=</span> <span class="n">Countdown</span><span class="p">()</span>
+<span class="nb">print</span><span class="p">(</span><span class="nb">next</span><span class="p">(</span><span class="n">countdown</span><span class="p">))</span>
+<span class="nb">print</span><span class="p">(</span><span class="nb">next</span><span class="p">(</span><span class="n">countdown</span><span class="p">))</span>
+<span class="nb">print</span><span class="p">()</span>
+
+<span class="k">for</span> <span class="n">c</span> <span class="ow">in</span> <span class="n">countdown</span><span class="p">:</span>
+    <span class="nb">print</span><span class="p">(</span><span class="n">c</span><span class="p">)</span>
+</code></pre></div>
+
+<h2 id="generators-lazy-evaluation-skit">Generators: <span class="gold">Lazy Evaluation</span> (<i class="muted">Skit</i>)<a class="headerlink" href="#generators-lazy-evaluation-skit" title="Permanent link">&para;</a></h2>
+<div class="flex-row">
+<div class="flex-col">
+<h3 id="list">List<a class="headerlink" href="#list" title="Permanent link">&para;</a></h3>
+<ul>
+<li><strong>TA</strong> grades exams one at a time</li>
+<li><strong>TA</strong> puts graded exams into buffer (box)</li>
+<li><strong>TA</strong> then passes whole box to next grader</li>
+</ul>
+</div>
+<div class="flex-col">
+<h3 id="generator">Generator<a class="headerlink" href="#generator" title="Permanent link">&para;</a></h3>
+<ul>
+<li><strong>TA</strong> grades exams one at a time</li>
+<li><strong>TA</strong> passes exams to next <strong>grader</strong></li>
+</ul>
+<div class="alert success-bg">
+<ul>
+<li>
+<p><strong>Concurrency</strong> / <strong>Pipelining</strong>!</p>
+</li>
+<li>
+<p>Less memory usage (<em>no DS</em>)</p>
+</li>
+</ul>
+</div>
+</div>
+</div>
+<p>With a <strong class="success">generator</strong>, we perform <strong
+class="warning">lazy evaluation</strong>:</p>
+<ol>
+<li>
+<p>Start evaluation of <strong class="primary">function</strong> until we
+reach <a href="https://docs.python.org/3/reference/simple_stmts.html#yield">yield</a> statement.</p>
+</li>
+<li>
+<p>When we reach the <a href="https://docs.python.org/3/reference/simple_stmts.html#yield">yield</a> statement, suspend or pause the <strong
+  class="primary">function</strong> and return the <strong
+  class="caution">expression</strong> to the caller.</p>
+</li>
+<li>
+<p>When the <strong class="primary">function</strong> is called again, resume
+or continue where we left off.</p>
+</li>
+</ol>
+<div class="codehilite"><pre><span></span><code><span class="c1"># Discuss:</span>
+<span class="c1">#   - return finishes a function</span>
+<span class="c1">#   - yield suspends function, gives back result, and we resume when called</span>
+<span class="c1">#     again</span>
+<span class="k">def</span> <span class="nf">triples</span><span class="p">(</span><span class="n">sequence</span><span class="p">:</span> <span class="n">Iterable</span><span class="p">[</span><span class="n">Any</span><span class="p">])</span> <span class="o">-&gt;</span> <span class="n">Iterator</span><span class="p">[</span><span class="n">Any</span><span class="p">]:</span>
+    <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="n">sequence</span><span class="p">:</span>
+      <span class="k">yield</span> <span class="n">i</span> <span class="o">*</span> <span class="mi">3</span>   <span class="c1"># Discuss: Suspend, Give, later Resume</span>
+
+    <span class="c1"># Generator expression</span>
+    <span class="k">return</span> <span class="p">(</span><span class="n">i</span><span class="o">*</span><span class="mi">3</span> <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="n">sequence</span><span class="p">)</span>
+</code></pre></div>
+
+<h2 id="generators-task-parallelism">Generators: <span class="gold">Task Parallelism</span><a class="headerlink" href="#generators-task-parallelism" title="Permanent link">&para;</a></h2>
+<p><strong class="success">Generators</strong> support problems that exhibit <a href="https://en.wikipedia.org/wiki/Task_parallelism">task
+parallelism</a>:</p>
+<p><img src="static/img/slides16-task-parallelism.svg" class="transparent responsive"></p>
+<blockquote>
+<p><strong class="warning">Concurrent</strong> execution of the <strong
+class="success">different tasks</strong> on same or different <strong
+class="caution">datasets</strong>.</p>
+</blockquote>
+<div class="alert warning-bg centered">
+<p>In such situations, the <strong class="warning">different tasks</strong>
+usually must <strong class="danger">communicate</strong> and <strong
+class="danger">coordinate</strong> with each other.<br>The <strong
+class="warning">concurrent</strong> execution of such tasks are <strong
+class="special">interleaved</strong> throughout the execution of the
+application.</p>
+</div>
+<h2 id="generators-reading-05">Generators: <a href="reading05.html">Reading 05</a><a class="headerlink" href="#generators-reading-05" title="Permanent link">&para;</a></h2>
+<div class="codehilite"><pre><span></span><code><span class="k">def</span> <span class="nf">odds_fp</span><span class="p">(</span><span class="n">stream</span><span class="o">=</span><span class="n">sys</span><span class="o">.</span><span class="n">stdin</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Iterator</span><span class="p">[</span><span class="nb">int</span><span class="p">]:</span>
+    <span class="k">return</span> <span class="nb">filter</span><span class="p">(</span><span class="k">lambda</span> <span class="n">n</span><span class="p">:</span> <span class="n">n</span> <span class="o">%</span> <span class="mi">2</span><span class="p">,</span> <span class="nb">map</span><span class="p">(</span><span class="nb">int</span><span class="p">,</span> <span class="n">stream</span><span class="p">))</span>
+
+<span class="k">def</span> <span class="nf">odds_lc</span><span class="p">(</span><span class="n">stream</span><span class="o">=</span><span class="n">sys</span><span class="o">.</span><span class="n">stdin</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">list</span><span class="p">[</span><span class="nb">int</span><span class="p">]:</span>
+    <span class="k">return</span> <span class="p">[</span><span class="nb">int</span><span class="p">(</span><span class="n">n</span><span class="p">)</span> <span class="k">for</span> <span class="n">n</span> <span class="ow">in</span> <span class="n">stream</span> <span class="k">if</span> <span class="nb">int</span><span class="p">(</span><span class="n">n</span><span class="p">)</span> <span class="o">%</span> <span class="mi">2</span><span class="p">]</span>
+
+<span class="k">def</span> <span class="nf">odds_gr</span><span class="p">(</span><span class="n">stream</span><span class="o">=</span><span class="n">sys</span><span class="o">.</span><span class="n">stdin</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Iterator</span><span class="p">[</span><span class="nb">int</span><span class="p">]:</span>
+    <span class="k">for</span> <span class="n">line</span> <span class="ow">in</span> <span class="n">stream</span><span class="p">:</span>
+        <span class="n">number</span> <span class="o">=</span> <span class="nb">int</span><span class="p">(</span><span class="n">line</span><span class="p">)</span>
+        <span class="k">if</span> <span class="n">number</span> <span class="o">%</span> <span class="mi">2</span><span class="p">:</span>
+            <span class="k">yield</span> <span class="n">number</span>
+
+<span class="k">def</span> <span class="nf">odds_ge</span><span class="p">(</span><span class="n">stream</span><span class="o">=</span><span class="n">sys</span><span class="o">.</span><span class="n">stdin</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Iterator</span><span class="p">[</span><span class="nb">int</span><span class="p">]:</span>
+    <span class="k">return</span> <span class="p">(</span><span class="n">n</span> <span class="k">for</span> <span class="n">n</span> <span class="ow">in</span> <span class="nb">map</span><span class="p">(</span><span class="nb">int</span><span class="p">,</span> <span class="n">stream</span><span class="p">)</span> <span class="k">if</span> <span class="n">n</span> <span class="o">%</span> <span class="mi">2</span><span class="p">)</span>
+</code></pre></div>
+</main>
+<footer>
+Built using <a href="https://python.org">Python</a>
+and <a href="https://jinja.palletsprojects.com">Jinja</a>
+with colors from 
+<a href="https://onmessage.nd.edu/university-branding/colors/">Notre Dame</a>, 
+<a href="https://spreadsheet.dev/how-to-get-the-hexadecimal-codes-of-colors-in-google-sheets">Google Docs</a>, and 
+<a href="https://nordtheme.com">Nord Theme</a>,
+and icons from <a href="https://pictogrammers.com/library/mdi/">Material Design Icons</a>.</footer>
+</body>
+</html>

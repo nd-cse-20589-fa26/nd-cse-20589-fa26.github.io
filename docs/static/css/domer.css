@@ -534,6 +534,10 @@ div.footnote > hr {
     background-color: var(--caution);
 }
 
+.warning {
+    color: var(--warning);
+}
+
 .warning-bg {
     border-color: var(--warning);
     color: var(--warning);
@@ -653,7 +657,7 @@ div.footnote > hr {
 
 /* Pygments */
 
-.c1, .cm {
+.c1, .ch, .cm {
     color: var(--nord08);
     font-style: italic;
 }
@@ -680,4 +684,33 @@ div.footnote > hr {
 
 .mi, .s, .s1, .s2, .sd {
     color: var(--nord11);
+}
+
+/* Printing */
+
+@media print {
+    body {
+	filter: grayscale(100%);
+
+	color: #000000 !important;
+	background: #ffffff !important;
+
+    	font-size: 0.8rem;
+    }
+
+    p, a, h1, h2, h3, h4, h5, h6, span, div {
+	color: #000000 !important;
+    }
+
+    footer {
+    	display: none !important;
+    }
+
+    img, table, tr, pre, blockquote {
+	break-inside: avoid;
+    }
+
+    .alert {
+	break-inside: avoid;
+    }
 }
