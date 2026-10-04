@@ -83,7 +83,7 @@ class="primary">object</strong>:
 <td class="caution-bg centered" width="500px">
 <strong>Data Abstraction</strong>
 
-*Hide implementation* details and exposing only the essential functionality.
+**Hide implementation** details and exposing only the essential functionality.
 
 <br>
 
@@ -193,7 +193,7 @@ class="warning">method</strong> definitions.
 
 <div class="alert info-bg font-small centered">
 
-The <strong class="warning">__init__ method</strong> is the <strong
+The <strong class="warning"> __init__ method</strong> is the <strong
 class="special">constructor</strong> of the <strong
 class="caution">class</strong> is called whenever we call the <strong
 class="caution">class</strong> name as if it were a <strong
@@ -300,7 +300,6 @@ class Timer:
     def reset(self):
         self.start_time = time.time()
 
-    @property
     def elapsed_time(self) -> float:
         stop_time = self.stop_time or time.time()
         return stop_time - self.start_time
