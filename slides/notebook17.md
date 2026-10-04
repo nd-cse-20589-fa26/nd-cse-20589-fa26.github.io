@@ -164,11 +164,11 @@ class="caution">class</strong> consists of:
 
 **[ ] Methods**
 
-**[ ] Decorators**
-
 **[ ] Dunder/Magic Methods**
 
 **[ ] Dataclass**
+
+**[ ] Decorators**
 
 </div>
 
