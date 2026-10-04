@@ -1,0 +1,292 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<!-- Favicon -->
+<link rel="icon" type="image/png" sizes="32x32" href="static/ico/favicon-32x32.png">
+<link rel="icon" type="image/png" sizes="16x16" href="static/ico/favicon-16x16.png">
+<link rel="manifest" href="static/ico/site.webmanifest">
+<!-- Stylesheets -->
+<link rel="stylesheet" href="static/css/domer.css">
+<title>Notes 17: Object-Oriented Programming</title>
+</head>
+<body>
+<header>
+<a class="logo" href="notes17.html">
+    <h1>Notes 17: Object-Oriented Programming</h1>
+</a>
+<nav>
+    <ul>
+        <li><a href="index.html"><h4>Home</h4></a></li>
+        </ul>
+</nav></header>
+<main>
+<h2 id="review-programming-paradigms">Review: <span class="gold">Programming Paradigms</span><a class="headerlink" href="#review-programming-paradigms" title="Permanent link">&para;</a></h2>
+<p>What is <a href="https://en.wikipedia.org/wiki/Functional_programming">functional programming</a>?  Why use it?</p>
+<blockquote>
+<ul>
+<li>
+<p>Solve problems by <strong>composing</strong> functions that <strong>transform</strong> streams of
+data.</p>
+</li>
+<li>
+<p>Enables <strong>concurrency</strong> in the form of <strong>data parallelism</strong>.</p>
+</li>
+</ul>
+</blockquote>
+<div class="alert success-bg">
+<p>Different <strong>programming paradigms</strong> allow us to solve problems in different
+ways (<em>right tool</em> for the <em>job</em>).</p>
+</div>
+<h2 id="oop-overview">OOP: <span class="gold">Overview</span><a class="headerlink" href="#oop-overview" title="Permanent link">&para;</a></h2>
+<div class="flex-row">
+<div class="flex-col">
+<p><a href="https://en.wikipedia.org/wiki/Object-oriented_programming">Object-oriented programming</a> is a <strong class="special">programming
+paradigm</strong> that organizes software design around <strong
+class="danger">data</strong> called <strong class="primary">objects</strong>
+(ie. <strong class="info">structures</strong>) and the <strong
+class="warning">methods</strong> that operate on such objects (ie.  <strong
+class="success">functions</strong>).</p>
+</div>
+<div class="flex-col">
+<div class="alert caution-bg">
+<p>Everything in <strong class="success">Python</strong> is an <strong
+class="primary">object</strong>:</p>
+<ul>
+<li>
+<p>Has a <strong class="caution">type</strong></p>
+</li>
+<li>
+<p>Has <strong class="info">attributes</strong> (<strong
+  class="danger">data</strong>)</p>
+</li>
+<li>
+<p>Has <strong class="warning">methods</strong> (<strong
+  class="success">functions</strong>)</p>
+</li>
+</ul>
+</div>
+</div>
+</div>
+<div class="codehilite"><pre><span></span><code><span class="o">&gt;&gt;&gt;</span> <span class="n">s</span> <span class="o">=</span> <span class="s1">&#39;hello, world&#39;</span>          <span class="c1"># Create string object</span>
+
+<span class="o">&gt;&gt;&gt;</span> <span class="nb">dir</span><span class="p">(</span><span class="n">s</span><span class="p">)</span>                      <span class="c1"># View attributes and methods of string object</span>
+<span class="p">[</span><span class="s1">&#39;__add__&#39;</span><span class="p">,</span> <span class="s1">&#39;__class__&#39;</span><span class="p">,</span> <span class="o">...</span> <span class="p">]</span>
+
+<span class="o">&gt;&gt;&gt;</span> <span class="n">s</span><span class="o">.</span><span class="n">upper</span><span class="p">()</span>                   <span class="c1"># Call upper method of string object</span>
+<span class="s1">&#39;HELLO, WORLD&#39;</span>
+</code></pre></div>
+
+<h2 id="oop-principles">OOP: <span class="gold">Principles</span><a class="headerlink" href="#oop-principles" title="Permanent link">&para;</a></h2>
+<table class="bordered">
+<tbody>
+<tr>
+<td class="caution-bg centered">
+<p><strong>Data Abstraction</strong></p>
+<strong>Hide implementation</strong> details and exposing only the essential functionality.
+
+</td>
+<td class="success-bg centered" width="50%">
+<p><strong>Polymorphism</strong></p>
+<strong>Treat objects</strong> as instances of the <strong>same base type</strong>, as long as they
+implement a <strong>common interface</strong>.
+
+</td>
+</tr>
+<tr>
+<td class="special-bg centered" width="50%">
+<p><strong>Encapsulation</strong></p>
+<strong>Bundle data</strong> (<em>attributes</em>) and <strong>behaviors</strong> (<em>methods</em>) to create a
+cohesive unit.
+
+</td>
+<td class="warning-bg centered">
+<p><strong>Inheritance</strong></p>
+
+Enable creation <strong>hierarchical relationships</strong> between units to allow for
+<strong>code reuse</strong>.
+
+</td>
+</tr>
+</tbody>
+</table>
+<div class="alert special-bg">
+<p><a href="https://en.wikipedia.org/wiki/Object-oriented_programming">Object-oriented programming</a> encourages <strong>modeling</strong> the world in terms of
+<strong>objects</strong> which have <strong>attributes</strong> and <strong>methods</strong> and their
+<strong>relationships</strong> and <strong>interactions</strong> with each other.</p>
+</div>
+<h2 id="oop-class">OOP: <span class="gold">Class</span><a class="headerlink" href="#oop-class" title="Permanent link">&para;</a></h2>
+<div class="flex-row">
+<div class="flex-col">
+<p>To model <strong class="danger">data</strong>, we define a <strong
+class="caution">class</strong> to serve as a <strong class="info">
+template</strong> for new <strong class="primary">objects</strong> of that
+type.  Each <strong class="caution">class</strong> consists of:</p>
+<ol>
+<li>
+<div class="flex-col" markdown="1">
+<p><strong class="info">Attributes</strong>:</p>
+<p><strong class="success">Variables</strong> that store internal <strong
+class="danger">data</strong>.</p>
+</li>
+<li>
+<div class="flex-col" markdown="1">
+<p><strong class="warning">Methods</strong>:</p>
+<p><strong class="success">Functions</strong> that define the behavior and
+operations of the <strong class="primary">object</strong>.</p>
+</li>
+</ol>
+</div>
+<div class="flex-col">
+<div class="alert warning-bg">
+<p><strong>[ ] Constructor</strong></p>
+<p><strong>[ ] Attributes</strong></p>
+<p><strong>[ ] Methods</strong></p>
+<p><strong>[ ] Dunder/Magic Methods</strong></p>
+<p><strong>[ ] Dataclass</strong></p>
+<p><strong>[ ] Decorators</strong></p>
+</div>
+</div>
+</div>
+<div class="codehilite"><pre><span></span><code><span class="sd">&#39;&#39;&#39; Version 1 &#39;&#39;&#39;</span>
+
+<span class="k">class</span> <span class="nc">Timer</span><span class="p">:</span>
+    <span class="c1"># Constructor</span>
+    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">start_time</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="nb">float</span><span class="p">]</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">start_time</span> <span class="o">=</span> <span class="n">start_time</span> <span class="ow">or</span> <span class="n">time</span><span class="o">.</span><span class="n">time</span><span class="p">()</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">stop_time</span>  <span class="o">=</span> <span class="mf">0.0</span>
+
+    <span class="c1"># Methods</span>
+    <span class="k">def</span> <span class="nf">stop</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">stop_time</span>  <span class="o">=</span> <span class="n">time</span><span class="o">.</span><span class="n">time</span><span class="p">()</span>
+
+    <span class="k">def</span> <span class="nf">reset</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">start_time</span> <span class="o">=</span> <span class="n">time</span><span class="o">.</span><span class="n">time</span><span class="p">()</span>
+
+    <span class="k">def</span> <span class="nf">elapsed_time</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">float</span><span class="p">:</span>
+        <span class="n">stop_time</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">stop_time</span> <span class="ow">or</span> <span class="n">time</span><span class="o">.</span><span class="n">time</span><span class="p">()</span>
+        <span class="k">return</span> <span class="n">stop_time</span> <span class="o">-</span> <span class="bp">self</span><span class="o">.</span><span class="n">start_time</span>
+
+    <span class="c1"># Dunder/Magic Method (str)</span>
+    <span class="k">def</span> <span class="fm">__str__</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">str</span><span class="p">:</span>
+        <span class="k">return</span> <span class="sa">f</span><span class="s1">&#39;Timer(</span><span class="si">{</span><span class="bp">self</span><span class="o">.</span><span class="n">start_time</span><span class="si">}</span><span class="s1">, </span><span class="si">{</span><span class="bp">self</span><span class="o">.</span><span class="n">stop_time</span><span class="si">}</span><span class="s1">)&#39;</span>
+
+<span class="c1"># Start timer</span>
+<span class="n">timer</span> <span class="o">=</span> <span class="n">Timer</span><span class="p">()</span>
+<span class="nb">print</span><span class="p">(</span><span class="n">timer</span><span class="p">)</span>
+
+<span class="nb">print</span><span class="p">(</span><span class="n">timer</span><span class="o">.</span><span class="n">elapsed_time</span><span class="p">())</span>
+<span class="n">time</span><span class="o">.</span><span class="n">sleep</span><span class="p">(</span><span class="mi">1</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="n">timer</span><span class="o">.</span><span class="n">elapsed_time</span><span class="p">())</span>
+<span class="n">time</span><span class="o">.</span><span class="n">sleep</span><span class="p">(</span><span class="mi">1</span><span class="p">)</span>
+
+<span class="c1"># Stop timer</span>
+<span class="n">timer</span><span class="o">.</span><span class="n">stop</span><span class="p">()</span>
+<span class="n">time</span><span class="o">.</span><span class="n">sleep</span><span class="p">(</span><span class="mi">1</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="n">timer</span><span class="o">.</span><span class="n">elapsed_time</span><span class="p">())</span>
+</code></pre></div>
+
+<div class="alert info-bg">
+<p>The <strong class="warning"> <strong>init</strong> method</strong> is the <strong
+class="special">constructor</strong> of the <strong
+class="caution">class</strong> is called whenever we call the <strong
+class="caution">class</strong> name as if it were a <strong
+class="success">function</strong>.</p>
+</div>
+<div class="alert success-bg">
+<p>The first argument to each <strong class="warning">method</strong> is <strong
+class="success">self</strong>, which represents the <strong
+class="primary">current instance</strong>.</p>
+</div>
+<div class="alert danger-bg">
+<p>Internal <strong class="info">attributes</strong> of each <strong
+class="primary">object</strong> can be accessed using the <strong>.</strong> notation:
+<strong>object.attribute</strong>.</p>
+</div>
+<div class="alert special-bg">
+<p>For example, whenever <strong class="info">str()</strong> is called on an
+<strong class="primary">object</strong>, <strong
+class="success">Python</strong> calls the <strong
+class="special"><strong>str</strong></strong> method of that <strong
+class="primary">object</strong> to get a <strong
+class="success">string</strong> representation of the <strong
+class="primary">object</strong>.</p>
+</div>
+<h2 id="oop-dataclass">OOP: <span class="gold">Dataclass</span><a class="headerlink" href="#oop-dataclass" title="Permanent link">&para;</a></h2>
+<div class="codehilite"><pre><span></span><code><span class="sd">&#39;&#39;&#39; Version 2 &#39;&#39;&#39;</span>
+
+<span class="nd">@dataclass</span>
+<span class="k">class</span> <span class="nc">Timer</span><span class="p">:</span>
+    <span class="n">start_time</span><span class="p">:</span> <span class="nb">float</span> <span class="o">=</span> <span class="n">time</span><span class="o">.</span><span class="n">time</span><span class="p">()</span>
+    <span class="n">stop_time</span><span class="p">:</span>  <span class="nb">float</span> <span class="o">=</span> <span class="mf">0.0</span>
+
+    <span class="k">def</span> <span class="nf">stop</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">stop_time</span>  <span class="o">=</span> <span class="n">time</span><span class="o">.</span><span class="n">time</span><span class="p">()</span>
+
+    <span class="k">def</span> <span class="nf">reset</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">start_time</span> <span class="o">=</span> <span class="n">time</span><span class="o">.</span><span class="n">time</span><span class="p">()</span>
+
+    <span class="nd">@property</span>
+    <span class="k">def</span> <span class="nf">elapsed_time</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">float</span><span class="p">:</span>
+        <span class="n">stop_time</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">stop_time</span> <span class="ow">or</span> <span class="n">time</span><span class="o">.</span><span class="n">time</span><span class="p">()</span>
+        <span class="k">return</span> <span class="n">stop_time</span> <span class="o">-</span> <span class="bp">self</span><span class="o">.</span><span class="n">start_time</span>
+</code></pre></div>
+
+<div class="alert warning-bg">
+<p>Functions with <strong class="comment">@</strong> are called <strong
+class="comment">decorators</strong>.  They modify the code (<strong
+class="caution">classes</strong> or <strong class="success">functions</strong>)
+that come after them.</p>
+</div>
+<div class="alert caution-bg">
+<p><strong class="comment">@dataclass</strong> provides the <strong
+class="caution">class</strong> with automatic <strong
+class="special">constructor</strong> and <strong
+class="special"><strong>str</strong></strong> <strong class="warning">methods</strong>.</p>
+<p><strong class="comment">@property</strong> provides the <strong
+class="caution">class</strong> with a <strong>dynamic</strong> <strong
+class="info">attribute</strong> that executes the corresponding <strong
+class="warning">method</strong> when accessed.</p>
+</div>
+<h2 id="oop-context-manager-protocol">OOP: <span class="gold">Context Manager Protocol</span><a class="headerlink" href="#oop-context-manager-protocol" title="Permanent link">&para;</a></h2>
+<p>In <strong class="success">Python</strong>, the <code>with</code> statement uses the
+<strong class="warning">context manager protocol</strong>, which requires that
+the <strong class="primary">object</strong> implements the <code>__enter__</code> and
+<code>__exit__</code> methods. (<strong>example</strong>: [timer.py])</p>
+<div class="codehilite"><pre><span></span><code><span class="nd">@dataclass</span>
+<span class="k">class</span> <span class="nc">Timer</span><span class="p">:</span>
+    <span class="o">...</span>
+
+    <span class="c1"># Context Manager Protocol</span>
+
+    <span class="k">def</span> <span class="fm">__enter__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="k">return</span> <span class="bp">self</span>
+
+    <span class="k">def</span> <span class="fm">__exit__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">exc_type</span><span class="p">,</span> <span class="n">exc_val</span><span class="p">,</span> <span class="n">exc_tb</span><span class="p">):</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">stop</span><span class="p">()</span>
+</code></pre></div>
+
+<div class="codehilite"><pre><span></span><code><span class="c1"># Use timer as context manger</span>
+
+<span class="k">with</span> <span class="n">Timer</span><span class="p">()</span> <span class="k">as</span> <span class="n">timer</span><span class="p">:</span>      <span class="c1"># Calls timer.__enter__()</span>
+    <span class="k">for</span> <span class="n">_</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="mi">5</span><span class="p">):</span>
+        <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s1">&#39;Loop: </span><span class="si">{</span><span class="n">timer</span><span class="o">.</span><span class="n">elapsed_time</span><span class="si">:</span><span class="s1">0.2f</span><span class="si">}</span><span class="s1">&#39;</span><span class="p">)</span>
+        <span class="n">time</span><span class="o">.</span><span class="n">sleep</span><span class="p">(</span><span class="mi">1</span><span class="p">)</span>
+
+<span class="c1"># Calls timer.__exit__()</span>
+
+<span class="n">time</span><span class="o">.</span><span class="n">sleep</span><span class="p">(</span><span class="mi">5</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s1">&#39;Final: </span><span class="si">{</span><span class="n">timer</span><span class="o">.</span><span class="n">elapsed_time</span><span class="si">:</span><span class="s1">0.2f</span><span class="si">}</span><span class="s1">&#39;</span><span class="p">)</span>
+</code></pre></div>
+</main>
+<footer>
+Built using <a href="https://python.org">Python</a>
+and <a href="https://jinja.palletsprojects.com">Jinja</a>
+with colors from 
+<a href="https://onmessage.nd.edu/university-branding/colors/">Notre Dame</a>, 
+<a href="https://spreadsheet.dev/how-to-get-the-hexadecimal-codes-of-colors-in-google-sheets">Google Docs</a>, and 
+<a href="https://nordtheme.com">Nord Theme</a>,
+and icons from <a href="https://pictogrammers.com/library/mdi/">Material Design Icons</a>.</footer>
+</body>
+</html>
