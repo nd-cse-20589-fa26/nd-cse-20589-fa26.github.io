@@ -1,0 +1,146 @@
+#!/usr/bin/env python3
+
+import doctest
+import hashlib
+import inspect
+import itertools
+import io
+import math
+import mypy.api
+import os
+import re
+import subprocess
+import tempfile
+import time
+import unittest
+import unittest.mock
+
+import timeit
+
+# Unit Tests
+
+class TimeitTest(unittest.TestCase):
+    ''' Timeit Unit Tests '''
+
+    TROLL_SH = '''#!/bin/sh
+trap '' TERM
+while true; do
+    sleep 1
+done
+'''
+
+    @classmethod
+    def setUpClass(cls):
+        cls.Points = 0
+        cls.Total  = len([method for method in dir(cls) if method.startswith('test_')]) + 2.0
+
+        with tempfile.NamedTemporaryFile(delete=False) as tmp:
+            cls.TrollPath = tmp.name
+            tmp.write(cls.TROLL_SH.encode())
+
+        os.chmod(cls.TrollPath, 0o755)
+
+    @classmethod
+    def tearDownClass(cls):
+        print()
+        print(f'   Score {cls.Points:5.2f} / {cls.Total:5.2f}')
+        print(f'   Grade {cls.Points/cls.Total:5.2f} / {1.0:5.2f}')
+        print(f'  Status {"Success" if math.isclose(cls.Points, cls.Total) else "Failure"}')
+
+        if os.path.exists(cls.TrollPath):
+            os.unlink(cls.TrollPath)
+
+    @staticmethod
+    def sha1sum(s):
+        return hashlib.sha1(s.encode()).hexdigest()
+
+    def test_00_doctest(self):
+        failures, tests = doctest.testmod(timeit, verbose=False)
+        self.assertEqual(failures, 0)
+        self.assertEqual(tests, 15)
+        TimeitTest.Points += (tests - failures) / tests * 3.0
+
+    def test_01_mypy(self):
+        _, _, exit_status = mypy.api.run(['timeit.py'])
+        self.assertTrue(exit_status == 0)
+        TimeitTest.Points += 1.0
+
+    def test_02_usage(self):
+        with unittest.mock.patch('sys.stderr', new=io.StringIO()) as output:
+            with self.assertRaises(SystemExit) as context:
+                timeit.main(['-h'])
+        self.assertTrue('Usage' in output.getvalue())
+        self.assertEqual(str(context.exception), '0')
+        TimeitTest.Points += 0.5
+
+        with unittest.mock.patch('sys.stderr', new=io.StringIO()) as output:
+            with self.assertRaises(SystemExit) as context:
+                timeit.main(['-f'])
+        self.assertTrue('Usage' in output.getvalue())
+        self.assertEqual(str(context.exception), '1')
+        TimeitTest.Points += 0.5
+
+    def test_03_false(self):
+        hashes = {
+            '394358bcdf12d6c4a1112a456c670e81bf442ae9',
+        }
+        with unittest.mock.patch('sys.stdout', new=io.StringIO()) as output:
+            with self.assertRaises(SystemExit) as context:
+                timeit.main(['false'])
+        self.assertTrue(self.sha1sum(output.getvalue()) in hashes)
+        self.assertEqual(str(context.exception), '1')
+        TimeitTest.Points += 1.0
+
+    def test_04_true(self):
+        hashes = {
+            'fe67964fda5732fb5fbd4b2b1f99effe03ae74b6',
+        }
+        with unittest.mock.patch('sys.stdout', new=io.StringIO()) as output:
+            with self.assertRaises(SystemExit) as context:
+                timeit.main(['true'])
+        self.assertTrue(self.sha1sum(output.getvalue()) in hashes)
+        self.assertEqual(str(context.exception), '0')
+        TimeitTest.Points += 1.0
+
+    def test_05_sleep_1(self):
+        hashes = {
+            'e999901934404d548bb11ce9647da6bb540f67e0',
+            '88f3747d0fbe1b793bee5bf0a422810b3a73233d',
+        }
+        with unittest.mock.patch('sys.stdout', new=io.StringIO()) as output:
+            with self.assertRaises(SystemExit) as context:
+                timeit.main(['-t', '5', 'sleep', '1'])
+        self.assertTrue(self.sha1sum(output.getvalue()) in hashes)
+        self.assertEqual(str(context.exception), '0')
+        TimeitTest.Points += 1.0
+
+    def test_06_sleep_5(self):
+        hashes = {
+            '92426be5645ca17c2895d054efdda7721fb40f14',
+            '2f14af8872f71fa145bf8fcf5b44c3395a53fa33',
+        }
+        with unittest.mock.patch('sys.stdout', new=io.StringIO()) as output:
+            with self.assertRaises(SystemExit) as context:
+                timeit.main(['sleep', '5'])
+        self.assertTrue(self.sha1sum(output.getvalue()) in hashes)
+        self.assertEqual(str(context.exception), '15')
+        TimeitTest.Points += 1.0
+
+    def test_07_troll(self):
+        hashes = {
+            'd7bb89e6dc6fa43eff9e30e2f8c84adc6e914ae2',
+            '9446f412d76968b87bda32aad1c2733a41ad5bfd',
+        }
+        with unittest.mock.patch('sys.stdout', new=io.StringIO()) as output:
+            with self.assertRaises(SystemExit) as context:
+                timeit.main([self.TrollPath])
+        self.assertTrue(self.sha1sum(output.getvalue()) in hashes)
+        self.assertEqual(str(context.exception), '9')
+        TimeitTest.Points += 1.0
+
+# Main Execution
+
+if __name__ == '__main__':
+    unittest.main()
+
+# vim: set sts=4 sw=4 ts=8 expandtab ft=python:
