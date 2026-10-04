@@ -1,0 +1,442 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<!-- Favicon -->
+<link rel="icon" type="image/png" sizes="32x32" href="static/ico/favicon-32x32.png">
+<link rel="icon" type="image/png" sizes="16x16" href="static/ico/favicon-16x16.png">
+<link rel="manifest" href="static/ico/site.webmanifest">
+<!-- Stylesheets -->
+<link rel="stylesheet" href="static/css/domer.css">
+<title>Homework 06: Timeit</title>
+</head>
+<body>
+<header>
+<a class="logo" href="homework06.html">
+    <h1>Homework 06: Timeit</h1>
+</a>
+<nav>
+    <ul>
+        <li><a href="index.html"><h4>Home</h4></a></li>
+        </ul>
+</nav></header>
+<main>
+<p>The goal of this homework assignment is to allow you to practice using
+<a href="https://en.wikipedia.org/wiki/Object-oriented_programming">object-oriented programming</a> and <a href="https://en.wikipedia.org/wiki/System_call">system calls</a> involving <a href="https://en.wikipedia.org/wiki/Process_(computing)">processes</a> and <a href="https://en.wikipedia.org/wiki/Signal_(IPC)">signals</a>
+in <a href="https://www.python.org/">Python</a> by implementing one new <a href="https://en.wikipedia.org/wiki/Unix">Unix</a> utility:</p>
+<blockquote>
+<p>The <code>timeit</code> utility allows users to view the elapsed time of an
+application while also enforcing a timeout (<em>or cut off time</em>).</p>
+</blockquote>
+<div class="alert danger-bg">
+<h3 id="bomb-embed_icon-set-us-up-the-bomb-no"><i class="icon icon-medium"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><title>bomb</title><path d="M11.25,6A3.25,3.25 0 0,1 14.5,2.75A3.25,3.25 0 0,1 17.75,6C17.75,6.42 18.08,6.75 18.5,6.75C18.92,6.75 19.25,6.42 19.25,6V5.25H20.75V6A2.25,2.25 0 0,1 18.5,8.25A2.25,2.25 0 0,1 16.25,6A1.75,1.75 0 0,0 14.5,4.25A1.75,1.75 0 0,0 12.75,6H14V7.29C16.89,8.15 19,10.83 19,14A7,7 0 0,1 12,21A7,7 0 0,1 5,14C5,10.83 7.11,8.15 10,7.29V6H11.25M22,6H24V7H22V6M19,4V2H20V4H19M20.91,4.38L22.33,2.96L23.04,3.67L21.62,5.09L20.91,4.38Z" /></svg>
+</i> Set us up the bomb (No!)<a class="headerlink" href="#bomb-embed_icon-set-us-up-the-bomb-no" title="Permanent link">&para;</a></h3>
+<p>Be careful with the <a href="https://docs.python.org/3/library/os.html#os.fork">fork</a> system call.  To prevent a <a href="https://en.wikipedia.org/wiki/Fork_bomb">fork bomb</a>, make sure
+you are not doing it in a <strong>loop</strong>.</p>
+<p>If you still manage to create a <a href="https://en.wikipedia.org/wiki/Fork_bomb">fork bomb</a>, <strong>do not</strong> simply go to another
+machine and run the same program.  Notify the
+<a href="mailto:csehelp@nd.edu">csehelp@nd.edu</a> and explain what happened.</p>
+</div>
+<p>For this assignment, record your scripts and any responses to the following
+activities in the <code>homework06</code> folder of your <strong>assignments</strong> <a href="https://github.com">GitHub</a>
+repository and push your work by <strong>noon Saturday, October 10</strong>.</p>
+<h2 id="activity-0-preparation">Activity 0: Preparation<a class="headerlink" href="#activity-0-preparation" title="Permanent link">&para;</a></h2>
+<p>Before starting this homework assignment, you should first perform a <code>git
+pull</code> to retrieve any changes in your remote <a href="https://github.com">GitHub</a> repository:</p>
+<div class="codehilite"><pre><span></span><code>$<span class="w"> </span><span class="nb">cd</span><span class="w"> </span>path/to/repository<span class="w">                   </span><span class="c1"># Go to assignments repository</span>
+
+$<span class="w"> </span>git<span class="w"> </span>switch<span class="w"> </span>master<span class="w">                       </span><span class="c1"># Make sure we are in master branch</span>
+
+$<span class="w"> </span>git<span class="w"> </span>pull<span class="w"> </span>--rebase<span class="w">                       </span><span class="c1"># Get any remote changes not present locally</span>
+</code></pre></div>
+
+<p>Next, create a new branch for this assignment:</p>
+<div class="codehilite"><pre><span></span><code>$<span class="w"> </span>git<span class="w"> </span>switch<span class="w"> </span>-c<span class="w"> </span>homework06<span class="w">                </span><span class="c1"># Create homework06 branch and check it out</span>
+</code></pre></div>
+
+<h3 id="task-1-skeleton-code">Task 1: Skeleton Code<a class="headerlink" href="#task-1-skeleton-code" title="Permanent link">&para;</a></h3>
+<p>To help you get started, the instructor has provided you with the following <strong>skeleton code</strong>:</p>
+<div class="codehilite"><pre><span></span><code><span class="c1"># Go to homework06 folder</span>
+$<span class="w"> </span><span class="nb">cd</span><span class="w"> </span>homework06
+
+<span class="c1"># Download Makefile</span>
+$<span class="w"> </span>curl<span class="w"> </span>-LO<span class="w"> </span>https://pnutz.h4x0r.space/courses/cse.20589.fa26/static/txt/homework06/Makefile
+
+<span class="c1"># Download Python skeleton code</span>
+$<span class="w"> </span>curl<span class="w"> </span>-LO<span class="w"> </span>https://pnutz.h4x0r.space/courses/cse.20589.fa26/static/txt/homework06/timeit.py
+</code></pre></div>
+
+<p>Once downloaded, you should see the following files in your <code>homework06</code> directory:</p>
+<div class="codehilite"><pre><span></span><code>homework06
+<span class="w">    </span><span class="se">\_</span><span class="w"> </span>Makefile<span class="w">       </span><span class="c1"># This is the Makefile building all the assignment artifacts</span>
+<span class="w">    </span><span class="se">\_</span><span class="w"> </span>timeit.py<span class="w">      </span><span class="c1"># This is the Python script for the timeit script</span>
+</code></pre></div>
+
+<div class="alert warning-bg">
+<h3 id="alert-embed_icon-doctests"><i class="icon icon-medium"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><title>alert</title><path d="M13 14H11V9H13M13 18H11V16H13M1 21H23L12 2L1 21Z" /></svg>
+</i> DocTests<a class="headerlink" href="#alert-embed_icon-doctests" title="Permanent link">&para;</a></h3>
+<p>You may notice that in addition to the usual comments and <code>TODOs</code>, the
+<a href="https://peps.python.org/pep-0257/">docstrings</a> of each method also contains a few <a href="https://docs.python.org/3/library/doctest.html">doctests</a>.</p>
+<p>You are <strong>not</strong> to modify these <a href="https://docs.python.org/3/library/doctest.html">doctests</a> and must keep them in-place. They
+are used to verify the correctness of your code.</p>
+<p>Your code goes <strong>below</strong> the <a href="https://peps.python.org/pep-0257/">docstrings</a>, where the <code>TODO</code> and <code>pass</code>
+commands are (you may remove the pass once you complete the method).</p>
+</div>
+<h3 id="task-2-initial-import">Task 2: Initial Import<a class="headerlink" href="#task-2-initial-import" title="Permanent link">&para;</a></h3>
+<p>Now that the files are downloaded into the <code>homework06</code> folder, you can
+<strong>commit</strong> them to your <a href="https://git-scm.com/">git</a> repository:</p>
+<div class="codehilite"><pre><span></span><code>$<span class="w"> </span>git<span class="w"> </span>add<span class="w"> </span>Makefile<span class="w">                            </span><span class="c1"># Mark changes for commit</span>
+$<span class="w"> </span>git<span class="w"> </span>add<span class="w"> </span>*.py
+$<span class="w"> </span>git<span class="w"> </span>commit<span class="w"> </span>-m<span class="w"> </span><span class="s2">&quot;Homework 06: Initial Import&quot;</span><span class="w"> </span><span class="c1"># Record changes</span>
+</code></pre></div>
+
+<h3 id="task-3-unit-tests">Task 3: Unit Tests<a class="headerlink" href="#task-3-unit-tests" title="Permanent link">&para;</a></h3>
+<p>After downloading these files, you can run the <code>make</code> command to run the
+tests.</p>
+<div class="codehilite"><pre><span></span><code><span class="c1"># Run all tests (will trigger automatic download)</span>
+$<span class="w"> </span>make
+</code></pre></div>
+
+<p>You will notice that the Makefile downloads these additional test data and scripts:</p>
+<div class="codehilite"><pre><span></span><code>homework06
+<span class="w">    </span><span class="se">\_</span><span class="w"> </span>timeit.test<span class="w">          </span><span class="c1"># This is the Python test for the timeit script</span>
+</code></pre></div>
+
+<p>In addition to the embedded <a href="https://docs.python.org/3/library/doctest.html">doctests</a> in the <strong>skeleton code</strong>, you will be
+using these <a href="https://en.wikipedia.org/wiki/Unit_testing">unit tests</a> to verify the correctness and behavior of your code.</p>
+<div class="alert info-bg">
+<h3 id="download-embed_icon-automatic-download"><i class="icon icon-medium"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><title>download</title><path d="M5,20H19V18H5M19,9H15V3H9V9H5L12,16L19,9Z" /></svg>
+</i> Automatic Download<a class="headerlink" href="#download-embed_icon-automatic-download" title="Permanent link">&para;</a></h3>
+<p>The <code>test</code> scripts are automatically downloaded by the <code>Makefile</code>, so any
+modifications you do to them will be lost when you run <code>make</code> again. Likewise,
+because they are automatically downloaded, you do not need to <code>add</code> or <code>commit</code>
+them to your <a href="https://git-scm.com/">git</a> repository.</p>
+</div>
+<p>The details on what you need to implement for this assignment are described
+in the following sections.</p>
+<h2 id="activity-2-timeit-08-points">Activity 2: timeit (<em>0.8 Points</em>)<a class="headerlink" href="#activity-2-timeit-08-points" title="Permanent link">&para;</a></h2>
+<p>For this activity, write a <a href="https://www.python.org/">Python</a> script, <code>timeit.py</code>, that executes the
+given command until a timeout is reached or the program terminates as shown
+below:</p>
+<div class="framed centered">
+<script src="https://asciinema.org/a/KLe593FTSHX0QupA.js" id="asciicast-KLe593FTSHX0QupA" async="true"></script>
+</div>
+
+<p>The <code>timeit.py</code> script takes the following possible flags:</p>
+<ul>
+<li>
+<p><code>-d</code>: This allows the user to specify the amount of time to sleep between
+iterations (default is <code>0.1</code> seconds).</p>
+</li>
+<li>
+<p><code>-t</code>: This allows the user to specify the amount of time to wait before
+  killing the process (default is <code>1</code> second).</p>
+</li>
+</ul>
+<p>After the flags, the user must provide a <code>command</code> and its arguments to run.</p>
+<div class="alert warning-bg">
+<p><strong>Note</strong>: If the time limit is exceeded, the parent should <a href="https://docs.python.org/3/library/os.html#os.kill">kill</a> the child
+and <a href="https://docs.python.org/3/library/os.html#os.wait">wait</a> for it.  Moreover, the parent should always return the <strong>child's
+exit status</strong> as its own <strong>exit status</strong>.</p>
+<p>If the child was <a href="https://docs.python.org/3/library/os.html#os.kill">kill</a>ed, then the parent should return the <a href="https://en.wikipedia.org/wiki/Signal_(IPC)">signal</a> it was
+terminated with.</p>
+</div>
+<h3 id="task-1-timeitpy">Task 1: <code>timeit.py</code><a class="headerlink" href="#task-1-timeitpy" title="Permanent link">&para;</a></h3>
+<p>To build this script, you will need to complete the <code>timeit.py</code> <a href="https://www.python.org/">Python</a>
+script by implementing the following <strong>methods</strong> in the <code>Timer</code> <strong>class</strong>:</p>
+<div class="centered">
+
+<img src="static/img/homework06-timeit.svg" class="transparent responsive">
+
+</div>
+
+<h4 id="context-manager-protocol">Context Manager Protocol<a class="headerlink" href="#context-manager-protocol" title="Permanent link">&para;</a></h4>
+<p>The core of the program is the <strong>context manager protocol</strong>, which will be in
+charge of managing the child <strong>process</strong>.</p>
+<ul>
+<li>
+<div class="flex-col" markdown="1">
+<p><code>__enter__(self):</code></p>
+<blockquote>
+<p>When this <strong>method</strong> is called, the parent <strong>process</strong> will call
+<a href="https://docs.python.org/3/library/os.html#os.fork">os.fork</a> to create a child <strong>process</strong>.</p>
+</blockquote>
+<ul>
+<li>
+<p><strong>Child</strong>: The child will call <a href="https://docs.python.org/3/library/os.html#os.execvp">os.execvp</a> to execute the <code>command</code>
+given to the <code>Timer</code> object and if it fails, it will call <a href="https://docs.python.org/3/library/sys.html#sys.exit">sys.exit</a> with
+an error <strong>exit status</strong>.</p>
+</li>
+<li>
+<p><strong>Parent</strong>: The parent will register <a href="https://en.wikipedia.org/wiki/Signal_(IPC)">signal</a> handlers for <code>SIGALRM</code>
+and <code>SIGCHLD</code> before setting a <a href="https://docs.python.org/3/library/signal.html#signal.alarm">signal.alarm</a> for the <code>timeout</code> given to
+the <code>Timer</code> object.</p>
+</li>
+</ul>
+</li>
+<li>
+<div class="flex-col" markdown="1">
+<p><code>__exit__(self, exc_type, exc_val, exc_tb):</code></p>
+<blockquote>
+<p>When this <strong>method</strong> is called, the parent <strong>process</strong> will cancel the
+<a href="https://docs.python.org/3/library/signal.html#signal.alarm">signal.alarm</a> and then <a href="https://docs.python.org/3/library/os.html#os.wait">wait</a> for the child <strong>process</strong> by calling the
+<code>handle_sigchld</code> handler manually.</p>
+</blockquote>
+</li>
+</ul>
+<h4 id="signal-handlers">Signal Handlers<a class="headerlink" href="#signal-handlers" title="Permanent link">&para;</a></h4>
+<p>The <a href="https://en.wikipedia.org/wiki/Signal_(IPC)">signal</a> handlers are responsible for handling the <code>SIGALRM</code> and
+<code>SIGCHLD</code> events respectively:</p>
+<ul>
+<li>
+<div class="flex-col" markdown="1">
+<p><code>handle_sigalrm(signum, frame):</code></p>
+<blockquote>
+<p>This should attempt to terminate the child <strong>process</strong> by sending it a
+<code>SIGTERM</code> (<em>graceful</em>) and then a <code>SIGKILL</code> (<em>forceful</em>) <a href="https://en.wikipedia.org/wiki/Signal_(IPC)">signal</a>.</p>
+</blockquote>
+</li>
+<li>
+<div class="flex-col" markdown="1">
+<p><code>handle_sigchld(signum, frame):</code></p>
+<blockquote>
+<p>This should attempt to wait for the child <strong>process</strong> and update the
+<code>status</code> of the <code>Timer</code> object if the <code>status</code> is still <code>None</code>.</p>
+</blockquote>
+</li>
+</ul>
+<h4 id="iterator-protocol">Iterator Protocol<a class="headerlink" href="#iterator-protocol" title="Permanent link">&para;</a></h4>
+<p>The <strong>iterator protocol</strong> allows the user to loop over the <code>Timer</code> object and
+get the <strong>elapsed time</strong>.</p>
+<ul>
+<li>
+<div class="flex-col" markdown="1">
+<p><code>__iter__(self):</code></p>
+<blockquote>
+<p>This returns the current instance of the <code>Timer</code> object.</p>
+</blockquote>
+</li>
+<li>
+<div class="flex-col" markdown="1">
+<p><code>__next__(self):</code></p>
+<blockquote>
+<p>If the <code>status</code> of the <code>Timer</code> object is <code>None</code>, then <code>StopIteration</code>
+is <strong>raised</strong>.  Otherwise, this method <a href="https://docs.python.org/3/library/time.html#time.sleep">sleeps</a> for <code>timedelta</code> and
+updates the overall <code>elapsed</code> time by <code>timedelta</code>.  If this new <code>elapsed</code>
+time exceeds the <code>timeout</code> then <code>StopIteration</code> is <strong>raised</strong>.
+Otherwise, the new overall <code>elapsed</code> time is returned.</p>
+</blockquote>
+</li>
+</ul>
+<h4 id="properties">Properties<a class="headerlink" href="#properties" title="Permanent link">&para;</a></h4>
+<p>There are two <strong>properties</strong> in the <code>Timer</code> class that translate the <code>status</code>
+of the child <strong>process</strong> into something more understandable:</p>
+<ul>
+<li>
+<div class="flex-col" markdown="1">
+<p><code>state(self)</code></p>
+<blockquote>
+<p>This returns a <strong>string</strong> representing the <strong>state</strong> of the child <strong>process</strong>.</p>
+</blockquote>
+<ul>
+<li>
+<p>If child <strong>process</strong> is still running, then return <a href="https://docs.python.org/3/builtins/functions.html#next">next</a> <code>spinner</code> string.</p>
+</li>
+<li>
+<p>Otherwise, if child <strong>process</strong> is terminated, then return <code>Success</code>
+<code>Failure</code>, <code>Terminated</code>, <code>Killed</code> based on <strong>exit status</strong>.</p>
+</li>
+</ul>
+<div class="alert success-bg" markdown="1">
+<p>To determine if the child <strong>process</strong> exited normally, you can use the <a href="https://docs.python.org/3/library/os.html#os.WIFEXITED">os.WIFEXITED</a> function:</p>
+<div class="codehilite"><pre><span></span><code><span class="k">if</span> <span class="n">os</span><span class="o">.</span><span class="n">WIFEXITED</span><span class="p">(</span><span class="n">status</span><span class="p">):</span>            <span class="c1"># Exited normally</span>
+    <span class="n">status</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">WEXITSTATUS</span><span class="p">(</span><span class="n">status</span><span class="p">)</span>
+<span class="k">else</span><span class="p">:</span>                               <span class="c1"># Terminated by signal</span>
+    <span class="n">status</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">WTERMSIG</span><span class="p">(</span><span class="n">status</span><span class="p">)</span>
+</code></pre></div>
+
+</div>
+</li>
+<li>
+<div class="flex-col" markdown="1">
+<p><code>returncode(self)</code></p>
+<blockquote>
+<p>This returns an <strong>integer</strong> corresponding to the <strong>exit status</strong> of the
+child <strong>process</strong>.</p>
+</blockquote>
+<p>As noted above, you will need to extract the final <code>returncode</code> from the
+<code>status</code> attribute using either <a href="https://docs.python.org/3/library/os.html#os.WEXITSTATUS">os.WEXITSTATUS</a> or <a href="https://docs.python.org/3/library/os.html#os.WTERMSIG">os.WTERMSIG</a>,
+depending on whether or not the child <strong>process</strong> terminated normally or
+not.</p>
+</li>
+</ul>
+<h4 id="main-execution">Main Execution<a class="headerlink" href="#main-execution" title="Permanent link">&para;</a></h4>
+<p>Finally, you will need to <strong>parse the command line options</strong> and use the
+<code>Timer</code> <strong>class</strong> to implement the <code>timeit.py</code> utility.</p>
+<ul>
+<li>
+<div class="flex-col" markdown="1">
+<p><code>main(arguments: list[str]=sys.argv[1:]) -&gt; None</code></p>
+<blockquote>
+<p>This executes given <code>command</code> for specified <code>timeout</code> and shows the
+<code>Timer</code>'s status every <code>timedelta</code> seconds.</p>
+</blockquote>
+<div class="alert success-bg" markdown="1">
+<p>For consistent output, you should use the following when printing out the
+<code>Timer</code>'s elapsed time:</p>
+<div class="codehilite"><pre><span></span><code><span class="n">sys</span><span class="o">.</span><span class="n">stdout</span><span class="o">.</span><span class="n">write</span><span class="p">(</span><span class="s1">&#39;Elapsed time: </span><span class="si">{elapsed:0.2f}</span><span class="s1"> / </span><span class="si">{timeout:0.2f}</span><span class="s1"> (</span><span class="si">{timer.state}</span><span class="s1">)</span><span class="se">\r</span><span class="s1">&#39;</span><span class="p">)</span>
+<span class="n">sys</span><span class="o">.</span><span class="n">stdout</span><span class="o">.</span><span class="n">flush</span><span class="p">()</span>
+</code></pre></div>
+
+<p>The <code>\r</code> at the end allows the for the output to overwrite the existing
+line and the <code>sys.stdout.flush</code> ensures the line is sent to the terminal.</p>
+<p>For the final status output (ie. after the <code>with</code>), you should replace
+the <code>\r</code> with a <code>\n</code>.</p>
+</div>
+</li>
+</ul>
+<h3 id="task-2-testing">Task 2: Testing<a class="headerlink" href="#task-2-testing" title="Permanent link">&para;</a></h3>
+<p>As you implement <code>timeit.py</code>, you can use the provided <a href="https://docs.python.org/3/library/doctest.html">doctests</a> to verify the
+correctness of your code:</p>
+<div class="codehilite"><pre><span></span><code><span class="c1"># Run doctests</span>
+$<span class="w"> </span>python3<span class="w"> </span>-m<span class="w"> </span>doctest<span class="w"> </span>timeit.py<span class="w"> </span>-v
+...
+<span class="m">8</span><span class="w"> </span>items<span class="w"> </span>passed<span class="w"> </span>all<span class="w"> </span>tests:
+<span class="w">  </span><span class="m">3</span><span class="w"> </span>tests<span class="w"> </span><span class="k">in</span><span class="w"> </span>timeit.Timer.__enter__
+<span class="w">  </span><span class="m">3</span><span class="w"> </span>tests<span class="w"> </span><span class="k">in</span><span class="w"> </span>timeit.Timer.__exit__
+<span class="w">  </span><span class="m">2</span><span class="w"> </span>tests<span class="w"> </span><span class="k">in</span><span class="w"> </span>timeit.Timer.__iter__
+<span class="w">  </span><span class="m">1</span><span class="w"> </span><span class="nb">test</span><span class="w"> </span><span class="k">in</span><span class="w"> </span>timeit.Timer.__next__
+<span class="w">  </span><span class="m">2</span><span class="w"> </span>tests<span class="w"> </span><span class="k">in</span><span class="w"> </span>timeit.Timer.handle_sigalrm
+<span class="w">  </span><span class="m">2</span><span class="w"> </span>tests<span class="w"> </span><span class="k">in</span><span class="w"> </span>timeit.Timer.handle_sigchld
+<span class="w">  </span><span class="m">1</span><span class="w"> </span><span class="nb">test</span><span class="w"> </span><span class="k">in</span><span class="w"> </span>timeit.Timer.returncode
+<span class="w">  </span><span class="m">1</span><span class="w"> </span><span class="nb">test</span><span class="w"> </span><span class="k">in</span><span class="w"> </span>timeit.Timer.state
+<span class="m">15</span><span class="w"> </span>tests<span class="w"> </span><span class="k">in</span><span class="w"> </span><span class="m">15</span><span class="w"> </span>items.
+<span class="m">15</span><span class="w"> </span>passed.
+Test<span class="w"> </span>passed.
+</code></pre></div>
+
+<p>You can also use <code>make</code> to run both the <a href="https://docs.python.org/3/library/doctest.html">doctests</a> and the <a href="https://en.wikipedia.org/wiki/Unit_testing">unit tests</a>:</p>
+<div class="codehilite"><pre><span></span><code><span class="c1"># Run unit tests (and doctests)</span>
+$<span class="w"> </span>make<span class="w"> </span>test-timeit
+Testing<span class="w"> </span>timeit<span class="w"> </span>...
+test_00_doctest<span class="w"> </span><span class="o">(</span>__main__.TimeitTest.test_00_doctest<span class="o">)</span><span class="w"> </span>...<span class="w"> </span>ok
+test_01_mypy<span class="w"> </span><span class="o">(</span>__main__.TimeitTest.test_01_mypy<span class="o">)</span><span class="w"> </span>...<span class="w"> </span>ok
+test_02_usage<span class="w"> </span><span class="o">(</span>__main__.TimeitTest.test_02_usage<span class="o">)</span><span class="w"> </span>...<span class="w"> </span>ok
+test_03_false<span class="w"> </span><span class="o">(</span>__main__.TimeitTest.test_03_false<span class="o">)</span><span class="w"> </span>...<span class="w"> </span>ok
+test_04_true<span class="w"> </span><span class="o">(</span>__main__.TimeitTest.test_04_true<span class="o">)</span><span class="w"> </span>...<span class="w"> </span>ok
+test_05_sleep_1<span class="w"> </span><span class="o">(</span>__main__.TimeitTest.test_05_sleep_1<span class="o">)</span><span class="w"> </span>...<span class="w"> </span>ok
+test_06_sleep_5<span class="w"> </span><span class="o">(</span>__main__.TimeitTest.test_06_sleep_5<span class="o">)</span><span class="w"> </span>...<span class="w"> </span>ok
+test_07_troll<span class="w"> </span><span class="o">(</span>__main__.TimeitTest.test_07_troll<span class="o">)</span><span class="w"> </span>...<span class="w"> </span>ok
+
+<span class="w">   </span>Score<span class="w"> </span><span class="m">10</span>.00<span class="w"> </span>/<span class="w"> </span><span class="m">10</span>.00
+<span class="w">   </span>Grade<span class="w">  </span><span class="m">1</span>.00<span class="w"> </span>/<span class="w">  </span><span class="m">1</span>.00
+<span class="w">  </span>Status<span class="w"> </span>Success
+
+----------------------------------------------------------------------
+Ran<span class="w"> </span><span class="m">8</span><span class="w"> </span>tests<span class="w"> </span><span class="k">in</span><span class="w"> </span><span class="m">6</span>.611s
+
+OK
+</code></pre></div>
+
+<p>To just run the <a href="https://en.wikipedia.org/wiki/Unit_testing">unit tests</a>, you can do the following:</p>
+<div class="codehilite"><pre><span></span><code><span class="c1"># Run unit tests</span>
+$<span class="w"> </span>./timeit.test<span class="w"> </span>-v
+...
+</code></pre></div>
+
+<p>To run a specific <a href="https://en.wikipedia.org/wiki/Unit_testing">unit test</a>, you can specify the <strong>method name</strong>:</p>
+<div class="codehilite"><pre><span></span><code><span class="c1"># Run only mypy unit test</span>
+$<span class="w"> </span>./timeit.test<span class="w"> </span>-v<span class="w"> </span>timeitTest.test_01_mypy
+...
+</code></pre></div>
+
+<p>To manually check your types, you can use <a href="https://mypy-lang.org/">mypy</a>:</p>
+<div class="codehilite"><pre><span></span><code><span class="c1"># Run mypy to check types</span>
+$<span class="w"> </span>mypy<span class="w"> </span>timeit.py
+</code></pre></div>
+
+<h2 id="activity-3-quiz-02-points">Activity 3: Quiz (<em>0.2 Points</em>)<a class="headerlink" href="#activity-3-quiz-02-points" title="Permanent link">&para;</a></h2>
+<p>Once you have completed all the activities above, you are to complete the
+following <strong>reflection quiz</strong>:</p>
+<div id="quiz-questions"></div>
+
+<div id="quiz-responses"></div>
+
+<script src="static/js/dredd-quiz.js"></script>
+<script>
+loadQuiz('static/json/homework06.json');
+</script>
+
+<pre style="display: none;" id="dr-container" class="codehilite"><code id="dredd-response"></code></pre>
+
+<p>As with <a href="reading01.html">Reading 01</a>, you will need to store your answers in a
+<code>homework06/answers.json</code> file.  You can use the form above to generate the
+contents of this file, or you can write the <a href="https://json.org/">JSON</a> by hand.</p>
+<p>To test your quiz, you can use the <code>check.py</code> script:</p>
+<div class="codehilite"><pre><span></span><code>$<span class="w"> </span>../.scripts/check.py
+Checking<span class="w"> </span>homework06<span class="w"> </span>quiz<span class="w"> </span>...
+<span class="w">      </span>Q1<span class="w">  </span><span class="m">2</span>.00<span class="w"> </span>/<span class="w">  </span><span class="m">2</span>.00
+<span class="w">      </span>Q2<span class="w">  </span><span class="m">2</span>.00<span class="w"> </span>/<span class="w">  </span><span class="m">2</span>.00
+<span class="w">      </span>Q3<span class="w">  </span><span class="m">1</span>.00<span class="w"> </span>/<span class="w">  </span><span class="m">1</span>.00
+<span class="w">      </span>Q4<span class="w">  </span><span class="m">1</span>.00<span class="w"> </span>/<span class="w">  </span><span class="m">1</span>.00
+<span class="w">      </span>Q5<span class="w">  </span><span class="m">1</span>.00<span class="w"> </span>/<span class="w">  </span><span class="m">1</span>.00
+<span class="w">  </span>--------------------
+<span class="w">   </span>Score<span class="w">  </span><span class="m">7</span>.00<span class="w"> </span>/<span class="w">  </span><span class="m">7</span>.00
+<span class="w">   </span>Grade<span class="w">  </span><span class="m">1</span>.00<span class="w"> </span>/<span class="w">  </span><span class="m">1</span>.00
+<span class="w">  </span>Status<span class="w"> </span>Success
+</code></pre></div>
+
+<h2 id="submission-1-points">Submission (<em>1 Points</em>)<a class="headerlink" href="#submission-1-points" title="Permanent link">&para;</a></h2>
+<p>To submit your assignment, please commit your work to the <code>homework06</code> folder
+of your <code>homework06</code> branch in your <strong>assignments</strong> <a href="https://github.com">GitHub</a> repository.
+Your <tt>homework06</tt> folder should <strong>only</strong> contain the following files:</p>
+<ul>
+<li><tt>Makefile</tt></li>
+<li><tt>answers.json</tt></li>
+<li><tt>timeit.py</tt></li>
+</ul>
+<div class="alert info-bg">
+<p><strong>Note</strong>: You do not need to commit the test scripts because the <code>Makefile</code>
+automatically downloads them.</p>
+</div>
+<div class="codehilite"><pre><span></span><code><span class="c1">#-----------------------------------------------------------------------</span>
+<span class="c1"># Make sure you have already completed Activity 0: Preparation</span>
+<span class="c1">#-----------------------------------------------------------------------</span>
+...
+$<span class="w"> </span>git<span class="w"> </span>add<span class="w"> </span>timeit.py<span class="w">                                   </span><span class="c1"># Mark changes for commit</span>
+$<span class="w"> </span>git<span class="w"> </span>commit<span class="w"> </span>-m<span class="w"> </span><span class="s2">&quot;Homework 06: timeit&quot;</span><span class="w">                 </span><span class="c1"># Record changes</span>
+...
+$<span class="w"> </span>git<span class="w"> </span>add<span class="w"> </span>answers.json<span class="w">                                </span><span class="c1"># Mark changes for commit</span>
+$<span class="w"> </span>git<span class="w"> </span>commit<span class="w"> </span>-m<span class="w"> </span><span class="s2">&quot;Homework 06: Quiz&quot;</span><span class="w">                   </span><span class="c1"># Record changes</span>
+...
+$<span class="w"> </span>git<span class="w"> </span>push<span class="w"> </span>-u<span class="w"> </span>origin<span class="w"> </span>homework06<span class="w">                       </span><span class="c1"># Push branch to GitHub</span>
+</code></pre></div>
+
+<div class="alert warning-bg">
+<h3 id="lifebuoy-embed_icon-acknowledgments"><i class="icon icon-medium"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><title>lifebuoy</title><path d="M19.79,15.41C20.74,13.24 20.74,10.75 19.79,8.59L17.05,9.83C17.65,11.21 17.65,12.78 17.06,14.17L19.79,15.41M15.42,4.21C13.25,3.26 10.76,3.26 8.59,4.21L9.83,6.94C11.22,6.35 12.79,6.35 14.18,6.95L15.42,4.21M4.21,8.58C3.26,10.76 3.26,13.24 4.21,15.42L6.95,14.17C6.35,12.79 6.35,11.21 6.95,9.82L4.21,8.58M8.59,19.79C10.76,20.74 13.25,20.74 15.42,19.78L14.18,17.05C12.8,17.65 11.22,17.65 9.84,17.06L8.59,19.79M12,2A10,10 0 0,1 22,12A10,10 0 0,1 12,22A10,10 0 0,1 2,12A10,10 0 0,1 12,2M12,8A4,4 0 0,0 8,12A4,4 0 0,0 12,16A4,4 0 0,0 16,12A4,4 0 0,0 12,8Z" /></svg>
+</i> Acknowledgments<a class="headerlink" href="#lifebuoy-embed_icon-acknowledgments" title="Permanent link">&para;</a></h3>
+<p>If you collaborated with any other students, or received help from TAs or AI
+tools on this assignment, please record this support in the <code>README.md</code> in
+the <code>homework06</code> folder and include it with your <strong>Pull Request</strong>.</p>
+</div>
+<div class="alert success-bg">
+<h3 id="account-question-embed_icon-graders"><i class="icon icon-medium"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><title>account-question</title><path d="M13,8A4,4 0 0,1 9,12A4,4 0 0,1 5,8A4,4 0 0,1 9,4A4,4 0 0,1 13,8M17,18V20H1V18C1,15.79 4.58,14 9,14C13.42,14 17,15.79 17,18M20.5,14.5V16H19V14.5H20.5M18.5,9.5H17V9A3,3 0 0,1 20,6A3,3 0 0,1 23,9C23,9.97 22.5,10.88 21.71,11.41L21.41,11.6C20.84,12 20.5,12.61 20.5,13.3V13.5H19V13.3C19,12.11 19.6,11 20.59,10.35L20.88,10.16C21.27,9.9 21.5,9.47 21.5,9A1.5,1.5 0 0,0 20,7.5A1.5,1.5 0 0,0 18.5,9V9.5Z" /></svg>
+</i> Graders<a class="headerlink" href="#account-question-embed_icon-graders" title="Permanent link">&para;</a></h3>
+<p>Once you have committed your work and pushed it to <a href="https://github.com">GitHub</a>, remember to
+create a <strong>pull request</strong> and assign it to the appropriate <strong>teaching
+assistant</strong> from the <a href="reading06_tas.html">Reading 06 TA List</a>.</p>
+<p><strong>Note</strong>: this list changes each week, so be sure to consult the appropriate
+list for each assignment.</p>
+</div>
+</main>
+<footer>
+Built using <a href="https://python.org">Python</a>
+and <a href="https://jinja.palletsprojects.com">Jinja</a>
+with colors from 
+<a href="https://onmessage.nd.edu/university-branding/colors/">Notre Dame</a>, 
+<a href="https://spreadsheet.dev/how-to-get-the-hexadecimal-codes-of-colors-in-google-sheets">Google Docs</a>, and 
+<a href="https://nordtheme.com">Nord Theme</a>,
+and icons from <a href="https://pictogrammers.com/library/mdi/">Material Design Icons</a>.</footer>
+</body>
+</html>
