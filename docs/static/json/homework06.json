@@ -1,0 +1,46 @@
+{
+    "q1": {
+        "type": "blank",
+        "question": "\n<p>As discussed in class, working with <b>low-level functions</b> and\n<b>system calls</b> can be tricky because unlike most normal functions,\nthey can <b>fail</b>. For each of the following scenarios involving\n<code>timeit</code>, identify which <b>low-level function</b> or <b>system\ncall</b> (used in <code>timeit</code>) would fail:</p>\n\n<ol>\n  <li>User has passes a <b>program that does not exist</b>. ____</li>\n  <li>User has reached their <b>limit of processes</b>. ____</li>\n</ol>\n"
+    },
+    "q2": {
+        "type": "multiple",
+        "question": "\n<p>In <code>timeit</code>, you implemented both the <b>context manager\nprotocol</b> and the <b>iterator protocol</b> in the <code>Timer</code>\nclass</p>:\n\n<pre>\nwith Timer(['sleep', '1']) as timer:\n    for elapsed in timer:\n        print(elapsed)\n</pre>\n\n<p>Which of the following statements regarding are true (<i>choose all that\napply</i>)?</p>\n",
+        "responses": {
+            "context_process": "The <b>context manager protocol</b> was used to manage the creation and cleanup of the child <b>process</b>.",
+            "iterator_process": "The <b>iterator protocol</b> was used to manage the creation and cleanup of the child <b>process</b>.",
+            "context_elapsed": "The <b>context manager protocol</b> was used to track the <b>elapsed time</b>.",
+            "iterator_elapsed": "The <b>iterator protocol</b> was used to track the <b>elapsed time</b>."
+        }
+    },
+    "q3": {
+        "type": "single",
+        "question": "\n<p>An eager student proposes changing <code>timeit</code> such that the\n<b>child process</b> sets an <code>signal.alarm</code> before calling\n<code>os.execvp</code> so that it can <code>os.kill</code> itself if the\n<b>signal handler</b> is invoked.  Would this work?</p>\n",
+        "responses": {
+            "yeah": "Yeah, totally.",
+            "nope_1": "Nope, only a parent process can set an <code>signal.alarm</code>.",
+            "nope_2": "Nope, a process cannot <code>os.kill</code> itself.",
+            "nope_3": "Nope, <code>os.execvp</code> loads new code so the <code>signal.alarm</code> handler is removed."
+        }
+    },
+    "q4": {
+        "type": "single",
+        "question": "\n<p>A malicious student proposes changing <code>timeit</code> such that the\n<b>child process</b> changes the <code>Timer.pid</code> attribute before\ncalling <code>os.execvp</code> in order to prevent the parent from killing the\nchild process.  Would this work?</p>\n",
+        "responses": {
+            "yeah": "Yeah, totally.",
+            "nope_1": "Nope, only a parent process can change <b>object attributes</b>.",
+            "nope_2": "Nope, a process cannot modify <b>object attributes</b>.",
+            "nope_3": "Nope, the parent and child have separate <b>address spaces</b>."
+        }
+    },
+    "q5": {
+        "type": "single",
+        "question": "\n<p>A concerned student proposes changing <code>timeit</code> such that the\n<b>parent process</b> sends <code>SIGSTOP</code> to the <b>child process</b>\nwhen <code>signal.alarm</code> handler is invoked.  Would this work?</p>\n",
+        "responses": {
+            "yeah": "Yeah, totally.",
+            "nope_1": "Nope, because the <b>child process</b> can ignore <code>SIGSTOP</code>.",
+            "nope_2": "Nope, because only the kernel can use this signal.",
+            "nope_3": "Nope, because this only suspends the process and does not terminate it."
+        }
+    }
+}
