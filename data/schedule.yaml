@@ -180,6 +180,8 @@
           - Reading 06
         items:
           - name:       Slides 17
+          - name:       Panopto
+            link:       https://notredame.hosted.panopto.com/Panopto/Pages/Viewer.aspx?id=d67df8df-f87b-4d0f-a3a3-b4da01190f26
 
       - date:           Wed 10/07
         topics:         Processes
