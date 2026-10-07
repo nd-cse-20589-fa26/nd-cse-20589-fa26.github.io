@@ -59,6 +59,23 @@ program; it is a unit of <strong class="warning">allocation</strong>
 
 ---
 
+# Process: <span class="gold">System Calls</span>
+
+A <strong class="info">system call</strong> occurs when a <strong
+class="success">user application</strong> requests a <strong
+class="warning">service, operation, or resource</strong> from the <strong
+class="danger">operating system kernel</strong>.
+
+<div class="centered">
+
+<br>
+
+<img src="static/img/slides18-house-of-cards.svg">
+
+</div>
+
+---
+
 # Process: <span class="gold">Life Cycle</span>
 
 <div class="columns-2-3">
