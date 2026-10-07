@@ -1,0 +1,217 @@
+title:  "Notes 18: Processes"
+body:   |
+
+  ## Review: <span class="gold">Object-Oriented Programming</span>
+
+  -   <div class="flex-col" markdown="1">
+
+      What is [object-oriented programming]? Why use it?
+
+      > - Solve problems by using **abstraction**, **encapsulation**,
+      **polymorphism**, and **inheritance**.
+
+      > - Hide complexity, promote code re-use, and model the world.
+
+  -   <div class="flex-col" markdown="1">
+
+      What is the <strong class="warning">context manager protocol</strong>?
+      Why use it?
+
+      > Allows us to use the `with` statement to allocate a resource and
+      automatically release it when the statement is done.
+
+  [object-oriented programming]: https://en.wikipedia.org/wiki/Object-oriented_programming
+
+  ## Process: <span class="gold">Overview</span>
+
+  <div class="flex-row" markdown="1">
+
+  <div class="flex-col" markdown="1">
+
+  A <strong class="success">process</strong> is a **loaded** instance of a
+  program; it is a unit of <strong class="warning">allocation</strong>
+  (*resources*, *privileges*, etc.).
+
+  - <strong class="success">Memory Address Space</strong>: code, data, heap,
+    stack.
+
+  - <strong class="caution">Kernel State</strong>: permissions, file descriptors,
+    etc.
+
+  - <strong class="info">Execution Context</strong>: program counter, stack
+    pointer, data registers.
+
+  <div class="alert warning-bg" markdown="1">
+
+  In [Homework 05], when we created a `concurrent.futures.ProcessPoolExecutor`,
+  we were allocating multiple <strong class="success">processes</strong> so we
+  can `smash` passwords in **parallel**.
+
+  </div>
+
+  </div>
+
+  <div class="flex-col-25" markdown="1">
+
+  <img src="static/img/slides18-process-machine-state.svg" class="transparent responsive">
+
+  </div>
+
+  </div>
+
+  [Homework 05]: homework05.html
+
+  ## Process: <span class="gold">System Calls</span>
+
+  A <strong class="info">system call</strong> occurs when a <strong
+  class="success">user application</strong> requests a <strong
+  class="warning">service, operation, or resource</strong> from the <strong
+  class="danger">operating system kernel</strong>.
+
+  <div class="centered">
+
+  <img src="static/img/slides18-house-of-cards.svg" class="transparent responsive">
+
+  </div>
+
+  <div class="alert success-bg" markdown="1">
+
+  We can **trace** the <strong class="info">system calls</strong> used by a
+  <strong class="success">process</strong> by using `strace`.
+
+  ```bash
+  $ strace cat /etc/hosts
+  ```
+
+  </div>
+
+  ## Process: <span class="gold">Life Cycle</span>
+
+  <div class="centered">
+
+  <img src="static/img/slides18-process-life-cycle.svg" class="transparent responsive">
+
+  </div>
+
+  1. <strong class="success">Parent process</strong> [forks] to create a new
+  <strong class="warning">child process</strong>.
+
+  2. <strong class="warning">Child process</strong> performs actions, possible
+  [execs] to run another program.
+
+  3. <strong class="success">Parent process</strong> [waits] for <strong
+  class="warning">child process</strong>.
+
+  4. <strong class="warning">Child process</strong> [exits].
+
+  5. <strong class="success">Parent process</strong> receives <strong
+  class="special">status code</strong> of <strong class="warning">child
+  process</strong>.
+
+  [fork]: https://docs.python.org/3/library/os.html#os.fork
+  [forks]: https://docs.python.org/3/library/os.html#os.fork
+  [exec]: https://docs.python.org/3/library/os.html#os.execvp
+  [execs]: https://docs.python.org/3/library/os.html#os.execvp
+  [wait]: https://docs.python.org/3/library/os.html#os.wait
+  [waits]: https://docs.python.org/3/library/os.html#os.wait
+  [exits]: https://docs.python.org/3/library/sys.html#sys.exit
+
+  ## Example: [safe_system.py]
+
+  > Write a `SafeSystem` object that implements the <strong
+  > class="warning">context manager protocol</strong> to create a child <strong
+  > class="success">process</strong> that executes the given command while the
+  > parent <strong class="success">process</strong> runs.
+
+  ```python
+  ''' Version 0 '''
+  cmd = ['ls', '-l']
+  pid = fork()                # Discuss: fork allocates child process
+
+  if pid == 0:                # Discuss: Child's pid is 0
+      os.execvp(cmd[0], cmd)  # Discuss: exec changes code
+  else:                       # Discuss: Parent's pid is non-zero
+      pid, status = os.wait() # Discuss: deallocates child process
+
+  print(f'{pid} {status}')
+  ```
+
+  <div class="alert danger-bg" markdown="1">
+
+  **Questions**:
+
+  - Who `print`s at the end?
+  - What happens if [fork] fails?
+  - What happens if [exec] fails?
+  - Who are we [wait]ing for?
+  - Why doesn't `status == 1` on failure?
+
+  </div>
+
+  ```python
+  ''' Version 1 '''
+  cmd = ['ls', '-l']
+  pid = fork()
+
+  if pid == 0:
+      try:
+          os.execvp(cmd[0], cmd)
+      except OSError:
+          sys.exit(1)
+  else:
+      _, status = os.waitpid(pid, 0)
+
+  print(f'{pid} {os.WEXITSTATUS(status)}')
+  ```
+
+  <div class="alert caution-bg" markdown="1">
+
+  - What happens if we don't [wait] at all?
+
+  </div>
+
+  ```python
+  ''' Version 2 '''
+  # Class
+
+  @dataclass
+  class SafeSystem:
+      command:    list[str]
+
+      pid:        Optional[int] = None
+      status:     Optional[int] = None
+
+      @property
+      def state(self):
+          if self.status is None:
+              return 'Running'
+
+          return f'Terminated ({os.WEXITSTATUS(self.status)})'
+
+      # Context Manager Protocol
+
+      def __enter__(self):
+          self.pid = os.fork()
+
+          if self.pid == 0:   # Child
+              try:
+                  os.execvp(self.command[0], self.command)
+              except OSError:
+                  os._exit(1)
+
+          return self
+
+      def __exit__(self, exc_type, exc_val, exc_tb):
+          _, self.status = os.waitpid(self.pid, 0)
+
+  # Main Execution
+
+  with SafeSystem(['ls', '-l']) as process:
+      for i in range(10):
+          time.sleep(0.1)
+          sys.stdout.write(f'{i}: {process.state}\r')
+
+  sys.stdout.write(f'Final: {process.state}\n')
+  ```
+
+  [safe_system.py]: https://github.com/nd-cse-20589-fa26/examples/blob/master/slides18/safesystem.py
