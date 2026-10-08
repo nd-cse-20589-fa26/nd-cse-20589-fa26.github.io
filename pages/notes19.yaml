@@ -1,0 +1,267 @@
+title:  "Notes 19: Signals"
+body:   |
+
+  ## Review: <span class="gold">Process Life Cycle</span>
+
+  1.  <div class="flex-col" markdown="1">
+
+      What is a <strong class="success">process</strong>?
+
+      > A <strong class="success">process</strong> is a **loaded** instance of
+      a program; it is a unit of <strong class="warning">allocation</strong>
+      (*resources*, *privileges*, etc.).
+
+  <div class="centered">
+
+  <img src="static/img/slides18-process-life-cycle.svg" class="transparent responsive">
+
+  </div>
+
+  ## Example: [safe_system.py]
+
+  > Write a `SafeSystem` object that implements the <strong
+  > class="warning">context manager protocol</strong> to create a child <strong
+  > class="success">process</strong> that executes the given command while the
+  > parent <strong class="success">process</strong> runs.
+
+  ```python
+  ''' Version 1 '''
+  cmd = ['ls', '-l']
+  pid = fork()        # Review: allocate child process
+
+  if pid == 0:        # Review: child
+      try:
+          # Review: change identity
+          os.execvp(cmd[0], cmd)
+      except OSError:
+          # Review: terminate existing process
+          sys.exit(1)
+  else:               # Review: parent
+      # Review: deallocate child process
+      _, status = os.waitpid(pid, 0)
+
+  # Review: status bitmask
+  print(f'{pid} {os.WEXITSTATUS(status)}')
+  ```
+
+  <div class="alert warning-bg" markdown="1">
+
+  - What happens if child [exits]?
+  - What happens if we don't [wait] at all?
+  - How could [exec] or [fork] fail?
+
+  </div>
+
+  [fork]: https://docs.python.org/3/library/os.html#os.fork
+  [forks]: https://docs.python.org/3/library/os.html#os.fork
+  [exec]: https://docs.python.org/3/library/os.html#os.execvp
+  [execs]: https://docs.python.org/3/library/os.html#os.execvp
+  [wait]: https://docs.python.org/3/library/os.html#os.wait
+  [waits]: https://docs.python.org/3/library/os.html#os.wait
+  [exits]: https://docs.python.org/3/library/sys.html#sys.exit
+
+  [safe_system.py]: https://github.com/nd-cse-20589-fa26/examples/blob/master/slides18/safesystem.py
+
+  ## Signals: <span class="gold">Event-based Programming</span>
+
+  <strong class="special">Signals</strong> are a means of notifying a
+  <strong class="success">process</strong> of an
+  <strong>event</strong>.
+
+  <div class="flex-row" markdown="1">
+
+  <div class="flex-col" markdown="1">
+
+  - Register interest in **events** (*callbacks*).
+
+  - When **event** occurs, interrupt current <success>process</process> and
+  invoke <success>handler</success>.
+
+  - After <success>handler</success> is executed, resume where we interruped
+  <success>process</success>.
+
+  - <success>handler</success> should be **short-lived**.
+
+  </div>
+
+  <div class="flex-col-25" markdown="1">
+
+  <img src="static/img/slides19-event-loop.svg" class="transparent responsive">
+
+  </div>
+
+  </div>
+
+  ## Signals: <span class="gold">Examples</span> (<i class="muted">Fork Bomb</i>)
+
+  ```python
+  #!/usr/bin/env python3
+
+  import os
+  import time
+
+  # And away we go
+
+  print(f'{os.getpid()} Spawning children...')
+  for i in range(10):
+      try:
+          pid = os.fork()
+      except OSError:
+          break
+
+      # Slow it down
+      time.sleep(1)
+  ```
+
+  ```bash
+  # Watch exponential growth
+  $ watch pstree -u pbui
+
+  # View process limits
+  $ ulimit -a
+  ```
+
+  <div class="alert warning-bg" markdown="1">
+
+  **Observations**:
+
+  - With great **power** comes great **responsibility**.
+
+  - **Denial of Service**: overload the system with resource allocation requests!
+
+  - **Bounded** loop guarantees that we **terminate**... eventually.
+
+  </div>
+
+  <div class="alert success-bg" markdown="1">
+
+  **Fix**: make sure **child** [exits].
+
+  </div>
+
+  ## Signals: <span class="gold">Examples</span> (<i class="muted">Zombies</i>)
+
+  ```python
+  #!/usr/bin/env python3
+
+  import os
+  import signal
+  import sys
+  import time
+
+  # And away we go
+
+  print(f'Spawning children...')
+  for i in range(10):
+      match pid := os.fork():
+          case 0: # Child
+              print(f'Child process: {os.getpid()}')
+              time.sleep(i)
+              sys.exit(i)
+
+  time.sleep(30)  # Parent: Sleep and watch 'ps ux | grep zombies'
+  ```
+
+  <div class="alert warning-bg" markdown="1">
+
+  **Observations**:
+
+  - When **child** [exits] it becomes a **zombie** (*until **parent** calls
+  [wait]*).
+
+  - Because **parent** terminates before calling [wait], the **children** are
+  **orphans**!
+
+  - `init` or `systemd` will adopt any **orphans** to ensure every **zombie**
+  is deallocated (ie. [wait]ed upon).
+
+  </div>
+
+  <div class="alert success-bg" markdown="1">
+
+  **Fix**: **parent** should call [wait] on all **children**.
+
+  </div>
+
+  ```python
+  # Fix 1: Wait all
+
+  print(f'Waiting for children...')
+  for i in range(10):
+      pid, status = os.wait()
+      print(f'Child {pid} exited with {os.WEXITSTATUS(status)}')
+  ```
+
+  <div class="alert success-bg" markdown="1">
+
+  **Observations**:
+
+  - Because [wait] is a <strong class="warning">system call</strong>, the
+  **parent** is **blocked** until a **child** calls [exit].
+
+  - What if we want to allow the **parent** to do something else until the
+  **child** actually [exits]?
+
+  </div>
+
+  ```python
+  # Fix 2: Wait after signal
+
+  WaitedChildren = []
+
+  def handle_sigchld(signum, frame):
+      pid, status = os.wait()
+      print(f'Child {pid} exited with {os.WEXITSTATUS(status)}')
+      WaitedChildren.append(pid)
+
+  print()
+  print(f'Registering handler...')
+  signal.signal(signal.SIGCHLD, handle_sigchld)
+
+  print(f'Spawning children...')
+  for i in range(10):
+      match pid := os.fork():
+          case 0: # Child
+              print(f'Child process: {os.getpid()}')
+              time.sleep(i)
+              sys.exit(i)
+
+  while len(WaitedChildren) < 10:
+      print('Waiting...')
+      time.sleep(1)
+  ```
+
+  ## Signals: <span class="gold">Examples</span> (<i class="muted">Alarm</i>)
+
+  ```python
+  #!/usr/bin/env python3
+
+  import os
+  import signal
+  import sys
+  import time
+
+  def handle_sigalrm(signum, frame):
+      print(f'Alarm triggered... Killing {pid}!')
+      os.kill(pid, signal.SIGKILL)    # Discuss: send signal
+
+      _, status = os.wait()           # Discuss: exit status
+      print(f'Child {pid} exited with {os.WTERMSIG(status)}')
+      sys.exit(0)
+
+  match pid := os.fork():
+      case 0: # Child
+          while True:
+              print('Hahahaha')
+              time.sleep(1)
+
+      case _: # Parent
+          # Discuss: register handler
+          signal.signal(signal.SIGALRM, handle_sigalrm)
+          # Discuss: set alarm
+          signal.alarm(5)
+
+          while True:
+              print('Waiting...')
+              time.sleep(1)
+  ```
