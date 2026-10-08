@@ -1,0 +1,230 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<!-- Favicon -->
+<link rel="icon" type="image/png" sizes="32x32" href="static/ico/favicon-32x32.png">
+<link rel="icon" type="image/png" sizes="16x16" href="static/ico/favicon-16x16.png">
+<link rel="manifest" href="static/ico/site.webmanifest">
+<!-- Stylesheets -->
+<link rel="stylesheet" href="static/css/domer.css">
+<title>Notes 18: Processes</title>
+</head>
+<body>
+<header>
+<a class="logo" href="notes18.html">
+    <h1>Notes 18: Processes</h1>
+</a>
+<nav>
+    <ul>
+        <li><a href="index.html"><h4>Home</h4></a></li>
+        </ul>
+</nav></header>
+<main>
+<h2 id="review-object-oriented-programming">Review: <span class="gold">Object-Oriented Programming</span><a class="headerlink" href="#review-object-oriented-programming" title="Permanent link">&para;</a></h2>
+<ul>
+<li>
+<div class="flex-col" markdown="1">
+<p>What is <a href="https://en.wikipedia.org/wiki/Object-oriented_programming">object-oriented programming</a>? Why use it?</p>
+<blockquote>
+<ul>
+<li>
+<p>Solve problems by using <strong>abstraction</strong>, <strong>encapsulation</strong>,
+<strong>polymorphism</strong>, and <strong>inheritance</strong>.</p>
+</li>
+<li>
+<p>Hide complexity, promote code re-use, and model the world.</p>
+</li>
+</ul>
+</blockquote>
+</li>
+<li>
+<div class="flex-col" markdown="1">
+<p>What is the <strong class="warning">context manager protocol</strong>?
+Why use it?</p>
+<blockquote>
+<p>Allows us to use the <code>with</code> statement to allocate a resource and
+automatically release it when the statement is done.</p>
+</blockquote>
+</li>
+</ul>
+<h2 id="process-overview">Process: <span class="gold">Overview</span><a class="headerlink" href="#process-overview" title="Permanent link">&para;</a></h2>
+<div class="flex-row">
+<div class="flex-col">
+<p>A <strong class="success">process</strong> is a <strong>loaded</strong> instance of a
+program; it is a unit of <strong class="warning">allocation</strong>
+(<em>resources</em>, <em>privileges</em>, etc.).</p>
+<ul>
+<li>
+<p><strong class="success">Memory Address Space</strong>: code, data, heap,
+  stack.</p>
+</li>
+<li>
+<p><strong class="caution">Kernel State</strong>: permissions, file descriptors,
+  etc.</p>
+</li>
+<li>
+<p><strong class="info">Execution Context</strong>: program counter, stack
+  pointer, data registers.</p>
+</li>
+</ul>
+<div class="alert warning-bg">
+<p>In <a href="homework05.html">Homework 05</a>, when we created a <code>concurrent.futures.ProcessPoolExecutor</code>,
+we were allocating multiple <strong class="success">processes</strong> so we
+can <code>smash</code> passwords in <strong>parallel</strong>.</p>
+</div>
+</div>
+<div class="flex-col-25">
+<p><img src="static/img/slides18-process-machine-state.svg" class="transparent responsive"></p>
+</div>
+</div>
+<h2 id="process-system-calls">Process: <span class="gold">System Calls</span><a class="headerlink" href="#process-system-calls" title="Permanent link">&para;</a></h2>
+<p>A <strong class="info">system call</strong> occurs when a <strong
+class="success">user application</strong> requests a <strong
+class="warning">service, operation, or resource</strong> from the <strong
+class="danger">operating system kernel</strong>.</p>
+<div class="centered">
+
+<img src="static/img/slides18-house-of-cards.svg" class="transparent responsive">
+
+</div>
+
+<div class="alert success-bg">
+<p>We can <strong>trace</strong> the <strong class="info">system calls</strong> used by a
+<strong class="success">process</strong> by using <code>strace</code>.</p>
+<div class="codehilite"><pre><span></span><code>$<span class="w"> </span>strace<span class="w"> </span>cat<span class="w"> </span>/etc/hosts
+</code></pre></div>
+
+</div>
+<h2 id="process-life-cycle">Process: <span class="gold">Life Cycle</span><a class="headerlink" href="#process-life-cycle" title="Permanent link">&para;</a></h2>
+<div class="centered">
+
+<img src="static/img/slides18-process-life-cycle.svg" class="transparent responsive">
+
+</div>
+
+<ol>
+<li>
+<p><strong class="success">Parent process</strong> <a href="https://docs.python.org/3/library/os.html#os.fork">forks</a> to create a new
+<strong class="warning">child process</strong>.</p>
+</li>
+<li>
+<p><strong class="warning">Child process</strong> performs actions, possible
+<a href="https://docs.python.org/3/library/os.html#os.execvp">execs</a> to run another program.</p>
+</li>
+<li>
+<p><strong class="success">Parent process</strong> <a href="https://docs.python.org/3/library/os.html#os.wait">waits</a> for <strong
+class="warning">child process</strong>.</p>
+</li>
+<li>
+<p><strong class="warning">Child process</strong> <a href="https://docs.python.org/3/library/sys.html#sys.exit">exits</a>.</p>
+</li>
+<li>
+<p><strong class="success">Parent process</strong> receives <strong
+class="special">status code</strong> of <strong class="warning">child
+process</strong>.</p>
+</li>
+</ol>
+<h2 id="example-safe_systempy">Example: <a href="https://github.com/nd-cse-20589-fa26/examples/blob/master/slides18/safesystem.py">safe_system.py</a><a class="headerlink" href="#example-safe_systempy" title="Permanent link">&para;</a></h2>
+<blockquote>
+<p>Write a <code>SafeSystem</code> object that implements the <strong
+class="warning">context manager protocol</strong> to create a child <strong
+class="success">process</strong> that executes the given command while the
+parent <strong class="success">process</strong> runs.</p>
+</blockquote>
+<div class="codehilite"><pre><span></span><code><span class="sd">&#39;&#39;&#39; Version 0 &#39;&#39;&#39;</span>
+<span class="n">cmd</span> <span class="o">=</span> <span class="p">[</span><span class="s1">&#39;ls&#39;</span><span class="p">,</span> <span class="s1">&#39;-l&#39;</span><span class="p">]</span>
+<span class="n">pid</span> <span class="o">=</span> <span class="n">fork</span><span class="p">()</span>                <span class="c1"># Discuss: fork allocates child process</span>
+
+<span class="k">if</span> <span class="n">pid</span> <span class="o">==</span> <span class="mi">0</span><span class="p">:</span>                <span class="c1"># Discuss: Child&#39;s pid is 0</span>
+    <span class="n">os</span><span class="o">.</span><span class="n">execvp</span><span class="p">(</span><span class="n">cmd</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span> <span class="n">cmd</span><span class="p">)</span>  <span class="c1"># Discuss: exec changes code</span>
+<span class="k">else</span><span class="p">:</span>                       <span class="c1"># Discuss: Parent&#39;s pid is non-zero</span>
+    <span class="n">pid</span><span class="p">,</span> <span class="n">status</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">wait</span><span class="p">()</span> <span class="c1"># Discuss: deallocates child process</span>
+
+<span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s1">&#39;</span><span class="si">{</span><span class="n">pid</span><span class="si">}</span><span class="s1"> </span><span class="si">{</span><span class="n">status</span><span class="si">}</span><span class="s1">&#39;</span><span class="p">)</span>
+</code></pre></div>
+
+<div class="alert danger-bg">
+<p><strong>Questions</strong>:</p>
+<ul>
+<li>Who <code>print</code>s at the end?</li>
+<li>What happens if <a href="https://docs.python.org/3/library/os.html#os.fork">fork</a> fails?</li>
+<li>What happens if <a href="https://docs.python.org/3/library/os.html#os.execvp">exec</a> fails?</li>
+<li>Who are we <a href="https://docs.python.org/3/library/os.html#os.wait">wait</a>ing for?</li>
+<li>Why doesn't <code>status == 1</code> on failure?</li>
+</ul>
+</div>
+<div class="codehilite"><pre><span></span><code><span class="sd">&#39;&#39;&#39; Version 1 &#39;&#39;&#39;</span>
+<span class="n">cmd</span> <span class="o">=</span> <span class="p">[</span><span class="s1">&#39;ls&#39;</span><span class="p">,</span> <span class="s1">&#39;-l&#39;</span><span class="p">]</span>
+<span class="n">pid</span> <span class="o">=</span> <span class="n">fork</span><span class="p">()</span>
+
+<span class="k">if</span> <span class="n">pid</span> <span class="o">==</span> <span class="mi">0</span><span class="p">:</span>
+    <span class="k">try</span><span class="p">:</span>
+        <span class="n">os</span><span class="o">.</span><span class="n">execvp</span><span class="p">(</span><span class="n">cmd</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span> <span class="n">cmd</span><span class="p">)</span>
+    <span class="k">except</span> <span class="ne">OSError</span><span class="p">:</span>
+        <span class="n">sys</span><span class="o">.</span><span class="n">exit</span><span class="p">(</span><span class="mi">1</span><span class="p">)</span>
+<span class="k">else</span><span class="p">:</span>
+    <span class="n">_</span><span class="p">,</span> <span class="n">status</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">waitpid</span><span class="p">(</span><span class="n">pid</span><span class="p">,</span> <span class="mi">0</span><span class="p">)</span>
+
+<span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s1">&#39;</span><span class="si">{</span><span class="n">pid</span><span class="si">}</span><span class="s1"> </span><span class="si">{</span><span class="n">os</span><span class="o">.</span><span class="n">WEXITSTATUS</span><span class="p">(</span><span class="n">status</span><span class="p">)</span><span class="si">}</span><span class="s1">&#39;</span><span class="p">)</span>
+</code></pre></div>
+
+<div class="alert caution-bg">
+<ul>
+<li>What happens if we don't <a href="https://docs.python.org/3/library/os.html#os.wait">wait</a> at all?</li>
+</ul>
+</div>
+<div class="codehilite"><pre><span></span><code><span class="sd">&#39;&#39;&#39; Version 2 &#39;&#39;&#39;</span>
+<span class="c1"># Class</span>
+
+<span class="nd">@dataclass</span>
+<span class="k">class</span> <span class="nc">SafeSystem</span><span class="p">:</span>
+    <span class="n">command</span><span class="p">:</span>    <span class="nb">list</span><span class="p">[</span><span class="nb">str</span><span class="p">]</span>
+
+    <span class="n">pid</span><span class="p">:</span>        <span class="n">Optional</span><span class="p">[</span><span class="nb">int</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span>
+    <span class="n">status</span><span class="p">:</span>     <span class="n">Optional</span><span class="p">[</span><span class="nb">int</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span>
+
+    <span class="nd">@property</span>
+    <span class="k">def</span> <span class="nf">state</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">status</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="k">return</span> <span class="s1">&#39;Running&#39;</span>
+
+        <span class="k">return</span> <span class="sa">f</span><span class="s1">&#39;Terminated (</span><span class="si">{</span><span class="n">os</span><span class="o">.</span><span class="n">WEXITSTATUS</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">status</span><span class="p">)</span><span class="si">}</span><span class="s1">)&#39;</span>
+
+    <span class="c1"># Context Manager Protocol</span>
+
+    <span class="k">def</span> <span class="fm">__enter__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">pid</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">fork</span><span class="p">()</span>
+
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">pid</span> <span class="o">==</span> <span class="mi">0</span><span class="p">:</span>   <span class="c1"># Child</span>
+            <span class="k">try</span><span class="p">:</span>
+                <span class="n">os</span><span class="o">.</span><span class="n">execvp</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">command</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span> <span class="bp">self</span><span class="o">.</span><span class="n">command</span><span class="p">)</span>
+            <span class="k">except</span> <span class="ne">OSError</span><span class="p">:</span>
+                <span class="n">os</span><span class="o">.</span><span class="n">_exit</span><span class="p">(</span><span class="mi">1</span><span class="p">)</span>
+
+        <span class="k">return</span> <span class="bp">self</span>
+
+    <span class="k">def</span> <span class="fm">__exit__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">exc_type</span><span class="p">,</span> <span class="n">exc_val</span><span class="p">,</span> <span class="n">exc_tb</span><span class="p">):</span>
+        <span class="n">_</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">status</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">waitpid</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">pid</span><span class="p">,</span> <span class="mi">0</span><span class="p">)</span>
+
+<span class="c1"># Main Execution</span>
+
+<span class="k">with</span> <span class="n">SafeSystem</span><span class="p">([</span><span class="s1">&#39;ls&#39;</span><span class="p">,</span> <span class="s1">&#39;-l&#39;</span><span class="p">])</span> <span class="k">as</span> <span class="n">process</span><span class="p">:</span>
+    <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="mi">10</span><span class="p">):</span>
+        <span class="n">time</span><span class="o">.</span><span class="n">sleep</span><span class="p">(</span><span class="mf">0.1</span><span class="p">)</span>
+        <span class="n">sys</span><span class="o">.</span><span class="n">stdout</span><span class="o">.</span><span class="n">write</span><span class="p">(</span><span class="sa">f</span><span class="s1">&#39;</span><span class="si">{</span><span class="n">i</span><span class="si">}</span><span class="s1">: </span><span class="si">{</span><span class="n">process</span><span class="o">.</span><span class="n">state</span><span class="si">}</span><span class="se">\r</span><span class="s1">&#39;</span><span class="p">)</span>
+
+<span class="n">sys</span><span class="o">.</span><span class="n">stdout</span><span class="o">.</span><span class="n">write</span><span class="p">(</span><span class="sa">f</span><span class="s1">&#39;Final: </span><span class="si">{</span><span class="n">process</span><span class="o">.</span><span class="n">state</span><span class="si">}</span><span class="se">\n</span><span class="s1">&#39;</span><span class="p">)</span>
+</code></pre></div>
+</main>
+<footer>
+Built using <a href="https://python.org">Python</a>
+and <a href="https://jinja.palletsprojects.com">Jinja</a>
+with colors from 
+<a href="https://onmessage.nd.edu/university-branding/colors/">Notre Dame</a>, 
+<a href="https://spreadsheet.dev/how-to-get-the-hexadecimal-codes-of-colors-in-google-sheets">Google Docs</a>, and 
+<a href="https://nordtheme.com">Nord Theme</a>,
+and icons from <a href="https://pictogrammers.com/library/mdi/">Material Design Icons</a>.</footer>
+</body>
+</html>
