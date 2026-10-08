@@ -1,0 +1,276 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<!-- Favicon -->
+<link rel="icon" type="image/png" sizes="32x32" href="static/ico/favicon-32x32.png">
+<link rel="icon" type="image/png" sizes="16x16" href="static/ico/favicon-16x16.png">
+<link rel="manifest" href="static/ico/site.webmanifest">
+<!-- Stylesheets -->
+<link rel="stylesheet" href="static/css/domer.css">
+<title>Notes 19: Signals</title>
+</head>
+<body>
+<header>
+<a class="logo" href="notes19.html">
+    <h1>Notes 19: Signals</h1>
+</a>
+<nav>
+    <ul>
+        <li><a href="index.html"><h4>Home</h4></a></li>
+        </ul>
+</nav></header>
+<main>
+<h2 id="review-process-life-cycle">Review: <span class="gold">Process Life Cycle</span><a class="headerlink" href="#review-process-life-cycle" title="Permanent link">&para;</a></h2>
+<ol>
+<li>
+<div class="flex-col" markdown="1">
+<p>What is a <strong class="success">process</strong>?</p>
+<blockquote>
+<p>A <strong class="success">process</strong> is a <strong>loaded</strong> instance of
+a program; it is a unit of <strong class="warning">allocation</strong>
+(<em>resources</em>, <em>privileges</em>, etc.).</p>
+</blockquote>
+</li>
+</ol>
+<div class="centered">
+
+<img src="static/img/slides18-process-life-cycle.svg" class="transparent responsive">
+
+</div>
+
+<h2 id="example-safe_systempy">Example: <a href="https://github.com/nd-cse-20589-fa26/examples/blob/master/slides18/safesystem.py">safe_system.py</a><a class="headerlink" href="#example-safe_systempy" title="Permanent link">&para;</a></h2>
+<blockquote>
+<p>Write a <code>SafeSystem</code> object that implements the <strong
+class="warning">context manager protocol</strong> to create a child <strong
+class="success">process</strong> that executes the given command while the
+parent <strong class="success">process</strong> runs.</p>
+</blockquote>
+<div class="codehilite"><pre><span></span><code><span class="sd">&#39;&#39;&#39; Version 1 &#39;&#39;&#39;</span>
+<span class="n">cmd</span> <span class="o">=</span> <span class="p">[</span><span class="s1">&#39;ls&#39;</span><span class="p">,</span> <span class="s1">&#39;-l&#39;</span><span class="p">]</span>
+<span class="n">pid</span> <span class="o">=</span> <span class="n">fork</span><span class="p">()</span>        <span class="c1"># Review: allocate child process</span>
+
+<span class="k">if</span> <span class="n">pid</span> <span class="o">==</span> <span class="mi">0</span><span class="p">:</span>        <span class="c1"># Review: child</span>
+    <span class="k">try</span><span class="p">:</span>
+        <span class="c1"># Review: change identity</span>
+        <span class="n">os</span><span class="o">.</span><span class="n">execvp</span><span class="p">(</span><span class="n">cmd</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span> <span class="n">cmd</span><span class="p">)</span>
+    <span class="k">except</span> <span class="ne">OSError</span><span class="p">:</span>
+        <span class="c1"># Review: terminate existing process</span>
+        <span class="n">sys</span><span class="o">.</span><span class="n">exit</span><span class="p">(</span><span class="mi">1</span><span class="p">)</span>
+<span class="k">else</span><span class="p">:</span>               <span class="c1"># Review: parent</span>
+    <span class="c1"># Review: deallocate child process</span>
+    <span class="n">_</span><span class="p">,</span> <span class="n">status</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">waitpid</span><span class="p">(</span><span class="n">pid</span><span class="p">,</span> <span class="mi">0</span><span class="p">)</span>
+
+<span class="c1"># Review: status bitmask</span>
+<span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s1">&#39;</span><span class="si">{</span><span class="n">pid</span><span class="si">}</span><span class="s1"> </span><span class="si">{</span><span class="n">os</span><span class="o">.</span><span class="n">WEXITSTATUS</span><span class="p">(</span><span class="n">status</span><span class="p">)</span><span class="si">}</span><span class="s1">&#39;</span><span class="p">)</span>
+</code></pre></div>
+
+<div class="alert warning-bg">
+<ul>
+<li>What happens if child <a href="https://docs.python.org/3/library/sys.html#sys.exit">exits</a>?</li>
+<li>What happens if we don't <a href="https://docs.python.org/3/library/os.html#os.wait">wait</a> at all?</li>
+<li>How could <a href="https://docs.python.org/3/library/os.html#os.execvp">exec</a> or <a href="https://docs.python.org/3/library/os.html#os.fork">fork</a> fail?</li>
+</ul>
+</div>
+<h2 id="signals-event-based-programming">Signals: <span class="gold">Event-based Programming</span><a class="headerlink" href="#signals-event-based-programming" title="Permanent link">&para;</a></h2>
+<p><strong class="special">Signals</strong> are a means of notifying a
+<strong class="success">process</strong> of an
+<strong>event</strong>.</p>
+<div class="flex-row">
+<div class="flex-col">
+<ul>
+<li>
+<p>Register interest in <strong>events</strong> (<em>callbacks</em>).</p>
+</li>
+<li>
+<p>When <strong>event</strong> occurs, interrupt current <success>process</process> and
+invoke <success>handler</success>.</p>
+</li>
+<li>
+<p>After <success>handler</success> is executed, resume where we interruped
+<success>process</success>.</p>
+</li>
+<li>
+<p><success>handler</success> should be <strong>short-lived</strong>.</p>
+</li>
+</ul>
+</div>
+<div class="flex-col-25">
+<p><img src="static/img/slides19-event-loop.svg" class="transparent responsive"></p>
+</div>
+</div>
+<h2 id="signals-examples-fork-bomb">Signals: <span class="gold">Examples</span> (<i class="muted">Fork Bomb</i>)<a class="headerlink" href="#signals-examples-fork-bomb" title="Permanent link">&para;</a></h2>
+<div class="codehilite"><pre><span></span><code><span class="ch">#!/usr/bin/env python3</span>
+
+<span class="kn">import</span> <span class="nn">os</span>
+<span class="kn">import</span> <span class="nn">time</span>
+
+<span class="c1"># And away we go</span>
+
+<span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s1">&#39;</span><span class="si">{</span><span class="n">os</span><span class="o">.</span><span class="n">getpid</span><span class="p">()</span><span class="si">}</span><span class="s1"> Spawning children...&#39;</span><span class="p">)</span>
+<span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="mi">10</span><span class="p">):</span>
+    <span class="k">try</span><span class="p">:</span>
+        <span class="n">pid</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">fork</span><span class="p">()</span>
+    <span class="k">except</span> <span class="ne">OSError</span><span class="p">:</span>
+        <span class="k">break</span>
+
+    <span class="c1"># Slow it down</span>
+    <span class="n">time</span><span class="o">.</span><span class="n">sleep</span><span class="p">(</span><span class="mi">1</span><span class="p">)</span>
+</code></pre></div>
+
+<div class="codehilite"><pre><span></span><code><span class="c1"># Watch exponential growth</span>
+$<span class="w"> </span>watch<span class="w"> </span>pstree<span class="w"> </span>-u<span class="w"> </span>pbui
+
+<span class="c1"># View process limits</span>
+$<span class="w"> </span><span class="nb">ulimit</span><span class="w"> </span>-a
+</code></pre></div>
+
+<div class="alert warning-bg">
+<p><strong>Observations</strong>:</p>
+<ul>
+<li>
+<p>With great <strong>power</strong> comes great <strong>responsibility</strong>.</p>
+</li>
+<li>
+<p><strong>Denial of Service</strong>: overload the system with resource allocation requests!</p>
+</li>
+<li>
+<p><strong>Bounded</strong> loop guarantees that we <strong>terminate</strong>... eventually.</p>
+</li>
+</ul>
+</div>
+<div class="alert success-bg">
+<p><strong>Fix</strong>: make sure <strong>child</strong> <a href="https://docs.python.org/3/library/sys.html#sys.exit">exits</a>.</p>
+</div>
+<h2 id="signals-examples-zombies">Signals: <span class="gold">Examples</span> (<i class="muted">Zombies</i>)<a class="headerlink" href="#signals-examples-zombies" title="Permanent link">&para;</a></h2>
+<div class="codehilite"><pre><span></span><code><span class="ch">#!/usr/bin/env python3</span>
+
+<span class="kn">import</span> <span class="nn">os</span>
+<span class="kn">import</span> <span class="nn">signal</span>
+<span class="kn">import</span> <span class="nn">sys</span>
+<span class="kn">import</span> <span class="nn">time</span>
+
+<span class="c1"># And away we go</span>
+
+<span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s1">&#39;Spawning children...&#39;</span><span class="p">)</span>
+<span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="mi">10</span><span class="p">):</span>
+    <span class="k">match</span> <span class="n">pid</span> <span class="o">:=</span> <span class="n">os</span><span class="o">.</span><span class="n">fork</span><span class="p">():</span>
+        <span class="k">case</span> <span class="mi">0</span><span class="p">:</span> <span class="c1"># Child</span>
+            <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s1">&#39;Child process: </span><span class="si">{</span><span class="n">os</span><span class="o">.</span><span class="n">getpid</span><span class="p">()</span><span class="si">}</span><span class="s1">&#39;</span><span class="p">)</span>
+            <span class="n">time</span><span class="o">.</span><span class="n">sleep</span><span class="p">(</span><span class="n">i</span><span class="p">)</span>
+            <span class="n">sys</span><span class="o">.</span><span class="n">exit</span><span class="p">(</span><span class="n">i</span><span class="p">)</span>
+
+<span class="n">time</span><span class="o">.</span><span class="n">sleep</span><span class="p">(</span><span class="mi">30</span><span class="p">)</span>  <span class="c1"># Parent: Sleep and watch &#39;ps ux | grep zombies&#39;</span>
+</code></pre></div>
+
+<div class="alert warning-bg">
+<p><strong>Observations</strong>:</p>
+<ul>
+<li>
+<p>When <strong>child</strong> <a href="https://docs.python.org/3/library/sys.html#sys.exit">exits</a> it becomes a <strong>zombie</strong> (<em>until </em><em>parent</em><em> calls
+<a href="https://docs.python.org/3/library/os.html#os.wait">wait</a></em>).</p>
+</li>
+<li>
+<p>Because <strong>parent</strong> terminates before calling <a href="https://docs.python.org/3/library/os.html#os.wait">wait</a>, the <strong>children</strong> are
+<strong>orphans</strong>!</p>
+</li>
+<li>
+<p><code>init</code> or <code>systemd</code> will adopt any <strong>orphans</strong> to ensure every <strong>zombie</strong>
+is deallocated (ie. <a href="https://docs.python.org/3/library/os.html#os.wait">wait</a>ed upon).</p>
+</li>
+</ul>
+</div>
+<div class="alert success-bg">
+<p><strong>Fix</strong>: <strong>parent</strong> should call <a href="https://docs.python.org/3/library/os.html#os.wait">wait</a> on all <strong>children</strong>.</p>
+</div>
+<div class="codehilite"><pre><span></span><code><span class="c1"># Fix 1: Wait all</span>
+
+<span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s1">&#39;Waiting for children...&#39;</span><span class="p">)</span>
+<span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="mi">10</span><span class="p">):</span>
+    <span class="n">pid</span><span class="p">,</span> <span class="n">status</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">wait</span><span class="p">()</span>
+    <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s1">&#39;Child </span><span class="si">{</span><span class="n">pid</span><span class="si">}</span><span class="s1"> exited with </span><span class="si">{</span><span class="n">os</span><span class="o">.</span><span class="n">WEXITSTATUS</span><span class="p">(</span><span class="n">status</span><span class="p">)</span><span class="si">}</span><span class="s1">&#39;</span><span class="p">)</span>
+</code></pre></div>
+
+<div class="alert success-bg">
+<p><strong>Observations</strong>:</p>
+<ul>
+<li>
+<p>Because <a href="https://docs.python.org/3/library/os.html#os.wait">wait</a> is a <strong class="warning">system call</strong>, the
+<strong>parent</strong> is <strong>blocked</strong> until a <strong>child</strong> calls [exit].</p>
+</li>
+<li>
+<p>What if we want to allow the <strong>parent</strong> to do something else until the
+<strong>child</strong> actually <a href="https://docs.python.org/3/library/sys.html#sys.exit">exits</a>?</p>
+</li>
+</ul>
+</div>
+<div class="codehilite"><pre><span></span><code><span class="c1"># Fix 2: Wait after signal</span>
+
+<span class="n">WaitedChildren</span> <span class="o">=</span> <span class="p">[]</span>
+
+<span class="k">def</span> <span class="nf">handle_sigchld</span><span class="p">(</span><span class="n">signum</span><span class="p">,</span> <span class="n">frame</span><span class="p">):</span>
+    <span class="n">pid</span><span class="p">,</span> <span class="n">status</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">wait</span><span class="p">()</span>
+    <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s1">&#39;Child </span><span class="si">{</span><span class="n">pid</span><span class="si">}</span><span class="s1"> exited with </span><span class="si">{</span><span class="n">os</span><span class="o">.</span><span class="n">WEXITSTATUS</span><span class="p">(</span><span class="n">status</span><span class="p">)</span><span class="si">}</span><span class="s1">&#39;</span><span class="p">)</span>
+    <span class="n">WaitedChildren</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">pid</span><span class="p">)</span>
+
+<span class="nb">print</span><span class="p">()</span>
+<span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s1">&#39;Registering handler...&#39;</span><span class="p">)</span>
+<span class="n">signal</span><span class="o">.</span><span class="n">signal</span><span class="p">(</span><span class="n">signal</span><span class="o">.</span><span class="n">SIGCHLD</span><span class="p">,</span> <span class="n">handle_sigchld</span><span class="p">)</span>
+
+<span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s1">&#39;Spawning children...&#39;</span><span class="p">)</span>
+<span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="mi">10</span><span class="p">):</span>
+    <span class="k">match</span> <span class="n">pid</span> <span class="o">:=</span> <span class="n">os</span><span class="o">.</span><span class="n">fork</span><span class="p">():</span>
+        <span class="k">case</span> <span class="mi">0</span><span class="p">:</span> <span class="c1"># Child</span>
+            <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s1">&#39;Child process: </span><span class="si">{</span><span class="n">os</span><span class="o">.</span><span class="n">getpid</span><span class="p">()</span><span class="si">}</span><span class="s1">&#39;</span><span class="p">)</span>
+            <span class="n">time</span><span class="o">.</span><span class="n">sleep</span><span class="p">(</span><span class="n">i</span><span class="p">)</span>
+            <span class="n">sys</span><span class="o">.</span><span class="n">exit</span><span class="p">(</span><span class="n">i</span><span class="p">)</span>
+
+<span class="k">while</span> <span class="nb">len</span><span class="p">(</span><span class="n">WaitedChildren</span><span class="p">)</span> <span class="o">&lt;</span> <span class="mi">10</span><span class="p">:</span>
+    <span class="nb">print</span><span class="p">(</span><span class="s1">&#39;Waiting...&#39;</span><span class="p">)</span>
+    <span class="n">time</span><span class="o">.</span><span class="n">sleep</span><span class="p">(</span><span class="mi">1</span><span class="p">)</span>
+</code></pre></div>
+
+<h2 id="signals-examples-alarm">Signals: <span class="gold">Examples</span> (<i class="muted">Alarm</i>)<a class="headerlink" href="#signals-examples-alarm" title="Permanent link">&para;</a></h2>
+<div class="codehilite"><pre><span></span><code><span class="ch">#!/usr/bin/env python3</span>
+
+<span class="kn">import</span> <span class="nn">os</span>
+<span class="kn">import</span> <span class="nn">signal</span>
+<span class="kn">import</span> <span class="nn">sys</span>
+<span class="kn">import</span> <span class="nn">time</span>
+
+<span class="k">def</span> <span class="nf">handle_sigalrm</span><span class="p">(</span><span class="n">signum</span><span class="p">,</span> <span class="n">frame</span><span class="p">):</span>
+    <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s1">&#39;Alarm triggered... Killing </span><span class="si">{</span><span class="n">pid</span><span class="si">}</span><span class="s1">!&#39;</span><span class="p">)</span>
+    <span class="n">os</span><span class="o">.</span><span class="n">kill</span><span class="p">(</span><span class="n">pid</span><span class="p">,</span> <span class="n">signal</span><span class="o">.</span><span class="n">SIGKILL</span><span class="p">)</span>    <span class="c1"># Discuss: send signal</span>
+
+    <span class="n">_</span><span class="p">,</span> <span class="n">status</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">wait</span><span class="p">()</span>           <span class="c1"># Discuss: exit status</span>
+    <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s1">&#39;Child </span><span class="si">{</span><span class="n">pid</span><span class="si">}</span><span class="s1"> exited with </span><span class="si">{</span><span class="n">os</span><span class="o">.</span><span class="n">WTERMSIG</span><span class="p">(</span><span class="n">status</span><span class="p">)</span><span class="si">}</span><span class="s1">&#39;</span><span class="p">)</span>
+    <span class="n">sys</span><span class="o">.</span><span class="n">exit</span><span class="p">(</span><span class="mi">0</span><span class="p">)</span>
+
+<span class="k">match</span> <span class="n">pid</span> <span class="o">:=</span> <span class="n">os</span><span class="o">.</span><span class="n">fork</span><span class="p">():</span>
+    <span class="k">case</span> <span class="mi">0</span><span class="p">:</span> <span class="c1"># Child</span>
+        <span class="k">while</span> <span class="kc">True</span><span class="p">:</span>
+            <span class="nb">print</span><span class="p">(</span><span class="s1">&#39;Hahahaha&#39;</span><span class="p">)</span>
+            <span class="n">time</span><span class="o">.</span><span class="n">sleep</span><span class="p">(</span><span class="mi">1</span><span class="p">)</span>
+
+    <span class="k">case</span><span class="w"> </span><span class="k">_</span><span class="p">:</span> <span class="c1"># Parent</span>
+        <span class="c1"># Discuss: register handler</span>
+        <span class="n">signal</span><span class="o">.</span><span class="n">signal</span><span class="p">(</span><span class="n">signal</span><span class="o">.</span><span class="n">SIGALRM</span><span class="p">,</span> <span class="n">handle_sigalrm</span><span class="p">)</span>
+        <span class="c1"># Discuss: set alarm</span>
+        <span class="n">signal</span><span class="o">.</span><span class="n">alarm</span><span class="p">(</span><span class="mi">5</span><span class="p">)</span>
+
+        <span class="k">while</span> <span class="kc">True</span><span class="p">:</span>
+            <span class="nb">print</span><span class="p">(</span><span class="s1">&#39;Waiting...&#39;</span><span class="p">)</span>
+            <span class="n">time</span><span class="o">.</span><span class="n">sleep</span><span class="p">(</span><span class="mi">1</span><span class="p">)</span>
+</code></pre></div>
+</main>
+<footer>
+Built using <a href="https://python.org">Python</a>
+and <a href="https://jinja.palletsprojects.com">Jinja</a>
+with colors from 
+<a href="https://onmessage.nd.edu/university-branding/colors/">Notre Dame</a>, 
+<a href="https://spreadsheet.dev/how-to-get-the-hexadecimal-codes-of-colors-in-google-sheets">Google Docs</a>, and 
+<a href="https://nordtheme.com">Nord Theme</a>,
+and icons from <a href="https://pictogrammers.com/library/mdi/">Material Design Icons</a>.</footer>
+</body>
+</html>
