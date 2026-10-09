@@ -1,0 +1,519 @@
+title:      Checklist 02
+body:       |
+
+    ## Overview
+
+    Here is a general outline of the **key concepts** (*arranged by topic*)
+    that you should know for **Exam 02**.
+
+    The exam will have the following format:
+
+    1. **Shell**: Identify ways to perform certain tasks using **networking**
+    commands, **filters**, or **pipelines** (*multiple-choice*,
+    *fill-in-the-blank*).
+
+    2. **Python - Sorting**: Debug, fix, test, and evaluate a **Python** script
+    that involves **sorting** data in **JSON** format.  (*multiple-choice*,
+    *fill-in-the-blank*).
+
+    3. **Python - Functional Programming**: Debug, fix, test, and evaluate a
+    **Python** script that involves the **functional programming**,
+    **iterators**, **generators**, and the **iterator protocol**.
+    (*multiple-choice*, *fill-in-the-blank*).
+
+    4. **Python - Object-Oriented Programming**: Debug, fix, test, and evaluate
+    a **Python** script that involves **object-oriented programming**,
+    **processes**, and the **context manager protocol**.  (*multiple-choice*,
+    *fill-in-the-blank*).
+
+    5. **Python - Translations**: Convert **pipelines** to **Python** code
+    (*coding on the computer*).
+
+    Parts `1` through `4` are to be done first on **paper**. Once that portion
+    is completed and submitted, you will do part `5` on your own computer and
+    submit code to your **assignments** repository.
+
+    <div class="alert special-bg" markdown="1">
+
+    **Note**: Using **signals** will not be on **Exam 02**.
+
+    </div>
+
+    <div class="alert warning-bg" markdown="1">
+
+    ### <i class="icon icon-medium">{{ "check-all" | embed_icon }}</i> Representative, But Not Exhaustive
+
+    This checklist is meant to be representative, rather than exhaustive (ie.
+    there may be questions that show up on the exam that are not shown below).
+
+    </div>
+
+    [git]: https://git-scm.com/
+    [lists]: https://docs.python.org/3/library/stdtypes.html#list
+    [dicts]: https://docs.python.org/3/library/stdtypes.html#dict
+    [list]: https://docs.python.org/3/library/stdtypes.html#list
+    [dict]: https://docs.python.org/3/library/stdtypes.html#dict
+    [str]: https://docs.python.org/3/library/stdtypes.html#str
+    [int]: https://docs.python.org/3/builtins/functions.html#int
+    [requests]: https://requests.readthedocs.io/
+    [csv]: https://docs.python.org/3/library/csv.html
+    [json]: https://docs.python.org/3/library/json.html
+
+    ## Logistics
+
+    **Exam 02** will take place during our normal lecture session on
+    **Wednesday, October 14** from **11:30 AM - 12:20 PM** in **303 Cushing
+    Hall**.
+
+    As noted above, the first portion of the exam with be on **paper**, while
+    the remaining component with require **coding** and submitting work to your
+    **assignments** [GitHub] repository.
+
+    During the **paper** portion of the exam, students will only be allowed to
+    use **one cheatsheet**.  This **paper** component of the exam must be
+    submitted before students can access the **coding** section.
+
+    For the **coding** portion, students will use their own computer, and thus
+    are permitted access to any material in their textbooks, notes,
+    assignments, and the Internet.
+
+    <div class="alert danger-bg"  markdown="1">
+
+    ### <i class="icon icon-medium">{{ "alert" | embed_icon }}</i> Honor Code Violations
+
+    Although students are allowed to use their computers and the Internet
+    during the **coding** portion of the exam, students **may not communicate
+    with others** or **solicit answers from others**.  **Nor may they use AI
+    tools** such as **ChatGPT** or **Co-Pilot** during the exam.  Students
+    caught sharing solutions or violating any portion of the honor code will
+    **receive a zero on the exam**.
+
+    Furthermore, students are not allowed to consult, copy, or share material
+    from previous sections of this course.
+
+    </div>
+
+    [GitHub]: https://github.com
+
+    ## Shell
+
+    ### Networking
+
+    #### Concepts
+
+    -   <div class="flex-col" markdown="1">
+
+        What is an **IP address**? How is a **domain name** related to it?
+
+        *You should know the commands to lookup this information.*
+
+    -   <div class="flex-col" markdown="1">
+
+        What is a network **port**?
+
+        *You should know how to scan for ports and how to connect to a machine
+        at a specific a domain or address and port number.*
+
+    -   <div class="flex-col" markdown="1">
+
+        What is **bandwidth** and **latency**?
+
+        *You should know what each measures and what programs we would use to
+        perform these measurements.*
+
+    #### Commands
+
+    <table class="bordered">
+    <thead>
+      <th>Command</th>
+      <th>Description</th>
+    </thead>
+    <tbody>
+      <tr class="info-bg">
+        <td class="centered"><b>ip</b></td>
+        <td>List the IP addresses of the current machine.</td>
+      </tr>
+      <tr class="success-bg">
+        <td class="centered"><b>host</b></td>
+        <td>Lookup IP addresses corresponding to domain.</td>
+      </tr>
+      <tr class="info-bg">
+        <td class="centered"><b>nmap</b></td>
+        <td>Scan remote machine for open ports.</td>
+      </tr>
+      <tr class="success-bg">
+        <td class="centered"><b>nc</b></td>
+        <td>General purpose tool to communicate with network services.</td>
+      </tr>
+      <tr class="info-bg">
+        <td class="centered"><b>curl</b></td>
+        <td>Perform a HTTP request.</td>
+      </tr>
+      <tr class="success-bg">
+        <td class="centered"><b>ping</b></td>
+        <td>Measure delay from host to remote machine.</td>
+      </tr>
+    </tbody>
+    </table>
+
+    <div class="alert success-bg" markdown="1">
+
+    ### <i class="icon icon-medium">{{ "help" | embed_icon }}</i> Sample Questions
+
+    1.  <div class="flex-col" markdown="1">
+
+        Which of the following **commands** can be used to measure
+        **bandwidth**?
+
+        - `host URL`
+        - `ping URL`
+        - `nmap URL`
+        - `curl URL`
+
+    2.  <div class="flex-col" markdown="1">
+
+        Run the `ip addr` command on a **student machine**.
+
+        - What is the **localhost** **IP address**?
+        - What is the **private** **IP address** (*if any*)?
+        - What is the **public** **IP address** (*if any*)?
+
+    </div>
+
+    ### Filters and Pipelines
+
+    #### Concepts
+
+    1.  <div class="flex-col" markdown="1">
+
+        What are the **three tenets** of the **Unix Philosophy**?
+
+        *You should be familiar with these tenets and what following them
+        enables when building or using software systems*.
+
+    2.  <div class="flex-col" markdown="1">
+
+        What are **filters**?
+
+        *You should be familiar with the general idea of a filter and know how
+        to use specific tools for certain tasks.*
+
+    3.  <div class="flex-col" markdown="1">
+
+        What are **pipelines**?
+
+        *You should be comfortable with combining filters and other commands
+        into pipelines to solve problems.*
+
+    #### Commands
+
+    <table class="bordered">
+    <thead>
+      <th>Command</th>
+      <th>Description</th>
+    </thead>
+    <tbody>
+      <tr class="info-bg">
+        <td class="centered"><b>cut / awk</b></td>
+        <td>Extract field or characters</td>
+      </tr>
+      <tr class="success-bg">
+        <td class="centered"><b>sort</b></td>
+        <td>Order text.</td>
+      </tr>
+      <tr class="info-bg">
+        <td class="centered"><b>uniq</b></td>
+        <td>Remove duplicates.</td>
+      </tr>
+      <tr class="success-bg">
+        <td class="centered"><b>tr</b></td>
+        <td>Translate from one set of characters to another.</td>
+      </tr>
+      <tr class="info-bg">
+        <td class="centered"><b>grep</b></td>
+        <td>Search text using regular expression.</td>
+      </tr>
+      <tr class="success-bg">
+        <td class="centered"><b>sed</b></td>
+        <td>Search and replace text using regular expressions.</td>
+      </tr>
+      <tr class="info-bg">
+        <td class="centered"><b>head</b></td>
+        <td>Display first few lines of input.</td>
+      </tr>
+      <tr class="success-bg">
+        <td class="centered"><b>head</b></td>
+        <td>Display last few lines of input.</td>
+      </tr>
+    </tbody>
+    </table>
+
+    <div class="alert success-bg" markdown="1">
+
+    ### <i class="icon icon-medium">{{ "help" | embed_icon }}</i> Sample Questions
+
+    1.  <div class="flex-col" markdown="1">
+
+        Given the following **text** in `data.txt`:
+
+            Leonardo:blue:katana
+            Donatello:purple:bo
+            Raphael:red:sai
+            Michelangelo:orange:nunchucks
+
+        Write a **pipeline** to extract just the **colors**.
+
+    2.  <div class="flex-col" markdown="1">
+
+        Given the following **Python** code:
+
+            :::python
+            for line in sorted(set(sys.stdin)):
+                print(line)
+
+        Write a **pipeline** that accomplishes the same task.
+
+    </div>
+
+    ## Python
+
+    ### Sorting
+
+    #### Concepts
+
+    1.  <div class="flex-col" markdown="1">
+
+        How do we **sort** sequences in **Python**?
+
+        - In-place?
+        - In **ascending** vs **descending** order?
+        - With a custom `key` function?
+        - With multiple factors?
+
+    2.  <div class="flex-col" markdown="1">
+
+        How do we **fetch** data using **HTTP** in **Python**?
+
+        - Extract **text** contents.
+        - Extract **JSON** contents.
+
+    #### Functions
+
+    <table class="bordered">
+    <thead>
+      <th>Function</th>
+      <th>Description</th>
+    </thead>
+    <tbody>
+      <tr class="info-bg">
+        <td class="centered"><code>sorted(seq)</code></td>
+        <td>Order sequence.</td>
+      </tr>
+      <tr class="success-bg">
+        <td class="centered"><code>requests.get(url)</code></td>
+        <td>Fetch data using HTTP.</td>
+      </tr>
+    </tbody>
+    </table>
+
+    <div class="alert success-bg" markdown="1">
+
+    ### <i class="icon icon-medium">{{ "help" | embed_icon }}</i> Sample Questions
+
+    1. Fetch the [Catalog JSON Data], sort it by **type** (*highest priority*),
+    **name**, and **owner** (*lowest priority*), and display the results.
+
+    2. Using the same [Catalog JSON Data], sort the services by **version
+    number** in **descending order** and display the results.
+
+    </div>
+
+    [Catalog JSON Data]: https://catalog.cse.nd.edu/query.json
+
+    ### Functional Programming
+
+    #### Concepts
+
+    1.  <div class="flex-col" markdown="1">
+
+        What is the difference between **imperative** and **functional programming**?
+
+        - What are some benefits of **functional programming**?
+
+        - How is **functional programming** related to the **Unix Philosophy**?
+
+    2. How do we use `map`, `filter`, and `lambda` to do **functional
+    programming** in **Python**?
+
+    3. How do we use **list comprehensions** in **Python**?
+
+    4. What is an **iterator** and how is it different from a **list**?
+
+    5.  <div class="flex-col" markdown="1">
+
+        What is a **generator** and how it is different from a **list**?
+
+        - What does the `yield` command do?
+
+        - Why would we use a **generator** over a **list** (*and vice versa*)?
+
+        - How do we convert a **list comprehension** to a **generator expression**?
+
+    6. How do we implement the **iterator protocol**?
+
+    #### Functions
+
+    <table class="bordered">
+    <thead>
+      <th>Function</th>
+      <th>Description</th>
+    </thead>
+    <tbody>
+      <tr class="info-bg">
+        <td class="centered"><code>map(func, seq)</code></td>
+        <td>Apply function to each element in sequence.</td>
+      </tr>
+      <tr class="success-bg">
+        <td class="centered"><code>filter(func, seq)</code></td>
+        <td>Apply function to each element in sequence and keep ones that return True.</td>
+      </tr>
+      <tr class="info-bg">
+        <td class="centered"><code>iter(iterable)</code></td>
+        <td>Gets iterator from iterable object.</td>
+      </tr>
+      <tr class="info-bg">
+        <td class="centered"><code>next(iterator)</code></td>
+        <td>Gets next element from iterator.</td>
+      </tr>
+    </tbody>
+    </table>
+
+    <div class="alert success-bg" markdown="1">
+
+    ### <i class="icon icon-medium">{{ "help" | embed_icon }}</i> Sample Questions
+
+    Translate the following **imperative** code:
+
+        :::python
+        def find_squares(start, end):
+            squares = []
+            for number in range(start, end):
+                if math.sqrt(number) == int(math.sqrt(number)):
+                    squares.append(number)
+            return squares
+
+    1. To using `map`, `filter`, and `lambda`.
+    2. To using a **list comprehension**.
+    3. To using a **generator** with `yield`.
+    4. To using a **generator expression**.
+    5. To using an **object** that implements the **iterator protocol**.
+
+    </div>
+
+    ### Object-oriented Programming
+
+    1.  <div class="flex-col" markdown="1">
+
+        What are the **four principles** of the **Object-oriented Programming**?
+
+          - How do we create a `class` with a **constructor**?
+          - How do we create a `dataclass`?
+          - How do we define **attributes**?
+          - How do we define **methods**?
+          - How do we define **properties**?
+          - How do we define **dunder methods**?
+
+    2.  How do we implement the **context manger protocol**?
+
+    3.  <div class="flex-col" markdown="1">
+
+        What is a **process**?
+
+        - What attributes or components does it have?
+
+        - What **system calls** can you do with them?
+
+    4.  <div class="flex-col" markdown="1">
+
+        What happens during the life cycle of a typical **process**?
+
+        - After a `fork`, how does a **process** determine if they are the **child** or **parent**?
+
+        - What happens when a **process** performs `exec`?
+
+        - Why is it good practice to perform a `wait`?
+
+        - What is the purpose of `exit`?
+
+    5.  <div class="flex-col" markdown="1">
+
+        How do we avoid a **fork bomb**?
+
+        - How do we reap **zombies**?
+
+        - Why would we want to prevent these situations?
+
+    <div class="alert success-bg" markdown="1">
+
+    ### <i class="icon icon-medium">{{ "help" | embed_icon }}</i> Sample Questions
+
+    1.  <div class="flex-col" markdown="1">
+
+        Given the following **Python** code:
+
+            :::python
+            def curl_all(urls: list[str]):
+                ''' Perform curl on each url and print text contents concurrently. '''
+                for url in urls:
+                    command = ['curl', '-sL', url]
+                    if (pid := os.fork()) == 0:
+                        os.execvp(command[0], command)
+
+            curl_all(sys.argv[1:])
+
+        Which of the following statements are true (*choose all that apply*)?
+
+        - `os.fork` will always succeed.
+        - `os.execvp` will always succeed.
+        - This program could behave like a **fork bomb**.
+        - This program will create **orphans**.
+        - This program will create **zombies**.
+
+    2.  <div class="flex-col" markdown="1">
+
+        Re-write the `curl_all` function using
+        `concurrent.futures.ProcessPoolExecutor` and `requests` rather than
+        `os.fork` and `curl` to accomplish the same task.
+
+    </div>
+
+    ### Translations
+
+    <div class="alert success-bg" markdown="1">
+
+    ### <i class="icon icon-medium">{{ "help" | embed_icon }}</i> Sample Questions
+
+    Given the following **pipelines**, write **Python** code that accomplishes
+    the same task.
+
+    <div class="alert danger-bg" markdown="1">
+
+    **Note**: *No credit will be given for simply calling `os.system` on the
+    given **pipeline**. You may use `os.popen` to read the output of the
+    **first command**, but you may not use a pipeline*.
+
+    </div>
+
+    1. `cat /etc/passwd | cut -d : -f 1 | grep d$ | wc -l`
+
+    2. `cat /etc/passwd | cut -d : -f 3 | grep -E '^[0-9]{2}$' | sort | uniq`
+
+    3. `curl -sL http://yld.me/raw/lmz | cut -d , -f 1 | grep -Eo '^[^jfs].*'`
+
+    4. `curl -sL http://yld.me/raw/lmz | cut -d , -f 2 | grep -Eo '^B.*' | sort`
+
+    5. `who | sed -rn 's|.*\((.*)\).*|\1|p' | sort | uniq`
+
+    6. `ls -l /etc | awk '{print $2}' | sort | uniq -c`
+
+    </div>
