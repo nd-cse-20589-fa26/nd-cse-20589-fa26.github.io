@@ -1,0 +1,547 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<!-- Favicon -->
+<link rel="icon" type="image/png" sizes="32x32" href="static/ico/favicon-32x32.png">
+<link rel="icon" type="image/png" sizes="16x16" href="static/ico/favicon-16x16.png">
+<link rel="manifest" href="static/ico/site.webmanifest">
+<!-- Stylesheets -->
+<link rel="stylesheet" href="static/css/domer.css">
+<title>Checklist 02</title>
+</head>
+<body>
+<header>
+<a class="logo" href="checklist02.html">
+    <h1>Checklist 02</h1>
+</a>
+<nav>
+    <ul>
+        <li><a href="index.html"><h4>Home</h4></a></li>
+        </ul>
+</nav></header>
+<main>
+<h2 id="overview">Overview<a class="headerlink" href="#overview" title="Permanent link">&para;</a></h2>
+<p>Here is a general outline of the <strong>key concepts</strong> (<em>arranged by topic</em>)
+that you should know for <strong>Exam 02</strong>.</p>
+<p>The exam will have the following format:</p>
+<ol>
+<li>
+<p><strong>Shell</strong>: Identify ways to perform certain tasks using <strong>networking</strong>
+commands, <strong>filters</strong>, or <strong>pipelines</strong> (<em>multiple-choice</em>,
+<em>fill-in-the-blank</em>).</p>
+</li>
+<li>
+<p><strong>Python - Sorting</strong>: Debug, fix, test, and evaluate a <strong>Python</strong> script
+that involves <strong>sorting</strong> data in <strong>JSON</strong> format.  (<em>multiple-choice</em>,
+<em>fill-in-the-blank</em>).</p>
+</li>
+<li>
+<p><strong>Python - Functional Programming</strong>: Debug, fix, test, and evaluate a
+<strong>Python</strong> script that involves the <strong>functional programming</strong>,
+<strong>iterators</strong>, <strong>generators</strong>, and the <strong>iterator protocol</strong>.
+(<em>multiple-choice</em>, <em>fill-in-the-blank</em>).</p>
+</li>
+<li>
+<p><strong>Python - Object-Oriented Programming</strong>: Debug, fix, test, and evaluate
+a <strong>Python</strong> script that involves <strong>object-oriented programming</strong>,
+<strong>processes</strong>, and the <strong>context manager protocol</strong>.  (<em>multiple-choice</em>,
+<em>fill-in-the-blank</em>).</p>
+</li>
+<li>
+<p><strong>Python - Translations</strong>: Convert <strong>pipelines</strong> to <strong>Python</strong> code
+(<em>coding on the computer</em>).</p>
+</li>
+</ol>
+<p>Parts <code>1</code> through <code>4</code> are to be done first on <strong>paper</strong>. Once that portion
+is completed and submitted, you will do part <code>5</code> on your own computer and
+submit code to your <strong>assignments</strong> repository.</p>
+<div class="alert special-bg">
+<p><strong>Note</strong>: Using <strong>signals</strong> will not be on <strong>Exam 02</strong>.</p>
+</div>
+<div class="alert warning-bg">
+<h3 id="check-all-embed_icon-representative-but-not-exhaustive"><i class="icon icon-medium"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><title>check-all</title><path d="M0.41,13.41L6,19L7.41,17.58L1.83,12M22.24,5.58L11.66,16.17L7.5,12L6.07,13.41L11.66,19L23.66,7M18,7L16.59,5.58L10.24,11.93L11.66,13.34L18,7Z" /></svg>
+</i> Representative, But Not Exhaustive<a class="headerlink" href="#check-all-embed_icon-representative-but-not-exhaustive" title="Permanent link">&para;</a></h3>
+<p>This checklist is meant to be representative, rather than exhaustive (ie.
+there may be questions that show up on the exam that are not shown below).</p>
+</div>
+<h2 id="logistics">Logistics<a class="headerlink" href="#logistics" title="Permanent link">&para;</a></h2>
+<p><strong>Exam 02</strong> will take place during our normal lecture session on
+<strong>Wednesday, October 14</strong> from <strong>11:30 AM - 12:20 PM</strong> in <strong>303 Cushing
+Hall</strong>.</p>
+<p>As noted above, the first portion of the exam with be on <strong>paper</strong>, while
+the remaining component with require <strong>coding</strong> and submitting work to your
+<strong>assignments</strong> <a href="https://github.com">GitHub</a> repository.</p>
+<p>During the <strong>paper</strong> portion of the exam, students will only be allowed to
+use <strong>one cheatsheet</strong>.  This <strong>paper</strong> component of the exam must be
+submitted before students can access the <strong>coding</strong> section.</p>
+<p>For the <strong>coding</strong> portion, students will use their own computer, and thus
+are permitted access to any material in their textbooks, notes,
+assignments, and the Internet.</p>
+<div class="alert danger-bg">
+<h3 id="alert-embed_icon-honor-code-violations"><i class="icon icon-medium"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><title>alert</title><path d="M13 14H11V9H13M13 18H11V16H13M1 21H23L12 2L1 21Z" /></svg>
+</i> Honor Code Violations<a class="headerlink" href="#alert-embed_icon-honor-code-violations" title="Permanent link">&para;</a></h3>
+<p>Although students are allowed to use their computers and the Internet
+during the <strong>coding</strong> portion of the exam, students <strong>may not communicate
+with others</strong> or <strong>solicit answers from others</strong>.  <strong>Nor may they use AI
+tools</strong> such as <strong>ChatGPT</strong> or <strong>Co-Pilot</strong> during the exam.  Students
+caught sharing solutions or violating any portion of the honor code will
+<strong>receive a zero on the exam</strong>.</p>
+<p>Furthermore, students are not allowed to consult, copy, or share material
+from previous sections of this course.</p>
+</div>
+<h2 id="shell">Shell<a class="headerlink" href="#shell" title="Permanent link">&para;</a></h2>
+<h3 id="networking">Networking<a class="headerlink" href="#networking" title="Permanent link">&para;</a></h3>
+<h4 id="concepts">Concepts<a class="headerlink" href="#concepts" title="Permanent link">&para;</a></h4>
+<ul>
+<li>
+<div class="flex-col" markdown="1">
+<p>What is an <strong>IP address</strong>? How is a <strong>domain name</strong> related to it?</p>
+<p><em>You should know the commands to lookup this information.</em></p>
+</li>
+<li>
+<div class="flex-col" markdown="1">
+<p>What is a network <strong>port</strong>?</p>
+<p><em>You should know how to scan for ports and how to connect to a machine
+at a specific a domain or address and port number.</em></p>
+</li>
+<li>
+<div class="flex-col" markdown="1">
+<p>What is <strong>bandwidth</strong> and <strong>latency</strong>?</p>
+<p><em>You should know what each measures and what programs we would use to
+perform these measurements.</em></p>
+</li>
+</ul>
+<h4 id="commands">Commands<a class="headerlink" href="#commands" title="Permanent link">&para;</a></h4>
+<table class="bordered">
+<thead>
+  <th>Command</th>
+  <th>Description</th>
+</thead>
+<tbody>
+  <tr class="info-bg">
+    <td class="centered"><b>ip</b></td>
+    <td>List the IP addresses of the current machine.</td>
+  </tr>
+  <tr class="success-bg">
+    <td class="centered"><b>host</b></td>
+    <td>Lookup IP addresses corresponding to domain.</td>
+  </tr>
+  <tr class="info-bg">
+    <td class="centered"><b>nmap</b></td>
+    <td>Scan remote machine for open ports.</td>
+  </tr>
+  <tr class="success-bg">
+    <td class="centered"><b>nc</b></td>
+    <td>General purpose tool to communicate with network services.</td>
+  </tr>
+  <tr class="info-bg">
+    <td class="centered"><b>curl</b></td>
+    <td>Perform a HTTP request.</td>
+  </tr>
+  <tr class="success-bg">
+    <td class="centered"><b>ping</b></td>
+    <td>Measure delay from host to remote machine.</td>
+  </tr>
+</tbody>
+</table>
+
+<div class="alert success-bg">
+<h3 id="help-embed_icon-sample-questions"><i class="icon icon-medium"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><title>help</title><path d="M10,19H13V22H10V19M12,2C17.35,2.22 19.68,7.62 16.5,11.67C15.67,12.67 14.33,13.33 13.67,14.17C13,15 13,16 13,17H10C10,15.33 10,13.92 10.67,12.92C11.33,11.92 12.67,11.33 13.5,10.67C15.92,8.43 15.32,5.26 12,5A3,3 0 0,0 9,8H6A6,6 0 0,1 12,2Z" /></svg>
+</i> Sample Questions<a class="headerlink" href="#help-embed_icon-sample-questions" title="Permanent link">&para;</a></h3>
+<ol>
+<li>
+<div class="flex-col" markdown="1">
+<p>Which of the following <strong>commands</strong> can be used to measure
+<strong>bandwidth</strong>?</p>
+<ul>
+<li><code>host URL</code></li>
+<li><code>ping URL</code></li>
+<li><code>nmap URL</code></li>
+<li><code>curl URL</code></li>
+</ul>
+</li>
+<li>
+<div class="flex-col" markdown="1">
+<p>Run the <code>ip addr</code> command on a <strong>student machine</strong>.</p>
+<ul>
+<li>What is the <strong>localhost</strong> <strong>IP address</strong>?</li>
+<li>What is the <strong>private</strong> <strong>IP address</strong> (<em>if any</em>)?</li>
+<li>What is the <strong>public</strong> <strong>IP address</strong> (<em>if any</em>)?</li>
+</ul>
+</li>
+</ol>
+</div>
+<h3 id="filters-and-pipelines">Filters and Pipelines<a class="headerlink" href="#filters-and-pipelines" title="Permanent link">&para;</a></h3>
+<h4 id="concepts_1">Concepts<a class="headerlink" href="#concepts_1" title="Permanent link">&para;</a></h4>
+<ol>
+<li>
+<div class="flex-col" markdown="1">
+<p>What are the <strong>three tenets</strong> of the <strong>Unix Philosophy</strong>?</p>
+<p><em>You should be familiar with these tenets and what following them
+enables when building or using software systems</em>.</p>
+</li>
+<li>
+<div class="flex-col" markdown="1">
+<p>What are <strong>filters</strong>?</p>
+<p><em>You should be familiar with the general idea of a filter and know how
+to use specific tools for certain tasks.</em></p>
+</li>
+<li>
+<div class="flex-col" markdown="1">
+<p>What are <strong>pipelines</strong>?</p>
+<p><em>You should be comfortable with combining filters and other commands
+into pipelines to solve problems.</em></p>
+</li>
+</ol>
+<h4 id="commands_1">Commands<a class="headerlink" href="#commands_1" title="Permanent link">&para;</a></h4>
+<table class="bordered">
+<thead>
+  <th>Command</th>
+  <th>Description</th>
+</thead>
+<tbody>
+  <tr class="info-bg">
+    <td class="centered"><b>cut / awk</b></td>
+    <td>Extract field or characters</td>
+  </tr>
+  <tr class="success-bg">
+    <td class="centered"><b>sort</b></td>
+    <td>Order text.</td>
+  </tr>
+  <tr class="info-bg">
+    <td class="centered"><b>uniq</b></td>
+    <td>Remove duplicates.</td>
+  </tr>
+  <tr class="success-bg">
+    <td class="centered"><b>tr</b></td>
+    <td>Translate from one set of characters to another.</td>
+  </tr>
+  <tr class="info-bg">
+    <td class="centered"><b>grep</b></td>
+    <td>Search text using regular expression.</td>
+  </tr>
+  <tr class="success-bg">
+    <td class="centered"><b>sed</b></td>
+    <td>Search and replace text using regular expressions.</td>
+  </tr>
+  <tr class="info-bg">
+    <td class="centered"><b>head</b></td>
+    <td>Display first few lines of input.</td>
+  </tr>
+  <tr class="success-bg">
+    <td class="centered"><b>head</b></td>
+    <td>Display last few lines of input.</td>
+  </tr>
+</tbody>
+</table>
+
+<div class="alert success-bg">
+<h3 id="help-embed_icon-sample-questions_1"><i class="icon icon-medium"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><title>help</title><path d="M10,19H13V22H10V19M12,2C17.35,2.22 19.68,7.62 16.5,11.67C15.67,12.67 14.33,13.33 13.67,14.17C13,15 13,16 13,17H10C10,15.33 10,13.92 10.67,12.92C11.33,11.92 12.67,11.33 13.5,10.67C15.92,8.43 15.32,5.26 12,5A3,3 0 0,0 9,8H6A6,6 0 0,1 12,2Z" /></svg>
+</i> Sample Questions<a class="headerlink" href="#help-embed_icon-sample-questions_1" title="Permanent link">&para;</a></h3>
+<ol>
+<li>
+<div class="flex-col" markdown="1">
+<p>Given the following <strong>text</strong> in <code>data.txt</code>:</p>
+<div class="codehilite"><pre><span></span><code><span class="n">Leonardo</span><span class="o">:</span><span class="n">blue</span><span class="o">:</span><span class="n">katana</span>
+<span class="n">Donatello</span><span class="o">:</span><span class="n">purple</span><span class="o">:</span><span class="n">bo</span>
+<span class="n">Raphael</span><span class="o">:</span><span class="n">red</span><span class="o">:</span><span class="n">sai</span>
+<span class="n">Michelangelo</span><span class="o">:</span><span class="n">orange</span><span class="o">:</span><span class="n">nunchucks</span>
+</code></pre></div>
+
+<p>Write a <strong>pipeline</strong> to extract just the <strong>colors</strong>.</p>
+</li>
+<li>
+<div class="flex-col" markdown="1">
+<p>Given the following <strong>Python</strong> code:</p>
+<div class="codehilite"><pre><span></span><code><span class="k">for</span> <span class="n">line</span> <span class="ow">in</span> <span class="nb">sorted</span><span class="p">(</span><span class="nb">set</span><span class="p">(</span><span class="n">sys</span><span class="o">.</span><span class="n">stdin</span><span class="p">)):</span>
+    <span class="nb">print</span><span class="p">(</span><span class="n">line</span><span class="p">)</span>
+</code></pre></div>
+
+<p>Write a <strong>pipeline</strong> that accomplishes the same task.</p>
+</li>
+</ol>
+</div>
+<h2 id="python">Python<a class="headerlink" href="#python" title="Permanent link">&para;</a></h2>
+<h3 id="sorting">Sorting<a class="headerlink" href="#sorting" title="Permanent link">&para;</a></h3>
+<h4 id="concepts_2">Concepts<a class="headerlink" href="#concepts_2" title="Permanent link">&para;</a></h4>
+<ol>
+<li>
+<div class="flex-col" markdown="1">
+<p>How do we <strong>sort</strong> sequences in <strong>Python</strong>?</p>
+<ul>
+<li>In-place?</li>
+<li>In <strong>ascending</strong> vs <strong>descending</strong> order?</li>
+<li>With a custom <code>key</code> function?</li>
+<li>With multiple factors?</li>
+</ul>
+</li>
+<li>
+<div class="flex-col" markdown="1">
+<p>How do we <strong>fetch</strong> data using <strong>HTTP</strong> in <strong>Python</strong>?</p>
+<ul>
+<li>Extract <strong>text</strong> contents.</li>
+<li>Extract <strong>JSON</strong> contents.</li>
+</ul>
+</li>
+</ol>
+<h4 id="functions">Functions<a class="headerlink" href="#functions" title="Permanent link">&para;</a></h4>
+<table class="bordered">
+<thead>
+  <th>Function</th>
+  <th>Description</th>
+</thead>
+<tbody>
+  <tr class="info-bg">
+    <td class="centered"><code>sorted(seq)</code></td>
+    <td>Order sequence.</td>
+  </tr>
+  <tr class="success-bg">
+    <td class="centered"><code>requests.get(url)</code></td>
+    <td>Fetch data using HTTP.</td>
+  </tr>
+</tbody>
+</table>
+
+<div class="alert success-bg">
+<h3 id="help-embed_icon-sample-questions_2"><i class="icon icon-medium"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><title>help</title><path d="M10,19H13V22H10V19M12,2C17.35,2.22 19.68,7.62 16.5,11.67C15.67,12.67 14.33,13.33 13.67,14.17C13,15 13,16 13,17H10C10,15.33 10,13.92 10.67,12.92C11.33,11.92 12.67,11.33 13.5,10.67C15.92,8.43 15.32,5.26 12,5A3,3 0 0,0 9,8H6A6,6 0 0,1 12,2Z" /></svg>
+</i> Sample Questions<a class="headerlink" href="#help-embed_icon-sample-questions_2" title="Permanent link">&para;</a></h3>
+<ol>
+<li>
+<p>Fetch the <a href="https://catalog.cse.nd.edu/query.json">Catalog JSON Data</a>, sort it by <strong>type</strong> (<em>highest priority</em>),
+<strong>name</strong>, and <strong>owner</strong> (<em>lowest priority</em>), and display the results.</p>
+</li>
+<li>
+<p>Using the same <a href="https://catalog.cse.nd.edu/query.json">Catalog JSON Data</a>, sort the services by <strong>version
+number</strong> in <strong>descending order</strong> and display the results.</p>
+</li>
+</ol>
+</div>
+<h3 id="functional-programming">Functional Programming<a class="headerlink" href="#functional-programming" title="Permanent link">&para;</a></h3>
+<h4 id="concepts_3">Concepts<a class="headerlink" href="#concepts_3" title="Permanent link">&para;</a></h4>
+<ol>
+<li>
+<div class="flex-col" markdown="1">
+<p>What is the difference between <strong>imperative</strong> and <strong>functional programming</strong>?</p>
+<ul>
+<li>
+<p>What are some benefits of <strong>functional programming</strong>?</p>
+</li>
+<li>
+<p>How is <strong>functional programming</strong> related to the <strong>Unix Philosophy</strong>?</p>
+</li>
+</ul>
+</li>
+<li>
+<p>How do we use <code>map</code>, <code>filter</code>, and <code>lambda</code> to do <strong>functional
+programming</strong> in <strong>Python</strong>?</p>
+</li>
+<li>
+<p>How do we use <strong>list comprehensions</strong> in <strong>Python</strong>?</p>
+</li>
+<li>
+<p>What is an <strong>iterator</strong> and how is it different from a <strong>list</strong>?</p>
+</li>
+<li>
+<div class="flex-col" markdown="1">
+<p>What is a <strong>generator</strong> and how it is different from a <strong>list</strong>?</p>
+<ul>
+<li>
+<p>What does the <code>yield</code> command do?</p>
+</li>
+<li>
+<p>Why would we use a <strong>generator</strong> over a <strong>list</strong> (<em>and vice versa</em>)?</p>
+</li>
+<li>
+<p>How do we convert a <strong>list comprehension</strong> to a <strong>generator expression</strong>?</p>
+</li>
+</ul>
+</li>
+<li>
+<p>How do we implement the <strong>iterator protocol</strong>?</p>
+</li>
+</ol>
+<h4 id="functions_1">Functions<a class="headerlink" href="#functions_1" title="Permanent link">&para;</a></h4>
+<table class="bordered">
+<thead>
+  <th>Function</th>
+  <th>Description</th>
+</thead>
+<tbody>
+  <tr class="info-bg">
+    <td class="centered"><code>map(func, seq)</code></td>
+    <td>Apply function to each element in sequence.</td>
+  </tr>
+  <tr class="success-bg">
+    <td class="centered"><code>filter(func, seq)</code></td>
+    <td>Apply function to each element in sequence and keep ones that return True.</td>
+  </tr>
+  <tr class="info-bg">
+    <td class="centered"><code>iter(iterable)</code></td>
+    <td>Gets iterator from iterable object.</td>
+  </tr>
+  <tr class="info-bg">
+    <td class="centered"><code>next(iterator)</code></td>
+    <td>Gets next element from iterator.</td>
+  </tr>
+</tbody>
+</table>
+
+<div class="alert success-bg">
+<h3 id="help-embed_icon-sample-questions_3"><i class="icon icon-medium"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><title>help</title><path d="M10,19H13V22H10V19M12,2C17.35,2.22 19.68,7.62 16.5,11.67C15.67,12.67 14.33,13.33 13.67,14.17C13,15 13,16 13,17H10C10,15.33 10,13.92 10.67,12.92C11.33,11.92 12.67,11.33 13.5,10.67C15.92,8.43 15.32,5.26 12,5A3,3 0 0,0 9,8H6A6,6 0 0,1 12,2Z" /></svg>
+</i> Sample Questions<a class="headerlink" href="#help-embed_icon-sample-questions_3" title="Permanent link">&para;</a></h3>
+<p>Translate the following <strong>imperative</strong> code:</p>
+<div class="codehilite"><pre><span></span><code><span class="k">def</span> <span class="nf">find_squares</span><span class="p">(</span><span class="n">start</span><span class="p">,</span> <span class="n">end</span><span class="p">):</span>
+    <span class="n">squares</span> <span class="o">=</span> <span class="p">[]</span>
+    <span class="k">for</span> <span class="n">number</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">start</span><span class="p">,</span> <span class="n">end</span><span class="p">):</span>
+        <span class="k">if</span> <span class="n">math</span><span class="o">.</span><span class="n">sqrt</span><span class="p">(</span><span class="n">number</span><span class="p">)</span> <span class="o">==</span> <span class="nb">int</span><span class="p">(</span><span class="n">math</span><span class="o">.</span><span class="n">sqrt</span><span class="p">(</span><span class="n">number</span><span class="p">)):</span>
+            <span class="n">squares</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">number</span><span class="p">)</span>
+    <span class="k">return</span> <span class="n">squares</span>
+</code></pre></div>
+
+<ol>
+<li>To using <code>map</code>, <code>filter</code>, and <code>lambda</code>.</li>
+<li>To using a <strong>list comprehension</strong>.</li>
+<li>To using a <strong>generator</strong> with <code>yield</code>.</li>
+<li>To using a <strong>generator expression</strong>.</li>
+<li>To using an <strong>object</strong> that implements the <strong>iterator protocol</strong>.</li>
+</ol>
+</div>
+<h3 id="object-oriented-programming">Object-oriented Programming<a class="headerlink" href="#object-oriented-programming" title="Permanent link">&para;</a></h3>
+<ol>
+<li>
+<div class="flex-col" markdown="1">
+<p>What are the <strong>four principles</strong> of the <strong>Object-oriented Programming</strong>?</p>
+<ul>
+<li>How do we create a <code>class</code> with a <strong>constructor</strong>?</li>
+<li>How do we create a <code>dataclass</code>?</li>
+<li>How do we define <strong>attributes</strong>?</li>
+<li>How do we define <strong>methods</strong>?</li>
+<li>How do we define <strong>properties</strong>?</li>
+<li>How do we define <strong>dunder methods</strong>?</li>
+</ul>
+</li>
+<li>
+<p>How do we implement the <strong>context manger protocol</strong>?</p>
+</li>
+<li>
+<div class="flex-col" markdown="1">
+<p>What is a <strong>process</strong>?</p>
+<ul>
+<li>
+<p>What attributes or components does it have?</p>
+</li>
+<li>
+<p>What <strong>system calls</strong> can you do with them?</p>
+</li>
+</ul>
+</li>
+<li>
+<div class="flex-col" markdown="1">
+<p>What happens during the life cycle of a typical <strong>process</strong>?</p>
+<ul>
+<li>
+<p>After a <code>fork</code>, how does a <strong>process</strong> determine if they are the <strong>child</strong> or <strong>parent</strong>?</p>
+</li>
+<li>
+<p>What happens when a <strong>process</strong> performs <code>exec</code>?</p>
+</li>
+<li>
+<p>Why is it good practice to perform a <code>wait</code>?</p>
+</li>
+<li>
+<p>What is the purpose of <code>exit</code>?</p>
+</li>
+</ul>
+</li>
+<li>
+<div class="flex-col" markdown="1">
+<p>How do we avoid a <strong>fork bomb</strong>?</p>
+<ul>
+<li>
+<p>How do we reap <strong>zombies</strong>?</p>
+</li>
+<li>
+<p>Why would we want to prevent these situations?</p>
+</li>
+</ul>
+</li>
+</ol>
+<div class="alert success-bg">
+<h3 id="help-embed_icon-sample-questions_4"><i class="icon icon-medium"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><title>help</title><path d="M10,19H13V22H10V19M12,2C17.35,2.22 19.68,7.62 16.5,11.67C15.67,12.67 14.33,13.33 13.67,14.17C13,15 13,16 13,17H10C10,15.33 10,13.92 10.67,12.92C11.33,11.92 12.67,11.33 13.5,10.67C15.92,8.43 15.32,5.26 12,5A3,3 0 0,0 9,8H6A6,6 0 0,1 12,2Z" /></svg>
+</i> Sample Questions<a class="headerlink" href="#help-embed_icon-sample-questions_4" title="Permanent link">&para;</a></h3>
+<ol>
+<li>
+<div class="flex-col" markdown="1">
+<p>Given the following <strong>Python</strong> code:</p>
+<div class="codehilite"><pre><span></span><code><span class="k">def</span> <span class="nf">curl_all</span><span class="p">(</span><span class="n">urls</span><span class="p">:</span> <span class="nb">list</span><span class="p">[</span><span class="nb">str</span><span class="p">]):</span>
+<span class="w">    </span><span class="sd">&#39;&#39;&#39; Perform curl on each url and print text contents concurrently. &#39;&#39;&#39;</span>
+    <span class="k">for</span> <span class="n">url</span> <span class="ow">in</span> <span class="n">urls</span><span class="p">:</span>
+        <span class="n">command</span> <span class="o">=</span> <span class="p">[</span><span class="s1">&#39;curl&#39;</span><span class="p">,</span> <span class="s1">&#39;-sL&#39;</span><span class="p">,</span> <span class="n">url</span><span class="p">]</span>
+        <span class="k">if</span> <span class="p">(</span><span class="n">pid</span> <span class="o">:=</span> <span class="n">os</span><span class="o">.</span><span class="n">fork</span><span class="p">())</span> <span class="o">==</span> <span class="mi">0</span><span class="p">:</span>
+            <span class="n">os</span><span class="o">.</span><span class="n">execvp</span><span class="p">(</span><span class="n">command</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span> <span class="n">command</span><span class="p">)</span>
+
+<span class="n">curl_all</span><span class="p">(</span><span class="n">sys</span><span class="o">.</span><span class="n">argv</span><span class="p">[</span><span class="mi">1</span><span class="p">:])</span>
+</code></pre></div>
+
+<p>Which of the following statements are true (<em>choose all that apply</em>)?</p>
+<ul>
+<li><code>os.fork</code> will always succeed.</li>
+<li><code>os.execvp</code> will always succeed.</li>
+<li>This program could behave like a <strong>fork bomb</strong>.</li>
+<li>This program will create <strong>orphans</strong>.</li>
+<li>This program will create <strong>zombies</strong>.</li>
+</ul>
+</li>
+<li>
+<div class="flex-col" markdown="1">
+<p>Re-write the <code>curl_all</code> function using
+<code>concurrent.futures.ProcessPoolExecutor</code> and <code>requests</code> rather than
+<code>os.fork</code> and <code>curl</code> to accomplish the same task.</p>
+</li>
+</ol>
+</div>
+<h3 id="translations">Translations<a class="headerlink" href="#translations" title="Permanent link">&para;</a></h3>
+<div class="alert success-bg">
+<h3 id="help-embed_icon-sample-questions_5"><i class="icon icon-medium"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><title>help</title><path d="M10,19H13V22H10V19M12,2C17.35,2.22 19.68,7.62 16.5,11.67C15.67,12.67 14.33,13.33 13.67,14.17C13,15 13,16 13,17H10C10,15.33 10,13.92 10.67,12.92C11.33,11.92 12.67,11.33 13.5,10.67C15.92,8.43 15.32,5.26 12,5A3,3 0 0,0 9,8H6A6,6 0 0,1 12,2Z" /></svg>
+</i> Sample Questions<a class="headerlink" href="#help-embed_icon-sample-questions_5" title="Permanent link">&para;</a></h3>
+<p>Given the following <strong>pipelines</strong>, write <strong>Python</strong> code that accomplishes
+the same task.</p>
+<div class="alert danger-bg">
+<p><strong>Note</strong>: <em>No credit will be given for simply calling <code>os.system</code> on the
+given </em><em>pipeline</em><em>. You may use <code>os.popen</code> to read the output of the
+</em><em>first command</em><em>, but you may not use a pipeline</em>.</p>
+</div>
+<ol>
+<li>
+<p><code>cat /etc/passwd | cut -d : -f 1 | grep d$ | wc -l</code></p>
+</li>
+<li>
+<p><code>cat /etc/passwd | cut -d : -f 3 | grep -E '^[0-9]{2}$' | sort | uniq</code></p>
+</li>
+<li>
+<p><code>curl -sL http://yld.me/raw/lmz | cut -d , -f 1 | grep -Eo '^[^jfs].*'</code></p>
+</li>
+<li>
+<p><code>curl -sL http://yld.me/raw/lmz | cut -d , -f 2 | grep -Eo '^B.*' | sort</code></p>
+</li>
+<li>
+<p><code>who | sed -rn 's|.*\((.*)\).*|\1|p' | sort | uniq</code></p>
+</li>
+<li>
+<p><code>ls -l /etc | awk '{print $2}' | sort | uniq -c</code></p>
+</li>
+</ol>
+</div>
+</main>
+<footer>
+Built using <a href="https://python.org">Python</a>
+and <a href="https://jinja.palletsprojects.com">Jinja</a>
+with colors from 
+<a href="https://onmessage.nd.edu/university-branding/colors/">Notre Dame</a>, 
+<a href="https://spreadsheet.dev/how-to-get-the-hexadecimal-codes-of-colors-in-google-sheets">Google Docs</a>, and 
+<a href="https://nordtheme.com">Nord Theme</a>,
+and icons from <a href="https://pictogrammers.com/library/mdi/">Material Design Icons</a>.</footer>
+</body>
+</html>
