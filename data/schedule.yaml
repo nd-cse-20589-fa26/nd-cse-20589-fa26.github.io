@@ -207,6 +207,7 @@
       - date:           Mon 10/12
         items:
           - name:       Checklist 02
+            link:       checklist02.html
 
       - date:           Wed 10/14
         items:
