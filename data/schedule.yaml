@@ -187,6 +187,8 @@
         topics:         Processes
         items:
           - name:       Slides 18
+          - name:       Processes
+            link:       https://notredame.hosted.panopto.com/Panopto/Pages/Viewer.aspx?id=5f6c2ee6-3f3c-44af-8e1b-b4dc011c212c
 
       - date:           Fri 10/09
         topics:         Signals
