@@ -221,11 +221,11 @@ get the <strong>elapsed time</strong>.</p>
 <div class="flex-col" markdown="1">
 <p><code>__next__(self):</code></p>
 <blockquote>
-<p>If the <code>status</code> of the <code>Timer</code> object is <code>None</code>, then <code>StopIteration</code>
-is <strong>raised</strong>.  Otherwise, this method <a href="https://docs.python.org/3/library/time.html#time.sleep">sleeps</a> for <code>timedelta</code> and
-updates the overall <code>elapsed</code> time by <code>timedelta</code>.  If this new <code>elapsed</code>
-time exceeds the <code>timeout</code> then <code>StopIteration</code> is <strong>raised</strong>.
-Otherwise, the new overall <code>elapsed</code> time is returned.</p>
+<p>If the <code>status</code> of the <code>Timer</code> object is not <code>None</code>, then
+<code>StopIteration</code> is <strong>raised</strong>.  Otherwise, this method <a href="https://docs.python.org/3/library/time.html#time.sleep">sleeps</a> for
+<code>timedelta</code> and updates the overall <code>elapsed</code> time by <code>timedelta</code>.  If
+this new <code>elapsed</code> time exceeds the <code>timeout</code> then <code>StopIteration</code> is
+<strong>raised</strong>.  Otherwise, the new overall <code>elapsed</code> time is returned.</p>
 </blockquote>
 </li>
 </ul>
