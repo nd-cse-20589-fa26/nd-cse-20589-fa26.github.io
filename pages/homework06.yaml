@@ -247,11 +247,11 @@ body:       |
 
       `__next__(self):`
 
-      > If the `status` of the `Timer` object is `None`, then `StopIteration`
-      is **raised**.  Otherwise, this method [sleeps] for `timedelta` and
-      updates the overall `elapsed` time by `timedelta`.  If this new `elapsed`
-      time exceeds the `timeout` then `StopIteration` is **raised**.
-      Otherwise, the new overall `elapsed` time is returned.
+      > If the `status` of the `Timer` object is not `None`, then
+      `StopIteration` is **raised**.  Otherwise, this method [sleeps] for
+      `timedelta` and updates the overall `elapsed` time by `timedelta`.  If
+      this new `elapsed` time exceeds the `timeout` then `StopIteration` is
+      **raised**.  Otherwise, the new overall `elapsed` time is returned.
 
   [sleeps]: https://docs.python.org/3/library/time.html#time.sleep
 
