@@ -208,6 +208,8 @@
         items:
           - name:       Checklist 02
             link:       checklist02.html
+          - name:       Panopto
+            link:       https://notredame.hosted.panopto.com/Panopto/Pages/Viewer.aspx?id=610bcd52-50e4-4499-8627-b4e1011389f8
 
       - date:           Wed 10/14
         items:
