@@ -221,6 +221,8 @@
         topics:         Environments
         items:
           - name:       Slides 20
+          - name:       Panopto
+            link:       https://notredame.hosted.panopto.com/Panopto/Pages/Viewer.aspx?id=96a03298-5044-4099-81d0-b4e5011161e8
 
 - name:   "Fall Break"
 
