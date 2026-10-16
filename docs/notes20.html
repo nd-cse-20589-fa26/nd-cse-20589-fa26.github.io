@@ -1,0 +1,158 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<!-- Favicon -->
+<link rel="icon" type="image/png" sizes="32x32" href="static/ico/favicon-32x32.png">
+<link rel="icon" type="image/png" sizes="16x16" href="static/ico/favicon-16x16.png">
+<link rel="manifest" href="static/ico/site.webmanifest">
+<!-- Stylesheets -->
+<link rel="stylesheet" href="static/css/domer.css">
+<title>Notes 20: Environments</title>
+</head>
+<body>
+<header>
+<a class="logo" href="notes20.html">
+    <h1>Notes 20: Environments</h1>
+</a>
+<nav>
+    <ul>
+        <li><a href="index.html"><h4>Home</h4></a></li>
+        </ul>
+</nav></header>
+<main>
+<h2 id="environments-overview">Environments: <span class="gold">Overview</span><a class="headerlink" href="#environments-overview" title="Permanent link">&para;</a></h2>
+<p>A <strong class="success">Python</strong> <strong class="info">virtual
+environment</strong> (ie. <code>venv</code>) is a way to create an <strong
+class="danger">isolated</strong> workspace for your <strong>project</strong> and its
+<strong>dependencies</strong>.</p>
+<ul>
+<li>
+<p>Does not require <strong>root</strong> permisions.</p>
+</li>
+<li>
+<p>Allows you to change <strong>interpreters</strong>.</p>
+</li>
+<li>
+<p>Allows you to install different <strong>libraries</strong>.</p>
+</li>
+</ul>
+<h2 id="environments-creation">Environments: <span class="gold">Creation</span><a class="headerlink" href="#environments-creation" title="Permanent link">&para;</a></h2>
+<p>To create a <strong class="info">virtual environment</strong>, go to your
+<strong>project</strong> directory and run:</p>
+<div class="codehilite"><pre><span></span><code><span class="c1"># Create virtual environment in .venv directory</span>
+$<span class="w"> </span>python3<span class="w"> </span>-m<span class="w"> </span>venv<span class="w"> </span>.venv
+
+<span class="c1"># List contents of virtual environment</span>
+$<span class="w"> </span>ls<span class="w"> </span>.venv
+bin/<span class="w">  </span>include/<span class="w">  </span>lib/<span class="w">  </span>lib64@<span class="w">  </span>pyvenv.cfg
+</code></pre></div>
+
+<p>This will download and install a <strong class="success">Python</strong>
+run-time into the <code>.venv</code> directory (<em>same version</em>).</p>
+<div class="codehilite"><pre><span></span><code><span class="c1"># Review tree</span>
+<span class="err">$</span> <span class="n">tree</span> <span class="o">.</span><span class="n">venv</span>
+
+<span class="c1"># Review find</span>
+<span class="err">$</span> <span class="n">find</span> <span class="o">.</span><span class="n">venv</span>
+</code></pre></div>
+
+<h2 id="environments-activation">Environments: <span class="gold">Activation</span><a class="headerlink" href="#environments-activation" title="Permanent link">&para;</a></h2>
+<p>To activate the <strong class="info">virtual environment</strong>, <code>source</code> the
+provided <code>.venv/bin/activate</code> script:</p>
+<div class="codehilite"><pre><span></span><code><span class="c1"># Activate virtual environment</span>
+$<span class="w"> </span><span class="nb">source</span><span class="w"> </span>.venv/bin/activate
+</code></pre></div>
+
+<p>This will modify your <strong>shell prompt</strong> by adding a <code>(.venv)</code> to the end of
+<code>PS1</code>.</p>
+<div class="codehilite"><pre><span></span><code><span class="c1"># Deactivate virtual environment</span>
+$<span class="w"> </span>deactivate
+</code></pre></div>
+
+<div class="codehilite"><pre><span></span><code><span class="c1"># Explore activate script</span>
+$<span class="w"> </span>vim<span class="w"> </span>.venv/bin/activate<span class="w">  </span><span class="c1"># Review: PATH</span>
+</code></pre></div>
+
+<h2 id="environments-installation">Environments: <span class="gold">Installation</span><a class="headerlink" href="#environments-installation" title="Permanent link">&para;</a></h2>
+<p>To install packages in the <strong class="info">virtual environment</strong>,
+use the <code>pip</code> command:</p>
+<div class="codehilite"><pre><span></span><code><span class="c1"># Attempt to load requests</span>
+$<span class="w"> </span>python3
+&gt;&gt;&gt;<span class="w"> </span>import<span class="w"> </span>requests
+...
+
+<span class="c1"># Install requests library</span>
+$<span class="w"> </span>pip<span class="w"> </span>install<span class="w"> </span>requests
+
+<span class="c1"># Upgrade pip library</span>
+$<span class="w"> </span>pip<span class="w"> </span>install<span class="w"> </span>--upgrade<span class="w"> </span>pip
+</code></pre></div>
+
+<p>The <code>pip</code> command will download and install the libraries to the
+<code>.venv/lib/pythonX.YZ/site-packages/</code> folder (<em>where <code>X.YZ</code> is the version
+number</em>).</p>
+<h2 id="example-curl_allpy">Example: <a href="https://github.com/nd-cse-20589-fa26/examples/blob/master/slides20/curl_all.py">curl_all.py</a><a class="headerlink" href="#example-curl_allpy" title="Permanent link">&para;</a></h2>
+<blockquote>
+<p>Write a program that downloads all <code>URLs</code> to separate files.</p>
+</blockquote>
+<ol>
+<li>Use <code>requests</code> instead of <code>os.popen</code>.</li>
+<li>Use <a href="https://tqdm.github.io/">tqdm</a> to show progress.</li>
+<li>Use <a href="https://docs.python.org/3/library/concurrent.futures.html">concurrent.futures</a> for concurrency.</li>
+</ol>
+<div class="alert warning-bg">
+<p>This is <strong>data parallel</strong>!</p>
+</div>
+<div class="codehilite"><pre><span></span><code><span class="ch">#!/usr/bin/env python3</span>
+
+<span class="sd">&#39;&#39;&#39; Original</span>
+<span class="sd">def curl_all(urls: list[str]):</span>
+<span class="sd">    for url in urls:</span>
+<span class="sd">        command = [&#39;curl&#39;, &#39;-sL&#39;, url]</span>
+<span class="sd">        if (pid := os.fork()) == 0:</span>
+<span class="sd">            os.execvp(command[0], command)</span>
+
+<span class="sd">curl_all(sys.argv[1:])</span>
+<span class="sd">&#39;&#39;&#39;</span>
+
+<span class="kn">import</span> <span class="nn">os</span>
+<span class="kn">import</span> <span class="nn">sys</span>
+
+<span class="kn">import</span> <span class="nn">concurrent.futures</span>
+<span class="kn">import</span> <span class="nn">requests</span>
+<span class="kn">from</span> <span class="nn">tqdm</span> <span class="kn">import</span> <span class="n">tqdm</span>
+
+<span class="k">def</span> <span class="nf">curl_url</span><span class="p">(</span><span class="n">url</span><span class="p">:</span> <span class="nb">str</span><span class="p">):</span>
+    <span class="c1"># Review: requests</span>
+    <span class="n">response</span> <span class="o">=</span> <span class="n">requests</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="n">url</span><span class="p">)</span>
+    <span class="n">filename</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">basename</span><span class="p">(</span><span class="n">url</span><span class="p">)</span>
+
+    <span class="c1"># Review: context manager</span>
+    <span class="k">with</span> <span class="nb">open</span><span class="p">(</span><span class="n">filename</span><span class="p">,</span> <span class="s1">&#39;wb&#39;</span><span class="p">)</span> <span class="k">as</span> <span class="n">stream</span><span class="p">:</span>
+        <span class="n">stream</span><span class="o">.</span><span class="n">write</span><span class="p">(</span><span class="n">response</span><span class="o">.</span><span class="n">content</span><span class="p">)</span>
+
+<span class="k">def</span> <span class="nf">curl_all</span><span class="p">(</span><span class="n">urls</span><span class="p">:</span> <span class="nb">list</span><span class="p">[</span><span class="nb">str</span><span class="p">]):</span>
+    <span class="k">for</span> <span class="n">url</span> <span class="ow">in</span> <span class="n">tqdm</span><span class="p">(</span><span class="n">urls</span><span class="p">):</span>
+        <span class="n">curl_url</span><span class="p">(</span><span class="n">url</span><span class="p">)</span>
+
+    <span class="c1"># Review: map, concurrent.futures</span>
+<span class="w">    </span><span class="sd">&#39;&#39;&#39;</span>
+<span class="sd">    with concurrent.futures.ProcessPoolExecutor() as executor:</span>
+<span class="sd">        list(tqdm(executor.map(curl_url, urls), total=len(urls)))</span>
+<span class="sd">    &#39;&#39;&#39;</span>
+
+<span class="n">curl_all</span><span class="p">(</span><span class="n">sys</span><span class="o">.</span><span class="n">argv</span><span class="p">[</span><span class="mi">1</span><span class="p">:])</span>
+</code></pre></div>
+</main>
+<footer>
+Built using <a href="https://python.org">Python</a>
+and <a href="https://jinja.palletsprojects.com">Jinja</a>
+with colors from 
+<a href="https://onmessage.nd.edu/university-branding/colors/">Notre Dame</a>, 
+<a href="https://spreadsheet.dev/how-to-get-the-hexadecimal-codes-of-colors-in-google-sheets">Google Docs</a>, and 
+<a href="https://nordtheme.com">Nord Theme</a>,
+and icons from <a href="https://pictogrammers.com/library/mdi/">Material Design Icons</a>.</footer>
+</body>
+</html>
