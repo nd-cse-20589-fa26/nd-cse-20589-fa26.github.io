@@ -1,0 +1,145 @@
+title:  "Notes 20: Environments"
+body:   |
+
+  ## Environments: <span class="gold">Overview</span>
+
+  A <strong class="success">Python</strong> <strong class="info">virtual
+  environment</strong> (ie. `venv`) is a way to create an <strong
+  class="danger">isolated</strong> workspace for your **project** and its
+  **dependencies**.
+
+  - Does not require **root** permisions.
+
+  - Allows you to change **interpreters**.
+
+  - Allows you to install different **libraries**.
+
+  ## Environments: <span class="gold">Creation</span>
+
+  To create a <strong class="info">virtual environment</strong>, go to your
+  **project** directory and run:
+
+  ```bash
+  # Create virtual environment in .venv directory
+  $ python3 -m venv .venv
+
+  # List contents of virtual environment
+  $ ls .venv
+  bin/  include/  lib/  lib64@  pyvenv.cfg
+  ```
+
+  This will download and install a <strong class="success">Python</strong>
+  run-time into the `.venv` directory (*same version*).
+
+  ```python3
+  # Review tree
+  $ tree .venv
+  
+  # Review find
+  $ find .venv
+  ```
+
+  ## Environments: <span class="gold">Activation</span>
+
+  To activate the <strong class="info">virtual environment</strong>, `source` the
+  provided `.venv/bin/activate` script:
+
+  ```bash
+  # Activate virtual environment
+  $ source .venv/bin/activate
+  ```
+
+  This will modify your **shell prompt** by adding a `(.venv)` to the end of
+  `PS1`.
+
+  ```bash
+  # Deactivate virtual environment
+  $ deactivate
+  ```
+
+  ```bash
+  # Explore activate script
+  $ vim .venv/bin/activate  # Review: PATH
+  ```
+
+  ## Environments: <span class="gold">Installation</span>
+
+  To install packages in the <strong class="info">virtual environment</strong>,
+  use the `pip` command:
+
+  ```bash
+  # Attempt to load requests
+  $ python3
+  >>> import requests
+  ...
+
+  # Install requests library
+  $ pip install requests
+
+  # Upgrade pip library
+  $ pip install --upgrade pip
+  ```
+
+  The `pip` command will download and install the libraries to the
+  `.venv/lib/pythonX.YZ/site-packages/` folder (*where `X.YZ` is the version
+  number*).
+
+  ## Example: [curl_all.py]
+
+  > Write a program that downloads all `URLs` to separate files.
+
+  1. Use `requests` instead of `os.popen`.
+  2. Use [tqdm] to show progress.
+  3. Use [concurrent.futures] for concurrency.
+
+  <div class="alert warning-bg" markdown="1">
+
+  This is **data parallel**!
+
+  </div>
+
+  ```python
+  #!/usr/bin/env python3
+
+  ''' Original
+  def curl_all(urls: list[str]):
+      for url in urls:
+          command = ['curl', '-sL', url]
+          if (pid := os.fork()) == 0:
+              os.execvp(command[0], command)
+
+  curl_all(sys.argv[1:])
+  '''
+
+  import os
+  import sys
+
+  import concurrent.futures
+  import requests
+  from tqdm import tqdm
+
+  def curl_url(url: str):
+      # Review: requests
+      response = requests.get(url)
+      filename = os.path.basename(url)
+
+      # Review: context manager
+      with open(filename, 'wb') as stream:
+          stream.write(response.content)
+
+  def curl_all(urls: list[str]):
+      for url in tqdm(urls):
+          curl_url(url)
+
+      # Review: map, concurrent.futures
+      '''
+      with concurrent.futures.ProcessPoolExecutor() as executor:
+          list(tqdm(executor.map(curl_url, urls), total=len(urls)))
+      '''
+
+  curl_all(sys.argv[1:])
+  ```
+
+  [curl_all.py]: https://github.com/nd-cse-20589-fa26/examples/blob/master/slides20/curl_all.py
+  [tqdm]: https://tqdm.github.io/
+  [concurrent.futures]: https://docs.python.org/3/library/concurrent.futures.html
