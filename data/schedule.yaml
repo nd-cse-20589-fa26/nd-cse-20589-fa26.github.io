@@ -229,19 +229,19 @@
 - name:    Files, Directories, I/O
   days:
       - date:           Mon 10/26
-        topics:         Files, Directories
+        topics:         Files
         assignments:
           - Reading 07
         items:
           - name:       Slides 21
 
       - date:           Wed 10/28
-        topics:         I/O
+        topics:         Directories
         items:
           - name:       Slides 22
 
       - date:           Fri 10/30
-        topics:         Unit Tests
+        topics:         I/O
         items:
           - name:       Slides 23
 
