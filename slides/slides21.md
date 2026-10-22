@@ -205,7 +205,8 @@ except OSError as e:
 ```
 
 To interpret some of these attributes, we can use the constants and functions
-from [stat].
+from [stat].  That said, we can often avoid doing this manually by using the
+helper functions provided by <strong class="success">Python</strong>.
 
 [os.stat]: https://docs.python.org/3/library/os.html#os.stat
 [stat]: https://docs.python.org/3/library/stat.html
@@ -214,8 +215,9 @@ from [stat].
 
 # Files: <span class="gold">Test Equivalences</span>
 
-The [test] command is used to check the <strong class="special">inode</strong> of a
-<strong class="success">file</strong>:
+The [test] command is used to check the <strong class="special">inode</strong>
+of a <strong class="success">file</strong>.  We can perform similar checks
+using <strong class="success">Python</strong> functions:
 
 <table class="bordered">
 <thead>
@@ -224,16 +226,16 @@ The [test] command is used to check the <strong class="special">inode</strong> o
 </thead>
 <tbody>
 <tr>
+    <td class="info-bg">test -f</td>
+    <td class="success-bg">os.path.isfile(path)</td>
+</tr>
+<tr>
     <td class="info-bg">test -d</td>
     <td class="success-bg">os.path.isdir(path)</td>
 </tr>
 <tr>
     <td class="info-bg">test -e</td>
     <td class="success-bg">os.path.exists(path)</td>
-</tr>
-<tr>
-    <td class="info-bg">test -f</td>
-    <td class="success-bg">os.path.isfile(path)</td>
 </tr>
 <tr>
     <td class="info-bg">test -r</td>
@@ -251,6 +253,74 @@ The [test] command is used to check the <strong class="special">inode</strong> o
 </table>
 
 [test]: https://man7.org/linux/man-pages/man1/test.1.html
+
+---
+
+# Files: <span class="gold">Properties</span>
+
+<strong class="success">Python</strong> also provides a number of useful
+functions for getting the <strong class="info">properties</strong> of <strong
+class="success">files</strong>.
+
+<table class="bordered">
+<thead>
+    <th class="info-bg">Information</th>
+    <th class="success-bg">Python Function</th>
+</thead>
+<tbody>
+<tr>
+    <td class="info-bg">Absolute Path</td>
+    <td class="success-bg">os.path.abspath(path)</td>
+</tr>
+<tr>
+    <td class="info-bg">Normalized Path</td>
+    <td class="success-bg">os.path.normpath(path)</td>
+</tr>
+<tr>
+    <td class="info-bg">File Name</td>
+    <td class="success-bg">os.path.basename(path)</td>
+</tr>
+<tr>
+    <td class="info-bg">Directory Name</td>
+    <td class="success-bg">os.path.dirname(path)</td>
+</tr>
+<tr>
+    <td class="info-bg">File Size</td>
+    <td class="success-bg">os.path.getsize(path)</td>
+</tr>
+<tr>
+    <td class="info-bg">File Extension</td>
+    <td class="success-bg">os.path.splitext(path)[-1]</td>
+</tr>
+</tbody>
+</table>
+
+[test]: https://man7.org/linux/man-pages/man1/test.1.html
+
+---
+
+# Files: <span class="gold">Path</span>
+
+In recent versions of <strong class="success">Python</strong>, the [pathlib]
+library provides a <strong class="special">object-oriented</strong> wrapper to
+many of the lower level [os] functions:
+
+```python
+>>> from pathlib import Path                # Load Path class from pathlib library
+
+>>> path = Path('/etc/hosts')               # Create Path instance
+
+>>> path.name                               # Get path name
+'hosts'
+
+>>> path.parent                             # Get path directory
+PosixPath('/etc')
+
+>>> path.stat().st_size                     # Get path size from stat structure
+449
+```
+
+[pathlib]: https://docs.python.org/3/library/pathlib.html
 
 ---
 
