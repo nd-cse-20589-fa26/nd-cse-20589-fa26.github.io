@@ -179,17 +179,57 @@ class="special">OOP principle</strong> that enables the creation of <strong
 class="caution">hierarchical relationships</strong> between units to allow for
 <strong class="success">code reuse</strong>.
 
+<div class="columns">
+
+<div>
+
 ```python
-# PathEntry objects inherit all attributes and methods of Path class
+# PathEntry objects inherit all attributes and
+# methods of Path class
 class PathEntry(pathlib.Path):
     @property
-    def path(self):         # Add new method to PathEntry
+    def path(self): # Add new method to PathEntry
         return self.parent / self
 
 entry = PathEntry('/etc/hosts')
-print(entry.name)           # From Path class
-print(entry.path)           # From PathEntry class
+print(entry.name)   # From Path class
+print(entry.path)   # From PathEntry class
 ```
+
+</div>
+
+<div>
+
+```python
+# Define abstract class or interface
+@dataclass
+class BaseWalker(ABC):
+    entry: os.DirEntry | PathEntry
+    @abstractmethod
+    def walk(self, recursive: bool=False): pass
+
+# Define concrete class that implements interface
+class NoopWalker(BaseWalker):
+    def walk(self, recursive: bool=False): pass
+```
+
+</div>
+
+</div>
+
+<br>
+
+<div class="alert info-bg font-small">
+
+To define an <strong class="special">interface</strong>, we can create an
+[abstract base class] and mark [abstract methods] which need to be defined by
+<strong class="caution">concrete classes</strong> that <strong
+class="special">inherit</strong> from this `ABC`.
+
+</div>
+
+[abstract base class]: https://docs.python.org/3/library/abc.html
+[abstract methods]: https://docs.python.org/3/library/abc.html#abc.abstractmethod
 
 ---
 
@@ -220,26 +260,26 @@ complex object instantiation logic.
 
 ```python
 @dataclass
-class BaseWalker:                                       # Product Interface (provides walk method)
-    entry:  os.DirEntry | PathEntry
+class BaseWalker:                                   # Product Interface (provides walk method)
+    entry: os.DirEntry | PathEntry
     def walk(self, recursive: bool=False): pass
 
-class FileWalker(BaseWalker):                           # Concrete Product (File)
+class FileWalker(BaseWalker):                       # Concrete Product (File)
     def walk(self, recursive: bool=False): print(f'{self.entry.path} {self.entry.stat().st_size}')
 
-class DirectoryWalker(BaseWalker):                      # Concrete Product (Directory)
+class DirectoryWalker(BaseWalker):                  # Concrete Product (Directory)
     def walk(self, recursive: bool=False):
         with os.scandir(self.entry.path) as entries:
             for entry in map(WalkerFactory.get_walker, entries, cycle([recursive])):
                 entry.walk(recursive)
 
-class WalkerFactory:                                    # Concrete Creator
-    @classmethod                                        # Factory method
+class WalkerFactory:                                # Concrete Creator
+    @classmethod                                    # Factory method
     def get_walker(cls, entry: os.DirEntry | PathEntry, recursive: bool=False):
         match stat.S_IFMT(entry.stat().st_mode):
             case stat.S_IFREG: return FileWalker(entry)
-            case stat.S_IFDIR: return DirectoryWalker(entry) if recursive else BaseWalker(entry)
-            case _:            return BaseWalker(entry)
+            case stat.S_IFDIR: return DirectoryWalker(entry) if recursive else NoopWalker(entry)
+            case _:            return NoopWalker(entry)
 ```
 
 </div>
