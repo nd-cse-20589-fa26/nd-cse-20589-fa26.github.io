@@ -1,0 +1,174 @@
+title:      "Reading 07: System Calls, File System"
+body:       |
+
+  **Everyone**:
+
+  Next week, we will continue exploring [system calls] and low level functions.
+  In particular, we will explore system calls related to [files],
+  [directories], and [I/O] and discuss how many of the utilities we use every
+  day are implemented.
+
+  <div class="alert info-bg" markdown="1">
+
+  ### <i class="icon icon-medium">{{ "book" | embed_icon }}</i> TL;DR
+
+  The focus of this reading is to explore [system calls] and low-level
+  functions related to [files], [directories], and [I/O] in [Python].
+
+  </div>
+
+  [system calls]: https://en.wikipedia.org/wiki/System_call
+  [files]: https://en.wikipedia.org/wiki/Computer_file
+  [directories]: https://en.wikipedia.org/wiki/Directory_(computing)
+  [I/O]: https://en.wikipedia.org/wiki/Input/output
+
+  ## Readings
+
+  <div class="flex-row" markdown="1">
+
+  <div class="flex-col" markdown="1">
+
+  The readings for this week are:
+
+  1.  <div class="flex-col" markdown="1">
+
+      [Real Python](https://realpython.com/)
+
+      -   <div class="flex-col" markdown="1">
+
+          [Working With Files in Python](https://realpython.com/working-with-files-in-python/)
+
+          <i>You can skip the **Archiving** section.</i>
+
+
+  2.  <div class="flex-col" markdown="1">
+
+      [Operating Systems: Three Easy Pieces](http://pages.cs.wisc.edu/~remzi/OSTEP/)
+
+      -   <div class="flex-col" markdown="1">
+
+          [Files and Directories](http://pages.cs.wisc.edu/~remzi/OSTEP/file-intro.pdf)
+
+          <i>This the textbook for the [Operating System Principles] course and
+          thus the examples are in [C].</i>
+  </div>
+
+  <div class="flex-col-25">
+
+  <div class="centered">
+    <img src="https://upload.wikimedia.org/wikipedia/commons/thumb/3/31/Python-logo.png/250px-Python-logo.png" class="transparent">
+  </div>
+
+  </div>
+
+  </div>
+
+  <div class="flex-row" markdown="1">
+
+  <div class="flex-col" markdown="1">
+    <a href="https://wizardzines.com/comics/inodes/">
+    <img src="https://wizardzines.com/images/uploads/inodes.png" class="responsive">
+    </a>
+  </div>
+
+  <div class="flex-col" markdown="1">
+    <a href="https://wizardzines.com/comics/directories-and-symlinks-1/">
+    <img src="https://wizardzines.com/images/uploads/directories.png" class="responsive">
+    </a>
+  </div>
+
+  </div>
+
+  [Operating System Principles]: https://pnutz.h4x0r.space/courses/cse.30341.fa26
+  [C]: https://www.c-language.org/
+  [Python]: https://python.org
+
+  ## Quiz
+
+  Once you have completed the readings, answer the following [Reading 07 Quiz]
+  questions:
+
+  <div id="quiz-questions"></div>
+
+  <div id="quiz-responses"></div>
+
+  <script src="static/js/dredd-quiz.js"></script>
+
+  <script>
+  loadQuiz('static/json/reading07.json');
+  </script>
+
+  <pre style="display: none;" id="dr-container" class="codehilite"><code id="dredd-response"></code></pre>
+
+  As with [Reading 01], you will need to store your answers in a
+  `reading07/answers.json` file. You can use the form above to generate the
+  contents of this file, or you can write the [JSON] by hand.
+
+  To test your quiz, you can use the `check.py` script:
+
+      :::bash
+      $ ../.scripts/check.py
+      Checking reading07 quiz ...
+            Q1  5.00 /  5.00
+            Q2  5.00 /  5.00
+            Q3  8.00 /  8.00
+            Q4  5.00 /  5.00
+        --------------------
+         Score 23.00 / 23.00
+         Grade  1.00 /  1.00
+        Status Success
+
+  ## Submission
+
+  To submit you work, follow the same process outlined in [Reading 01]:
+
+      :::bash
+      #--------------------------------------------------
+      # Make sure you have already completed Preparation
+      #--------------------------------------------------
+      ...
+      $ git add answers.json                # Mark changes for commit
+      $ git commit -m "Reading 07: Quiz"    # Record changes
+      ...
+      $ git push -u origin reading07        # Push branch to GitHub
+
+  <div class="alert warning-bg" markdown="1">
+
+  ### <i class="icon icon-medium">{{ "lifebuoy" | embed_icon }}</i> Acknowledgments
+
+  If you collaborated with any other students, or received help from TAs or AI
+  tools on this assignment, please record this support in the `README.md` in
+  the `reading07` folder and include it with your **Pull Request**.
+
+  </div>
+
+  <div class="alert success-bg" markdown="1">
+
+  ### <i class="icon icon-medium">{{ "account-question" | embed_icon }}</i> Graders
+
+  Once you have committed your work and pushed it to [GitHub], remember to
+  create a **pull request** and assign it to the appropriate **teaching
+  assistant** from the [Reading 07 TA List].
+
+  **Note**: this list changes each week, so be sure to consult the appropriate
+  list for each assignment.
+
+  </div>
+
+  [Markdown]: https://daringfireball.net/projects/markdown/
+  [git]: https://git-scm.com/
+  [clone]: https://git-scm.com/docs/git-clone
+  [commit]: https://git-scm.com/docs/git-commit
+  [push]: https://git-scm.com/docs/git-push
+  [GitHub]: https://github.com
+  [Reading 01]: reading01.html
+  [Reading 07 TA List]: reading07_tas.html
+  [dredd]: https://dredd.h4x0r.space
+  [Reading 07 Quiz]: static/json/reading07.json
+  [JSON]: https://json.org/
+
+  [The Linux Command Line]: http://linuxcommand.org/tlcl.php
+  [Unix]: https://en.wikipedia.org/wiki/Unix
+  [Unix Shell]: https://en.wikipedia.org/wiki/Unix_shell
+  [Git]: https://git-scm.com/
+  [Bash]: https://www.gnu.org/software/bash/
