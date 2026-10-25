@@ -145,7 +145,13 @@ for root, dirs, files in os.walk('/etc/'):
         print(f'{path} {os.path.getsize(path)}')
 ```
 
+Alternatively, we can use the [Path.walk] method to get [Path] objects instead
+of just strings as we <strong class="warning">walk</strong> a <strong
+class="caution">directory</strong>.
+
 [os.walk]: https://docs.python.org/3/library/os.html#os.walk
+[Path.walk]: https://docs.python.org/3/library/pathlib.html#pathlib.Path.walk
+[Path]: https://docs.python.org/3/library/pathlib.html#concrete-paths
 
 ---
 
