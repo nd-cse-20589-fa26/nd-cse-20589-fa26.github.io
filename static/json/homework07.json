@@ -1,0 +1,36 @@
+{
+    "q1": {
+        "type": "multiple",
+        "question": "\n<p>What of the following statements regarding using <b>OOP</b> in\n<code>findit.py</code> is true (<i>choose all that apply</i>)?</p>\n",
+        "responses": {
+            "abstraction": "The <code>BaseFilter</code> class demonstrates the <b>data abstraction</b> principle.",
+            "encapsulation": "The <code>NameFilter</code> class demonstrates the <b>encapsulation</b> principle.",
+            "inheritance": "The <code>UnknownFilter</code> class demonstrates the <b>inheritance</b> principle.",
+            "polymorphism": "The <code>ExecutableFilter</code> class demonstrates the <b>polymorphism</b> principle."
+        }
+    },
+    "q2": {
+        "type": "multiple",
+        "question": "\n<p>For some of the <code>Filters</code>, you had to use <b>system calls</b> to\nimplement the method.  Which of the following statements are true (<i>\nchoose all that apply</i>)?</p>\n",
+        "responses": {
+            "type": "<code>FileFilter</code> and <code>DirectoryFilter</code> use at least one <b>system call</b>.",
+            "name": "<code>NameFilter</code> uses at least one <b>system call</b>.",
+            "empty": "<code>EmptyFilter</code> uses at least one <b>system call</b>.",
+            "mode": "<code>ReadableFilter</code>, <code>WritableFilter</code>, and <code>ExecutableFilter</code> uses at least one <b>system call</b>."
+        }
+    },
+    "q3": {
+        "type": "multiple",
+        "question": "\n<p>Because you used some <b>system calls</b> in <code>findit.py</code>, it\nwas possible that some of them would return <b>failure</b>.  Which of the\nfollowing are possible reasons for failures in the <b>system calls</b> you\nused (<i> choose all that apply</i>)?</p>\n",
+        "responses": {
+            "permission": "Do not have <b>permissions</b> to access file.",
+            "relative": "Cannot use a <b>relative path</b>.",
+            "exist": "A component of the path <b>does not exist</b>.",
+            "fds": "Ran out of <b>file descriptors</b>."
+        }
+    },
+    "q4": {
+        "type": "blank",
+        "question": "\n<p>On the <b>student machines</b>, run <code>strace -e stat,access,write -c\n./findit.py /etc -type f -readable -name '*.conf'</code> a few times and answer\nthe following questions:</p>\n\n<ol>\n    <li>Which of the three <b>system calls</b> was called the most often? ____</li>\n    <li>Which of the three <b>system calls</b> was called the least often? ____</li>\n    <li>Which of the three <b>system calls</b> had the most errors? ____</li>\n    <li>Which of the three <b>system calls</b> used the most time? ____</li>\n</ol>\n"
+    }
+}

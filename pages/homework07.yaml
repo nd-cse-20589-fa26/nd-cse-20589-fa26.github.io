@@ -1,0 +1,557 @@
+title:      "Homework 07: Findit"
+body:       |
+
+  The goal of this homework assignment is to allow you to continue practicing
+  [object-oriented programming] and using [system calls] related to [files] and
+  [directories] in [Python] by implementing one a file system search utility
+  similar to [find] named `findit.py`.
+
+  For this assignment, record your scripts and any responses to the following
+  activities in the `homework07` folder of your **assignments** [GitHub]
+  repository and push your work by **noon Saturday, October 31**.
+
+  [Python]: https://www.python.org/
+  [object-oriented programming]: https://en.wikipedia.org/wiki/Object-oriented_programming
+  [system calls]: https://en.wikipedia.org/wiki/System_call
+  [files]: https://en.wikipedia.org/wiki/Computer_file
+  [directories]: https://en.wikipedia.org/wiki/Directory_(computing)
+  [find]: https://man7.org/linux/man-pages/man1/find.1.html
+
+  ## Activity 0: Preparation
+
+  Before starting this homework assignment, you should first perform a `git
+  pull` to retrieve any changes in your remote [GitHub] repository:
+
+      :::bash
+      $ cd path/to/repository                   # Go to assignments repository
+
+      $ git switch master                       # Make sure we are in master branch
+
+      $ git pull --rebase                       # Get any remote changes not present locally
+
+  Next, create a new branch for this assignment:
+
+      :::bash
+      $ git switch -c homework07                # Create homework07 branch and check it out
+
+  ### Task 1: Skeleton Code
+
+  To help you get started, the instructor has provided you with the following **skeleton code**:
+
+      ::bash
+      # Create homework07 folder
+      $ mkdir homework07
+
+      # Go to homework07 folder
+      $ cd homework07
+
+      # Download Makefile
+      $ curl -LO https://pnutz.h4x0r.space/courses/cse.20589.fa26/static/txt/homework07/Makefile
+
+      # Download Python skeleton code
+      $ curl -LO https://pnutz.h4x0r.space/courses/cse.20589.fa26/static/txt/homework07/findit.py
+
+  Once downloaded, you should see the following files in your `homework07` directory:
+
+      :::bash
+      homework07
+          \_ Makefile       # This is the Makefile building all the assignment artifacts
+          \_ findit.py      # This is the Python script for the findit script
+
+  <div class="alert warning-bg" markdown="1">
+
+  ### <i class="icon icon-medium">{{ "alert" | embed_icon }}</i> DocTests
+
+  You may notice that in addition to the usual comments and `TODOs`, the
+  [docstrings] of each method also contains a few [doctests].
+
+  You are **not** to modify these [doctests] and must keep them in-place. They
+  are used to verify the correctness of your code.
+
+  Your code goes **below** the [docstrings], where the `TODO` and `pass`
+  commands are (you may remove the pass once you complete the method).
+
+  </div>
+
+  [docstrings]: https://peps.python.org/pep-0257/
+  [doctests]: https://docs.python.org/3/library/doctest.html
+  [unit test]: https://en.wikipedia.org/wiki/Unit_testing
+  [unit tests]: https://en.wikipedia.org/wiki/Unit_testing
+
+  ### Task 2: Initial Import
+
+  Now that the files are downloaded into the `homework07` folder, you can
+  **commit** them to your [git] repository:
+
+      :::bash
+      $ git add Makefile                            # Mark changes for commit
+      $ git add *.py
+      $ git commit -m "Homework 07: Initial Import" # Record changes
+
+  ### Task 3: Unit Tests
+
+  After downloading these files, you can run the `make` command to run the
+  tests.
+
+      :::bash
+      # Run all tests (will trigger automatic download)
+      $ make
+
+  You will notice that the Makefile downloads these additional test data and scripts:
+
+      :::bash
+      homework07
+          \_ findit.test          # This is the Python test for the findit script
+
+  In addition to the embedded [doctests] in the **skeleton code**, you will be
+  using these [unit tests] to verify the correctness and behavior of your code.
+
+  <div class="alert info-bg" markdown="1">
+
+  ### <i class="icon icon-medium">{{ "download" | embed_icon }}</i> Automatic Download
+
+  The `test` scripts are automatically downloaded by the `Makefile`, so any
+  modifications you do to them will be lost when you run `make` again. Likewise,
+  because they are automatically downloaded, you do not need to `add` or `commit`
+  them to your [git] repository.
+
+  </div>
+
+  The details on what you need to implement for this assignment are described
+  in the following sections.
+
+  ## Activity 2: findit (*0.8 Points*)
+
+  For this activity, write a [Python] script, `findit.py`, that implements a
+  subset of the [find] utility:
+
+  ```bash
+  # Display usage message
+  $ ./findit.py
+  Usage: findit ROOT [FILTERS]
+
+  Filters:
+      -type [f|d]     File is of type f for regular file or d for directory
+      -name PATTERN   Name of file matches shell pattern
+      -empty          File or directory is empty
+      -readable       File is readable by user
+      -writable       File is writable by user
+      -executable     File is executable or directory is searchable by user
+
+  # Display entries in current directory
+  $ ./findit.py .
+  .
+  __pycache__
+  findit.test
+  findit.py
+  findit.py.template
+  Makefile
+  answers.json
+  __pycache__/findit.cpython-314.pyc
+
+  # Display only files that end with .py
+  $ ./findit.py . -type f -name *.py
+  findit.py
+  ```
+
+  The `findit.py` takes a `ROOT` argument and then a series of *optional* `FILTERS`:
+
+  - `-type [f|d]`: This allows the user to specify whether or not to search for
+  [files] or [directories] (*note, cannot be a symlink*).
+
+  - `-name PATTERN`: This allows the user to specify a *shell pattern* to match
+  against the name of the file.
+
+  - `-empty`: This allows the user to specify searching for empty [files] or
+  [directories].
+
+  - `-readable`: This allows the user to specify search for entries that are
+  **readable** by the user.
+
+  - `-writable`: This allows the user to specify search for entries that are
+  **writable** by the user.
+
+  - `-executable`: This allows the user to specify search for entries that are
+  **executable** by the user.
+
+  If multiple `FILTERS` are specified, then they all must match in order for
+  the file or directory to be displayed.
+
+  ### Task 1: `findit.py`
+
+  To implement the `findit.py` script, you will need to use the [inheritance]
+  and the [factory method pattern] discussed in class.
+
+  [inheritance]: https://en.wikipedia.org/wiki/Inheritance_(object-oriented_programming)
+  [factory method pattern]: https://en.wikipedia.org/wiki/Factory_method_pattern
+
+  #### Filters
+
+  Each of the command line `FILTERS` in `findit.py` corresponds to a specific
+  `BaseFilter` class:
+
+  ```python
+  class BaseFilter(ABC):
+      ''' Filter Interface'''
+      @abstractmethod
+      def check(self, path: Path) -> bool:
+          pass
+  ```
+
+  As can be seen, the provided `BaseFilter` is an [abstract base class] which
+  requires subclasses to implement the `check` [abstract method].  The purpose
+  of this method is to return `True` if the given `path` passes the `FILTER`.
+
+  You will need to implement each of the following **methods** in the
+  corresponding **concrete** classes:
+
+  -   <div class="flex-col" markdown="1">
+
+          :::python
+          class FilterFilter:
+              def check(self, path: Path) -> bool:
+
+      > This returns `True` if the given `path` is a regular **file** and not a **symlink**.
+
+      <div class="alert success-bg" markdown="1">
+
+      **Hint**: Use the methods of the [Path] object or a function in [os.path].
+
+      </div>
+
+  -   <div class="flex-col" markdown="1">
+
+          :::python
+          class DirectoryFilter:
+              def check(self, path: Path) -> bool:
+
+      > This returns `True` if the given `path` is a **directory** and not a **symlink**.
+
+      <div class="alert success-bg" markdown="1">
+
+      **Hint**: Use the methods of the [Path] object or a function in [os.path].
+
+      </div>
+
+  -   <div class="flex-col" markdown="1">
+
+          :::python
+          @dataclass
+          class NameFilter:
+              pattern: str
+              def check(self, path: Path) -> bool:
+
+      > This returns `True` if the name of given `path` matches stored shell **pattern**.
+
+      <div class="alert success-bg" markdown="1">
+
+      **Hint**: Use [fnmatch.fnmatch].
+
+      </div>
+
+  -   <div class="flex-col" markdown="1">
+
+          :::python
+          class EmptyFilter:
+              def check(self, path: Path) -> bool:
+
+      > This returns `True` if the given `path` is **empty** (*must be a file or directory, no symlink*).
+
+      <div class="alert success-bg" markdown="1">
+
+      **Hint**: Use the methods of the [Path] object or a function in
+      [os.path].
+
+      Think carefully on what it means for a **file** or **directory** to be
+      empty.
+
+      </div>
+
+  -   <div class="flex-col" markdown="1">
+
+          :::python
+          class ReadableFilter:
+              def check(self, path: Path) -> bool:
+
+      > This returns `True` if the given `path` is **readable**.
+
+      <div class="alert success-bg" markdown="1">
+
+      **Hint**: Use [os.access].
+
+      </div>
+
+  -   <div class="flex-col" markdown="1">
+
+          :::python
+          class WritableFilter:
+              def check(self, path: Path) -> bool:
+
+      > This returns `True` if the given `path` is **writable**.
+
+      <div class="alert success-bg" markdown="1">
+
+      **Hint**: Use [os.access].
+
+      </div>
+
+  -   <div class="flex-col" markdown="1">
+
+          :::python
+          class ExecutableFilter:
+              def check(self, path: Path) -> bool:
+
+      > This returns `True` if the given `path` is **executable**.
+
+      <div class="alert success-bg" markdown="1">
+
+      **Hint**: Use [os.access].
+
+      </div>
+
+  [abstract base class]: https://docs.python.org/3/library/abc.html
+  [abstract method]: https://docs.python.org/3/library/abc.html#abc.abstractmethod
+  [Path]: https://docs.python.org/3/library/pathlib.html#concrete-paths
+  [os.path]: https://docs.python.org/3/library/os.path.html
+  [fnmatch.fnmatch]: https://docs.python.org/3/library/fnmatch.html#fnmatch.fnmatch
+  [os.access]: https://docs.python.org/3/library/os.html#os.access
+
+  #### Factory
+
+  Once you have implemented the `Filter` classes, you are to complete the
+  [factory method pattern]:
+
+  -   <div class="flex-col" markdown="1">
+
+          :::python
+          class FilterFactory:
+              @classmethod
+              def get_filter(cls, arguments: list[str]) -> BaseFilter:
+
+      > This returns the next concrete `Filter` class based on the given
+      command line arguments (`raise UnknownFilter` if invalid argument).
+
+      <div class="alert success-bg" markdown="1">
+
+      **Hint**: You should consume at least one argument (and sometimes two
+      depending on the `Filter`).
+
+      </div>
+
+  #### Walk
+
+  You will use these `Filters` and the **factory method** in the following
+  `walk` function:
+
+  -   <div class="flex-col" markdown="1">
+
+          :::python
+          def walk(root: Path, filters: list[BaseFilter]) -> None:
+
+      > This function prints `root` if it passes all `filters` and then
+      recursively walks `root` and prints any entries that pass all
+      `filters`.
+
+      <div class="alert success-bg" markdown="1">
+
+      **Hint**: Use [Path.walk] to perform the **walk**.  Consider using [all]
+      with a **generator expression** to check all the `filters`.  You can also
+      use [itertools.chain] to combine two separate **iterables** into a single
+      sequence.
+
+      </div>
+
+  [Path.walk]: https://docs.python.org/3/library/pathlib.html#pathlib.Path.walk
+  [all]: https://docs.python.org/3/builtins/functions.html#all
+  [itertools.chain]: https://docs.python.org/3/library/itertools.html#itertools.chain
+
+  #### Main Execution
+
+  Finally, you will need to parse command line arguments and perform the `walk`:
+
+  -   <div class="flex-col" markdown="1">
+
+          :::python
+          def main(arguments: list[str]=sys.argv[1:]:
+
+      > This parses the command line arguments to get the `root` and `filters`,
+      and then walks the `root` using the specified `filters`. '''
+
+  ### Task 2: Testing
+
+  As you implement `findit.py`, you can use the provided [doctests] to verify the
+  correctness of your code:
+
+      :::bash
+      # Run doctests
+      $ python3 -m doctest findit.py -v
+      ...
+      8 items passed all tests:
+         1 test in findit.DirectoryFilter.check
+         1 test in findit.EmptyFilter.check
+         1 test in findit.ExecutableFilter.check
+         1 test in findit.FileFilter.check
+         7 tests in findit.FilterFactory.get_filter
+         1 test in findit.NameFilter.check
+         1 test in findit.ReadableFilter.check
+         1 test in findit.WritableFilter.check
+      14 tests in 27 items.
+      14 passed.
+      Test passed.
+
+  You can also use `make` to run both the [doctests] and the [unit tests]:
+
+      :::bash
+      # Run unit tests (and doctests)
+      $ make test-findit
+      Testing findit ...
+      test_00_doctest (__main__.FinditTest.test_00_doctest) ... ok
+      test_01_mypy (__main__.FinditTest.test_01_mypy) ... ok
+      test_02_usage (__main__.FinditTest.test_02_usage) ... ok
+      test_03_parent (__main__.FinditTest.test_03_parent) ... ok
+      test_04_etc (__main__.FinditTest.test_04_etc) ... ok
+      test_05_etc_type_f (__main__.FinditTest.test_05_etc_type_f) ... ok
+      test_06_etc_type_d (__main__.FinditTest.test_06_etc_type_d) ... ok
+      test_07_etc_name (__main__.FinditTest.test_07_etc_name) ... ok
+      test_08_etc_empty (__main__.FinditTest.test_08_etc_empty) ... ok
+      test_09_etc_readable (__main__.FinditTest.test_09_etc_readable) ... ok
+      test_10_etc_writable (__main__.FinditTest.test_10_etc_writable) ... ok
+      test_11_etc_executable (__main__.FinditTest.test_11_etc_executable) ... ok
+      test_12_etc_type_f_executable (__main__.FinditTest.test_12_etc_type_f_executable) ... ok
+      test_13_etc_type_d_empty (__main__.FinditTest.test_13_etc_type_d_empty) ... ok
+      test_14_etc_type_d_name_executable (__main__.FinditTest.test_14_etc_type_d_name_executable) ... ok
+      test_15_etc_type_f_readable_name (__main__.FinditTest.test_15_etc_type_f_readable_name) ... ok
+      test_16_etc_type_d_empty_readable_name (__main__.FinditTest.test_16_etc_type_d_empty_readable_name) ... ok
+
+      ----------------------------------------------------------------------
+      Ran 17 tests in 0.382s
+
+      OK
+
+         Score 17.00 / 17.00
+         Grade  1.00 /  1.00
+        Status Success
+
+  To just run the [unit tests], you can do the following:
+
+      :::bash
+      # Run unit tests
+      $ ./findit.test -v
+      ...
+
+  To run a specific [unit test], you can specify the **method name**:
+
+      :::bash
+      # Run only mypy unit test
+      $ ./findit.test -v finditTest.test_01_mypy
+      ...
+
+  To manually check your types, you can use [mypy]:
+
+      :::bash
+      # Run mypy to check types
+      $ mypy findit.py
+
+  ## Activity 3: Quiz (*0.2 Points*)
+
+  Once you have completed all the activities above, you are to complete the
+  following **reflection quiz**:
+
+  <div id="quiz-questions"></div>
+
+  <div id="quiz-responses"></div>
+
+  <script src="static/js/dredd-quiz.js"></script>
+  <script>
+  loadQuiz('static/json/homework07.json');
+  </script>
+
+  <pre style="display: none;" id="dr-container" class="codehilite"><code id="dredd-response"></code></pre>
+
+  As with [Reading 01], you will need to store your answers in a
+  `homework07/answers.json` file.  You can use the form above to generate the
+  contents of this file, or you can write the [JSON] by hand.
+
+  To test your quiz, you can use the `check.py` script:
+
+      :::bash
+      $ ../.scripts/check.py
+      Checking homework07 quiz ...
+            Q1  4.00 /  4.00
+            Q2  3.00 /  3.00
+            Q3  2.00 /  2.00
+            Q4  4.00 /  4.00
+        --------------------
+         Score 13.00 / 13.00
+         Grade  1.00 /  1.00
+        Status Success
+
+  ## Submission (*1 Points*)
+
+  To submit your assignment, please commit your work to the `homework07` folder
+  of your `homework07` branch in your **assignments** [GitHub] repository.
+  Your `homework07` folder should **only** contain the following files:
+
+  - `Makefile`
+  - `answers.json`
+  - `findit.py`
+
+  <div class="alert info-bg" markdown="1">
+  **Note**: You do not need to commit the test scripts because the `Makefile`
+  automatically downloads them.
+  </div>
+
+      :::bash
+      #-----------------------------------------------------------------------
+      # Make sure you have already completed Activity 0: Preparation
+      #-----------------------------------------------------------------------
+      ...
+      $ git add findit.py                                   # Mark changes for commit
+      $ git commit -m "Homework 07: findit"                 # Record changes
+      ...
+      $ git add answers.json                                # Mark changes for commit
+      $ git commit -m "Homework 07: Quiz"                   # Record changes
+      ...
+      $ git push -u origin homework07                       # Push branch to GitHub
+
+  <div class="alert warning-bg" markdown="1">
+
+  ### <i class="icon icon-medium">{{ "lifebuoy" | embed_icon }}</i> Acknowledgments
+
+  If you collaborated with any other students, or received help from TAs or AI
+  tools on this assignment, please record this support in the `README.md` in
+  the `homework07` folder and include it with your **Pull Request**.
+
+  </div>
+
+  <div class="alert success-bg" markdown="1">
+
+  ### <i class="icon icon-medium">{{ "account-question" | embed_icon }}</i> Graders
+
+  Once you have committed your work and pushed it to [GitHub], remember to
+  create a **pull request** and assign it to the appropriate **teaching
+  assistant** from the [Reading 07 TA List].
+
+  **Note**: this list changes each week, so be sure to consult the appropriate
+  list for each assignment.
+
+  </div>
+
+  [Markdown]: https://daringfireball.net/projects/markdown/
+  [git]: https://git-scm.com/
+  [clone]: https://git-scm.com/docs/git-clone
+  [commit]: https://git-scm.com/docs/git-commit
+  [push]: https://git-scm.com/docs/git-push
+  [branching]: https://git-scm.com/docs/git-branch
+  [code review]: https://en.wikipedia.org/wiki/Code_review
+  [GitHub]: https://github.com
+  [Linux]: https://kernel.org
+  [branch]: https://git-scm.com/docs/git-branch
+  [add]: https://git-scm.com/docs/git-add
+  [Reading 01]: reading01.html
+  [Reading 07 TA List]: reading06_tas.html
+  [curl]: http://man7.org/linux/man-pages/man1/curl.1.html
+  [wget]: http://man7.org/linux/man-pages/man1/wget.1.html
+  [JSON]: https://json.org/
+  [ESC]: https://esc.nd.edu/
+  [mypy]: https://mypy-lang.org/
