@@ -1,0 +1,282 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<!-- Favicon -->
+<link rel="icon" type="image/png" sizes="32x32" href="static/ico/favicon-32x32.png">
+<link rel="icon" type="image/png" sizes="16x16" href="static/ico/favicon-16x16.png">
+<link rel="manifest" href="static/ico/site.webmanifest">
+<!-- Stylesheets -->
+<link rel="stylesheet" href="static/css/domer.css">
+<title>Notes 21: Files</title>
+</head>
+<body>
+<header>
+<a class="logo" href="notes21.html">
+    <h1>Notes 21: Files</h1>
+</a>
+<nav>
+    <ul>
+        <li><a href="index.html"><h4>Home</h4></a></li>
+        </ul>
+</nav></header>
+<main>
+<h2 id="logistics">Logistics:<a class="headerlink" href="#logistics" title="Permanent link">&para;</a></h2>
+<ul>
+<li><a href="reading07.html">Reading 07</a>: due today</li>
+<li><a href="homework07.html">Homework 07</a>: files, system calls, OOP!</li>
+<li><a href="extracredit02.html">Extra Credit 02</a>: exams will be passed back on <strong>Wednesday</strong></li>
+</ul>
+<h2 id="system-calls-house-of-cards">System Calls: <span class="gold">House of Cards</span><a class="headerlink" href="#system-calls-house-of-cards" title="Permanent link">&para;</a></h2>
+<p>A <strong class="info">system call</strong> occurs when a <strong
+class="success">user application</strong> requests a <strong
+class="warning">service, operation, or resource</strong> from the <strong
+class="danger">operating system kernel</strong>.</p>
+<div class="centered">
+
+<img src="static/img/slides18-house-of-cards.svg" class="transparent responsive">
+
+</div>
+
+<div class="alert success-bg">
+<p>We can <strong>trace</strong> the <strong class="info">system calls</strong> used by a
+<strong class="success">process</strong> by using <code>strace</code>.</p>
+<div class="codehilite"><pre><span></span><code>$<span class="w"> </span>strace<span class="w"> </span>ls
+</code></pre></div>
+
+</div>
+<div class="alert info-bg">
+<p><strong>Review</strong>: <code>fork</code>, <code>exec</code>, <code>wait</code>, <code>kill</code>, <code>signal</code> for <strong>process control</strong>.</p>
+</div>
+<h2 id="files-os">Files: <span class="gold">OS</span><a class="headerlink" href="#files-os" title="Permanent link">&para;</a></h2>
+<p>Many <strong class="primary">functions</strong> and <strong class="info">system
+calls</strong> related to the <strong class="warning">file system</strong> are
+provided by the <a href="https://docs.python.org/3/library/os.html">os</a> library:</p>
+<div class="codehilite"><pre><span></span><code><span class="c1"># Import OS library</span>
+<span class="o">&gt;&gt;&gt;</span> <span class="kn">import</span> <span class="nn">os</span>
+
+<span class="c1"># Create a path by joining directory and file name</span>
+<span class="o">&gt;&gt;&gt;</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">os</span><span class="o">.</span><span class="n">curdir</span><span class="p">,</span> <span class="s1">&#39;README.md&#39;</span><span class="p">)</span>
+<span class="s1">&#39;./README.md&#39;</span>
+
+<span class="c1"># Check if path exists</span>
+<span class="o">&gt;&gt;&gt;</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">exists</span><span class="p">(</span><span class="s1">&#39;/etc/hosts&#39;</span><span class="p">)</span>
+<span class="kc">True</span>
+</code></pre></div>
+
+<h2 id="files-inodes">Files: <span class="gold">Inodes</span><a class="headerlink" href="#files-inodes" title="Permanent link">&para;</a></h2>
+<p><strong class="success">Files</strong> are objects stored on a <strong
+class="warning">file system</strong>, which is usually a <strong
+class="special">tree-like data structure</strong> managed by the <strong
+class="caution">operating system</strong> to ensure data <strong
+class="danger">persists</strong>.</p>
+<div class="flex-row">
+<div class="flex-col">
+<div class="centered">
+
+<img src="static/img/slides03-files-inode.svg" class="transparent responsive">
+
+</div>
+</div>
+<div class="flex-col">
+<p>To keep track of <strong class="success">files</strong>, the <strong
+class="caution">operating system</strong> stores information about each <strong
+class="success">file</strong> in an <strong class="special">inode</strong>
+structure in the <strong class="warning">file system</strong>.</p>
+<ul>
+<li>Permissions</li>
+<li>Owner, Group</li>
+<li>File Size</li>
+<li>Links</li>
+<li>Timestamps</li>
+</ul>
+</div>
+</div>
+<h2 id="files-stat">Files: <span class="gold">Stat</span><a class="headerlink" href="#files-stat" title="Permanent link">&para;</a></h2>
+<p>To access the <strong class="special">inode</strong> information for a
+<strong class="success">file</strong>, we can use the <a href="https://docs.python.org/3/library/os.html#os.stat">os.stat</a> function:</p>
+<div class="codehilite"><pre><span></span><code><span class="k">try</span><span class="p">:</span>
+    <span class="n">inode</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">stat</span><span class="p">(</span><span class="n">path</span><span class="p">)</span>                       <span class="c1"># Get inode information</span>
+    <span class="k">if</span> <span class="n">stat</span><span class="o">.</span><span class="n">S_ISREG</span><span class="p">(</span><span class="n">inode</span><span class="o">.</span><span class="n">st_mode</span><span class="p">):</span>             <span class="c1"># Check if regular file</span>
+        <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s1">&#39;</span><span class="si">{</span><span class="n">path</span><span class="si">}</span><span class="s1"> size: </span><span class="si">{</span><span class="n">inode</span><span class="o">.</span><span class="n">st_size</span><span class="si">}</span><span class="s1">&#39;</span><span class="p">)</span>  <span class="c1"># Print file size</span>
+<span class="k">except</span> <span class="ne">OSError</span> <span class="k">as</span> <span class="n">e</span><span class="p">:</span>
+    <span class="nb">print</span><span class="p">(</span><span class="n">e</span><span class="p">,</span> <span class="n">file</span><span class="o">=</span><span class="n">sys</span><span class="o">.</span><span class="n">stderr</span><span class="p">)</span>
+</code></pre></div>
+
+<p>To interpret some of these attributes, we can use the constants and functions
+from <a href="https://docs.python.org/3/library/stat.html">stat</a>.  That said, we can often avoid doing this manually by using the
+helper functions provided by <strong class="success">Python</strong>.</p>
+<h2 id="files-test-equivalences">Files: <span class="gold">Test Equivalences</span><a class="headerlink" href="#files-test-equivalences" title="Permanent link">&para;</a></h2>
+<p>The <a href="https://man7.org/linux/man-pages/man1/test.1.html">test</a> command is used to check the <strong class="special">inode</strong>
+of a <strong class="success">file</strong>.  We can perform similar checks
+using <strong class="success">Python</strong> functions:</p>
+<table class="bordered">
+<thead>
+    <th class="info-bg">Test Command</th>
+    <th class="success-bg">Python Function</th>
+</thead>
+<tbody>
+<tr>
+    <td class="info-bg">test -f</td>
+    <td class="success-bg">os.path.isfile(path)</td>
+</tr>
+<tr>
+    <td class="info-bg">test -d</td>
+    <td class="success-bg">os.path.isdir(path)</td>
+</tr>
+<tr>
+    <td class="info-bg">test -e</td>
+    <td class="success-bg">os.path.exists(path)</td>
+</tr>
+<tr>
+    <td class="info-bg">test -r</td>
+    <td class="success-bg">os.access(path, os.R_OK)</td>
+</tr>
+<tr>
+    <td class="info-bg">test -w</td>
+    <td class="success-bg">os.access(path, os.W_OK)</td>
+</tr>
+<tr>
+    <td class="info-bg">test -x</td>
+    <td class="success-bg">os.access(path, os.X_OK)</td>
+</tr>
+</tbody>
+</table>
+
+<h2 id="files-checkpy-old">Files: <a href="https://github.com/nd-cse-20589-fa26/examples/blob/master/slides21/check.py">check.py</a> (<i class="muted">Old</i>)<a class="headerlink" href="#files-checkpy-old" title="Permanent link">&para;</a></h2>
+<blockquote>
+<p>Write a program to check the properties of a file (ie. <a href="https://man7.org/linux/man-pages/man1/test.1.html">test</a>).</p>
+</blockquote>
+<div class="codehilite"><pre><span></span><code>$<span class="w"> </span>./check.py
+Usage:<span class="w"> </span>check<span class="w"> </span>flag<span class="w"> </span>path
+<span class="w">  </span>-e<span class="w"> </span>path<span class="w">      </span>Returns<span class="w"> </span><span class="k">if</span><span class="w"> </span>path<span class="w"> </span>exists
+<span class="w">  </span>-r<span class="w"> </span>path<span class="w">      </span>Returns<span class="w"> </span><span class="k">if</span><span class="w"> </span>path<span class="w"> </span>is<span class="w"> </span>readable
+<span class="w">  </span>-x<span class="w"> </span>path<span class="w">      </span>Returns<span class="w"> </span><span class="k">if</span><span class="w"> </span>path<span class="w"> </span>is<span class="w"> </span>executable
+<span class="w">  </span>-d<span class="w"> </span>path<span class="w">      </span>Returns<span class="w"> </span><span class="k">if</span><span class="w"> </span>path<span class="w"> </span>is<span class="w"> </span>a<span class="w"> </span>directory
+<span class="w">  </span>-f<span class="w"> </span>path<span class="w">      </span>Returns<span class="w"> </span><span class="k">if</span><span class="w"> </span>path<span class="w"> </span>is<span class="w"> </span>a<span class="w"> </span>regular<span class="w"> </span>file
+<span class="w">  </span>-s<span class="w"> </span>path<span class="w">      </span>Returns<span class="w"> </span><span class="k">if</span><span class="w"> </span>path<span class="w"> </span>exists<span class="w"> </span>and<span class="w"> </span>has<span class="w"> </span>size<span class="w"> </span>greater<span class="w"> </span>than<span class="w"> </span>zero
+</code></pre></div>
+
+<div class="codehilite"><pre><span></span><code><span class="ch">#!/usr/bin/env python3</span>
+
+<span class="kn">import</span> <span class="nn">os</span>
+<span class="kn">import</span> <span class="nn">sys</span>
+
+<span class="c1"># Functions</span>
+
+<span class="k">def</span> <span class="nf">usage</span><span class="p">(</span><span class="n">status</span><span class="p">:</span> <span class="nb">int</span><span class="o">=</span><span class="mi">0</span><span class="p">):</span>
+    <span class="nb">print</span><span class="p">(</span><span class="s1">&#39;&#39;&#39;Usage: check flag path</span>
+<span class="s1">    -e path      Returns if path exists</span>
+<span class="s1">    -r path      Returns if path is readable</span>
+<span class="s1">    -x path      Returns if path is executable</span>
+<span class="s1">    -d path      Returns if path is a directory</span>
+<span class="s1">    -f path      Returns if path is a regular file</span>
+<span class="s1">    -s path      Returns if path exists and has size greater than zero</span>
+<span class="s1">&#39;&#39;&#39;</span><span class="p">,</span> <span class="n">file</span><span class="o">=</span><span class="n">sys</span><span class="o">.</span><span class="n">stderr</span><span class="p">)</span>
+    <span class="n">sys</span><span class="o">.</span><span class="n">exit</span><span class="p">(</span><span class="n">status</span><span class="p">)</span>
+
+<span class="k">def</span> <span class="nf">is_file_nonempty</span><span class="p">(</span><span class="n">path</span><span class="p">:</span> <span class="nb">str</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">bool</span><span class="p">:</span>
+    <span class="k">try</span><span class="p">:</span>
+        <span class="k">return</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">getsize</span><span class="p">(</span><span class="n">path</span><span class="p">)</span> <span class="o">&gt;</span> <span class="mi">0</span>
+    <span class="k">except</span> <span class="ne">OSError</span><span class="p">:</span>
+        <span class="k">return</span> <span class="kc">False</span>
+
+<span class="c1"># Main Execution</span>
+
+<span class="k">def</span> <span class="nf">main</span><span class="p">(</span><span class="n">arguments</span><span class="p">:</span> <span class="nb">list</span><span class="p">[</span><span class="nb">str</span><span class="p">]</span><span class="o">=</span><span class="n">sys</span><span class="o">.</span><span class="n">argv</span><span class="p">[</span><span class="mi">1</span><span class="p">:]):</span>
+    <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">arguments</span><span class="p">)</span> <span class="o">!=</span> <span class="mi">2</span><span class="p">:</span>
+        <span class="n">usage</span><span class="p">(</span><span class="mi">1</span><span class="p">)</span>
+
+    <span class="n">flag</span><span class="p">,</span> <span class="n">path</span> <span class="o">=</span> <span class="n">arguments</span>
+
+    <span class="k">match</span> <span class="n">flag</span><span class="p">:</span>
+        <span class="k">case</span> <span class="s1">&#39;-e&#39;</span><span class="p">:</span> <span class="n">sys</span><span class="o">.</span><span class="n">exit</span><span class="p">(</span><span class="mi">0</span> <span class="k">if</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">exists</span><span class="p">(</span><span class="n">path</span><span class="p">)</span> <span class="k">else</span> <span class="mi">1</span><span class="p">)</span>
+        <span class="k">case</span> <span class="s1">&#39;-r&#39;</span><span class="p">:</span> <span class="n">sys</span><span class="o">.</span><span class="n">exit</span><span class="p">(</span><span class="mi">0</span> <span class="k">if</span> <span class="n">os</span><span class="o">.</span><span class="n">access</span><span class="p">(</span><span class="n">path</span><span class="p">,</span> <span class="n">os</span><span class="o">.</span><span class="n">R_OK</span><span class="p">)</span> <span class="k">else</span> <span class="mi">1</span><span class="p">)</span>
+        <span class="k">case</span> <span class="s1">&#39;-x&#39;</span><span class="p">:</span> <span class="n">sys</span><span class="o">.</span><span class="n">exit</span><span class="p">(</span><span class="mi">0</span> <span class="k">if</span> <span class="n">os</span><span class="o">.</span><span class="n">access</span><span class="p">(</span><span class="n">path</span><span class="p">,</span> <span class="n">os</span><span class="o">.</span><span class="n">X_OK</span><span class="p">)</span> <span class="k">else</span> <span class="mi">1</span><span class="p">)</span>
+        <span class="k">case</span> <span class="s1">&#39;-d&#39;</span><span class="p">:</span> <span class="n">sys</span><span class="o">.</span><span class="n">exit</span><span class="p">(</span><span class="mi">0</span> <span class="k">if</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">isdir</span><span class="p">(</span><span class="n">path</span><span class="p">)</span> <span class="k">else</span> <span class="mi">1</span><span class="p">)</span>
+        <span class="k">case</span> <span class="s1">&#39;-f&#39;</span><span class="p">:</span> <span class="n">sys</span><span class="o">.</span><span class="n">exit</span><span class="p">(</span><span class="mi">0</span> <span class="k">if</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">isfile</span><span class="p">(</span><span class="n">path</span><span class="p">)</span> <span class="k">else</span> <span class="mi">1</span><span class="p">)</span>
+        <span class="k">case</span> <span class="s1">&#39;-s&#39;</span><span class="p">:</span> <span class="n">sys</span><span class="o">.</span><span class="n">exit</span><span class="p">(</span><span class="mi">0</span> <span class="k">if</span> <span class="n">is_file_nonempty</span><span class="p">(</span><span class="n">path</span><span class="p">)</span> <span class="k">else</span> <span class="mi">1</span><span class="p">)</span>
+        <span class="k">case</span><span class="w"> </span><span class="k">_</span>   <span class="p">:</span> <span class="n">usage</span><span class="p">(</span><span class="mi">1</span><span class="p">)</span>
+
+<span class="k">if</span> <span class="vm">__name__</span> <span class="o">==</span> <span class="s1">&#39;__main__&#39;</span><span class="p">:</span>
+    <span class="n">main</span><span class="p">()</span>
+</code></pre></div>
+
+<h1 id="files-path">Files: <span class="gold">Path</span><a class="headerlink" href="#files-path" title="Permanent link">&para;</a></h1>
+<p>In recent versions of <strong class="success">Python</strong>, the <a href="https://docs.python.org/3/library/pathlib.html">pathlib</a>
+library provides a <strong class="special">object-oriented</strong> wrapper to
+many of the lower level <a href="https://docs.python.org/3/library/os.html">os</a> functions:</p>
+<div class="codehilite"><pre><span></span><code><span class="o">&gt;&gt;&gt;</span> <span class="kn">from</span> <span class="nn">pathlib</span> <span class="kn">import</span> <span class="n">Path</span>                <span class="c1"># Load Path class from pathlib library</span>
+
+<span class="o">&gt;&gt;&gt;</span> <span class="n">path</span> <span class="o">=</span> <span class="n">Path</span><span class="p">(</span><span class="s1">&#39;/etc/hosts&#39;</span><span class="p">)</span>               <span class="c1"># Create Path instance</span>
+
+<span class="o">&gt;&gt;&gt;</span> <span class="n">path</span><span class="o">.</span><span class="n">name</span>                               <span class="c1"># Get path name</span>
+<span class="s1">&#39;hosts&#39;</span>
+
+<span class="o">&gt;&gt;&gt;</span> <span class="n">path</span><span class="o">.</span><span class="n">is_file</span><span class="p">()</span>                          <span class="c1"># Check if regular file</span>
+<span class="kc">True</span>
+
+<span class="o">&gt;&gt;&gt;</span> <span class="n">path</span><span class="o">.</span><span class="n">parent</span>                             <span class="c1"># Get path directory</span>
+<span class="n">PosixPath</span><span class="p">(</span><span class="s1">&#39;/etc&#39;</span><span class="p">)</span>
+
+<span class="o">&gt;&gt;&gt;</span> <span class="n">path</span><span class="o">.</span><span class="n">stat</span><span class="p">()</span><span class="o">.</span><span class="n">st_size</span>                     <span class="c1"># Get path size from stat structure</span>
+<span class="mi">449</span>
+</code></pre></div>
+
+<h2 id="files-checkpy-new">Files: <a href="https://github.com/nd-cse-20589-fa26/examples/blob/master/slides21/check.py">check.py</a> (<i class="muted">New</i>)<a class="headerlink" href="#files-checkpy-new" title="Permanent link">&para;</a></h2>
+<blockquote>
+<p>Write a program to check the properties of a file (ie. <a href="https://man7.org/linux/man-pages/man1/test.1.html">test</a>).</p>
+</blockquote>
+<div class="codehilite"><pre><span></span><code>$<span class="w"> </span>./check.py
+Usage:<span class="w"> </span>check<span class="w"> </span>flag<span class="w"> </span>path
+<span class="w">  </span>-e<span class="w"> </span>path<span class="w">      </span>Returns<span class="w"> </span><span class="k">if</span><span class="w"> </span>path<span class="w"> </span>exists
+<span class="w">  </span>-r<span class="w"> </span>path<span class="w">      </span>Returns<span class="w"> </span><span class="k">if</span><span class="w"> </span>path<span class="w"> </span>is<span class="w"> </span>readable
+<span class="w">  </span>-x<span class="w"> </span>path<span class="w">      </span>Returns<span class="w"> </span><span class="k">if</span><span class="w"> </span>path<span class="w"> </span>is<span class="w"> </span>executable
+<span class="w">  </span>-d<span class="w"> </span>path<span class="w">      </span>Returns<span class="w"> </span><span class="k">if</span><span class="w"> </span>path<span class="w"> </span>is<span class="w"> </span>a<span class="w"> </span>directory
+<span class="w">  </span>-f<span class="w"> </span>path<span class="w">      </span>Returns<span class="w"> </span><span class="k">if</span><span class="w"> </span>path<span class="w"> </span>is<span class="w"> </span>a<span class="w"> </span>regular<span class="w"> </span>file
+<span class="w">  </span>-s<span class="w"> </span>path<span class="w">      </span>Returns<span class="w"> </span><span class="k">if</span><span class="w"> </span>path<span class="w"> </span>exists<span class="w"> </span>and<span class="w"> </span>has<span class="w"> </span>size<span class="w"> </span>greater<span class="w"> </span>than<span class="w"> </span>zero
+</code></pre></div>
+
+<div class="codehilite"><pre><span></span><code><span class="ch">#!/usr/bin/env python3</span>
+
+<span class="o">...</span>
+
+<span class="kn">from</span> <span class="nn">pathlib</span> <span class="kn">import</span> <span class="n">Path</span>
+
+<span class="o">...</span>
+
+<span class="k">def</span> <span class="nf">is_file_nonempty</span><span class="p">(</span><span class="n">path</span><span class="p">:</span> <span class="n">Path</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">bool</span><span class="p">:</span>
+    <span class="k">try</span><span class="p">:</span>
+        <span class="k">return</span> <span class="n">path</span><span class="o">.</span><span class="n">stat</span><span class="p">()</span><span class="o">.</span><span class="n">st_size</span> <span class="o">&gt;</span> <span class="mi">0</span>
+    <span class="k">except</span> <span class="ne">OSError</span><span class="p">:</span>
+        <span class="k">return</span> <span class="kc">False</span>
+
+<span class="c1"># Main Execution</span>
+
+<span class="k">def</span> <span class="nf">main</span><span class="p">(</span><span class="n">arguments</span><span class="p">:</span> <span class="nb">list</span><span class="p">[</span><span class="nb">str</span><span class="p">]</span><span class="o">=</span><span class="n">sys</span><span class="o">.</span><span class="n">argv</span><span class="p">[</span><span class="mi">1</span><span class="p">:]):</span>
+    <span class="o">...</span>
+
+    <span class="n">flag</span> <span class="o">=</span> <span class="n">arguments</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>
+    <span class="n">path</span> <span class="o">=</span> <span class="n">Path</span><span class="p">(</span><span class="n">arguments</span><span class="p">[</span><span class="mi">1</span><span class="p">])</span>
+
+    <span class="k">match</span> <span class="n">flag</span><span class="p">:</span>
+        <span class="k">case</span> <span class="s1">&#39;-e&#39;</span><span class="p">:</span> <span class="n">sys</span><span class="o">.</span><span class="n">exit</span><span class="p">(</span><span class="mi">0</span> <span class="k">if</span> <span class="n">path</span><span class="o">.</span><span class="n">exists</span><span class="p">(</span><span class="n">path</span><span class="p">)</span> <span class="k">else</span> <span class="mi">1</span><span class="p">)</span>
+        <span class="k">case</span> <span class="s1">&#39;-r&#39;</span><span class="p">:</span> <span class="n">sys</span><span class="o">.</span><span class="n">exit</span><span class="p">(</span><span class="mi">0</span> <span class="k">if</span> <span class="n">os</span><span class="o">.</span><span class="n">access</span><span class="p">(</span><span class="n">path</span><span class="p">,</span> <span class="n">os</span><span class="o">.</span><span class="n">R_OK</span><span class="p">)</span> <span class="k">else</span> <span class="mi">1</span><span class="p">)</span>
+        <span class="k">case</span> <span class="s1">&#39;-x&#39;</span><span class="p">:</span> <span class="n">sys</span><span class="o">.</span><span class="n">exit</span><span class="p">(</span><span class="mi">0</span> <span class="k">if</span> <span class="n">os</span><span class="o">.</span><span class="n">access</span><span class="p">(</span><span class="n">path</span><span class="p">,</span> <span class="n">os</span><span class="o">.</span><span class="n">X_OK</span><span class="p">)</span> <span class="k">else</span> <span class="mi">1</span><span class="p">)</span>
+        <span class="k">case</span> <span class="s1">&#39;-d&#39;</span><span class="p">:</span> <span class="n">sys</span><span class="o">.</span><span class="n">exit</span><span class="p">(</span><span class="mi">0</span> <span class="k">if</span> <span class="n">path</span><span class="o">.</span><span class="n">is_dir</span><span class="p">()</span> <span class="k">else</span> <span class="mi">1</span><span class="p">)</span>
+        <span class="k">case</span> <span class="s1">&#39;-f&#39;</span><span class="p">:</span> <span class="n">sys</span><span class="o">.</span><span class="n">exit</span><span class="p">(</span><span class="mi">0</span> <span class="k">if</span> <span class="n">path</span><span class="o">.</span><span class="n">is_file</span><span class="p">()</span> <span class="k">else</span> <span class="mi">1</span><span class="p">)</span>
+        <span class="k">case</span> <span class="s1">&#39;-s&#39;</span><span class="p">:</span> <span class="n">sys</span><span class="o">.</span><span class="n">exit</span><span class="p">(</span><span class="mi">0</span> <span class="k">if</span> <span class="n">is_file_nonempty</span><span class="p">(</span><span class="n">path</span><span class="p">)</span> <span class="k">else</span> <span class="mi">1</span><span class="p">)</span>
+        <span class="k">case</span><span class="w"> </span><span class="k">_</span>   <span class="p">:</span> <span class="n">usage</span><span class="p">(</span><span class="mi">1</span><span class="p">)</span>
+</code></pre></div>
+</main>
+<footer>
+Built using <a href="https://python.org">Python</a>
+and <a href="https://jinja.palletsprojects.com">Jinja</a>
+with colors from 
+<a href="https://onmessage.nd.edu/university-branding/colors/">Notre Dame</a>, 
+<a href="https://spreadsheet.dev/how-to-get-the-hexadecimal-codes-of-colors-in-google-sheets">Google Docs</a>, and 
+<a href="https://nordtheme.com">Nord Theme</a>,
+and icons from <a href="https://pictogrammers.com/library/mdi/">Material Design Icons</a>.</footer>
+</body>
+</html>
