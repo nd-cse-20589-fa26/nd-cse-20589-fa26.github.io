@@ -1,0 +1,299 @@
+title:  "Notes 21: Files"
+body:   |
+
+  ## Logistics:
+
+  - [Reading 07]: due today
+  - [Homework 07]: files, system calls, OOP!
+  - [Extra Credit 02]: exams will be passed back on **Wednesday**
+
+  [Reading 07]: reading07.html
+  [Homework 07]: homework07.html
+  [Extra Credit 02]: extracredit02.html
+
+  ## System Calls: <span class="gold">House of Cards</span>
+
+  A <strong class="info">system call</strong> occurs when a <strong
+  class="success">user application</strong> requests a <strong
+  class="warning">service, operation, or resource</strong> from the <strong
+  class="danger">operating system kernel</strong>.
+
+  <div class="centered">
+
+  <img src="static/img/slides18-house-of-cards.svg" class="transparent responsive">
+
+  </div>
+
+  <div class="alert success-bg" markdown="1">
+
+  We can **trace** the <strong class="info">system calls</strong> used by a
+  <strong class="success">process</strong> by using `strace`.
+
+  ```bash
+  $ strace ls
+  ```
+
+  </div>
+
+  <div class="alert info-bg" markdown="1">
+
+  **Review**: `fork`, `exec`, `wait`, `kill`, `signal` for **process control**.
+
+  </div>
+
+  ## Files: <span class="gold">OS</span>
+
+  Many <strong class="primary">functions</strong> and <strong class="info">system
+  calls</strong> related to the <strong class="warning">file system</strong> are
+  provided by the [os] library:
+
+  ```python
+  # Import OS library
+  >>> import os
+
+  # Create a path by joining directory and file name
+  >>> os.path.join(os.curdir, 'README.md')
+  './README.md'
+
+  # Check if path exists
+  >>> os.path.exists('/etc/hosts')
+  True
+  ```
+
+  [os]: https://docs.python.org/3/library/os.html
+
+  ## Files: <span class="gold">Inodes</span>
+
+  <strong class="success">Files</strong> are objects stored on a <strong
+  class="warning">file system</strong>, which is usually a <strong
+  class="special">tree-like data structure</strong> managed by the <strong
+  class="caution">operating system</strong> to ensure data <strong
+  class="danger">persists</strong>.
+
+  <div class="flex-row" markdown="1">
+
+  <div class="flex-col" markdown="1">
+
+  <div class="centered">
+
+  <img src="static/img/slides03-files-inode.svg" class="transparent responsive">
+
+  </div>
+
+  </div>
+
+  <div class="flex-col" markdown="1">
+
+  To keep track of <strong class="success">files</strong>, the <strong
+  class="caution">operating system</strong> stores information about each <strong
+  class="success">file</strong> in an <strong class="special">inode</strong>
+  structure in the <strong class="warning">file system</strong>.
+
+  - Permissions
+  - Owner, Group
+  - File Size
+  - Links
+  - Timestamps
+
+  </div>
+
+  </div>
+
+  ## Files: <span class="gold">Stat</span>
+
+  To access the <strong class="special">inode</strong> information for a
+  <strong class="success">file</strong>, we can use the [os.stat] function:
+
+  ```python
+  try:
+      inode = os.stat(path)                       # Get inode information
+      if stat.S_ISREG(inode.st_mode):             # Check if regular file
+          print(f'{path} size: {inode.st_size}')  # Print file size
+  except OSError as e:
+      print(e, file=sys.stderr)
+  ```
+
+  To interpret some of these attributes, we can use the constants and functions
+  from [stat].  That said, we can often avoid doing this manually by using the
+  helper functions provided by <strong class="success">Python</strong>.
+
+  [os.stat]: https://docs.python.org/3/library/os.html#os.stat
+  [stat]: https://docs.python.org/3/library/stat.html
+
+  ## Files: <span class="gold">Test Equivalences</span>
+
+  The [test] command is used to check the <strong class="special">inode</strong>
+  of a <strong class="success">file</strong>.  We can perform similar checks
+  using <strong class="success">Python</strong> functions:
+
+  <table class="bordered">
+  <thead>
+      <th class="info-bg">Test Command</th>
+      <th class="success-bg">Python Function</th>
+  </thead>
+  <tbody>
+  <tr>
+      <td class="info-bg">test -f</td>
+      <td class="success-bg">os.path.isfile(path)</td>
+  </tr>
+  <tr>
+      <td class="info-bg">test -d</td>
+      <td class="success-bg">os.path.isdir(path)</td>
+  </tr>
+  <tr>
+      <td class="info-bg">test -e</td>
+      <td class="success-bg">os.path.exists(path)</td>
+  </tr>
+  <tr>
+      <td class="info-bg">test -r</td>
+      <td class="success-bg">os.access(path, os.R_OK)</td>
+  </tr>
+  <tr>
+      <td class="info-bg">test -w</td>
+      <td class="success-bg">os.access(path, os.W_OK)</td>
+  </tr>
+  <tr>
+      <td class="info-bg">test -x</td>
+      <td class="success-bg">os.access(path, os.X_OK)</td>
+  </tr>
+  </tbody>
+  </table>
+
+  [test]: https://man7.org/linux/man-pages/man1/test.1.html
+
+  ## Files: [check.py] (<i class="muted">Old</i>)
+
+  > Write a program to check the properties of a file (ie. [test]).
+
+  ```
+  $ ./check.py
+  Usage: check flag path
+    -e path      Returns if path exists
+    -r path      Returns if path is readable
+    -x path      Returns if path is executable
+    -d path      Returns if path is a directory
+    -f path      Returns if path is a regular file
+    -s path      Returns if path exists and has size greater than zero
+  ```
+
+  ```python
+  #!/usr/bin/env python3
+
+  import os
+  import sys
+
+  # Functions
+
+  def usage(status: int=0):
+      print('''Usage: check flag path
+      -e path      Returns if path exists
+      -r path      Returns if path is readable
+      -x path      Returns if path is executable
+      -d path      Returns if path is a directory
+      -f path      Returns if path is a regular file
+      -s path      Returns if path exists and has size greater than zero
+  ''', file=sys.stderr)
+      sys.exit(status)
+
+  def is_file_nonempty(path: str) -> bool:
+      try:
+          return os.path.getsize(path) > 0
+      except OSError:
+          return False
+
+  # Main Execution
+
+  def main(arguments: list[str]=sys.argv[1:]):
+      if len(arguments) != 2:
+          usage(1)
+
+      flag, path = arguments
+
+      match flag:
+          case '-e': sys.exit(0 if os.path.exists(path) else 1)
+          case '-r': sys.exit(0 if os.access(path, os.R_OK) else 1)
+          case '-x': sys.exit(0 if os.access(path, os.X_OK) else 1)
+          case '-d': sys.exit(0 if os.path.isdir(path) else 1)
+          case '-f': sys.exit(0 if os.path.isfile(path) else 1)
+          case '-s': sys.exit(0 if is_file_nonempty(path) else 1)
+          case _   : usage(1)
+
+  if __name__ == '__main__':
+      main()
+  ```
+
+  [check.py]: https://github.com/nd-cse-20589-fa26/examples/blob/master/slides21/check.py
+
+  # Files: <span class="gold">Path</span>
+
+  In recent versions of <strong class="success">Python</strong>, the [pathlib]
+  library provides a <strong class="special">object-oriented</strong> wrapper to
+  many of the lower level [os] functions:
+
+  ```python
+  >>> from pathlib import Path                # Load Path class from pathlib library
+
+  >>> path = Path('/etc/hosts')               # Create Path instance
+
+  >>> path.name                               # Get path name
+  'hosts'
+
+  >>> path.is_file()                          # Check if regular file
+  True
+
+  >>> path.parent                             # Get path directory
+  PosixPath('/etc')
+
+  >>> path.stat().st_size                     # Get path size from stat structure
+  449
+  ```
+
+  [pathlib]: https://docs.python.org/3/library/pathlib.html
+
+  ## Files: [check.py] (<i class="muted">New</i>)
+
+  > Write a program to check the properties of a file (ie. [test]).
+
+  ```
+  $ ./check.py
+  Usage: check flag path
+    -e path      Returns if path exists
+    -r path      Returns if path is readable
+    -x path      Returns if path is executable
+    -d path      Returns if path is a directory
+    -f path      Returns if path is a regular file
+    -s path      Returns if path exists and has size greater than zero
+  ```
+
+  ```python
+  #!/usr/bin/env python3
+
+  ...
+
+  from pathlib import Path
+
+  ...
+
+  def is_file_nonempty(path: Path) -> bool:
+      try:
+          return path.stat().st_size > 0
+      except OSError:
+          return False
+
+  # Main Execution
+
+  def main(arguments: list[str]=sys.argv[1:]):
+      ...
+
+      flag = arguments[0]
+      path = Path(arguments[1])
+
+      match flag:
+          case '-e': sys.exit(0 if path.exists(path) else 1)
+          case '-r': sys.exit(0 if os.access(path, os.R_OK) else 1)
+          case '-x': sys.exit(0 if os.access(path, os.X_OK) else 1)
+          case '-d': sys.exit(0 if path.is_dir() else 1)
+          case '-f': sys.exit(0 if path.is_file() else 1)
+          case '-s': sys.exit(0 if is_file_nonempty(path) else 1)
+          case _   : usage(1)
+  ```
