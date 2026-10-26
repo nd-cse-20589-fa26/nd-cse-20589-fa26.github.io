@@ -234,6 +234,8 @@
           - Reading 07
         items:
           - name:       Slides 21
+          - name:       Panopto
+            link:       https://notredame.hosted.panopto.com/Panopto/Pages/Viewer.aspx?id=a3bb9b5d-f6ef-49a0-81ff-b4ef01141417
 
       - date:           Wed 10/28
         topics:         Directories
