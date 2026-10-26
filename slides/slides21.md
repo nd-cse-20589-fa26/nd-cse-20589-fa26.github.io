@@ -326,7 +326,7 @@ PosixPath('/etc')
 
 # Files: [check.py]
 
-> Write a program can check the properties of a file (ie. [test]).
+> Write a program to check the properties of a file (ie. [test]).
 
 ```
 $ ./check.py
