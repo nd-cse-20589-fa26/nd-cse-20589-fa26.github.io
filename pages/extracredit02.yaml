@@ -1,0 +1,44 @@
+title:  "Extra Credit 02"
+body:   |
+
+    For up to **1.0** points of extra credit, you may do both of the following
+    **Extra Credit** opportunities by **Friday, November 6**:
+
+    ## Extra Credit 02-A: <span class="gold">Exam Corrections</span> (<i class="muted">0.5 Points</i>)
+
+    Correct **10%** (ie. **4 Points**) of **Exam 02** and then meet with a
+    **teaching assistant** during their office hours to explain the corrections
+    you made.
+
+    If you cannot figure out the correct solutions, then you can alternatively
+    go to their office hours with **specific written questions** and discuss
+    the solutions.
+
+    <div class="alert warning-bg" markdown="1">
+
+    This meeting should be no more than `10`-`15` minutes.
+
+    </div>
+
+    ## Extra Credit 02-B: <span class="gold">Web Scraper</span> (<i class="muted">0.5 Points</i>)
+
+    Use [functional programming], [requests], and [concurrent.futures] to
+    [scrape] a website of your choice.
+
+    Create a new [git] repository on [GitHub] with your scraper and fill out a
+    `README.md` that:
+
+    - Explains how to use your scraper.
+
+    - Provides a screenshot or video of your scraper in action.
+
+    - Describes the performance impact of using [functional programming] and [concurrent.futures].
+
+    Share this [git] repository in the class **Slack** channel.
+
+    [functional programming]: https://en.wikipedia.org/wiki/Functional_programming
+    [requests]: https://requests.readthedocs.io/en/latest/
+    [concurrent.futures]: https://docs.python.org/3/library/concurrent.futures.html
+    [scrape]: https://en.wikipedia.org/wiki/Web_scraping
+    [git]: https://git-scm.com/
+    [GitHub]: https://github.com
