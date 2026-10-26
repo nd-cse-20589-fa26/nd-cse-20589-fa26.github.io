@@ -1,0 +1,493 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<!-- Favicon -->
+<link rel="icon" type="image/png" sizes="32x32" href="static/ico/favicon-32x32.png">
+<link rel="icon" type="image/png" sizes="16x16" href="static/ico/favicon-16x16.png">
+<link rel="manifest" href="static/ico/site.webmanifest">
+<!-- Stylesheets -->
+<link rel="stylesheet" href="static/css/domer.css">
+<title>Homework 07: Findit</title>
+</head>
+<body>
+<header>
+<a class="logo" href="homework07.html">
+    <h1>Homework 07: Findit</h1>
+</a>
+<nav>
+    <ul>
+        <li><a href="index.html"><h4>Home</h4></a></li>
+        </ul>
+</nav></header>
+<main>
+<p>The goal of this homework assignment is to allow you to continue practicing
+<a href="https://en.wikipedia.org/wiki/Object-oriented_programming">object-oriented programming</a> and using <a href="https://en.wikipedia.org/wiki/System_call">system calls</a> related to <a href="https://en.wikipedia.org/wiki/Computer_file">files</a> and
+<a href="https://en.wikipedia.org/wiki/Directory_(computing)">directories</a> in <a href="https://www.python.org/">Python</a> by implementing one a file system search utility
+similar to <a href="https://man7.org/linux/man-pages/man1/find.1.html">find</a> named <code>findit.py</code>.</p>
+<p>For this assignment, record your scripts and any responses to the following
+activities in the <code>homework07</code> folder of your <strong>assignments</strong> <a href="https://github.com">GitHub</a>
+repository and push your work by <strong>noon Saturday, October 31</strong>.</p>
+<h2 id="activity-0-preparation">Activity 0: Preparation<a class="headerlink" href="#activity-0-preparation" title="Permanent link">&para;</a></h2>
+<p>Before starting this homework assignment, you should first perform a <code>git
+pull</code> to retrieve any changes in your remote <a href="https://github.com">GitHub</a> repository:</p>
+<div class="codehilite"><pre><span></span><code>$<span class="w"> </span><span class="nb">cd</span><span class="w"> </span>path/to/repository<span class="w">                   </span><span class="c1"># Go to assignments repository</span>
+
+$<span class="w"> </span>git<span class="w"> </span>switch<span class="w"> </span>master<span class="w">                       </span><span class="c1"># Make sure we are in master branch</span>
+
+$<span class="w"> </span>git<span class="w"> </span>pull<span class="w"> </span>--rebase<span class="w">                       </span><span class="c1"># Get any remote changes not present locally</span>
+</code></pre></div>
+
+<p>Next, create a new branch for this assignment:</p>
+<div class="codehilite"><pre><span></span><code>$<span class="w"> </span>git<span class="w"> </span>switch<span class="w"> </span>-c<span class="w"> </span>homework07<span class="w">                </span><span class="c1"># Create homework07 branch and check it out</span>
+</code></pre></div>
+
+<h3 id="task-1-skeleton-code">Task 1: Skeleton Code<a class="headerlink" href="#task-1-skeleton-code" title="Permanent link">&para;</a></h3>
+<p>To help you get started, the instructor has provided you with the following <strong>skeleton code</strong>:</p>
+<div class="codehilite"><pre><span></span><code><span class="c1"># Create homework07 folder</span>
+$<span class="w"> </span>mkdir<span class="w"> </span>homework07
+
+<span class="c1"># Go to homework07 folder</span>
+$<span class="w"> </span><span class="nb">cd</span><span class="w"> </span>homework07
+
+<span class="c1"># Download Makefile</span>
+$<span class="w"> </span>curl<span class="w"> </span>-LO<span class="w"> </span>https://pnutz.h4x0r.space/courses/cse.20589.fa26/static/txt/homework07/Makefile
+
+<span class="c1"># Download Python skeleton code</span>
+$<span class="w"> </span>curl<span class="w"> </span>-LO<span class="w"> </span>https://pnutz.h4x0r.space/courses/cse.20589.fa26/static/txt/homework07/findit.py
+</code></pre></div>
+
+<p>Once downloaded, you should see the following files in your <code>homework07</code> directory:</p>
+<div class="codehilite"><pre><span></span><code>homework07
+<span class="w">    </span><span class="se">\_</span><span class="w"> </span>Makefile<span class="w">       </span><span class="c1"># This is the Makefile building all the assignment artifacts</span>
+<span class="w">    </span><span class="se">\_</span><span class="w"> </span>findit.py<span class="w">      </span><span class="c1"># This is the Python script for the findit script</span>
+</code></pre></div>
+
+<div class="alert warning-bg">
+<h3 id="alert-embed_icon-doctests"><i class="icon icon-medium"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><title>alert</title><path d="M13 14H11V9H13M13 18H11V16H13M1 21H23L12 2L1 21Z" /></svg>
+</i> DocTests<a class="headerlink" href="#alert-embed_icon-doctests" title="Permanent link">&para;</a></h3>
+<p>You may notice that in addition to the usual comments and <code>TODOs</code>, the
+<a href="https://peps.python.org/pep-0257/">docstrings</a> of each method also contains a few <a href="https://docs.python.org/3/library/doctest.html">doctests</a>.</p>
+<p>You are <strong>not</strong> to modify these <a href="https://docs.python.org/3/library/doctest.html">doctests</a> and must keep them in-place. They
+are used to verify the correctness of your code.</p>
+<p>Your code goes <strong>below</strong> the <a href="https://peps.python.org/pep-0257/">docstrings</a>, where the <code>TODO</code> and <code>pass</code>
+commands are (you may remove the pass once you complete the method).</p>
+</div>
+<h3 id="task-2-initial-import">Task 2: Initial Import<a class="headerlink" href="#task-2-initial-import" title="Permanent link">&para;</a></h3>
+<p>Now that the files are downloaded into the <code>homework07</code> folder, you can
+<strong>commit</strong> them to your <a href="https://git-scm.com/">git</a> repository:</p>
+<div class="codehilite"><pre><span></span><code>$<span class="w"> </span>git<span class="w"> </span>add<span class="w"> </span>Makefile<span class="w">                            </span><span class="c1"># Mark changes for commit</span>
+$<span class="w"> </span>git<span class="w"> </span>add<span class="w"> </span>*.py
+$<span class="w"> </span>git<span class="w"> </span>commit<span class="w"> </span>-m<span class="w"> </span><span class="s2">&quot;Homework 07: Initial Import&quot;</span><span class="w"> </span><span class="c1"># Record changes</span>
+</code></pre></div>
+
+<h3 id="task-3-unit-tests">Task 3: Unit Tests<a class="headerlink" href="#task-3-unit-tests" title="Permanent link">&para;</a></h3>
+<p>After downloading these files, you can run the <code>make</code> command to run the
+tests.</p>
+<div class="codehilite"><pre><span></span><code><span class="c1"># Run all tests (will trigger automatic download)</span>
+$<span class="w"> </span>make
+</code></pre></div>
+
+<p>You will notice that the Makefile downloads these additional test data and scripts:</p>
+<div class="codehilite"><pre><span></span><code>homework07
+<span class="w">    </span><span class="se">\_</span><span class="w"> </span>findit.test<span class="w">          </span><span class="c1"># This is the Python test for the findit script</span>
+</code></pre></div>
+
+<p>In addition to the embedded <a href="https://docs.python.org/3/library/doctest.html">doctests</a> in the <strong>skeleton code</strong>, you will be
+using these <a href="https://en.wikipedia.org/wiki/Unit_testing">unit tests</a> to verify the correctness and behavior of your code.</p>
+<div class="alert info-bg">
+<h3 id="download-embed_icon-automatic-download"><i class="icon icon-medium"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><title>download</title><path d="M5,20H19V18H5M19,9H15V3H9V9H5L12,16L19,9Z" /></svg>
+</i> Automatic Download<a class="headerlink" href="#download-embed_icon-automatic-download" title="Permanent link">&para;</a></h3>
+<p>The <code>test</code> scripts are automatically downloaded by the <code>Makefile</code>, so any
+modifications you do to them will be lost when you run <code>make</code> again. Likewise,
+because they are automatically downloaded, you do not need to <code>add</code> or <code>commit</code>
+them to your <a href="https://git-scm.com/">git</a> repository.</p>
+</div>
+<p>The details on what you need to implement for this assignment are described
+in the following sections.</p>
+<h2 id="activity-2-findit-08-points">Activity 2: findit (<em>0.8 Points</em>)<a class="headerlink" href="#activity-2-findit-08-points" title="Permanent link">&para;</a></h2>
+<p>For this activity, write a <a href="https://www.python.org/">Python</a> script, <code>findit.py</code>, that implements a
+subset of the <a href="https://man7.org/linux/man-pages/man1/find.1.html">find</a> utility:</p>
+<div class="codehilite"><pre><span></span><code><span class="c1"># Display usage message</span>
+$<span class="w"> </span>./findit.py
+Usage:<span class="w"> </span>findit<span class="w"> </span>ROOT<span class="w"> </span><span class="o">[</span>FILTERS<span class="o">]</span>
+
+Filters:
+<span class="w">    </span>-type<span class="w"> </span><span class="o">[</span>f<span class="p">|</span>d<span class="o">]</span><span class="w">     </span>File<span class="w"> </span>is<span class="w"> </span>of<span class="w"> </span><span class="nb">type</span><span class="w"> </span>f<span class="w"> </span><span class="k">for</span><span class="w"> </span>regular<span class="w"> </span>file<span class="w"> </span>or<span class="w"> </span>d<span class="w"> </span><span class="k">for</span><span class="w"> </span>directory
+<span class="w">    </span>-name<span class="w"> </span>PATTERN<span class="w">   </span>Name<span class="w"> </span>of<span class="w"> </span>file<span class="w"> </span>matches<span class="w"> </span>shell<span class="w"> </span>pattern
+<span class="w">    </span>-empty<span class="w">          </span>File<span class="w"> </span>or<span class="w"> </span>directory<span class="w"> </span>is<span class="w"> </span>empty
+<span class="w">    </span>-readable<span class="w">       </span>File<span class="w"> </span>is<span class="w"> </span>readable<span class="w"> </span>by<span class="w"> </span>user
+<span class="w">    </span>-writable<span class="w">       </span>File<span class="w"> </span>is<span class="w"> </span>writable<span class="w"> </span>by<span class="w"> </span>user
+<span class="w">    </span>-executable<span class="w">     </span>File<span class="w"> </span>is<span class="w"> </span>executable<span class="w"> </span>or<span class="w"> </span>directory<span class="w"> </span>is<span class="w"> </span>searchable<span class="w"> </span>by<span class="w"> </span>user
+
+<span class="c1"># Display entries in current directory</span>
+$<span class="w"> </span>./findit.py<span class="w"> </span>.
+.
+__pycache__
+findit.test
+findit.py
+findit.py.template
+Makefile
+answers.json
+__pycache__/findit.cpython-314.pyc
+
+<span class="c1"># Display only files that end with .py</span>
+$<span class="w"> </span>./findit.py<span class="w"> </span>.<span class="w"> </span>-type<span class="w"> </span>f<span class="w"> </span>-name<span class="w"> </span>*.py
+findit.py
+</code></pre></div>
+
+<p>The <code>findit.py</code> takes a <code>ROOT</code> argument and then a series of <em>optional</em> <code>FILTERS</code>:</p>
+<ul>
+<li>
+<p><code>-type [f|d]</code>: This allows the user to specify whether or not to search for
+<a href="https://en.wikipedia.org/wiki/Computer_file">files</a> or <a href="https://en.wikipedia.org/wiki/Directory_(computing)">directories</a> (<em>note, cannot be a symlink</em>).</p>
+</li>
+<li>
+<p><code>-name PATTERN</code>: This allows the user to specify a <em>shell pattern</em> to match
+against the name of the file.</p>
+</li>
+<li>
+<p><code>-empty</code>: This allows the user to specify searching for empty <a href="https://en.wikipedia.org/wiki/Computer_file">files</a> or
+<a href="https://en.wikipedia.org/wiki/Directory_(computing)">directories</a>.</p>
+</li>
+<li>
+<p><code>-readable</code>: This allows the user to specify search for entries that are
+<strong>readable</strong> by the user.</p>
+</li>
+<li>
+<p><code>-writable</code>: This allows the user to specify search for entries that are
+<strong>writable</strong> by the user.</p>
+</li>
+<li>
+<p><code>-executable</code>: This allows the user to specify search for entries that are
+<strong>executable</strong> by the user.</p>
+</li>
+</ul>
+<p>If multiple <code>FILTERS</code> are specified, then they all must match in order for
+the file or directory to be displayed.</p>
+<h3 id="task-1-finditpy">Task 1: <code>findit.py</code><a class="headerlink" href="#task-1-finditpy" title="Permanent link">&para;</a></h3>
+<p>To implement the <code>findit.py</code> script, you will need to use the <a href="https://en.wikipedia.org/wiki/Inheritance_(object-oriented_programming)">inheritance</a>
+and the <a href="https://en.wikipedia.org/wiki/Factory_method_pattern">factory method pattern</a> discussed in class.</p>
+<h4 id="filters">Filters<a class="headerlink" href="#filters" title="Permanent link">&para;</a></h4>
+<p>Each of the command line <code>FILTERS</code> in <code>findit.py</code> corresponds to a specific
+<code>BaseFilter</code> class:</p>
+<div class="codehilite"><pre><span></span><code><span class="k">class</span> <span class="nc">BaseFilter</span><span class="p">(</span><span class="n">ABC</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">&#39;&#39;&#39; Filter Interface&#39;&#39;&#39;</span>
+    <span class="nd">@abstractmethod</span>
+    <span class="k">def</span> <span class="nf">check</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">path</span><span class="p">:</span> <span class="n">Path</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">bool</span><span class="p">:</span>
+        <span class="k">pass</span>
+</code></pre></div>
+
+<p>As can be seen, the provided <code>BaseFilter</code> is an <a href="https://docs.python.org/3/library/abc.html">abstract base class</a> which
+requires subclasses to implement the <code>check</code> <a href="https://docs.python.org/3/library/abc.html#abc.abstractmethod">abstract method</a>.  The purpose
+of this method is to return <code>True</code> if the given <code>path</code> passes the <code>FILTER</code>.</p>
+<p>You will need to implement each of the following <strong>methods</strong> in the
+corresponding <strong>concrete</strong> classes:</p>
+<ul>
+<li>
+<div class="flex-col" markdown="1">
+<div class="codehilite"><pre><span></span><code><span class="k">class</span> <span class="nc">FilterFilter</span><span class="p">:</span>
+    <span class="k">def</span> <span class="nf">check</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">path</span><span class="p">:</span> <span class="n">Path</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">bool</span><span class="p">:</span>
+</code></pre></div>
+
+<blockquote>
+<p>This returns <code>True</code> if the given <code>path</code> is a regular <strong>file</strong> and not a <strong>symlink</strong>.</p>
+</blockquote>
+<div class="alert success-bg" markdown="1">
+<p><strong>Hint</strong>: Use the methods of the <a href="https://docs.python.org/3/library/pathlib.html#concrete-paths">Path</a> object or a function in <a href="https://docs.python.org/3/library/os.path.html">os.path</a>.</p>
+</div>
+</li>
+<li>
+<div class="flex-col" markdown="1">
+<div class="codehilite"><pre><span></span><code><span class="k">class</span> <span class="nc">DirectoryFilter</span><span class="p">:</span>
+    <span class="k">def</span> <span class="nf">check</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">path</span><span class="p">:</span> <span class="n">Path</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">bool</span><span class="p">:</span>
+</code></pre></div>
+
+<blockquote>
+<p>This returns <code>True</code> if the given <code>path</code> is a <strong>directory</strong> and not a <strong>symlink</strong>.</p>
+</blockquote>
+<div class="alert success-bg" markdown="1">
+<p><strong>Hint</strong>: Use the methods of the <a href="https://docs.python.org/3/library/pathlib.html#concrete-paths">Path</a> object or a function in <a href="https://docs.python.org/3/library/os.path.html">os.path</a>.</p>
+</div>
+</li>
+<li>
+<div class="flex-col" markdown="1">
+<div class="codehilite"><pre><span></span><code><span class="nd">@dataclass</span>
+<span class="k">class</span> <span class="nc">NameFilter</span><span class="p">:</span>
+    <span class="n">pattern</span><span class="p">:</span> <span class="nb">str</span>
+    <span class="k">def</span> <span class="nf">check</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">path</span><span class="p">:</span> <span class="n">Path</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">bool</span><span class="p">:</span>
+</code></pre></div>
+
+<blockquote>
+<p>This returns <code>True</code> if the name of given <code>path</code> matches stored shell <strong>pattern</strong>.</p>
+</blockquote>
+<div class="alert success-bg" markdown="1">
+<p><strong>Hint</strong>: Use <a href="https://docs.python.org/3/library/fnmatch.html#fnmatch.fnmatch">fnmatch.fnmatch</a>.</p>
+</div>
+</li>
+<li>
+<div class="flex-col" markdown="1">
+<div class="codehilite"><pre><span></span><code><span class="k">class</span> <span class="nc">EmptyFilter</span><span class="p">:</span>
+    <span class="k">def</span> <span class="nf">check</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">path</span><span class="p">:</span> <span class="n">Path</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">bool</span><span class="p">:</span>
+</code></pre></div>
+
+<blockquote>
+<p>This returns <code>True</code> if the given <code>path</code> is <strong>empty</strong> (<em>must be a file or directory, no symlink</em>).</p>
+</blockquote>
+<div class="alert success-bg" markdown="1">
+<p><strong>Hint</strong>: Use the methods of the <a href="https://docs.python.org/3/library/pathlib.html#concrete-paths">Path</a> object or a function in
+<a href="https://docs.python.org/3/library/os.path.html">os.path</a>.</p>
+<p>Think carefully on what it means for a <strong>file</strong> or <strong>directory</strong> to be
+empty.</p>
+</div>
+</li>
+<li>
+<div class="flex-col" markdown="1">
+<div class="codehilite"><pre><span></span><code><span class="k">class</span> <span class="nc">ReadableFilter</span><span class="p">:</span>
+    <span class="k">def</span> <span class="nf">check</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">path</span><span class="p">:</span> <span class="n">Path</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">bool</span><span class="p">:</span>
+</code></pre></div>
+
+<blockquote>
+<p>This returns <code>True</code> if the given <code>path</code> is <strong>readable</strong>.</p>
+</blockquote>
+<div class="alert success-bg" markdown="1">
+<p><strong>Hint</strong>: Use <a href="https://docs.python.org/3/library/os.html#os.access">os.access</a>.</p>
+</div>
+</li>
+<li>
+<div class="flex-col" markdown="1">
+<div class="codehilite"><pre><span></span><code><span class="k">class</span> <span class="nc">WritableFilter</span><span class="p">:</span>
+    <span class="k">def</span> <span class="nf">check</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">path</span><span class="p">:</span> <span class="n">Path</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">bool</span><span class="p">:</span>
+</code></pre></div>
+
+<blockquote>
+<p>This returns <code>True</code> if the given <code>path</code> is <strong>writable</strong>.</p>
+</blockquote>
+<div class="alert success-bg" markdown="1">
+<p><strong>Hint</strong>: Use <a href="https://docs.python.org/3/library/os.html#os.access">os.access</a>.</p>
+</div>
+</li>
+<li>
+<div class="flex-col" markdown="1">
+<div class="codehilite"><pre><span></span><code><span class="k">class</span> <span class="nc">ExecutableFilter</span><span class="p">:</span>
+    <span class="k">def</span> <span class="nf">check</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">path</span><span class="p">:</span> <span class="n">Path</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">bool</span><span class="p">:</span>
+</code></pre></div>
+
+<blockquote>
+<p>This returns <code>True</code> if the given <code>path</code> is <strong>executable</strong>.</p>
+</blockquote>
+<div class="alert success-bg" markdown="1">
+<p><strong>Hint</strong>: Use <a href="https://docs.python.org/3/library/os.html#os.access">os.access</a>.</p>
+</div>
+</li>
+</ul>
+<h4 id="factory">Factory<a class="headerlink" href="#factory" title="Permanent link">&para;</a></h4>
+<p>Once you have implemented the <code>Filter</code> classes, you are to complete the
+<a href="https://en.wikipedia.org/wiki/Factory_method_pattern">factory method pattern</a>:</p>
+<ul>
+<li>
+<div class="flex-col" markdown="1">
+<div class="codehilite"><pre><span></span><code><span class="k">class</span> <span class="nc">FilterFactory</span><span class="p">:</span>
+    <span class="nd">@classmethod</span>
+    <span class="k">def</span> <span class="nf">get_filter</span><span class="p">(</span><span class="bp">cls</span><span class="p">,</span> <span class="n">arguments</span><span class="p">:</span> <span class="nb">list</span><span class="p">[</span><span class="nb">str</span><span class="p">])</span> <span class="o">-&gt;</span> <span class="n">BaseFilter</span><span class="p">:</span>
+</code></pre></div>
+
+<blockquote>
+<p>This returns the next concrete <code>Filter</code> class based on the given
+command line arguments (<code>raise UnknownFilter</code> if invalid argument).</p>
+</blockquote>
+<div class="alert success-bg" markdown="1">
+<p><strong>Hint</strong>: You should consume at least one argument (and sometimes two
+depending on the <code>Filter</code>).</p>
+</div>
+</li>
+</ul>
+<h4 id="walk">Walk<a class="headerlink" href="#walk" title="Permanent link">&para;</a></h4>
+<p>You will use these <code>Filters</code> and the <strong>factory method</strong> in the following
+<code>walk</code> function:</p>
+<ul>
+<li>
+<div class="flex-col" markdown="1">
+<div class="codehilite"><pre><span></span><code><span class="k">def</span> <span class="nf">walk</span><span class="p">(</span><span class="n">root</span><span class="p">:</span> <span class="n">Path</span><span class="p">,</span> <span class="n">filters</span><span class="p">:</span> <span class="nb">list</span><span class="p">[</span><span class="n">BaseFilter</span><span class="p">])</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
+</code></pre></div>
+
+<blockquote>
+<p>This function prints <code>root</code> if it passes all <code>filters</code> and then
+recursively walks <code>root</code> and prints any entries that pass all
+<code>filters</code>.</p>
+</blockquote>
+<div class="alert success-bg" markdown="1">
+<p><strong>Hint</strong>: Use <a href="https://docs.python.org/3/library/pathlib.html#pathlib.Path.walk">Path.walk</a> to perform the <strong>walk</strong>.  Consider using <a href="https://docs.python.org/3/builtins/functions.html#all">all</a>
+with a <strong>generator expression</strong> to check all the <code>filters</code>.  You can also
+use <a href="https://docs.python.org/3/library/itertools.html#itertools.chain">itertools.chain</a> to combine two separate <strong>iterables</strong> into a single
+sequence.</p>
+</div>
+</li>
+</ul>
+<h4 id="main-execution">Main Execution<a class="headerlink" href="#main-execution" title="Permanent link">&para;</a></h4>
+<p>Finally, you will need to parse command line arguments and perform the <code>walk</code>:</p>
+<ul>
+<li>
+<div class="flex-col" markdown="1">
+<div class="codehilite"><pre><span></span><code><span class="k">def</span> <span class="nf">main</span><span class="p">(</span><span class="n">arguments</span><span class="p">:</span> <span class="nb">list</span><span class="p">[</span><span class="nb">str</span><span class="p">]</span><span class="o">=</span><span class="n">sys</span><span class="o">.</span><span class="n">argv</span><span class="p">[</span><span class="mi">1</span><span class="p">:]:</span>
+</code></pre></div>
+
+<blockquote>
+<p>This parses the command line arguments to get the <code>root</code> and <code>filters</code>,
+and then walks the <code>root</code> using the specified <code>filters</code>. '''</p>
+</blockquote>
+</li>
+</ul>
+<h3 id="task-2-testing">Task 2: Testing<a class="headerlink" href="#task-2-testing" title="Permanent link">&para;</a></h3>
+<p>As you implement <code>findit.py</code>, you can use the provided <a href="https://docs.python.org/3/library/doctest.html">doctests</a> to verify the
+correctness of your code:</p>
+<div class="codehilite"><pre><span></span><code><span class="c1"># Run doctests</span>
+$<span class="w"> </span>python3<span class="w"> </span>-m<span class="w"> </span>doctest<span class="w"> </span>findit.py<span class="w"> </span>-v
+...
+<span class="m">8</span><span class="w"> </span>items<span class="w"> </span>passed<span class="w"> </span>all<span class="w"> </span>tests:
+<span class="w">   </span><span class="m">1</span><span class="w"> </span><span class="nb">test</span><span class="w"> </span><span class="k">in</span><span class="w"> </span>findit.DirectoryFilter.check
+<span class="w">   </span><span class="m">1</span><span class="w"> </span><span class="nb">test</span><span class="w"> </span><span class="k">in</span><span class="w"> </span>findit.EmptyFilter.check
+<span class="w">   </span><span class="m">1</span><span class="w"> </span><span class="nb">test</span><span class="w"> </span><span class="k">in</span><span class="w"> </span>findit.ExecutableFilter.check
+<span class="w">   </span><span class="m">1</span><span class="w"> </span><span class="nb">test</span><span class="w"> </span><span class="k">in</span><span class="w"> </span>findit.FileFilter.check
+<span class="w">   </span><span class="m">7</span><span class="w"> </span>tests<span class="w"> </span><span class="k">in</span><span class="w"> </span>findit.FilterFactory.get_filter
+<span class="w">   </span><span class="m">1</span><span class="w"> </span><span class="nb">test</span><span class="w"> </span><span class="k">in</span><span class="w"> </span>findit.NameFilter.check
+<span class="w">   </span><span class="m">1</span><span class="w"> </span><span class="nb">test</span><span class="w"> </span><span class="k">in</span><span class="w"> </span>findit.ReadableFilter.check
+<span class="w">   </span><span class="m">1</span><span class="w"> </span><span class="nb">test</span><span class="w"> </span><span class="k">in</span><span class="w"> </span>findit.WritableFilter.check
+<span class="m">14</span><span class="w"> </span>tests<span class="w"> </span><span class="k">in</span><span class="w"> </span><span class="m">27</span><span class="w"> </span>items.
+<span class="m">14</span><span class="w"> </span>passed.
+Test<span class="w"> </span>passed.
+</code></pre></div>
+
+<p>You can also use <code>make</code> to run both the <a href="https://docs.python.org/3/library/doctest.html">doctests</a> and the <a href="https://en.wikipedia.org/wiki/Unit_testing">unit tests</a>:</p>
+<div class="codehilite"><pre><span></span><code><span class="c1"># Run unit tests (and doctests)</span>
+$<span class="w"> </span>make<span class="w"> </span>test-findit
+Testing<span class="w"> </span>findit<span class="w"> </span>...
+test_00_doctest<span class="w"> </span><span class="o">(</span>__main__.FinditTest.test_00_doctest<span class="o">)</span><span class="w"> </span>...<span class="w"> </span>ok
+test_01_mypy<span class="w"> </span><span class="o">(</span>__main__.FinditTest.test_01_mypy<span class="o">)</span><span class="w"> </span>...<span class="w"> </span>ok
+test_02_usage<span class="w"> </span><span class="o">(</span>__main__.FinditTest.test_02_usage<span class="o">)</span><span class="w"> </span>...<span class="w"> </span>ok
+test_03_parent<span class="w"> </span><span class="o">(</span>__main__.FinditTest.test_03_parent<span class="o">)</span><span class="w"> </span>...<span class="w"> </span>ok
+test_04_etc<span class="w"> </span><span class="o">(</span>__main__.FinditTest.test_04_etc<span class="o">)</span><span class="w"> </span>...<span class="w"> </span>ok
+test_05_etc_type_f<span class="w"> </span><span class="o">(</span>__main__.FinditTest.test_05_etc_type_f<span class="o">)</span><span class="w"> </span>...<span class="w"> </span>ok
+test_06_etc_type_d<span class="w"> </span><span class="o">(</span>__main__.FinditTest.test_06_etc_type_d<span class="o">)</span><span class="w"> </span>...<span class="w"> </span>ok
+test_07_etc_name<span class="w"> </span><span class="o">(</span>__main__.FinditTest.test_07_etc_name<span class="o">)</span><span class="w"> </span>...<span class="w"> </span>ok
+test_08_etc_empty<span class="w"> </span><span class="o">(</span>__main__.FinditTest.test_08_etc_empty<span class="o">)</span><span class="w"> </span>...<span class="w"> </span>ok
+test_09_etc_readable<span class="w"> </span><span class="o">(</span>__main__.FinditTest.test_09_etc_readable<span class="o">)</span><span class="w"> </span>...<span class="w"> </span>ok
+test_10_etc_writable<span class="w"> </span><span class="o">(</span>__main__.FinditTest.test_10_etc_writable<span class="o">)</span><span class="w"> </span>...<span class="w"> </span>ok
+test_11_etc_executable<span class="w"> </span><span class="o">(</span>__main__.FinditTest.test_11_etc_executable<span class="o">)</span><span class="w"> </span>...<span class="w"> </span>ok
+test_12_etc_type_f_executable<span class="w"> </span><span class="o">(</span>__main__.FinditTest.test_12_etc_type_f_executable<span class="o">)</span><span class="w"> </span>...<span class="w"> </span>ok
+test_13_etc_type_d_empty<span class="w"> </span><span class="o">(</span>__main__.FinditTest.test_13_etc_type_d_empty<span class="o">)</span><span class="w"> </span>...<span class="w"> </span>ok
+test_14_etc_type_d_name_executable<span class="w"> </span><span class="o">(</span>__main__.FinditTest.test_14_etc_type_d_name_executable<span class="o">)</span><span class="w"> </span>...<span class="w"> </span>ok
+test_15_etc_type_f_readable_name<span class="w"> </span><span class="o">(</span>__main__.FinditTest.test_15_etc_type_f_readable_name<span class="o">)</span><span class="w"> </span>...<span class="w"> </span>ok
+test_16_etc_type_d_empty_readable_name<span class="w"> </span><span class="o">(</span>__main__.FinditTest.test_16_etc_type_d_empty_readable_name<span class="o">)</span><span class="w"> </span>...<span class="w"> </span>ok
+
+----------------------------------------------------------------------
+Ran<span class="w"> </span><span class="m">17</span><span class="w"> </span>tests<span class="w"> </span><span class="k">in</span><span class="w"> </span><span class="m">0</span>.382s
+
+OK
+
+<span class="w">   </span>Score<span class="w"> </span><span class="m">17</span>.00<span class="w"> </span>/<span class="w"> </span><span class="m">17</span>.00
+<span class="w">   </span>Grade<span class="w">  </span><span class="m">1</span>.00<span class="w"> </span>/<span class="w">  </span><span class="m">1</span>.00
+<span class="w">  </span>Status<span class="w"> </span>Success
+</code></pre></div>
+
+<p>To just run the <a href="https://en.wikipedia.org/wiki/Unit_testing">unit tests</a>, you can do the following:</p>
+<div class="codehilite"><pre><span></span><code><span class="c1"># Run unit tests</span>
+$<span class="w"> </span>./findit.test<span class="w"> </span>-v
+...
+</code></pre></div>
+
+<p>To run a specific <a href="https://en.wikipedia.org/wiki/Unit_testing">unit test</a>, you can specify the <strong>method name</strong>:</p>
+<div class="codehilite"><pre><span></span><code><span class="c1"># Run only mypy unit test</span>
+$<span class="w"> </span>./findit.test<span class="w"> </span>-v<span class="w"> </span>finditTest.test_01_mypy
+...
+</code></pre></div>
+
+<p>To manually check your types, you can use <a href="https://mypy-lang.org/">mypy</a>:</p>
+<div class="codehilite"><pre><span></span><code><span class="c1"># Run mypy to check types</span>
+$<span class="w"> </span>mypy<span class="w"> </span>findit.py
+</code></pre></div>
+
+<h2 id="activity-3-quiz-02-points">Activity 3: Quiz (<em>0.2 Points</em>)<a class="headerlink" href="#activity-3-quiz-02-points" title="Permanent link">&para;</a></h2>
+<p>Once you have completed all the activities above, you are to complete the
+following <strong>reflection quiz</strong>:</p>
+<div id="quiz-questions"></div>
+
+<div id="quiz-responses"></div>
+
+<script src="static/js/dredd-quiz.js"></script>
+<script>
+loadQuiz('static/json/homework07.json');
+</script>
+
+<pre style="display: none;" id="dr-container" class="codehilite"><code id="dredd-response"></code></pre>
+
+<p>As with <a href="reading01.html">Reading 01</a>, you will need to store your answers in a
+<code>homework07/answers.json</code> file.  You can use the form above to generate the
+contents of this file, or you can write the <a href="https://json.org/">JSON</a> by hand.</p>
+<p>To test your quiz, you can use the <code>check.py</code> script:</p>
+<div class="codehilite"><pre><span></span><code>$<span class="w"> </span>../.scripts/check.py
+Checking<span class="w"> </span>homework07<span class="w"> </span>quiz<span class="w"> </span>...
+<span class="w">      </span>Q1<span class="w">  </span><span class="m">4</span>.00<span class="w"> </span>/<span class="w">  </span><span class="m">4</span>.00
+<span class="w">      </span>Q2<span class="w">  </span><span class="m">3</span>.00<span class="w"> </span>/<span class="w">  </span><span class="m">3</span>.00
+<span class="w">      </span>Q3<span class="w">  </span><span class="m">2</span>.00<span class="w"> </span>/<span class="w">  </span><span class="m">2</span>.00
+<span class="w">      </span>Q4<span class="w">  </span><span class="m">4</span>.00<span class="w"> </span>/<span class="w">  </span><span class="m">4</span>.00
+<span class="w">  </span>--------------------
+<span class="w">   </span>Score<span class="w"> </span><span class="m">13</span>.00<span class="w"> </span>/<span class="w"> </span><span class="m">13</span>.00
+<span class="w">   </span>Grade<span class="w">  </span><span class="m">1</span>.00<span class="w"> </span>/<span class="w">  </span><span class="m">1</span>.00
+<span class="w">  </span>Status<span class="w"> </span>Success
+</code></pre></div>
+
+<h2 id="submission-1-points">Submission (<em>1 Points</em>)<a class="headerlink" href="#submission-1-points" title="Permanent link">&para;</a></h2>
+<p>To submit your assignment, please commit your work to the <code>homework07</code> folder
+of your <code>homework07</code> branch in your <strong>assignments</strong> <a href="https://github.com">GitHub</a> repository.
+Your <code>homework07</code> folder should <strong>only</strong> contain the following files:</p>
+<ul>
+<li><code>Makefile</code></li>
+<li><code>answers.json</code></li>
+<li><code>findit.py</code></li>
+</ul>
+<div class="alert info-bg">
+<p><strong>Note</strong>: You do not need to commit the test scripts because the <code>Makefile</code>
+automatically downloads them.</p>
+</div>
+<div class="codehilite"><pre><span></span><code><span class="c1">#-----------------------------------------------------------------------</span>
+<span class="c1"># Make sure you have already completed Activity 0: Preparation</span>
+<span class="c1">#-----------------------------------------------------------------------</span>
+...
+$<span class="w"> </span>git<span class="w"> </span>add<span class="w"> </span>findit.py<span class="w">                                   </span><span class="c1"># Mark changes for commit</span>
+$<span class="w"> </span>git<span class="w"> </span>commit<span class="w"> </span>-m<span class="w"> </span><span class="s2">&quot;Homework 07: findit&quot;</span><span class="w">                 </span><span class="c1"># Record changes</span>
+...
+$<span class="w"> </span>git<span class="w"> </span>add<span class="w"> </span>answers.json<span class="w">                                </span><span class="c1"># Mark changes for commit</span>
+$<span class="w"> </span>git<span class="w"> </span>commit<span class="w"> </span>-m<span class="w"> </span><span class="s2">&quot;Homework 07: Quiz&quot;</span><span class="w">                   </span><span class="c1"># Record changes</span>
+...
+$<span class="w"> </span>git<span class="w"> </span>push<span class="w"> </span>-u<span class="w"> </span>origin<span class="w"> </span>homework07<span class="w">                       </span><span class="c1"># Push branch to GitHub</span>
+</code></pre></div>
+
+<div class="alert warning-bg">
+<h3 id="lifebuoy-embed_icon-acknowledgments"><i class="icon icon-medium"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><title>lifebuoy</title><path d="M19.79,15.41C20.74,13.24 20.74,10.75 19.79,8.59L17.05,9.83C17.65,11.21 17.65,12.78 17.06,14.17L19.79,15.41M15.42,4.21C13.25,3.26 10.76,3.26 8.59,4.21L9.83,6.94C11.22,6.35 12.79,6.35 14.18,6.95L15.42,4.21M4.21,8.58C3.26,10.76 3.26,13.24 4.21,15.42L6.95,14.17C6.35,12.79 6.35,11.21 6.95,9.82L4.21,8.58M8.59,19.79C10.76,20.74 13.25,20.74 15.42,19.78L14.18,17.05C12.8,17.65 11.22,17.65 9.84,17.06L8.59,19.79M12,2A10,10 0 0,1 22,12A10,10 0 0,1 12,22A10,10 0 0,1 2,12A10,10 0 0,1 12,2M12,8A4,4 0 0,0 8,12A4,4 0 0,0 12,16A4,4 0 0,0 16,12A4,4 0 0,0 12,8Z" /></svg>
+</i> Acknowledgments<a class="headerlink" href="#lifebuoy-embed_icon-acknowledgments" title="Permanent link">&para;</a></h3>
+<p>If you collaborated with any other students, or received help from TAs or AI
+tools on this assignment, please record this support in the <code>README.md</code> in
+the <code>homework07</code> folder and include it with your <strong>Pull Request</strong>.</p>
+</div>
+<div class="alert success-bg">
+<h3 id="account-question-embed_icon-graders"><i class="icon icon-medium"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><title>account-question</title><path d="M13,8A4,4 0 0,1 9,12A4,4 0 0,1 5,8A4,4 0 0,1 9,4A4,4 0 0,1 13,8M17,18V20H1V18C1,15.79 4.58,14 9,14C13.42,14 17,15.79 17,18M20.5,14.5V16H19V14.5H20.5M18.5,9.5H17V9A3,3 0 0,1 20,6A3,3 0 0,1 23,9C23,9.97 22.5,10.88 21.71,11.41L21.41,11.6C20.84,12 20.5,12.61 20.5,13.3V13.5H19V13.3C19,12.11 19.6,11 20.59,10.35L20.88,10.16C21.27,9.9 21.5,9.47 21.5,9A1.5,1.5 0 0,0 20,7.5A1.5,1.5 0 0,0 18.5,9V9.5Z" /></svg>
+</i> Graders<a class="headerlink" href="#account-question-embed_icon-graders" title="Permanent link">&para;</a></h3>
+<p>Once you have committed your work and pushed it to <a href="https://github.com">GitHub</a>, remember to
+create a <strong>pull request</strong> and assign it to the appropriate <strong>teaching
+assistant</strong> from the <a href="reading06_tas.html">Reading 07 TA List</a>.</p>
+<p><strong>Note</strong>: this list changes each week, so be sure to consult the appropriate
+list for each assignment.</p>
+</div>
+</main>
+<footer>
+Built using <a href="https://python.org">Python</a>
+and <a href="https://jinja.palletsprojects.com">Jinja</a>
+with colors from 
+<a href="https://onmessage.nd.edu/university-branding/colors/">Notre Dame</a>, 
+<a href="https://spreadsheet.dev/how-to-get-the-hexadecimal-codes-of-colors-in-google-sheets">Google Docs</a>, and 
+<a href="https://nordtheme.com">Nord Theme</a>,
+and icons from <a href="https://pictogrammers.com/library/mdi/">Material Design Icons</a>.</footer>
+</body>
+</html>
