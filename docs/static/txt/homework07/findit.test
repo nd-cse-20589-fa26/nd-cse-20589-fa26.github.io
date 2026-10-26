@@ -1,0 +1,257 @@
+#!/usr/bin/env python3
+
+import doctest
+import hashlib
+import inspect
+import itertools
+import io
+import math
+import mypy.api
+import os
+import re
+import subprocess
+import tempfile
+import time
+import unittest
+import unittest.mock
+
+import findit
+
+# Unit Tests
+
+class FinditTest(unittest.TestCase):
+    ''' Findit Unit Tests '''
+
+    @classmethod
+    def setUpClass(cls):
+        cls.Points = 0
+        cls.Total  = len([method for method in dir(cls) if method.startswith('test_')])
+
+    @classmethod
+    def tearDownClass(cls):
+        print()
+        print(f'   Score {cls.Points:5.2f} / {cls.Total:5.2f}')
+        print(f'   Grade {cls.Points/cls.Total:5.2f} / {1.0:5.2f}')
+        print(f'  Status {"Success" if math.isclose(cls.Points, cls.Total) else "Failure"}')
+
+    def test_00_doctest(self):
+        failures, tests = doctest.testmod(findit, verbose=False)
+        self.assertEqual(failures, 0)
+        self.assertEqual(tests, 14)
+        FinditTest.Points += (tests - failures) / tests
+
+    def test_01_mypy(self):
+        _, _, exit_status = mypy.api.run(['findit.py'])
+        self.assertTrue(exit_status == 0)
+        FinditTest.Points += 1.0
+
+    def test_02_usage(self):
+        with unittest.mock.patch('sys.stderr', new=io.StringIO()) as output:
+            with self.assertRaises(SystemExit) as context:
+                findit.main(['-h'])
+        self.assertTrue('Usage' in output.getvalue())
+        self.assertEqual(str(context.exception), '0')
+        FinditTest.Points += 0.33
+
+        with unittest.mock.patch('sys.stderr', new=io.StringIO()) as output:
+            with self.assertRaises(SystemExit) as context:
+                findit.main([])
+        self.assertTrue('Usage' in output.getvalue())
+        self.assertEqual(str(context.exception), '1')
+        FinditTest.Points += 0.33
+
+        with unittest.mock.patch('sys.stderr', new=io.StringIO()) as output:
+            with self.assertRaises(SystemExit) as context:
+                findit.main(['.', '-fake'])
+        self.assertTrue('Usage' in output.getvalue())
+        self.assertEqual(str(context.exception), '1')
+        FinditTest.Points += 0.34
+
+    def test_03_parent(self):
+        arguments = '..'.split()
+
+        with unittest.mock.patch('sys.stdout', new=io.StringIO()) as output:
+            findit.main(arguments[:])
+
+        expected = subprocess.run(['find', *arguments], capture_output=True, text=True)
+        self.assertEqual(
+            sorted(output.getvalue().splitlines()),
+            sorted(expected.stdout.splitlines())
+        )
+        FinditTest.Points += 1.00
+    
+    def test_04_etc(self):
+        arguments = '/etc'.split()
+
+        with unittest.mock.patch('sys.stdout', new=io.StringIO()) as output:
+            findit.main(arguments[:])
+
+        expected = subprocess.run(['find', *arguments], capture_output=True, text=True)
+        self.assertEqual(
+            sorted(output.getvalue().splitlines()),
+            sorted(expected.stdout.splitlines())
+        )
+        FinditTest.Points += 1.00
+    
+    def test_05_etc_type_f(self):
+        arguments = '/etc -type f'.split()
+
+        with unittest.mock.patch('sys.stdout', new=io.StringIO()) as output:
+            findit.main(arguments[:])
+
+        expected = subprocess.run(['find', *arguments], capture_output=True, text=True)
+        self.assertEqual(
+            sorted(output.getvalue().splitlines()),
+            sorted(expected.stdout.splitlines())
+        )
+        FinditTest.Points += 1.00
+    
+    def test_06_etc_type_d(self):
+        arguments = '/etc -type d'.split()
+
+        with unittest.mock.patch('sys.stdout', new=io.StringIO()) as output:
+            findit.main(arguments[:])
+
+        expected = subprocess.run(['find', *arguments], capture_output=True, text=True)
+        self.assertEqual(
+            sorted(output.getvalue().splitlines()),
+            sorted(expected.stdout.splitlines())
+        )
+        FinditTest.Points += 1.00
+    
+    def test_07_etc_name(self):
+        arguments = '/etc -name *.conf'.split()
+
+        with unittest.mock.patch('sys.stdout', new=io.StringIO()) as output:
+            findit.main(arguments[:])
+
+        expected = subprocess.run(['find', *arguments], capture_output=True, text=True)
+        self.assertEqual(
+            sorted(output.getvalue().splitlines()),
+            sorted(expected.stdout.splitlines())
+        )
+        FinditTest.Points += 1.00
+    
+    def test_08_etc_empty(self):
+        arguments = '/etc -empty'.split()
+
+        with unittest.mock.patch('sys.stdout', new=io.StringIO()) as output:
+            findit.main(arguments[:])
+
+        expected = subprocess.run(['find', *arguments], capture_output=True, text=True)
+        self.assertEqual(
+            sorted(output.getvalue().splitlines()),
+            sorted(expected.stdout.splitlines())
+        )
+        FinditTest.Points += 1.00
+    
+    def test_09_etc_readable(self):
+        arguments = '/etc -readable'.split()
+
+        with unittest.mock.patch('sys.stdout', new=io.StringIO()) as output:
+            findit.main(arguments[:])
+
+        expected = subprocess.run(['find', *arguments], capture_output=True, text=True)
+        self.assertEqual(
+            sorted(output.getvalue().splitlines()),
+            sorted(expected.stdout.splitlines())
+        )
+        FinditTest.Points += 1.00
+    
+    def test_10_etc_writable(self):
+        arguments = '/etc -writable'.split()
+
+        with unittest.mock.patch('sys.stdout', new=io.StringIO()) as output:
+            findit.main(arguments[:])
+
+        expected = subprocess.run(['find', *arguments], capture_output=True, text=True)
+        self.assertEqual(
+            sorted(output.getvalue().splitlines()),
+            sorted(expected.stdout.splitlines())
+        )
+        FinditTest.Points += 1.00
+    
+    def test_11_etc_executable(self):
+        arguments = '/etc -executable'.split()
+
+        with unittest.mock.patch('sys.stdout', new=io.StringIO()) as output:
+            findit.main(arguments[:])
+
+        expected = subprocess.run(['find', *arguments], capture_output=True, text=True)
+        self.assertEqual(
+            sorted(output.getvalue().splitlines()),
+            sorted(expected.stdout.splitlines())
+        )
+        FinditTest.Points += 1.00
+    
+    def test_12_etc_type_f_executable(self):
+        arguments = '/etc -type f -executable'.split()
+
+        with unittest.mock.patch('sys.stdout', new=io.StringIO()) as output:
+            findit.main(arguments[:])
+
+        expected = subprocess.run(['find', *arguments], capture_output=True, text=True)
+        self.assertEqual(
+            sorted(output.getvalue().splitlines()),
+            sorted(expected.stdout.splitlines())
+        )
+        FinditTest.Points += 1.00
+    
+    def test_13_etc_type_d_empty(self):
+        arguments = '/etc -type d -empty'.split()
+
+        with unittest.mock.patch('sys.stdout', new=io.StringIO()) as output:
+            findit.main(arguments[:])
+
+        expected = subprocess.run(['find', *arguments], capture_output=True, text=True)
+        self.assertEqual(
+            sorted(output.getvalue().splitlines()),
+            sorted(expected.stdout.splitlines())
+        )
+        FinditTest.Points += 1.00
+    
+    def test_14_etc_type_d_name_executable(self):
+        arguments = '/etc -type d -name *.d -executable'.split()
+
+        with unittest.mock.patch('sys.stdout', new=io.StringIO()) as output:
+            findit.main(arguments[:])
+
+        expected = subprocess.run(['find', *arguments], capture_output=True, text=True)
+        self.assertEqual(
+            sorted(output.getvalue().splitlines()),
+            sorted(expected.stdout.splitlines())
+        )
+        FinditTest.Points += 1.00
+    
+    def test_15_etc_type_f_readable_name(self):
+        arguments = '/etc -type f -readable -name *.conf'.split()
+
+        with unittest.mock.patch('sys.stdout', new=io.StringIO()) as output:
+            findit.main(arguments[:])
+
+        expected = subprocess.run(['find', *arguments], capture_output=True, text=True)
+        self.assertEqual(
+            sorted(output.getvalue().splitlines()),
+            sorted(expected.stdout.splitlines())
+        )
+        FinditTest.Points += 1.00
+    
+    def test_16_etc_type_d_empty_readable_name(self):
+        arguments = '/etc -type f -empty -readable -name *.d'.split()
+
+        with unittest.mock.patch('sys.stdout', new=io.StringIO()) as output:
+            findit.main(arguments[:])
+
+        expected = subprocess.run(['find', *arguments], capture_output=True, text=True)
+        self.assertEqual(
+            sorted(output.getvalue().splitlines()),
+            sorted(expected.stdout.splitlines())
+        )
+        FinditTest.Points += 1.00
+
+# Main Execution
+
+if __name__ == '__main__':
+    unittest.main()
+
+# vim: set sts=4 sw=4 ts=8 expandtab ft=python:
