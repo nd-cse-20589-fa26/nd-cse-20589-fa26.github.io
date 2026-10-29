@@ -1,0 +1,272 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<!-- Favicon -->
+<link rel="icon" type="image/png" sizes="32x32" href="static/ico/favicon-32x32.png">
+<link rel="icon" type="image/png" sizes="16x16" href="static/ico/favicon-16x16.png">
+<link rel="manifest" href="static/ico/site.webmanifest">
+<!-- Stylesheets -->
+<link rel="stylesheet" href="static/css/domer.css">
+<title>Notes 23: I/O</title>
+</head>
+<body>
+<header>
+<a class="logo" href="notes23.html">
+    <h1>Notes 23: I/O</h1>
+</a>
+<nav>
+    <ul>
+        <li><a href="index.html"><h4>Home</h4></a></li>
+        </ul>
+</nav></header>
+<main>
+<h2 id="review-directories">Review: <span class="gold">Directories</span><a class="headerlink" href="#review-directories" title="Permanent link">&para;</a></h2>
+<ol>
+<li>
+<div class="flex-col" markdown="1">
+<p>What is a <strong class="caution">directory</strong>?</p>
+<blockquote>
+<p>A <strong class="info">system call</strong> occurs when a <strong
+class="success">user application</strong> requests a <strong
+class="warning">service, operation, or resource</strong> from the <strong
+class="danger">operating system kernel</strong>.</p>
+</blockquote>
+</li>
+<li>
+<div class="flex-col" markdown="1">
+<p>How do we list the contents of a <strong class="caution">directory</strong>?</p>
+<div class="codehilite"><pre><span></span><code><span class="k">for</span> <span class="n">entry</span> <span class="ow">in</span> <span class="n">os</span><span class="o">.</span><span class="n">listdir</span><span class="p">(</span><span class="n">directory</span><span class="p">):</span>
+    <span class="nb">print</span><span class="p">(</span><span class="n">entry</span><span class="p">)</span>
+
+<span class="k">with</span> <span class="n">os</span><span class="o">.</span><span class="n">scandir</span><span class="p">(</span><span class="n">directory</span><span class="p">)</span> <span class="k">as</span> <span class="n">entries</span><span class="p">:</span>
+  <span class="k">for</span> <span class="n">entry</span> <span class="ow">in</span> <span class="n">entries</span><span class="p">:</span>
+      <span class="nb">print</span><span class="p">(</span><span class="n">entry</span><span class="p">)</span>
+</code></pre></div>
+
+</li>
+</ol>
+<h2 id="review-inheritance-factory-method-pattern">Review: <span class="gold">Inheritance, Factory Method Pattern</span><a class="headerlink" href="#review-inheritance-factory-method-pattern" title="Permanent link">&para;</a></h2>
+<ol>
+<li>
+<div class="flex-col" markdown="1">
+<p>What is <strong class="warning">inheritance</strong>?</p>
+<blockquote>
+<p><strong class="warning">Inheritance</strong> is a core <strong
+class="special">OOP principle</strong> that enables the creation of
+<strong class="caution">hierarchical relationships</strong> between units
+to allow for <strong class="success">code reuse</strong>.</p>
+</blockquote>
+<div class="codehilite"><pre><span></span><code><span class="c1"># Subclass inherits from Path</span>
+
+<span class="k">class</span> <span class="nc">PathEntry</span><span class="p">(</span><span class="n">Path</span><span class="p">):</span>
+  <span class="nd">@property</span>
+  <span class="k">def</span> <span class="nf">path</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+      <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">parent</span> <span class="o">/</span> <span class="bp">self</span>
+
+<span class="c1"># Parent - Abstract Base Class / Interface</span>
+
+<span class="nd">@dataclass</span>
+<span class="k">class</span> <span class="nc">BaseWalker</span><span class="p">(</span><span class="n">ABC</span><span class="p">):</span>
+    <span class="n">entry</span><span class="p">:</span>  <span class="n">os</span><span class="o">.</span><span class="n">DirEntry</span> <span class="o">|</span> <span class="n">PathEntry</span>
+
+    <span class="nd">@abstractmethod</span>
+    <span class="k">def</span> <span class="nf">walk</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">recursive</span><span class="p">:</span> <span class="nb">bool</span><span class="o">=</span><span class="kc">False</span><span class="p">):</span>
+        <span class="k">pass</span>
+
+<span class="c1"># Child - Concrete Class inherits from BaseWalker</span>
+
+<span class="k">class</span> <span class="nc">NoopWalker</span><span class="p">(</span><span class="n">BaseWalker</span><span class="p">):</span>
+    <span class="k">def</span> <span class="nf">walk</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">recursive</span><span class="p">:</span> <span class="nb">bool</span><span class="o">=</span><span class="kc">False</span><span class="p">):</span>
+        <span class="k">pass</span>
+</code></pre></div>
+
+</li>
+<li>
+<div class="flex-col" markdown="1">
+<p>What is the <strong class="warning">factory design pattern</strong>?</p>
+<blockquote>
+<p>The <strong class="special">factory design pattern</strong> uses a
+specialized <strong class="special">factory</strong> method that produces
+<strong>instantiated</strong> objects.  This is done to <strong
+class="success">abstract</strong> away complex object instantiation
+logic.</p>
+</blockquote>
+<div class="codehilite"><pre><span></span><code><span class="c1"># Child - Concrete Class inherits from BaseWalker</span>
+
+<span class="k">class</span> <span class="nc">FileWalker</span><span class="p">(</span><span class="n">BaseWalker</span><span class="p">):</span>
+    <span class="k">def</span> <span class="nf">walk</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">recursive</span><span class="p">:</span> <span class="nb">bool</span><span class="o">=</span><span class="kc">False</span><span class="p">):</span>
+        <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s1">&#39;</span><span class="si">{</span><span class="bp">self</span><span class="o">.</span><span class="n">entry</span><span class="o">.</span><span class="n">path</span><span class="si">}</span><span class="s1"> </span><span class="si">{</span><span class="bp">self</span><span class="o">.</span><span class="n">entry</span><span class="o">.</span><span class="n">stat</span><span class="p">()</span><span class="o">.</span><span class="n">st_size</span><span class="si">}</span><span class="s1">&#39;</span><span class="p">)</span>
+
+<span class="c1"># Child - Concrete Class inherits from BaseWalker</span>
+
+<span class="k">class</span> <span class="nc">DirectoryWalker</span><span class="p">(</span><span class="n">BaseWalker</span><span class="p">):</span>
+    <span class="k">def</span> <span class="nf">walk</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">recursive</span><span class="p">:</span> <span class="nb">bool</span><span class="o">=</span><span class="kc">False</span><span class="p">):</span>
+        <span class="k">try</span><span class="p">:</span>
+            <span class="k">with</span> <span class="n">os</span><span class="o">.</span><span class="n">scandir</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">entry</span><span class="o">.</span><span class="n">path</span><span class="p">)</span> <span class="k">as</span> <span class="n">entries</span><span class="p">:</span>
+                <span class="k">for</span> <span class="n">entry</span> <span class="ow">in</span> <span class="nb">map</span><span class="p">(</span><span class="n">WalkerFactory</span><span class="o">.</span><span class="n">get_walker</span><span class="p">,</span> <span class="n">entries</span><span class="p">,</span> <span class="n">cycle</span><span class="p">([</span><span class="n">recursive</span><span class="p">])):</span>
+                    <span class="n">entry</span><span class="o">.</span><span class="n">walk</span><span class="p">(</span><span class="n">recursive</span><span class="p">)</span>
+        <span class="k">except</span> <span class="ne">PermissionError</span><span class="p">:</span>
+            <span class="k">pass</span>
+
+<span class="c1"># Concrete Creator</span>
+
+<span class="k">class</span> <span class="nc">WalkerFactory</span><span class="p">:</span>
+    <span class="nd">@classmethod</span>
+    <span class="k">def</span> <span class="nf">get_walker</span><span class="p">(</span><span class="bp">cls</span><span class="p">,</span> <span class="n">entry</span><span class="p">:</span> <span class="n">os</span><span class="o">.</span><span class="n">DirEntry</span> <span class="o">|</span> <span class="n">PathEntry</span><span class="p">,</span> <span class="n">recursive</span><span class="p">:</span> <span class="nb">bool</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">BaseWalker</span><span class="p">:</span>
+        <span class="k">match</span> <span class="n">stat</span><span class="o">.</span><span class="n">S_IFMT</span><span class="p">(</span><span class="n">entry</span><span class="o">.</span><span class="n">stat</span><span class="p">()</span><span class="o">.</span><span class="n">st_mode</span><span class="p">):</span>
+            <span class="k">case</span> <span class="n">stat</span><span class="o">.</span><span class="n">S_IFREG</span><span class="p">:</span> <span class="k">return</span> <span class="n">FileWalker</span><span class="p">(</span><span class="n">entry</span><span class="p">)</span>
+            <span class="k">case</span> <span class="n">stat</span><span class="o">.</span><span class="n">S_IFDIR</span><span class="p">:</span> <span class="k">return</span> <span class="n">DirectoryWalker</span><span class="p">(</span><span class="n">entry</span><span class="p">)</span> <span class="k">if</span> <span class="n">recursive</span> <span class="k">else</span> <span class="n">NoopWalker</span><span class="p">(</span><span class="n">entry</span><span class="p">)</span>
+            <span class="k">case</span><span class="w"> </span><span class="k">_</span><span class="p">:</span>            <span class="k">return</span> <span class="n">NoopWalker</span><span class="p">(</span><span class="n">entry</span><span class="p">)</span>
+</code></pre></div>
+
+</li>
+</ol>
+<div class="alert success-bg">
+<p><strong>Advantages</strong>:</p>
+<ul>
+<li>
+<p><strong>Separation of Concerns</strong>: Separate the <code>what</code> (business logic) from the
+<code>how</code> (concrete implementation details)</p>
+</li>
+<li>
+<p><strong>Open/closed Principle</strong>: extend <code>units</code> (functions, classes) without <code>modification</code>.</p>
+</li>
+<li>
+<p>Should make it easier to add new <code>types</code> (ie. <strong>symlinks</strong>)</p>
+</li>
+</ul>
+</div>
+<h2 id="io-overview">I/O: <span class="gold">Overview</span><a class="headerlink" href="#io-overview" title="Permanent link">&para;</a></h2>
+<div class="flex-row">
+<div class="flex-col">
+<p>All <strong class="warning">input</strong> and <strong
+class="warning">output</strong> is performed on <strong
+class="success">files</strong>:</p>
+<ol>
+<li>
+<p><strong class="caution">Open</strong></p>
+<p>Acquire handle to stream of data.</p>
+</li>
+<li>
+<p><strong class="caution">Close</strong></p>
+<p>Release handle to stream of data.</p>
+</li>
+</ol>
+</div>
+<div class="flex-col">
+<ol>
+<li>
+<p><strong class="warning">Read</strong></p>
+<p>Load chunk from stream of data.</p>
+</li>
+<li>
+<p><strong class="warning">Write</strong></p>
+<p>Store chunk to stream of data.</p>
+</li>
+<li>
+<p><strong class="danger">Seek</strong></p>
+<p>Move within stream of data.</p>
+</li>
+</ol>
+</div>
+</div>
+<div class="alert warning-bg">
+<ul>
+<li>
+<p><strong>Q</strong>: What is a <strong>file</strong>?</p>
+</li>
+<li>
+<p><strong>A</strong>: A <strong>sequence</strong> or <strong>stream</strong> of <strong>bytes</strong> (stored in <strong>blocks</strong>)</p>
+</li>
+<li>
+<p><strong>Skit</strong>: Perform <strong>system calls</strong> on <strong>file</strong>, show <strong>man pages</strong>, <strong>blocking</strong></p>
+</li>
+</ul>
+</div>
+<h2 id="io-copy_filepy">I/O: <a href="https://github.com/nd-cse-20589-fa26/examples/blob/master/slides23/copy_file.py">copy_file.py</a><a class="headerlink" href="#io-copy_filepy" title="Permanent link">&para;</a></h2>
+<blockquote>
+<p>Write a simplified version of <a href="https://man7.org/linux/man-pages/man1/cp.1.html">cp</a> that copies one file to another.</p>
+</blockquote>
+<div class="codehilite"><pre><span></span><code><span class="c1"># Copy /etc/hosts to hosts.copy</span>
+$<span class="w"> </span>./copy_file.py<span class="w"> </span>/etc/hosts<span class="w"> </span>hosts.copy
+
+<span class="c1"># Verify that sha1sums are the same</span>
+$<span class="w"> </span>sha1sum<span class="w"> </span>/etc/hosts<span class="w"> </span>hosts.copy
+</code></pre></div>
+
+<h3 id="implementation">Implementation<a class="headerlink" href="#implementation" title="Permanent link">&para;</a></h3>
+<div class="codehilite"><pre><span></span><code><span class="k">def</span> <span class="nf">copy_file</span><span class="p">(</span><span class="n">src</span><span class="p">:</span> <span class="n">Path</span><span class="p">,</span> <span class="n">dst</span><span class="p">:</span> <span class="n">Path</span><span class="p">):</span>
+    <span class="k">try</span><span class="p">:</span>
+        <span class="n">rfd</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">open</span><span class="p">(</span><span class="n">src</span><span class="p">,</span> <span class="n">os</span><span class="o">.</span><span class="n">O_RDONLY</span><span class="p">)</span>
+        <span class="n">wfd</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">open</span><span class="p">(</span><span class="n">dst</span><span class="p">,</span> <span class="n">os</span><span class="o">.</span><span class="n">O_WRONLY</span> <span class="o">|</span> <span class="n">os</span><span class="o">.</span><span class="n">O_CREAT</span><span class="p">,</span> <span class="n">src</span><span class="o">.</span><span class="n">stat</span><span class="p">()</span><span class="o">.</span><span class="n">st_mode</span><span class="p">)</span>
+    <span class="k">except</span> <span class="ne">OSError</span> <span class="k">as</span> <span class="n">e</span><span class="p">:</span>
+        <span class="nb">print</span><span class="p">(</span><span class="n">e</span><span class="p">,</span> <span class="n">file</span><span class="o">=</span><span class="n">sys</span><span class="o">.</span><span class="n">stderr</span><span class="p">)</span>
+        <span class="n">sys</span><span class="o">.</span><span class="n">exit</span><span class="p">(</span><span class="mi">1</span><span class="p">)</span>
+
+    <span class="k">while</span> <span class="n">data</span> <span class="o">:=</span> <span class="n">os</span><span class="o">.</span><span class="n">read</span><span class="p">(</span><span class="n">rfd</span><span class="p">,</span> <span class="n">BUFSIZ</span><span class="p">):</span>
+        <span class="n">os</span><span class="o">.</span><span class="n">write</span><span class="p">(</span><span class="n">wfd</span><span class="p">,</span> <span class="n">data</span><span class="p">)</span>
+
+    <span class="n">os</span><span class="o">.</span><span class="n">close</span><span class="p">(</span><span class="n">rfd</span><span class="p">)</span>
+    <span class="n">os</span><span class="o">.</span><span class="n">close</span><span class="p">(</span><span class="n">wfd</span><span class="p">)</span>
+</code></pre></div>
+
+<h2 id="io-file_arraypy">I/O: <a href="https://github.com/nd-cse-20589-fa26/examples/blob/master/slides23/file_array.py">file_array.py</a><a class="headerlink" href="#io-file_arraypy" title="Permanent link">&para;</a></h2>
+<blockquote>
+<p>Create a <strong>persistent array</strong> that supports the <strong>index</strong> operator.</p>
+</blockquote>
+<div class="codehilite"><pre><span></span><code><span class="c1"># Create Persistent Array</span>
+<span class="n">array</span> <span class="o">=</span> <span class="n">FileArray</span><span class="p">(</span><span class="s1">&#39;array.txt&#39;</span><span class="p">)</span>
+
+<span class="c1"># Write to Persistent Array</span>
+<span class="k">for</span> <span class="n">index</span><span class="p">,</span> <span class="n">char</span> <span class="ow">in</span> <span class="nb">enumerate</span><span class="p">(</span><span class="s1">&#39;hello, world&#39;</span><span class="p">):</span>
+    <span class="n">array</span><span class="p">[</span><span class="n">index</span><span class="p">]</span> <span class="o">=</span> <span class="n">char</span><span class="o">.</span><span class="n">encode</span><span class="p">()</span>
+
+<span class="c1"># Write to Persistent Array (again)</span>
+<span class="k">for</span> <span class="n">index</span><span class="p">,</span> <span class="n">char</span> <span class="ow">in</span> <span class="nb">enumerate</span><span class="p">(</span><span class="s1">&#39;goodbye, all&#39;</span><span class="p">):</span>
+    <span class="n">array</span><span class="p">[(</span><span class="mi">1</span><span class="o">&lt;&lt;</span><span class="mi">8</span><span class="p">)</span> <span class="o">+</span> <span class="n">index</span><span class="p">]</span> <span class="o">=</span> <span class="n">char</span><span class="o">.</span><span class="n">encode</span><span class="p">()</span>
+</code></pre></div>
+
+<h3 id="implementation_1">Implementation<a class="headerlink" href="#implementation_1" title="Permanent link">&para;</a></h3>
+<div class="codehilite"><pre><span></span><code><span class="nd">@dataclass</span>
+<span class="k">class</span> <span class="nc">FileArray</span><span class="p">:</span>
+    <span class="n">path</span><span class="p">:</span>   <span class="nb">str</span>                 <span class="c1"># Path to file/array</span>
+    <span class="n">size</span><span class="p">:</span>   <span class="nb">int</span><span class="o">=</span><span class="p">(</span><span class="mi">1</span><span class="o">&lt;&lt;</span><span class="mi">10</span><span class="p">)</span>         <span class="c1"># Size of file/array</span>
+
+    <span class="k">def</span> <span class="nf">__post_init__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&#39;&#39;&#39; Post constructor: open file and allocate space. &#39;&#39;&#39;</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">fd</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">open</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">path</span><span class="p">,</span> <span class="n">os</span><span class="o">.</span><span class="n">O_RDWR</span> <span class="o">|</span> <span class="n">os</span><span class="o">.</span><span class="n">O_CREAT</span><span class="p">,</span> <span class="mo">0o644</span><span class="p">)</span>
+        <span class="n">os</span><span class="o">.</span><span class="n">posix_fallocate</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">fd</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">size</span><span class="p">)</span>
+
+    <span class="k">def</span> <span class="fm">__del__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&#39;&#39;&#39; Destructor: close file &#39;&#39;&#39;</span>
+        <span class="n">os</span><span class="o">.</span><span class="n">close</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">fd</span><span class="p">)</span>
+
+    <span class="k">def</span> <span class="fm">__getitem__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">key</span><span class="p">:</span> <span class="nb">int</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">bytes</span><span class="p">:</span>
+<span class="w">        </span><span class="sd">&#39;&#39;&#39; Get item at key &#39;&#39;&#39;</span>
+        <span class="k">if</span> <span class="n">key</span> <span class="o">&gt;=</span> <span class="bp">self</span><span class="o">.</span><span class="n">size</span><span class="p">:</span>
+            <span class="k">raise</span> <span class="ne">IndexError</span>
+
+        <span class="n">os</span><span class="o">.</span><span class="n">lseek</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">fd</span><span class="p">,</span> <span class="n">key</span><span class="p">,</span> <span class="n">os</span><span class="o">.</span><span class="n">SEEK_SET</span><span class="p">)</span>
+        <span class="k">return</span> <span class="n">os</span><span class="o">.</span><span class="n">read</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">fd</span><span class="p">,</span> <span class="mi">1</span><span class="p">)</span>
+
+    <span class="k">def</span> <span class="fm">__setitem__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">key</span><span class="p">:</span> <span class="nb">int</span><span class="p">,</span> <span class="n">value</span><span class="p">:</span> <span class="nb">bytes</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&#39;&#39;&#39; Set item at key with value &#39;&#39;&#39;</span>
+        <span class="k">if</span> <span class="n">key</span> <span class="o">&gt;=</span> <span class="bp">self</span><span class="o">.</span><span class="n">size</span><span class="p">:</span>
+            <span class="k">raise</span> <span class="ne">IndexError</span>
+
+        <span class="n">os</span><span class="o">.</span><span class="n">lseek</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">fd</span><span class="p">,</span> <span class="n">key</span><span class="p">,</span> <span class="n">os</span><span class="o">.</span><span class="n">SEEK_SET</span><span class="p">)</span>
+        <span class="n">os</span><span class="o">.</span><span class="n">write</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">fd</span><span class="p">,</span> <span class="n">value</span><span class="p">)</span>
+</code></pre></div>
+</main>
+<footer>
+Built using <a href="https://python.org">Python</a>
+and <a href="https://jinja.palletsprojects.com">Jinja</a>
+with colors from 
+<a href="https://onmessage.nd.edu/university-branding/colors/">Notre Dame</a>, 
+<a href="https://spreadsheet.dev/how-to-get-the-hexadecimal-codes-of-colors-in-google-sheets">Google Docs</a>, and 
+<a href="https://nordtheme.com">Nord Theme</a>,
+and icons from <a href="https://pictogrammers.com/library/mdi/">Material Design Icons</a>.</footer>
+</body>
+</html>
