@@ -1,0 +1,22 @@
+{
+    "q1": {
+        "type": "blank",
+        "question": "\n<p>Given the <b>URL</b>:\n  <code>http://momo.ndlug.org:9414/script.py?friend=appa</code>,\n  identify the following components:</p>\n\n<table class=\"bordered\">\n<tbody>\n<tr><td style=\"text-align: right;\">Protocol:</td><td width=\"50%\"><b>(1)</b> ____</td></tr>\n<tr><td style=\"text-align: right;\">Domain Name:</td><td><b>(2)</b> ____</td></tr>\n<tr><td style=\"text-align: right;\">Port Number:</td><td><b>(3)</b> ____</td></tr>\n<tr><td style=\"text-align: right;\">Resource Path:</td><td><b>(4)</b> ____</td></tr>\n<tr><td style=\"text-align: right;\">Query Parameter:</td><td><b>(5)</b> ____</td></tr>\n</table>\n"
+    },
+    "q2": {
+        "type": "order",
+        "question": "\n<p>Identify the networking <b>system call</b> or <b>standard library\nfunction</b> you should use to accomplish the following tasks:</p>\n\n<p>\n<ol>\n  <li>Lookup the address information for a particular machine or service.</li>\n  <li>Associate an address and service to a server network file descriptor (aka assign a name to a socket).</li>\n  <li>Create a file descriptor or endpoint for communicating over the network.</li>\n  <li>Establish a client network file descriptor to a specified address.</li>\n  <li>Mark network file descriptor as waiting for incoming connections.</li>\n  <li>Create a new network file descriptor based on a incoming connection.</li>\n</ol>\n</p>\n",
+        "responses": {
+            "socket": "<code>socket.socket()</code>",
+            "connect": "<code>socket.connect()</code>",
+            "listen": "<code>socket.listen()</code>",
+            "bind": "<code>socket.bind()</code>",
+            "accept": "<code>socket.accept()</code>",
+            "gethostbyname": "<code>socket.gethostbyname()</code>"
+        }
+    },
+    "q3": {
+        "type": "blank",
+        "question": "\n<p>Complete the following <b>Python</b> script, <code>http_get.py</code>,\nwhich makes a <b>HTTP</b> request to <code>weasel.h4x0r.space</code> using\na <b>socket</b>.</p>\n\n<pre>\nimport socket\nimport sys\n\n# Constants\n\nHOST = 'weasel.h4x0r.space'\nPORT = 9910\n\n# Create socket, connect to specified HOST and PORT, write HTTP request, and\n# read back response\nwith socket.____(socket.AF_INET, socket.SOCK_STREAM) as client: # 1.\n    client.____((HOST, PORT))                                   # 2.\n    client.____(b'GET / HTTP/1.0\\r\\n\\r\\n')                      # 3.\n\n    while data := client.____(8<<20):                           # 4.\n        sys.stdout.write(data.decode())\n</pre>\n\nHere is an example of the script in action:\n\n<pre>\n$ ./http_get.py\nHTTP/1.0 200 OK\nServer: SimpleHTTP/0.6 Python/3.14.4\nDate: Thu, 29 Oct 2026 19:22:35 GMT\nContent-type: text/html; charset=utf-8\nContent-Length: 344\n\n&lt;!DOCTYPE HTML&gt;\n&lt;html lang=\"en\"&gt;\n&lt;head&gt;\n&lt;meta charset=\"utf-8\"&gt;\n&lt;style type=\"text/css\"&gt;\n:root {\ncolor-scheme: light dark;\n}\n&lt;/style&gt;\n&lt;title&gt;Directory listing for /&lt;/title&gt;\n&lt;/head&gt;\n&lt;body&gt;\n&lt;h1&gt;Directory listing for /&lt;/h1&gt;\n&lt;hr&gt;\n&lt;ul&gt;\n&lt;li&gt;&lt;a href=\"echo.py\"&gt;echo.py&lt;/a&gt;&lt;/li&gt;\n&lt;li&gt;&lt;a href=\"echo.service\"&gt;echo.service&lt;/a&gt;&lt;/li&gt;\n&lt;/ul&gt;\n&lt;hr&gt;\n&lt;/body&gt;\n&lt;/html&gt;\n</pre>\n"
+    }
+}
