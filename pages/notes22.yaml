@@ -1,0 +1,303 @@
+title:  "Notes 22: Directories"
+body:   |
+
+  ## Logistics:
+
+  - [Homework 07]: files, system calls, OOP!
+  - [Extra Credit 02]: exams be passed back today!
+
+  [Homework 07]: homework07.html
+  [Extra Credit 02]: extracredit02.html
+
+  ## Review: <span class="gold">System Calls, Files</span>
+
+  1.  <div class="flex-col" markdown="1">
+
+      What is a <strong class="warning">system call</strong>?
+
+      > A <strong class="info">system call</strong> occurs when a <strong
+      class="success">user application</strong> requests a <strong
+      class="warning">service, operation, or resource</strong> from the <strong
+      class="danger">operating system kernel</strong>.
+
+  2.  <div class="flex-col" markdown="1">
+
+      How would you track the <strong class="warning">system calls</strong>
+      used by a program?
+
+      > `strace`
+
+  3.  <div class="flex-col" markdown="1">
+
+      What <strong class="warning">system call</strong> would you use to get
+      the <strong class="special">inode</strong> information about a <strong
+      class="success">file</strong>?
+
+          :::python
+          >>> inode = os.stat(path)
+
+          >>> inode = Path(path).stat()
+
+  ## Directories: <span class="gold">Overview</span>
+
+  As with <strong class="success">files</strong>, <strong
+  class="caution">directories</strong> are also represented by <strong
+  class="special">inodes</strong> in the <strong class="warning">file
+  system</strong>.
+
+  -   <div class="flex-col" markdown="1">
+
+      Each <strong class="caution">directory</strong> contains:
+
+      - References to itself (`.`) and its <strong
+        class="warning">parent</strong> (`..`)
+
+      - References to other <strong class="special">inodes</strong> (ie. <strong
+        class="comment">entries</strong>)
+
+  -   <div class="flex-col" markdown="1">
+
+      Each <strong class="success">process</strong> tracks its <strong
+      class="caution">current working directory</strong>:
+
+          :::python
+          # Get current working directory of process
+          >>> os.getcwd()
+
+  ## Directories: <span class="gold">Operations</span>
+
+  Many of the <strong class="warning">file system</strong> operations we might
+  use <strong class="danger">unix commands</strong> for can be accomplished with
+  <strong class="success">Python</strong> functions:
+
+  <table class="bordered">
+  <thead>
+      <th class="info-bg">Unix Command</th>
+      <th class="success-bg">Python Function</th>
+  </thead>
+  <tbody>
+  <tr>
+      <td class="info-bg">cd</td>
+      <td class="success-bg">os.chdir(path)</td>
+  </tr>
+  <tr>
+      <td class="info-bg">chmod</td>
+      <td class="success-bg">os.chmod(path, mode)</td>
+  </tr>
+  <tr>
+      <td class="info-bg">mkdir</td>
+      <td class="success-bg">os.mkdir(path, mode)</td>
+  </tr>
+  <tr>
+      <td class="info-bg">rm</td>
+      <td class="success-bg">os.unlink(path)</td>
+  </tr>
+  <tr>
+      <td class="info-bg">mv</td>
+      <td class="success-bg">os.rename(path)</td>
+  </tr>
+  <tr>
+      <td class="info-bg">cp</td>
+      <td class="success-bg">shutil.copy(src, dst)</td>
+  </tr>
+  </tbody>
+  </table>
+
+  ## Directories: <span class="gold">Listing / Walking</span>
+
+  ### [os.listdir]
+
+  ```python
+  # List all entries under root directory along with size
+  for name in os.listdir(root):       # Strings
+      path = os.path.join(root, name)
+      print(f'{path} {os.path.getsize(path)}')
+  ```
+
+  [os.listdir]: https://docs.python.org/3/library/os.html#os.listdir
+
+  ### [os.scandir]
+
+  ```python
+  # List all entries under root directory along with size
+  with os.scandir(root) as entries:   # DirEntry objects
+      for entry in entries:
+          print(f'{entry.path} {entry.stat().st_size}')
+  ```
+
+  [os.scandir]: https://docs.python.org/3/library/os.html#os.scandir
+
+  <div class="alert info-bg" markdown="1">
+
+  Using [os.scandir] instead of [os.listdir] can significantly increase the
+  performance of code that also needs file type or file attribute information.
+
+  </div>
+
+  ### [os.walk]
+
+  ```python
+  # Walk the /etc directory and print out files and their sizes
+  for root, dirs, files in os.walk('/etc/'):
+      for name in files:
+          path = os.path.join(root, name)
+          print(f'{path} {os.path.getsize(path)}')
+  ```
+
+  [os.walk]: https://docs.python.org/3/library/os.html#os.walk
+
+  ## Directories: [list_rec.py] (<i class="muted">Recursive</i>)
+
+  > Write a simplified version of [ls] that lists the files in directory
+  (*possibly recursively*) along with the corresponding file sizes.
+
+  ```bash
+  $ ./list_rec.py  -h
+  Usage: list [directory]
+      -R      List the contents of all directories recursively
+  ```
+
+  ```python
+  #!/usr/bin/env python3
+
+  import os
+  import stat
+  import sys
+
+  # Functions
+
+  def usage(status: int=0):
+      print('''Usage: list [directory]
+      -R      List the contents of all directories recursively
+  ''', file=sys.stderr)
+      sys.exit(status)
+
+  def walk_directory(path: str, recursive: bool=False):
+      ''' Traditional recursive approach '''
+      if not os.path.isdir(path) or not os.access(path, os.R_OK):
+          return
+
+      with os.scandir(path) as entries:
+          for entry in entries:
+              if entry.is_dir() and recursive:
+                  walk_directory(entry.path, recursive)
+              elif entry.is_file():
+                  print(f'{entry.path} {entry.stat().st_size}')
+
+  # Main Execution
+
+  def main(arguments: list[str]=sys.argv[1:]):
+      recursive = False
+
+      while arguments and arguments[0].startswith('-'):
+          match argument := arguments.pop(0):
+              case '-R': recursive = True
+              case '-h': usage(0)
+              case _   : usage(1)
+
+      root = arguments[0] if arguments else os.curdir
+      walk_directory(root, recursive)
+
+  if __name__ == '__main__':
+      main()
+  ```
+
+  [list_rec.py]: https://github.com/nd-cse-20589-fa26/examples/blob/master/slides22/list_rec.py
+
+  ## Directories: [list_oop.py] (<i class="muted">OOP</i>)
+
+  ### OOP: <span class="gold">Inheritance</span>
+
+  <strong class="warning">Inheritance</strong> is a core <strong
+  class="special">OOP principle</strong> that enables the creation of <strong
+  class="caution">hierarchical relationships</strong> between units to allow for
+  <strong class="success">code reuse</strong>.
+
+  ```python
+  class PathEntry(Path):
+    @property
+    def path(self):
+        return self.parent / self
+
+  @dataclass
+  class BaseWalker(ABC):
+      entry:  os.DirEntry | PathEntry
+
+      @abstractmethod
+      def walk(self, recursive: bool=False):
+          pass
+
+  class NoopWalker(BaseWalker):
+      def walk(self, recursive: bool=False):
+          pass
+  ```
+
+  <div class="alert info-bg" markdown="1">
+
+  To define an <strong class="special">interface</strong>, we can create an
+  [abstract base class] and mark [abstract methods] which need to be defined by
+  <strong class="caution">concrete classes</strong> that <strong
+  class="special">inherit</strong> from this `ABC`.
+
+  </div>
+
+  [abstract base class]: https://docs.python.org/3/library/abc.html
+  [abstract methods]: https://docs.python.org/3/library/abc.html#abc.abstractmethod
+
+  ### OOP: <span class="gold">Factory Method Pattern</span>
+
+  The <strong class="special">factory design pattern</strong> uses a
+  specialized <strong class="special">factory</strong> method that produces
+  **instantiated** objects.  This is done to <strong
+  class="success">abstract</strong> away complex object instantiation logic.
+
+  - <strong class="caution">Product</strong>: An interface or abstract class
+  shared by all objects the **factory** produces.
+
+  - <strong class="warning">Concrete Products</strong>: Specific classes that
+  implement <strong class="caution">product</strong> interface.
+
+  - <strong class="danger">Concrete Creator</strong>: Specific <strong
+    class="special">factory</strong> method that returns <strong
+    class="warning">concrete products</strong>.
+
+  ```python
+  class FileWalker(BaseWalker):
+      def walk(self, recursive: bool=False):
+          print(f'{self.entry.path} {self.entry.stat().st_size}')
+
+  class DirectoryWalker(BaseWalker):
+      def walk(self, recursive: bool=False):
+          try:
+              with os.scandir(self.entry.path) as entries:
+                  for entry in map(WalkerFactory.get_walker, entries, cycle([recursive])):
+                      entry.walk(recursive)
+          except PermissionError:
+              pass
+
+  class WalkerFactory:
+      @classmethod
+      def get_walker(cls, entry: os.DirEntry | PathEntry, recursive: bool=False) -> BaseWalker:
+          match stat.S_IFMT(entry.stat().st_mode):
+              case stat.S_IFREG: return FileWalker(entry)
+              case stat.S_IFDIR: return DirectoryWalker(entry) if recursive else NoopWalker(entry)
+              case _:            return NoopWalker(entry)
+  ```
+
+  ### `main`
+
+  ```python
+  def main(arguments: list[str]=sys.argv[1:]):
+      recursive = False
+
+      while arguments and arguments[0].startswith('-'):
+          match argument := arguments.pop(0):
+              case '-R': recursive = True
+              case '-h': usage(0)
+              case _   : usage(1)
+
+      root = arguments[0] if arguments else os.curdir
+      DirectoryWalker(PathEntry(root)).walk(recursive)
+  ```
+
+  [list_oop.py]: https://github.com/nd-cse-20589-fa26/examples/blob/master/slides22/list_oop.py
