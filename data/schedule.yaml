@@ -241,6 +241,8 @@
         topics:         Directories
         items:
           - name:       Slides 22
+          - name:       Panopto
+            link:       https://notredame.hosted.panopto.com/Panopto/Pages/Viewer.aspx?id=de2c13d0-f3cc-4689-a767-b4f10113caa5
 
       - date:           Fri 10/30
         topics:         I/O
