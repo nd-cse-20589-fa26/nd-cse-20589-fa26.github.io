@@ -1,0 +1,152 @@
+title:      "Reading 08: Networking"
+body:       |
+
+  **Everyone**:
+
+  Next week, we will discuss [system calls] involving [networking].  We will
+  explore using [sockets] to communicate between [clients] and [servers] and
+  eventually create our own [HTTP] client in [Homework 08].
+
+  <div class="alert info-bg" markdown="1">
+
+  ### <i class="icon icon-medium">{{ "book" | embed_icon }}</i> TL;DR
+
+  The focus of this reading is to explore [system calls] related to network
+  [sockets] in [Python].
+
+  </div>
+
+  ## Readings
+
+  <div class="flex-row" markdown="1">
+
+  <div class="flex-col" markdown="1">
+
+  The readings for this week are:
+
+  1.  <div class="flex-col" markdown="1">
+
+      [Real Python](https://realpython.org)
+
+      - [Socket Programming in Python (Guide)](https://realpython.com/python-sockets/)
+
+      *Just focus on the sections up through [Communication Breakdown](https://realpython.com/python-sockets/#communication-breakdown)*.
+
+  2.  <div class="flex-col" markdown="1">
+
+      [Mozilla Developer Network](https://developer.mozilla.org)
+
+      - [How the web works](https://developer.mozilla.org/en-US/docs/Learn_web_development/Getting_started/Web_standards/How_the_web_works)
+      - [What is a URL?](https://developer.mozilla.org/en-US/docs/Learn/Common_questions/What_is_a_URL)
+
+  </div>
+
+  <div class="flex-col-25">
+
+  <div class="centered">
+    <img src="https://upload.wikimedia.org/wikipedia/commons/thumb/3/31/Python-logo.png/250px-Python-logo.png" class="transparent">
+  </div>
+
+  </div>
+
+  </div>
+
+  </div>
+
+  [system calls]: https://en.wikipedia.org/wiki/System_call
+  [Python]: https://python.org
+  [networking]: https://en.wikipedia.org/wiki/Computer_network
+  [sockets]: https://en.wikipedia.org/wiki/Network_socket
+  [clients]: https://en.wikipedia.org/wiki/Client_(computing)
+  [servers]: https://en.wikipedia.org/wiki/Server_(computing)
+  [HTTP]: https://en.wikipedia.org/wiki/Hypertext_Transfer_Protocol
+  [Homework 08]: homework08.html
+
+  ## Quiz
+
+  Once you have completed the readings, answer the following [Reading 08 Quiz]
+  questions:
+
+  <div id="quiz-questions"></div>
+
+  <div id="quiz-responses"></div>
+
+  <script src="static/js/dredd-quiz.js"></script>
+
+  <script>
+  loadQuiz('static/json/reading08.json');
+  </script>
+
+  <pre style="display: none;" id="dr-container" class="codehilite"><code id="dredd-response"></code></pre>
+
+  As with [Reading 01], you will need to store your answers in a
+  `reading08/answers.json` file. You can use the form above to generate the
+  contents of this file, or you can write the [JSON] by hand.
+
+  To test your quiz, you can use the `check.py` script:
+
+      :::bash
+      $ ../.scripts/check.py
+      Checking reading08 quiz ...
+            Q1  5.00 /  5.00
+            Q2  6.00 /  6.00
+            Q3  4.00 /  4.00
+        --------------------
+         Score 15.00 / 15.00
+         Grade  1.00 /  1.00
+        Status Success
+
+  ## Submission
+
+  To submit you work, follow the same process outlined in [Reading 01]:
+
+      :::bash
+      #--------------------------------------------------
+      # Make sure you have already completed Preparation
+      #--------------------------------------------------
+      ...
+      $ git add answers.json                # Mark changes for commit
+      $ git commit -m "Reading 08: Quiz"    # Record changes
+      ...
+      $ git push -u origin reading08        # Push branch to GitHub
+
+  <div class="alert warning-bg" markdown="1">
+
+  ### <i class="icon icon-medium">{{ "lifebuoy" | embed_icon }}</i> Acknowledgments
+
+  If you collaborated with any other students, or received help from TAs or AI
+  tools on this assignment, please record this support in the `README.md` in
+  the `reading08` folder and include it with your **Pull Request**.
+
+  </div>
+
+  <div class="alert success-bg" markdown="1">
+
+  ### <i class="icon icon-medium">{{ "account-question" | embed_icon }}</i> Graders
+
+  Once you have committed your work and pushed it to [GitHub], remember to
+  create a **pull request** and assign it to the appropriate **teaching
+  assistant** from the [Reading 08 TA List].
+
+  **Note**: this list changes each week, so be sure to consult the appropriate
+  list for each assignment.
+
+  </div>
+
+  [Markdown]: https://daringfireball.net/projects/markdown/
+  [git]: https://git-scm.com/
+  [clone]: https://git-scm.com/docs/git-clone
+  [commit]: https://git-scm.com/docs/git-commit
+  [push]: https://git-scm.com/docs/git-push
+  [GitHub]: https://github.com
+  [Reading 01]: reading01.html
+  [Reading 08 TA List]: reading08_tas.html
+  [dredd]: https://dredd.h4x0r.space
+  [Reading 08 Quiz]: static/json/reading08.json
+  [JSON]: https://json.org/
+
+  [The Linux Command Line]: http://linuxcommand.org/tlcl.php
+  [Unix]: https://en.wikipedia.org/wiki/Unix
+  [Unix Shell]: https://en.wikipedia.org/wiki/Unix_shell
+  [Git]: https://git-scm.com/
+  [Bash]: https://www.gnu.org/software/bash/
