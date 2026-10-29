@@ -44,7 +44,7 @@ system</strong>.
       class="comment">entries</strong>)
 
 - Each <strong class="success">process</strong> tracks its
-  <strong="caution">current working directory</strong>:
+  <strong class="caution">current working directory</strong>:
 
     ```python
     # Get current working directory of process
