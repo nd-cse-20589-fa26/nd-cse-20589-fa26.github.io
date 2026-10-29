@@ -1,0 +1,249 @@
+title:  "Notes 23: I/O"
+body:   |
+
+  ## Review: <span class="gold">Directories</span>
+
+  1.  <div class="flex-col" markdown="1">
+
+      What is a <strong class="caution">directory</strong>?
+
+      > A <strong class="info">system call</strong> occurs when a <strong
+      class="success">user application</strong> requests a <strong
+      class="warning">service, operation, or resource</strong> from the <strong
+      class="danger">operating system kernel</strong>.
+
+  2.  <div class="flex-col" markdown="1">
+
+      How do we list the contents of a <strong class="caution">directory</strong>?
+
+          :::python
+          for entry in os.listdir(directory):
+              print(entry)
+
+          with os.scandir(directory) as entries:
+            for entry in entries:
+                print(entry)
+
+  ## Review: <span class="gold">Inheritance, Factory Method Pattern</span>
+
+  1.  <div class="flex-col" markdown="1">
+
+      What is <strong class="warning">inheritance</strong>?
+
+      >  <strong class="warning">Inheritance</strong> is a core <strong
+      class="special">OOP principle</strong> that enables the creation of
+      <strong class="caution">hierarchical relationships</strong> between units
+      to allow for <strong class="success">code reuse</strong>.
+
+          :::python
+          # Subclass inherits from Path
+
+          class PathEntry(Path):
+            @property
+            def path(self):
+                return self.parent / self
+
+          # Parent - Abstract Base Class / Interface
+
+          @dataclass
+          class BaseWalker(ABC):
+              entry:  os.DirEntry | PathEntry
+
+              @abstractmethod
+              def walk(self, recursive: bool=False):
+                  pass
+
+          # Child - Concrete Class inherits from BaseWalker
+
+          class NoopWalker(BaseWalker):
+              def walk(self, recursive: bool=False):
+                  pass
+
+  2.  <div class="flex-col" markdown="1">
+
+      What is the <strong class="warning">factory design pattern</strong>?
+
+      > The <strong class="special">factory design pattern</strong> uses a
+      specialized <strong class="special">factory</strong> method that produces
+      **instantiated** objects.  This is done to <strong
+      class="success">abstract</strong> away complex object instantiation
+      logic.
+
+          :::python
+          # Child - Concrete Class inherits from BaseWalker
+
+          class FileWalker(BaseWalker):
+              def walk(self, recursive: bool=False):
+                  print(f'{self.entry.path} {self.entry.stat().st_size}')
+
+          # Child - Concrete Class inherits from BaseWalker
+
+          class DirectoryWalker(BaseWalker):
+              def walk(self, recursive: bool=False):
+                  try:
+                      with os.scandir(self.entry.path) as entries:
+                          for entry in map(WalkerFactory.get_walker, entries, cycle([recursive])):
+                              entry.walk(recursive)
+                  except PermissionError:
+                      pass
+
+          # Concrete Creator
+
+          class WalkerFactory:
+              @classmethod
+              def get_walker(cls, entry: os.DirEntry | PathEntry, recursive: bool=False) -> BaseWalker:
+                  match stat.S_IFMT(entry.stat().st_mode):
+                      case stat.S_IFREG: return FileWalker(entry)
+                      case stat.S_IFDIR: return DirectoryWalker(entry) if recursive else NoopWalker(entry)
+                      case _:            return NoopWalker(entry)
+
+
+  <div class="alert success-bg" markdown="1">
+
+  **Advantages**:
+
+  - **Separation of Concerns**: Separate the `what` (business logic) from the
+  `how` (concrete implementation details)
+
+  - **Open/closed Principle**: extend `units` (functions, classes) without `modification`.
+
+  - Should make it easier to add new `types` (ie. **symlinks**)
+
+  </div>
+
+  [list_oop.py]: https://github.com/nd-cse-20589-fa26/examples/blob/master/slides22/list_oop.py
+
+  ## I/O: <span class="gold">Overview</span>
+
+  <div class="flex-row" markdown="1">
+
+  <div class="flex-col" markdown="1">
+
+  All <strong class="warning">input</strong> and <strong
+  class="warning">output</strong> is performed on <strong
+  class="success">files</strong>:
+
+  1. <strong class="caution">Open</strong>
+
+      Acquire handle to stream of data.
+
+  2. <strong class="caution">Close</strong>
+
+      Release handle to stream of data.
+
+  </div>
+
+  <div class="flex-col" markdown="1">
+
+  3. <strong class="warning">Read</strong>
+
+      Load chunk from stream of data.
+
+  4. <strong class="warning">Write</strong>
+
+      Store chunk to stream of data.
+
+  5. <strong class="danger">Seek</strong>
+
+      Move within stream of data.
+
+  </div>
+
+  </div>
+
+  <div class="alert warning-bg" markdown="1">
+
+  - **Q**: What is a **file**?
+
+  - **A**: A **sequence** or **stream** of **bytes** (stored in **blocks**)
+
+  - **Skit**: Perform **system calls** on **file**, show **man pages**, **blocking**
+
+  </div>
+
+  ## I/O: [copy_file.py]
+
+  > Write a simplified version of [cp] that copies one file to another.
+
+  ```bash
+  # Copy /etc/hosts to hosts.copy
+  $ ./copy_file.py /etc/hosts hosts.copy
+
+  # Verify that sha1sums are the same
+  $ sha1sum /etc/hosts hosts.copy
+  ```
+
+  ### Implementation
+
+  ```python
+  def copy_file(src: Path, dst: Path):
+      try:
+          rfd = os.open(src, os.O_RDONLY)
+          wfd = os.open(dst, os.O_WRONLY | os.O_CREAT, src.stat().st_mode)
+      except OSError as e:
+          print(e, file=sys.stderr)
+          sys.exit(1)
+
+      while data := os.read(rfd, BUFSIZ):
+          os.write(wfd, data)
+
+      os.close(rfd)
+      os.close(wfd)
+  ```
+
+  [cp]: https://man7.org/linux/man-pages/man1/cp.1.html
+  [copy_file.py]: https://github.com/nd-cse-20589-fa26/examples/blob/master/slides23/copy_file.py
+
+  ## I/O: [file_array.py]
+
+  > Create a **persistent array** that supports the **index** operator.
+
+  ```python
+  # Create Persistent Array
+  array = FileArray('array.txt')
+
+  # Write to Persistent Array
+  for index, char in enumerate('hello, world'):
+      array[index] = char.encode()
+
+  # Write to Persistent Array (again)
+  for index, char in enumerate('goodbye, all'):
+      array[(1<<8) + index] = char.encode()
+  ```
+
+  ### Implementation
+
+  ```python
+  @dataclass
+  class FileArray:
+      path:   str                 # Path to file/array
+      size:   int=(1<<10)         # Size of file/array
+
+      def __post_init__(self):
+          ''' Post constructor: open file and allocate space. '''
+          self.fd = os.open(self.path, os.O_RDWR | os.O_CREAT, 0o644)
+          os.posix_fallocate(self.fd, 0, self.size)
+
+      def __del__(self):
+          ''' Destructor: close file '''
+          os.close(self.fd)
+
+      def __getitem__(self, key: int) -> bytes:
+          ''' Get item at key '''
+          if key >= self.size:
+              raise IndexError
+
+          os.lseek(self.fd, key, os.SEEK_SET)
+          return os.read(self.fd, 1)
+
+      def __setitem__(self, key: int, value: bytes):
+          ''' Set item at key with value '''
+          if key >= self.size:
+              raise IndexError
+
+          os.lseek(self.fd, key, os.SEEK_SET)
+          os.write(self.fd, value)
+  ```
+
+  [file_array.py]: https://github.com/nd-cse-20589-fa26/examples/blob/master/slides23/file_array.py
+
