@@ -1,0 +1,16 @@
+<mxfile host="Electron">
+  <diagram name="Page-1" id="U1L8l-U17fqGpl2mAKsj">
+    <mxGraphModel dx="1414" dy="843" grid="1" gridSize="10" guides="1" tooltips="1" connect="1" arrows="1" fold="1" page="1" pageScale="1" pageWidth="1100" pageHeight="850" math="0" shadow="0">
+      <root>
+        <mxCell id="0" />
+        <mxCell id="1" parent="0" />
+        <mxCell id="PzXlLXl7uA2mllf3LHsy-12" parent="1" style="shape=mxgraph.signs.tech.telephone_1;html=1;pointerEvents=1;fillColor=#d5e8d4;strokeColor=#82b366;verticalLabelPosition=bottom;verticalAlign=top;align=center;labelPerimeter=1;fontFamily=Ubuntu Sans Mono;strokeWidth=2;" value="" vertex="1">
+          <mxGeometry height="160" width="82" x="90" y="280" as="geometry" />
+        </mxCell>
+        <mxCell id="PzXlLXl7uA2mllf3LHsy-13" parent="1" style="shape=message;html=1;html=1;outlineConnect=0;labelPosition=center;verticalLabelPosition=bottom;align=center;verticalAlign=top;labelPerimeter=1;fontFamily=Ubuntu Sans Mono;fillColor=#f8cecc;strokeColor=#b85450;strokeWidth=2;" value="" vertex="1">
+          <mxGeometry height="80" width="120" x="700" y="320" as="geometry" />
+        </mxCell>
+      </root>
+    </mxGraphModel>
+  </diagram>
+</mxfile>

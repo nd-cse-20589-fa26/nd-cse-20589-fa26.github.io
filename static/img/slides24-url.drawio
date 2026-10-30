@@ -1,0 +1,53 @@
+<mxfile host="Electron">
+  <diagram name="Page-1" id="U1L8l-U17fqGpl2mAKsj">
+    <mxGraphModel dx="1414" dy="843" grid="1" gridSize="10" guides="1" tooltips="1" connect="1" arrows="1" fold="1" page="1" pageScale="1" pageWidth="1100" pageHeight="850" math="0" shadow="0">
+      <root>
+        <mxCell id="0" />
+        <mxCell id="1" parent="0" />
+        <mxCell id="PzXlLXl7uA2mllf3LHsy-1" parent="1" style="text;html=1;whiteSpace=wrap;strokeColor=none;fillColor=none;align=center;verticalAlign=middle;rounded=0;fontFamily=Ubuntu Sans Mono;" value="&lt;font style=&quot;font-size: 24px;&quot;&gt;&lt;b&gt;&lt;span style=&quot;color: rgb(53, 28, 117);&quot;&gt;http&lt;/span&gt;&lt;span style=&quot;color: rgb(0, 0, 0);&quot;&gt;://&lt;/span&gt;&lt;span style=&quot;color: rgb(11, 83, 148);&quot;&gt;xavier.h4x0r.space&lt;/span&gt;:&lt;span style=&quot;color: rgb(180, 95, 6);&quot;&gt;9234&lt;/span&gt;/&lt;span style=&quot;color: rgb(56, 118, 29);&quot;&gt;cgi-bin/hello.sh&lt;/span&gt;?&lt;span style=&quot;color: rgb(153, 0, 0);&quot;&gt;name=butters&lt;/span&gt;&lt;/b&gt;&lt;/font&gt;" vertex="1">
+          <mxGeometry height="40" width="880" x="110" y="280" as="geometry" />
+        </mxCell>
+        <mxCell id="PzXlLXl7uA2mllf3LHsy-3" edge="1" parent="1" source="PzXlLXl7uA2mllf3LHsy-2" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;exitX=0.5;exitY=1;exitDx=0;exitDy=0;defaultLabelBackgroundColor=page;strokeWidth=2;">
+          <mxGeometry relative="1" as="geometry">
+            <mxPoint x="190" y="270" as="targetPoint" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="PzXlLXl7uA2mllf3LHsy-2" parent="1" style="rounded=0;whiteSpace=wrap;html=1;fontFamily=Ubuntu Sans Mono;fillColor=#e1d5e7;strokeColor=#9673a6;strokeWidth=2;" value="&lt;b&gt;&lt;font style=&quot;font-size: 18px;&quot;&gt;Protocol&lt;/font&gt;&lt;/b&gt;" vertex="1">
+          <mxGeometry height="60" width="120" x="130" y="190" as="geometry" />
+        </mxCell>
+        <mxCell id="PzXlLXl7uA2mllf3LHsy-4" edge="1" parent="1" source="PzXlLXl7uA2mllf3LHsy-5" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;exitX=0.5;exitY=1;exitDx=0;exitDy=0;defaultLabelBackgroundColor=page;strokeWidth=2;">
+          <mxGeometry relative="1" as="geometry">
+            <mxPoint x="520" y="270" as="targetPoint" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="PzXlLXl7uA2mllf3LHsy-5" parent="1" style="rounded=0;whiteSpace=wrap;html=1;fontFamily=Ubuntu Sans Mono;fillColor=#ffe6cc;strokeColor=#d79b00;strokeWidth=2;" value="&lt;b&gt;&lt;font style=&quot;font-size: 18px;&quot;&gt;Port&lt;/font&gt;&lt;/b&gt;" vertex="1">
+          <mxGeometry height="60" width="120" x="460" y="190" as="geometry" />
+        </mxCell>
+        <mxCell id="PzXlLXl7uA2mllf3LHsy-6" edge="1" parent="1" source="PzXlLXl7uA2mllf3LHsy-7" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;exitX=0.5;exitY=1;exitDx=0;exitDy=0;defaultLabelBackgroundColor=page;strokeWidth=2;">
+          <mxGeometry relative="1" as="geometry">
+            <mxPoint x="870" y="270" as="targetPoint" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="PzXlLXl7uA2mllf3LHsy-7" parent="1" style="rounded=0;whiteSpace=wrap;html=1;fontFamily=Ubuntu Sans Mono;fillColor=#f8cecc;strokeColor=#b85450;strokeWidth=2;" value="&lt;b&gt;&lt;font style=&quot;font-size: 18px;&quot;&gt;Query String&lt;/font&gt;&lt;/b&gt;" vertex="1">
+          <mxGeometry height="60" width="120" x="810" y="190" as="geometry" />
+        </mxCell>
+        <mxCell id="PzXlLXl7uA2mllf3LHsy-9" edge="1" parent="1" source="PzXlLXl7uA2mllf3LHsy-8" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;exitX=0.5;exitY=0;exitDx=0;exitDy=0;defaultLabelBackgroundColor=page;strokeWidth=2;">
+          <mxGeometry relative="1" as="geometry">
+            <mxPoint x="360" y="330" as="targetPoint" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="PzXlLXl7uA2mllf3LHsy-8" parent="1" style="rounded=0;whiteSpace=wrap;html=1;fontFamily=Ubuntu Sans Mono;fillColor=#dae8fc;strokeColor=#6c8ebf;strokeWidth=2;" value="&lt;b&gt;&lt;font style=&quot;font-size: 18px;&quot;&gt;Domain&lt;/font&gt;&lt;/b&gt;" vertex="1">
+          <mxGeometry height="60" width="120" x="300" y="350" as="geometry" />
+        </mxCell>
+        <mxCell id="PzXlLXl7uA2mllf3LHsy-10" edge="1" parent="1" source="PzXlLXl7uA2mllf3LHsy-11" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;exitX=0.5;exitY=0;exitDx=0;exitDy=0;defaultLabelBackgroundColor=page;strokeWidth=2;">
+          <mxGeometry relative="1" as="geometry">
+            <mxPoint x="660" y="330" as="targetPoint" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="PzXlLXl7uA2mllf3LHsy-11" parent="1" style="rounded=0;whiteSpace=wrap;html=1;fontFamily=Ubuntu Sans Mono;fillColor=#d5e8d4;strokeColor=#82b366;strokeWidth=2;" value="&lt;b&gt;&lt;font style=&quot;font-size: 18px;&quot;&gt;Path&lt;/font&gt;&lt;/b&gt;" vertex="1">
+          <mxGeometry height="60" width="120" x="600" y="350" as="geometry" />
+        </mxCell>
+      </root>
+    </mxGraphModel>
+  </diagram>
+</mxfile>
