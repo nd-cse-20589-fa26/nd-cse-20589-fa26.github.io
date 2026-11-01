@@ -248,6 +248,8 @@
         topics:         I/O
         items:
           - name:       Slides 23
+          - name:       Panopto
+            link:       https://notredame.hosted.panopto.com/Panopto/Pages/Viewer.aspx?id=9ac75936-916b-48cc-bb3c-b4f30112a7b6
 
       - date:           Sat 10/31
         topics:         '<i class="muted">Findit</i>'
