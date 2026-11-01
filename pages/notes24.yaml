@@ -1,0 +1,202 @@
+title:  "Notes 24: Sockets"
+body:   |
+
+  ## Logistics
+
+  -   <div class="flex-col" markdown="1">
+
+      [Homework 08](homework08.html):
+
+      - Implement [requests] like library
+      - Implement [curl] based on that library
+      - Measure **bandwidth**
+
+  [requests]: https://requests.readthedocs.io/en/latest/
+  [curl]:  https://curl.se/
+
+  ## Review: <span class="gold">Looking Back, Moving Forward</span>
+
+  1.  <div class="flex-col" markdown="1">
+
+      What is <strong class="primary">networking</strong>?
+
+      - What is an <strong class="caution">IP address</strong>?
+
+      - What is a <strong class="warning">port</strong>?
+
+      - What is a <strong class="info">domain name</strong>?
+
+      - What is a <strong class="success">URL</strong>?
+
+  2.  <div class="flex-col" markdown="1">
+
+      What is a <strong class="special">protocol</strong>?
+
+      - What is an **example**?
+
+  ## Review: <span class="gold">TCP/IP</span>
+
+  <div class="centered">
+
+  <img src="static/img/slides24-tcpip.svg" class="transparent responsive">
+
+  </div>
+
+  1. To communicate over the <strong class="primary">network</strong>, <strong
+  class="info">client</strong> makes request to <strong
+  class="danger">server</strong>.
+
+  2. <strong class="info">Client</strong> needs to know <strong
+  class="caution">IP address</strong> and <strong class="warning">port</strong>
+  of <strong class="danger">Server</strong> (*review*).
+
+  3. <strong class="special">Packets</strong> are sent between <strong
+  class="info">client</strong> and <strong class="danger">server</strong>, but
+  may be **lost** (*package analogy*).
+
+  4. <strong class="success">TCP</strong> is used to provide <strong
+  class="success">streaming abstraction</strong> with **delivery control**.
+
+  ## Review: <span class="gold">URL</span>
+
+  <div class="centered">
+
+  <img src="static/img/slides24-url.svg" class="transparent responsive">
+
+  </div>
+
+  1. <strong class="primary">Web browser</strong> is the most common <strong
+  class="info">client</strong> (<strong class="special">HTTP</strong>).
+
+  2. Use a <strong class="success">URL</strong> to denote what **resource** we
+  are requesting.
+
+  3. <strong class="special">Protocol</strong> defines rules for communication.
+
+  4. <strong class="info">Host</strong> indicates the <strong
+  class="danger">server</strong> we want to contact.
+
+  5. <strong class="warning">Port</strong> specifies the <strong
+  class="warning">service</strong> number we want to utilize.
+
+  6. <strong class="success">Path</strong> tells server what **resource** we
+  want.
+
+  7. <strong class="danger">Query String</strong> are arguments (**example**:
+    google.com, query string).
+
+  ## Sockets: [echo_client] / [echo_server]
+
+  <div class="flex-row" markdown="1">
+
+  <div class="flex-col centered" markdown="1">
+
+  <strong class="info">Client</strong>
+
+  <img src="static/img/slides24-client.svg" class="transparent responsive">
+
+  </div>
+
+  <div class="flex-col centered" markdown="1">
+
+  <strong class="danger">Server</strong>
+
+  <img src="static/img/slides24-server.svg" class="transparent responsive">
+
+  </div>
+
+  </div>
+
+  [echo_client]: https://github.com/nd-cse-20589-fa26/examples/blob/master/slides24/echo_client.py
+  [echo_server]: https://github.com/nd-cse-20589-fa26/examples/blob/master/slides24/echo_server.py
+
+  ### Echo Client
+
+  ```python
+  #!/usr/bin/env python3
+
+  import socket
+  import sys
+
+  # Constants
+
+  BUFSIZ = (1<<10)
+
+  # Parse command line arguments
+
+  try:
+      host = sys.argv[1]
+      port = int(sys.argv[2])
+  except IndexError:
+      print('Usage: echo_client.py host port', file=sys.stderr)
+      sys.exit(1)
+
+  # Connect to remote machine at host and port
+
+  with socket.socket(socket.AF_INET, socket.SOCK_STREAM) as client:
+      client.connect((host, port))
+      print(f'Connected to {host}:{port}')
+
+      # Read from stdin, send to server, display response from server
+
+      for line in sys.stdin:
+          client.send(line.encode())
+          response = client.recv(BUFSIZ)
+          print(response.decode(), end='')
+  ```
+
+  <div class="alert success-bg" markdown="1">
+
+  - **client**: `./echo_client.py localhost 9999`
+  - **server**: `nc -l 9999`
+
+  </div>
+
+  ### Echo Server
+
+  ```python
+  #!/usr/bin/env python3
+
+  import socket
+  import sys
+
+  # Constants
+
+  BUFSIZ = (1<<10)
+
+  # Parse command line arguments
+
+  try:
+      host = '127.0.0.1'
+      port = int(sys.argv[1])
+  except IndexError:
+      print('Usage: echo_server.py port', file=sys.stderr)
+      sys.exit(1)
+
+  # Connect to remote machine at host and port
+
+  with socket.socket(socket.AF_INET, socket.SOCK_STREAM) as server:
+      # Bind to port and begin listening
+      server.bind((host, port))
+      server.listen()
+      print(f'Listening on {host}:{port}')
+
+      while True:
+          # Accept a client
+          client, address = server.accept()
+
+          with client:
+              print(f'Accepted connection from {address[0]}:{address[1]}')
+
+              # Read from client and send it back
+              while request := client.recv(BUFSIZ):
+                  print(request.decode(), end='')
+                  client.send(request)
+  ```
+
+  <div class="alert success-bg" markdown="1">
+
+  - **client**: `./echo_client.py localhost 9999`
+  - **server**: `./echo_server.py 9999`
+
+  </div>

@@ -1,0 +1,25 @@
+<mxfile host="Electron">
+  <diagram name="Page-1" id="U1L8l-U17fqGpl2mAKsj">
+    <mxGraphModel dx="1414" dy="843" grid="1" gridSize="10" guides="1" tooltips="1" connect="1" arrows="1" fold="1" page="1" pageScale="1" pageWidth="1100" pageHeight="850" math="0" shadow="0">
+      <root>
+        <mxCell id="0" />
+        <mxCell id="1" parent="0" />
+        <mxCell id="PzXlLXl7uA2mllf3LHsy-15" parent="1" style="rounded=0;whiteSpace=wrap;html=1;fontFamily=Ubuntu Sans Mono;fillColor=#d5e8d4;strokeColor=#82b366;strokeWidth=2;" value="" vertex="1">
+          <mxGeometry height="60" width="240" x="280" y="100" as="geometry" />
+        </mxCell>
+        <mxCell id="PzXlLXl7uA2mllf3LHsy-16" parent="1" style="rounded=0;whiteSpace=wrap;html=1;fontFamily=Ubuntu Sans Mono;fillColor=#d5e8d4;strokeColor=#82b366;strokeWidth=2;" value="" vertex="1">
+          <mxGeometry height="60" width="240" x="280" y="170" as="geometry" />
+        </mxCell>
+        <mxCell id="PzXlLXl7uA2mllf3LHsy-17" parent="1" style="rounded=0;whiteSpace=wrap;html=1;fontFamily=Ubuntu Sans Mono;fillColor=#fff2cc;strokeColor=#d6b656;strokeWidth=2;" value="&lt;br&gt;&lt;div&gt;&lt;br&gt;&lt;/div&gt;" vertex="1">
+          <mxGeometry height="60" width="240" x="280" y="240" as="geometry" />
+        </mxCell>
+        <mxCell id="PzXlLXl7uA2mllf3LHsy-18" parent="1" style="rounded=0;whiteSpace=wrap;html=1;fontFamily=Ubuntu Sans Mono;fillColor=#fff2cc;strokeColor=#d6b656;strokeWidth=2;" value="" vertex="1">
+          <mxGeometry height="60" width="240" x="280" y="310" as="geometry" />
+        </mxCell>
+        <mxCell id="PzXlLXl7uA2mllf3LHsy-19" parent="1" style="rounded=0;whiteSpace=wrap;html=1;fontFamily=Ubuntu Sans Mono;fillColor=#f8cecc;strokeColor=#b85450;strokeWidth=2;" value="" vertex="1">
+          <mxGeometry height="60" width="240" x="280" y="380" as="geometry" />
+        </mxCell>
+      </root>
+    </mxGraphModel>
+  </diagram>
+</mxfile>
