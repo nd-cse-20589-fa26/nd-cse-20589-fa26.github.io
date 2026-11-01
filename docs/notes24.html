@@ -1,0 +1,235 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<!-- Favicon -->
+<link rel="icon" type="image/png" sizes="32x32" href="static/ico/favicon-32x32.png">
+<link rel="icon" type="image/png" sizes="16x16" href="static/ico/favicon-16x16.png">
+<link rel="manifest" href="static/ico/site.webmanifest">
+<!-- Stylesheets -->
+<link rel="stylesheet" href="static/css/domer.css">
+<title>Notes 24: Sockets</title>
+</head>
+<body>
+<header>
+<a class="logo" href="notes24.html">
+    <h1>Notes 24: Sockets</h1>
+</a>
+<nav>
+    <ul>
+        <li><a href="index.html"><h4>Home</h4></a></li>
+        </ul>
+</nav></header>
+<main>
+<h2 id="logistics">Logistics<a class="headerlink" href="#logistics" title="Permanent link">&para;</a></h2>
+<ul>
+<li>
+<div class="flex-col" markdown="1">
+<p><a href="homework08.html">Homework 08</a>:</p>
+<ul>
+<li>Implement <a href="https://requests.readthedocs.io/en/latest/">requests</a> like library</li>
+<li>Implement <a href="https://curl.se/">curl</a> based on that library</li>
+<li>Measure <strong>bandwidth</strong></li>
+</ul>
+</li>
+</ul>
+<h2 id="review-looking-back-moving-forward">Review: <span class="gold">Looking Back, Moving Forward</span><a class="headerlink" href="#review-looking-back-moving-forward" title="Permanent link">&para;</a></h2>
+<ol>
+<li>
+<div class="flex-col" markdown="1">
+<p>What is <strong class="primary">networking</strong>?</p>
+<ul>
+<li>
+<p>What is an <strong class="caution">IP address</strong>?</p>
+</li>
+<li>
+<p>What is a <strong class="warning">port</strong>?</p>
+</li>
+<li>
+<p>What is a <strong class="info">domain name</strong>?</p>
+</li>
+<li>
+<p>What is a <strong class="success">URL</strong>?</p>
+</li>
+</ul>
+</li>
+<li>
+<div class="flex-col" markdown="1">
+<p>What is a <strong class="special">protocol</strong>?</p>
+<ul>
+<li>What is an <strong>example</strong>?</li>
+</ul>
+</li>
+</ol>
+<h2 id="review-tcpip">Review: <span class="gold">TCP/IP</span><a class="headerlink" href="#review-tcpip" title="Permanent link">&para;</a></h2>
+<div class="centered">
+
+<img src="static/img/slides24-tcpip.svg" class="transparent responsive">
+
+</div>
+
+<ol>
+<li>
+<p>To communicate over the <strong class="primary">network</strong>, <strong
+class="info">client</strong> makes request to <strong
+class="danger">server</strong>.</p>
+</li>
+<li>
+<p><strong class="info">Client</strong> needs to know <strong
+class="caution">IP address</strong> and <strong class="warning">port</strong>
+of <strong class="danger">Server</strong> (<em>review</em>).</p>
+</li>
+<li>
+<p><strong class="special">Packets</strong> are sent between <strong
+class="info">client</strong> and <strong class="danger">server</strong>, but
+may be <strong>lost</strong> (<em>package analogy</em>).</p>
+</li>
+<li>
+<p><strong class="success">TCP</strong> is used to provide <strong
+class="success">streaming abstraction</strong> with <strong>delivery control</strong>.</p>
+</li>
+</ol>
+<h2 id="review-url">Review: <span class="gold">URL</span><a class="headerlink" href="#review-url" title="Permanent link">&para;</a></h2>
+<div class="centered">
+
+<img src="static/img/slides24-url.svg" class="transparent responsive">
+
+</div>
+
+<ol>
+<li>
+<p><strong class="primary">Web browser</strong> is the most common <strong
+class="info">client</strong> (<strong class="special">HTTP</strong>).</p>
+</li>
+<li>
+<p>Use a <strong class="success">URL</strong> to denote what <strong>resource</strong> we
+are requesting.</p>
+</li>
+<li>
+<p><strong class="special">Protocol</strong> defines rules for communication.</p>
+</li>
+<li>
+<p><strong class="info">Host</strong> indicates the <strong
+class="danger">server</strong> we want to contact.</p>
+</li>
+<li>
+<p><strong class="warning">Port</strong> specifies the <strong
+class="warning">service</strong> number we want to utilize.</p>
+</li>
+<li>
+<p><strong class="success">Path</strong> tells server what <strong>resource</strong> we
+want.</p>
+</li>
+<li>
+<p><strong class="danger">Query String</strong> are arguments (<strong>example</strong>:
+  google.com, query string).</p>
+</li>
+</ol>
+<h2 id="sockets-echo_client-echo_server">Sockets: <a href="https://github.com/nd-cse-20589-fa26/examples/blob/master/slides24/echo_client.py">echo_client</a> / <a href="https://github.com/nd-cse-20589-fa26/examples/blob/master/slides24/echo_server.py">echo_server</a><a class="headerlink" href="#sockets-echo_client-echo_server" title="Permanent link">&para;</a></h2>
+<div class="flex-row">
+<div class="flex-col centered">
+<p><strong class="info">Client</strong></p>
+<p><img src="static/img/slides24-client.svg" class="transparent responsive"></p>
+</div>
+<div class="flex-col centered">
+<p><strong class="danger">Server</strong></p>
+<p><img src="static/img/slides24-server.svg" class="transparent responsive"></p>
+</div>
+</div>
+<h3 id="echo-client">Echo Client<a class="headerlink" href="#echo-client" title="Permanent link">&para;</a></h3>
+<div class="codehilite"><pre><span></span><code><span class="ch">#!/usr/bin/env python3</span>
+
+<span class="kn">import</span> <span class="nn">socket</span>
+<span class="kn">import</span> <span class="nn">sys</span>
+
+<span class="c1"># Constants</span>
+
+<span class="n">BUFSIZ</span> <span class="o">=</span> <span class="p">(</span><span class="mi">1</span><span class="o">&lt;&lt;</span><span class="mi">10</span><span class="p">)</span>
+
+<span class="c1"># Parse command line arguments</span>
+
+<span class="k">try</span><span class="p">:</span>
+    <span class="n">host</span> <span class="o">=</span> <span class="n">sys</span><span class="o">.</span><span class="n">argv</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span>
+    <span class="n">port</span> <span class="o">=</span> <span class="nb">int</span><span class="p">(</span><span class="n">sys</span><span class="o">.</span><span class="n">argv</span><span class="p">[</span><span class="mi">2</span><span class="p">])</span>
+<span class="k">except</span> <span class="ne">IndexError</span><span class="p">:</span>
+    <span class="nb">print</span><span class="p">(</span><span class="s1">&#39;Usage: echo_client.py host port&#39;</span><span class="p">,</span> <span class="n">file</span><span class="o">=</span><span class="n">sys</span><span class="o">.</span><span class="n">stderr</span><span class="p">)</span>
+    <span class="n">sys</span><span class="o">.</span><span class="n">exit</span><span class="p">(</span><span class="mi">1</span><span class="p">)</span>
+
+<span class="c1"># Connect to remote machine at host and port</span>
+
+<span class="k">with</span> <span class="n">socket</span><span class="o">.</span><span class="n">socket</span><span class="p">(</span><span class="n">socket</span><span class="o">.</span><span class="n">AF_INET</span><span class="p">,</span> <span class="n">socket</span><span class="o">.</span><span class="n">SOCK_STREAM</span><span class="p">)</span> <span class="k">as</span> <span class="n">client</span><span class="p">:</span>
+    <span class="n">client</span><span class="o">.</span><span class="n">connect</span><span class="p">((</span><span class="n">host</span><span class="p">,</span> <span class="n">port</span><span class="p">))</span>
+    <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s1">&#39;Connected to </span><span class="si">{</span><span class="n">host</span><span class="si">}</span><span class="s1">:</span><span class="si">{</span><span class="n">port</span><span class="si">}</span><span class="s1">&#39;</span><span class="p">)</span>
+
+    <span class="c1"># Read from stdin, send to server, display response from server</span>
+
+    <span class="k">for</span> <span class="n">line</span> <span class="ow">in</span> <span class="n">sys</span><span class="o">.</span><span class="n">stdin</span><span class="p">:</span>
+        <span class="n">client</span><span class="o">.</span><span class="n">send</span><span class="p">(</span><span class="n">line</span><span class="o">.</span><span class="n">encode</span><span class="p">())</span>
+        <span class="n">response</span> <span class="o">=</span> <span class="n">client</span><span class="o">.</span><span class="n">recv</span><span class="p">(</span><span class="n">BUFSIZ</span><span class="p">)</span>
+        <span class="nb">print</span><span class="p">(</span><span class="n">response</span><span class="o">.</span><span class="n">decode</span><span class="p">(),</span> <span class="n">end</span><span class="o">=</span><span class="s1">&#39;&#39;</span><span class="p">)</span>
+</code></pre></div>
+
+<div class="alert success-bg">
+<ul>
+<li><strong>client</strong>: <code>./echo_client.py localhost 9999</code></li>
+<li><strong>server</strong>: <code>nc -l 9999</code></li>
+</ul>
+</div>
+<h3 id="echo-server">Echo Server<a class="headerlink" href="#echo-server" title="Permanent link">&para;</a></h3>
+<div class="codehilite"><pre><span></span><code><span class="ch">#!/usr/bin/env python3</span>
+
+<span class="kn">import</span> <span class="nn">socket</span>
+<span class="kn">import</span> <span class="nn">sys</span>
+
+<span class="c1"># Constants</span>
+
+<span class="n">BUFSIZ</span> <span class="o">=</span> <span class="p">(</span><span class="mi">1</span><span class="o">&lt;&lt;</span><span class="mi">10</span><span class="p">)</span>
+
+<span class="c1"># Parse command line arguments</span>
+
+<span class="k">try</span><span class="p">:</span>
+    <span class="n">host</span> <span class="o">=</span> <span class="s1">&#39;127.0.0.1&#39;</span>
+    <span class="n">port</span> <span class="o">=</span> <span class="nb">int</span><span class="p">(</span><span class="n">sys</span><span class="o">.</span><span class="n">argv</span><span class="p">[</span><span class="mi">1</span><span class="p">])</span>
+<span class="k">except</span> <span class="ne">IndexError</span><span class="p">:</span>
+    <span class="nb">print</span><span class="p">(</span><span class="s1">&#39;Usage: echo_server.py port&#39;</span><span class="p">,</span> <span class="n">file</span><span class="o">=</span><span class="n">sys</span><span class="o">.</span><span class="n">stderr</span><span class="p">)</span>
+    <span class="n">sys</span><span class="o">.</span><span class="n">exit</span><span class="p">(</span><span class="mi">1</span><span class="p">)</span>
+
+<span class="c1"># Connect to remote machine at host and port</span>
+
+<span class="k">with</span> <span class="n">socket</span><span class="o">.</span><span class="n">socket</span><span class="p">(</span><span class="n">socket</span><span class="o">.</span><span class="n">AF_INET</span><span class="p">,</span> <span class="n">socket</span><span class="o">.</span><span class="n">SOCK_STREAM</span><span class="p">)</span> <span class="k">as</span> <span class="n">server</span><span class="p">:</span>
+    <span class="c1"># Bind to port and begin listening</span>
+    <span class="n">server</span><span class="o">.</span><span class="n">bind</span><span class="p">((</span><span class="n">host</span><span class="p">,</span> <span class="n">port</span><span class="p">))</span>
+    <span class="n">server</span><span class="o">.</span><span class="n">listen</span><span class="p">()</span>
+    <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s1">&#39;Listening on </span><span class="si">{</span><span class="n">host</span><span class="si">}</span><span class="s1">:</span><span class="si">{</span><span class="n">port</span><span class="si">}</span><span class="s1">&#39;</span><span class="p">)</span>
+
+    <span class="k">while</span> <span class="kc">True</span><span class="p">:</span>
+        <span class="c1"># Accept a client</span>
+        <span class="n">client</span><span class="p">,</span> <span class="n">address</span> <span class="o">=</span> <span class="n">server</span><span class="o">.</span><span class="n">accept</span><span class="p">()</span>
+
+        <span class="k">with</span> <span class="n">client</span><span class="p">:</span>
+            <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s1">&#39;Accepted connection from </span><span class="si">{</span><span class="n">address</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="si">}</span><span class="s1">:</span><span class="si">{</span><span class="n">address</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span><span class="si">}</span><span class="s1">&#39;</span><span class="p">)</span>
+
+            <span class="c1"># Read from client and send it back</span>
+            <span class="k">while</span> <span class="n">request</span> <span class="o">:=</span> <span class="n">client</span><span class="o">.</span><span class="n">recv</span><span class="p">(</span><span class="n">BUFSIZ</span><span class="p">):</span>
+                <span class="nb">print</span><span class="p">(</span><span class="n">request</span><span class="o">.</span><span class="n">decode</span><span class="p">(),</span> <span class="n">end</span><span class="o">=</span><span class="s1">&#39;&#39;</span><span class="p">)</span>
+                <span class="n">client</span><span class="o">.</span><span class="n">send</span><span class="p">(</span><span class="n">request</span><span class="p">)</span>
+</code></pre></div>
+
+<div class="alert success-bg">
+<ul>
+<li><strong>client</strong>: <code>./echo_client.py localhost 9999</code></li>
+<li><strong>server</strong>: <code>./echo_server.py 9999</code></li>
+</ul>
+</div>
+</main>
+<footer>
+Built using <a href="https://python.org">Python</a>
+and <a href="https://jinja.palletsprojects.com">Jinja</a>
+with colors from 
+<a href="https://onmessage.nd.edu/university-branding/colors/">Notre Dame</a>, 
+<a href="https://spreadsheet.dev/how-to-get-the-hexadecimal-codes-of-colors-in-google-sheets">Google Docs</a>, and 
+<a href="https://nordtheme.com">Nord Theme</a>,
+and icons from <a href="https://pictogrammers.com/library/mdi/">Material Design Icons</a>.</footer>
+</body>
+</html>
