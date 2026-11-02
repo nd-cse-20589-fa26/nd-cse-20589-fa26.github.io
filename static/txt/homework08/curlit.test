@@ -1,0 +1,142 @@
+#!/usr/bin/env python3
+
+import doctest
+import hashlib
+import inspect
+import itertools
+import io
+import math
+import mypy.api
+import os
+import re
+import subprocess
+import tempfile
+import time
+import unittest
+import unittest.mock
+
+import curlit
+
+# Functions
+
+def sha1sum(s: str) -> str:
+    return hashlib.sha1(s.encode()).hexdigest()
+
+# Unit Tests
+
+class CurlItTest(unittest.TestCase):
+    ''' CurlIt Unit Tests '''
+
+    @classmethod
+    def setUpClass(cls):
+        cls.Points = 0
+        cls.Total  = len([method for method in dir(cls) if method.startswith('test_')])
+
+    @classmethod
+    def tearDownClass(cls):
+        print()
+        print(f'   Score {cls.Points:5.2f} / {cls.Total:5.2f}')
+        print(f'   Grade {cls.Points/cls.Total:5.2f} / {1.0:5.2f}')
+        print(f'  Status {"Success" if math.isclose(cls.Points, cls.Total) else "Failure"}')
+
+    def test_00_doctest(self):
+        failures, tests = doctest.testmod(curlit, verbose=False)
+        self.assertEqual(failures, 0)
+        self.assertEqual(tests, 14)
+        CurlItTest.Points += (tests - failures) / tests
+
+    def test_01_mypy(self):
+        _, _, exit_status = mypy.api.run(['curlit.py'])
+        self.assertTrue(exit_status == 0)
+        CurlItTest.Points += 1.0
+
+    def test_02_usage(self):
+        with unittest.mock.patch('sys.stderr', new=io.StringIO()) as output:
+            with self.assertRaises(SystemExit) as context:
+                curlit.main(['-h'])
+        self.assertTrue('Usage' in output.getvalue())
+        self.assertEqual(str(context.exception), '0')
+        CurlItTest.Points += 0.50
+
+        with unittest.mock.patch('sys.stderr', new=io.StringIO()) as output:
+            with self.assertRaises(SystemExit) as context:
+                curlit.main([])
+        self.assertTrue('Usage' in output.getvalue())
+        self.assertEqual(str(context.exception), '1')
+        CurlItTest.Points += 0.50
+
+    def test_03_curl_dredd(self):
+        arguments = 'dredd.h4x0r.space'
+        with unittest.mock.patch('sys.stdout', new=io.StringIO()) as output:
+            curlit.main(arguments.split())
+        self.assertEqual(sha1sum(output.getvalue()), '05e1348f6db843a082e73df51e7db97507f0b672')
+        CurlItTest.Points += 0.33
+
+        arguments = 'https://dredd.h4x0r.space'
+        with unittest.mock.patch('sys.stdout', new=io.StringIO()) as output:
+            curlit.main(arguments.split())
+        self.assertEqual(sha1sum(output.getvalue()), 'a6ef043f9397f574178164b9e93ebf54692e3e12')
+        CurlItTest.Points += 0.33
+
+        arguments = '-v https://dredd.h4x0r.space'
+        with unittest.mock.patch('sys.stdout', new=io.StringIO()) as output:
+            curlit.main(arguments.split())
+        lines = output.getvalue().splitlines()
+        self.assertEqual(len(lines), 42)
+        self.assertEqual(lines[0], '< HTTP/1.1 200 OK')
+        self.assertEqual(lines[1], '< Server: nginx/1.28.3')
+        self.assertEqual(lines[4], '< Content-Length: 887')
+        CurlItTest.Points += 0.34
+
+    def test_04_curl_loki(self):
+        arguments = 'http://weasel.h4x0r.space:9898/'
+        with unittest.mock.patch('sys.stdout', new=io.StringIO()) as output:
+            curlit.main(arguments.split())
+        self.assertEqual(sha1sum(output.getvalue()), '781179f0e77978fabc99661fc159d22713d1419d')
+        CurlItTest.Points += 0.33
+
+        arguments = 'http://weasel.h4x0r.space:9898/txt/hello.txt'
+        with unittest.mock.patch('sys.stdout', new=io.StringIO()) as output:
+            curlit.main(arguments.split())
+        self.assertEqual(sha1sum(output.getvalue()), 'e91ba0972b9055187fa2efa8b5c156f487a8293a')
+        CurlItTest.Points += 0.33
+
+        arguments = '-v http://weasel.h4x0r.space:9898/txt/hello.txt'
+        with unittest.mock.patch('sys.stdout', new=io.StringIO()) as output:
+            curlit.main(arguments.split())
+        lines = output.getvalue().splitlines()
+        self.assertEqual(len(lines), 8)
+        self.assertEqual(lines[0], '< HTTP/1.0 200 OK')
+        self.assertEqual(lines[1], '< Server: SimpleHTTP/0.6 Python/3.14.4')
+        self.assertEqual(lines[4], '< Content-Length: 14')
+        CurlItTest.Points += 0.34
+
+    def test_05_curl_yldme(self):
+        arguments = 'https://yld.me/raw/Akf'
+        with unittest.mock.patch('sys.stdout', new=io.StringIO()) as output:
+            curlit.main(arguments.split())
+        self.assertEqual(sha1sum(output.getvalue()), '736c284bfbb686eeed6800776193218e61035e3e')
+        CurlItTest.Points += 0.33
+
+        arguments = 'https://yld.me/raw/SAw'
+        with unittest.mock.patch('sys.stdout', new=io.StringIO()) as output:
+            curlit.main(arguments.split())
+        self.assertEqual(sha1sum(output.getvalue()), '6e698534fdf6df4bc9f30e07e9f22aadb50c0316')
+        CurlItTest.Points += 0.33
+
+        arguments = '-v https://yld.me/raw/SAw'
+        with unittest.mock.patch('sys.stdout', new=io.StringIO()) as output:
+            curlit.main(arguments.split())
+        lines = output.getvalue().splitlines()
+        self.assertEqual(len(lines), 213)
+        self.assertEqual(lines[0], '< HTTP/1.1 200 OK')
+        self.assertEqual(lines[1], '< Server: nginx/1.28.3')
+        self.assertEqual(lines[4], '< Content-Length: 9982')
+        CurlItTest.Points += 0.34
+
+# Main Execution
+
+if __name__ == '__main__':
+    unittest.main()
+
+# vim: set sts=4 sw=4 ts=8 expandtab ft=python:

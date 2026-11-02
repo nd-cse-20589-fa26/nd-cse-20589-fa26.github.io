@@ -1,0 +1,481 @@
+title:      "Homework 08: Curlit"
+body:       |
+
+  The goal of this homework assignment is to allow you to practice using
+  [system calls] involving [networking] with [sockets] in [Python] by implementing
+  a simplified version of [curl] named `curlit`.
+
+  For this assignment, record your source code and any responses to the
+  following activities in the `homework08` folder of your **assignments**
+  [GitHub] repository and push your work by **noon Saturday, November 7**.
+
+  [networking]: https://en.wikipedia.org/wiki/Computer_network
+  [sockets]: https://en.wikipedia.org/wiki/Network_socket
+  [HTTP]: https://en.wikipedia.org/wiki/Hypertext_Transfer_Protocol
+  [curl]: https://curl.se/
+  [Python]: https://python.org
+  [system calls]: https://en.wikipedia.org/wiki/System_call
+
+  ## Activity 0: Preparation
+
+  Before starting this homework assignment, you should first perform a `git
+  pull` to retrieve any changes in your remote [GitHub] repository:
+
+      :::bash
+      $ cd path/to/repository                   # Go to assignments repository
+
+      $ git switch master                       # Make sure we are in master branch
+
+      $ git pull --rebase                       # Get any remote changes not present locally
+
+  Next, create a new branch for this assignment:
+
+      :::bash
+      $ git switch -c homework08                # Create homework08 branch and check it out
+
+  ### Task 1: Skeleton Code
+
+  To help you get started, the instructor has provided you with the following
+  **skeleton code**:
+
+      :::bash
+      # Create homework08 folder
+      $ mkdir homework08
+
+      # Go to homework08 folder
+      $ cd homework08
+
+      # Download Makefile
+      $ curl -LO https://pnutz.h4x0r.space/courses/cse.20289.fa26/static/txt/homework08/Makefile
+
+      # Download Python skeleton code
+      $ curl -LO https://pnutz.h4x0r.space/courses/cse.20289.fa26/static/txt/homework08/curlit.py
+
+  Once downloaded, you should see the following files in your `homework08`
+  directory:
+
+      :::bash
+      homework08
+          \_ Makefile           # This is the Makefile for building all the assignment artifacts
+          \_ curlit.py          # This is the Python script for the curlit script
+
+  <div class="alert warning-bg" markdown="1">
+
+  ### <i class="icon icon-medium">{{ "alert" | embed_icon }}</i> DocTests
+
+  You may notice that in addition to the usual comments and `TODOs`, the
+  [docstrings] of each method also contains a few [doctests].
+
+  You are **not** to modify these [doctests] and must keep them in-place. They
+  are used to verify the correctness of your code.
+
+  Your code goes **below** the [docstrings], where the `TODO` and `pass`
+  commands are (you may remove the pass once you complete the method).
+
+  </div>
+
+  [docstrings]: https://peps.python.org/pep-0257/
+  [doctests]: https://docs.python.org/3/library/doctest.html
+  [unit test]: https://en.wikipedia.org/wiki/Unit_testing
+  [unit tests]: https://en.wikipedia.org/wiki/Unit_testing
+
+  ### Task 2: Initial Import
+
+  Now that the files are downloaded into the `homework08` folder, you can
+  **commit** them to your [git] repository:
+
+      :::bash
+      $ git add Makefile                            # Mark changes for commit
+      $ git add *.py
+      $ git commit -m "Homework 08: Initial Import" # Record changes
+
+  ### Task 3: Unit and Functional Tests
+
+  After downloading these files, you can run `make test` to run the tests.
+
+      :::bash
+      # Run all tests (will trigger automatic download)
+      $ make test
+
+  You will notice that the Makefile downloads these additional test data and scripts:
+
+      :::bash
+      homework08
+          \_ curlit.test      # This is the Python test for the curlit script
+
+  In addition to the embedded [doctests] in the **skeleton code**, you will be
+  using these [unit tests] to verify the correctness and behavior of your code.
+
+  <div class="alert info-bg" markdown="1">
+
+  ### <i class="icon icon-medium">{{ "download" | embed_icon }}</i> Automatic Download
+
+  The `test` scripts are automatically downloaded by the `Makefile`, so any
+  modifications you do to them will be lost when you run `make` again. Likewise,
+  because they are automatically downloaded, you do not need to `add` or `commit`
+  them to your [git] repository.
+
+  </div>
+
+  The details on what you need to implement for this assignment are described
+  in the following sections.
+
+  ## Activity 1: `curlit` (*0.8 Points*)
+
+  For this activity, write a [Python] script, `curlit.py`, that implements a
+  subset of the [curl] utility:
+
+  ```bash
+  # Display usage message
+  $ ./curlit.py
+  Usage: curlit [-v -H HEADER] URL
+
+  # Curl this webpage
+  $ ./curlit.py https://pnutz.h4x0r.space/courses/cse.20589.fa26/homework08.html
+  <!doctype html>
+  <html lang="en">
+  <head>
+  ...
+
+  # Curl this webpage with verbosity
+  $ ./curlit.py -v https://pnutz.h4x0r.space/courses/cse.20589.fa26/homework08.html
+  < HTTP/1.1 200 OK
+  < Server: nginx/1.28.3
+  < Date: Mon, 02 Nov 2026 04:03:44 GMT
+  < Content-Type: text/html
+  < Content-Length: 16746
+  < Last-Modified: Mon, 02 Nov 2026 04:03:17 GMT
+  < Connection: close
+  < ETag: "6ae80b85-416a"
+  < Accept-Ranges: bytes
+  ...
+
+  # Curl with custom header
+  $ ./curlit.py -H 'User-Agent: Homework08/Fall2026' https://ip.yld.me/User-Agent
+  Homework08/Fall2026
+  ```
+
+  The `curlit.py` takes a `URL` argument and a series of *optional* flags:
+
+  - `-v`: This enables **verbose** information (ie. display the [HTTP] headers
+  before the [HTTP] contents).
+
+  - `-H HEADER`: This allows the user to add additional [HTTP] headers as part
+    of the request (must be in the format `KEY: VALUE`.
+
+  If no **scheme** is provided in the `URL` then `http` is assumed.  Likewise,
+  if no **port** is provided, then `80` is assumed.  Finally if no **path** is
+  provided, then `/` is assumed.
+
+  ### Task 1: `curlit.py`
+
+  To implement the `curlit.py` script, you will need complete the following:
+
+  #### Classes
+
+  The first **class** you will need to implement is `HTTPConnection`:
+
+  -   <div class="flex-col" markdown="1">
+
+          :::python
+          @dataclass
+          class HTTPConnection:
+              host:       str
+              port:       int
+              use_ssl:    bool=False
+
+      > This implements the **context manager protocol** such that the
+      `__enter__` method allocates a [socket] using [socket.create_connection]
+      to the given `host` and `port` and `__exit__` performs [socket.close].
+
+      <div class="alert success-bg" markdown="1">
+
+      **Hint**: If `use_ssl` is `True`, then you can use
+      [ssl.create_default_context] and [SSLContext.wrap_socket] as described in
+      [socket creation] to provide encrypted communication on the [socket].
+
+      </div>
+
+  [socket]: https://docs.python.org/3/library/socket.html#socket.socket
+  [socket.close]: https://docs.python.org/3/library/socket.html#socket.socket.close
+  [socket.create_connection]: https://docs.python.org/3/library/socket.html#socket.create_connection
+  [SSLContext.wrap_socket]: https://docs.python.org/3/library/ssl.html#ssl.SSLContext.wrap_socket
+  [ssl.create_default_context]: https://docs.python.org/3/library/ssl.html#ssl.create_default_context
+  [socket creation]: https://docs.python.org/3/library/ssl.html#socket-creation
+
+  The second **class** you will need to implement is `HTTPResponse`:
+
+  -   <div class="flex-col" markdown="1">
+
+          :::python
+          @dataclass
+          class HTTPResponse:
+              status:     str
+              headers:    dict[str, str]
+              text:       str
+
+      > This stores the result of [HTTP] request (ie. the `status` message, all
+      the `headers`, and the [HTTP] content `text`) and a provides a few
+      utility methods for accessing the [HTTP] `status_code`, the `text`
+      contents as `bytes`, and the `text` contents as [JSON].
+
+      <div class="alert success-bg" markdown="1">
+
+      **Hint**: All these methods should be **one-liners**.
+
+      </div>
+
+
+
+
+  #### Functions
+
+  Once you have the **classes** above, you can then implement the following
+  **functions**:
+
+  -   <div class="flex-col" markdown="1">
+
+          :::python
+          def get(url, headers: Optional[dict[str, str]]=None) -> HTTPResponse:
+
+      > This function parses the `url`, performs a [HTTP] request using the
+      given `headers`, and then returns a `HTTPResponse` with the results.
+
+      <div class="alert success-bg" markdown="1">
+
+      **Hints**:
+
+      - You can use [urlsplit] to parse the `url` to determine the **scheme**,
+      **host**, **port**, and **path*.
+
+      - You will need to handle the situations where the `url` does not specify
+      a component (ie. **scheme**, **port**, or **path**) and fall back to the
+      appropriate default.
+
+      - You will want to ensure you set the `Host` [HTTP] header.
+
+      - You should use your `HTTPConnection` class to make a connection.
+
+      - You should use [socket.makefile] to get a reader and writer stream.
+
+      -   <div class="flex-col" markdown="1">
+
+          Remember that a [HTTP] transaction looks like the following:
+
+              :::bash
+              GET $PATH HTTP/1.0\r\n    # HTTP Request Method
+              Host: $HOST\r\n           # HTTP Request Headers
+              Key: Value\r\n
+              ...
+              \r\n                      # HTTP Request Sentinel
+              HTTP/1.0 200 OK\r\n       # HTTP Response Status
+              Key: Value\r\n            # HTTP Response Headers
+              ...
+              \r\n                      # HTTP Response Sentinel
+              Contents                  # HTTP Response Contents
+
+
+      </div>
+
+  [urlsplit]: https://docs.python.org/3/library/urllib.parse.html#urllib.parse.urlsplit
+  [socket.makefile]: https://docs.python.org/3/library/socket.html#socket.socket.makefile
+
+  -   <div class="flex-col" markdown="1">
+
+          :::python
+          def curlit(url: str, headers: Optional[dict[str, str]]=None, verbose: bool=False):
+
+      > This function performs a [HTTP] `GET` request on specified `url` with
+      given `headers`.  If `verbose` is `True`, then output status and headers
+      before text.
+
+      <div class="alert success-bg" markdown="1">
+
+      **Hints**: Use the `get` function and access the headers from the `HTTPReponse` object.
+
+      </div>
+
+  -   <div class="flex-col" markdown="1">
+
+          :::python
+          def main(arguments: list[str]=sys.argv[1:]) -> None:
+
+      > This function parses the command line arguments and then performs the
+      [HTTP] `GET` request on the specified `url`.
+
+      <div class="alert success-bg" markdown="1">
+
+      **Hints**: The [str.split] function has a `maxsplit` keyword argument.
+      Use `curlit` to perform the actual [HTTP] `GET` request.
+
+      </div>
+
+  [str.split]: https://docs.python.org/3/builtins/stdtypes.html#str.split
+
+
+  ### Task 2: Testing
+
+  As you implement `curlit.py`, you can use the provided [doctests] to verify the
+  correctness of your code:
+
+      :::bash
+      # Run doctests
+      $ python3 -m doctest curlit.py -v
+      ...
+      6 items passed all tests:
+         2 tests in curlit.HTTPConnection.__enter__
+         1 test in curlit.HTTPResponse.content
+         1 test in curlit.HTTPResponse.json
+         3 tests in curlit.HTTPResponse.status_code
+         3 tests in curlit.curlit
+         4 tests in curlit.get
+      14 tests in 20 items.
+      14 passed.
+      Test passed.
+
+  You can also use `make` to run both the [doctests] and the [unit tests]:
+
+      :::bash
+      # Run unit tests (and doctests)
+      $ make test-curlit
+      test_00_doctest (__main__.CurlItTest.test_00_doctest) ... ok
+      test_01_mypy (__main__.CurlItTest.test_01_mypy) ... ok
+      test_02_usage (__main__.CurlItTest.test_02_usage) ... ok
+      test_03_curl_dredd (__main__.CurlItTest.test_03_curl_dredd) ... ok
+      test_04_curl_loki (__main__.CurlItTest.test_04_curl_loki) ... ok
+      test_05_curl_yldme (__main__.CurlItTest.test_05_curl_yldme) ... ok
+
+         Score  6.00 /  6.00
+         Grade  1.00 /  1.00
+        Status Success
+
+      ----------------------------------------------------------------------
+      Ran 6 tests in 1.219s
+
+      OK
+
+  To just run the [unit tests], you can do the following:
+
+      :::bash
+      # Run unit tests
+      $ ./curlit.test -v
+      ...
+
+  To run a specific [unit test], you can specify the **method name**:
+
+      :::bash
+      # Run only mypy unit test
+      $ ./curlit.test -v curlitTest.test_01_mypy
+      ...
+
+  To manually check your types, you can use [mypy]:
+
+      :::bash
+      # Run mypy to check types
+      $ mypy curlit.py
+
+  ## Activity 2: Quiz (*0.2 Points*)
+
+  Once you have completed all the activities above, you are to complete the
+  following **reflection quiz**:
+
+  <div id="quiz-questions"></div>
+
+  <div id="quiz-responses"></div>
+
+  <script src="static/js/dredd-quiz.js"></script>
+  <script>
+  loadQuiz('static/json/homework08.json');
+  </script>
+
+  <pre style="display: none;" id="dr-container" class="codehilite"><code id="dredd-response"></code></pre>
+
+  As with [Reading 01], you will need to store your answers in a
+  `homework08/answers.json` file.  You can use the form above to generate the
+  contents of this file, or you can write the [JSON] by hand.
+
+  To test your quiz, you can use the `check.py` script:
+
+      :::bash
+      $ ../.scripts/check.py
+      Checking homework08 quiz ...
+            Q1  7.00 /  7.00
+            Q2  4.00 /  4.00
+            Q3  3.00 /  3.00
+            Q4  3.00 /  3.00
+        --------------------
+         Score 17.00 / 17.00
+         Grade  1.00 /  1.00
+        Status Success
+
+  [JSON]: https://json.org
+
+  ## Submission
+
+  To submit your assignment, please commit your work to the `homework08` folder
+  of your `homework08` branch in your **assignments** [GitHub] repository.
+  Your `homework08` folder should **only** contain the following files:
+
+  - `Makefile`
+  - `answers.json`
+  - `curlit.py`
+
+  <div class="alert info-bg" markdown="1">
+
+  **Note**: You do not need to commit the test scripts because the `Makefile`
+  automatically downloads them.
+
+  </div>
+
+      :::bash
+      #-----------------------------------------------------------------------
+      # Make sure you have already completed Activity 0: Preparation
+      #-----------------------------------------------------------------------
+      ...
+      $ git add Makefile                        # Mark changes for commit
+      $ git add curlit.py                       # Mark changes for commit
+      $ git commit -m "Homework 08: curlit"     # Record changes
+      ...
+      $ git add answers.json                    # Mark changes for commit
+      $ git commit -m "Homework 08: quiz"       # Record changes
+      ...
+      $ git push -u origin homework08           # Push branch to GitHub
+
+  <div class="alert warning-bg" markdown="1">
+
+  ### <i class="icon icon-medium">{{ "lifebuoy" | embed_icon }}</i> Acknowledgments
+
+  If you collaborated with any other students, or received help from TAs or AI
+  tools on this assignment, please record this support in the `README.md` in
+  the `homework08` folder and include it with your **Pull Request**.
+
+  </div>
+
+  <div class="alert success-bg" markdown="1">
+
+  ### <i class="icon icon-medium">{{ "account-question" | embed_icon }}</i> Graders
+
+  Once you have committed your work and pushed it to [GitHub], remember to
+  create a **pull request** and assign it to the appropriate **teaching
+  assistant** from the [Reading 08 TA List].
+
+  **Note**: this list changes each week, so be sure to consult the appropriate
+  list for each assignment.
+
+  </div>
+
+  [git]: https://git-scm.com/
+  [clone]: https://git-scm.com/docs/git-clone
+  [commit]: https://git-scm.com/docs/git-commit
+  [push]: https://git-scm.com/docs/git-push
+  [GitHub]: https://github.com
+  [Linux]: https://kernel.org
+  [branch]: https://git-scm.com/docs/git-branch
+  [add]: https://git-scm.com/docs/git-add
+  [Reading 01]: reading01.html
+  [Reading 08 TA List]: reading08_tas.html
+  [curl]: http://man7.org/linux/man-pages/man1/curl.1.html
+  [wget]: http://man7.org/linux/man-pages/man1/wget.1.html
+  [JSON]: https://json.org/
+  [ESC]: https://esc.nd.edu/
+  [mypy]: https://mypy-lang.org/
