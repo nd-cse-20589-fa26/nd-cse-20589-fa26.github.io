@@ -1,0 +1,423 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<!-- Favicon -->
+<link rel="icon" type="image/png" sizes="32x32" href="static/ico/favicon-32x32.png">
+<link rel="icon" type="image/png" sizes="16x16" href="static/ico/favicon-16x16.png">
+<link rel="manifest" href="static/ico/site.webmanifest">
+<!-- Stylesheets -->
+<link rel="stylesheet" href="static/css/domer.css">
+<title>Homework 08: Curlit</title>
+</head>
+<body>
+<header>
+<a class="logo" href="homework08.html">
+    <h1>Homework 08: Curlit</h1>
+</a>
+<nav>
+    <ul>
+        <li><a href="index.html"><h4>Home</h4></a></li>
+        </ul>
+</nav></header>
+<main>
+<p>The goal of this homework assignment is to allow you to practice using
+<a href="https://en.wikipedia.org/wiki/System_call">system calls</a> involving <a href="https://en.wikipedia.org/wiki/Computer_network">networking</a> with <a href="https://en.wikipedia.org/wiki/Network_socket">sockets</a> in <a href="https://python.org">Python</a> by implementing
+a simplified version of <a href="http://man7.org/linux/man-pages/man1/curl.1.html">curl</a> named <code>curlit</code>.</p>
+<p>For this assignment, record your source code and any responses to the
+following activities in the <code>homework08</code> folder of your <strong>assignments</strong>
+<a href="https://github.com">GitHub</a> repository and push your work by <strong>noon Saturday, November 7</strong>.</p>
+<h2 id="activity-0-preparation">Activity 0: Preparation<a class="headerlink" href="#activity-0-preparation" title="Permanent link">&para;</a></h2>
+<p>Before starting this homework assignment, you should first perform a <code>git
+pull</code> to retrieve any changes in your remote <a href="https://github.com">GitHub</a> repository:</p>
+<div class="codehilite"><pre><span></span><code>$<span class="w"> </span><span class="nb">cd</span><span class="w"> </span>path/to/repository<span class="w">                   </span><span class="c1"># Go to assignments repository</span>
+
+$<span class="w"> </span>git<span class="w"> </span>switch<span class="w"> </span>master<span class="w">                       </span><span class="c1"># Make sure we are in master branch</span>
+
+$<span class="w"> </span>git<span class="w"> </span>pull<span class="w"> </span>--rebase<span class="w">                       </span><span class="c1"># Get any remote changes not present locally</span>
+</code></pre></div>
+
+<p>Next, create a new branch for this assignment:</p>
+<div class="codehilite"><pre><span></span><code>$<span class="w"> </span>git<span class="w"> </span>switch<span class="w"> </span>-c<span class="w"> </span>homework08<span class="w">                </span><span class="c1"># Create homework08 branch and check it out</span>
+</code></pre></div>
+
+<h3 id="task-1-skeleton-code">Task 1: Skeleton Code<a class="headerlink" href="#task-1-skeleton-code" title="Permanent link">&para;</a></h3>
+<p>To help you get started, the instructor has provided you with the following
+<strong>skeleton code</strong>:</p>
+<div class="codehilite"><pre><span></span><code><span class="c1"># Create homework08 folder</span>
+$<span class="w"> </span>mkdir<span class="w"> </span>homework08
+
+<span class="c1"># Go to homework08 folder</span>
+$<span class="w"> </span><span class="nb">cd</span><span class="w"> </span>homework08
+
+<span class="c1"># Download Makefile</span>
+$<span class="w"> </span>curl<span class="w"> </span>-LO<span class="w"> </span>https://pnutz.h4x0r.space/courses/cse.20289.fa26/static/txt/homework08/Makefile
+
+<span class="c1"># Download Python skeleton code</span>
+$<span class="w"> </span>curl<span class="w"> </span>-LO<span class="w"> </span>https://pnutz.h4x0r.space/courses/cse.20289.fa26/static/txt/homework08/curlit.py
+</code></pre></div>
+
+<p>Once downloaded, you should see the following files in your <code>homework08</code>
+directory:</p>
+<div class="codehilite"><pre><span></span><code>homework08
+<span class="w">    </span><span class="se">\_</span><span class="w"> </span>Makefile<span class="w">           </span><span class="c1"># This is the Makefile for building all the assignment artifacts</span>
+<span class="w">    </span><span class="se">\_</span><span class="w"> </span>curlit.py<span class="w">          </span><span class="c1"># This is the Python script for the curlit script</span>
+</code></pre></div>
+
+<div class="alert warning-bg">
+<h3 id="alert-embed_icon-doctests"><i class="icon icon-medium"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><title>alert</title><path d="M13 14H11V9H13M13 18H11V16H13M1 21H23L12 2L1 21Z" /></svg>
+</i> DocTests<a class="headerlink" href="#alert-embed_icon-doctests" title="Permanent link">&para;</a></h3>
+<p>You may notice that in addition to the usual comments and <code>TODOs</code>, the
+<a href="https://peps.python.org/pep-0257/">docstrings</a> of each method also contains a few <a href="https://docs.python.org/3/library/doctest.html">doctests</a>.</p>
+<p>You are <strong>not</strong> to modify these <a href="https://docs.python.org/3/library/doctest.html">doctests</a> and must keep them in-place. They
+are used to verify the correctness of your code.</p>
+<p>Your code goes <strong>below</strong> the <a href="https://peps.python.org/pep-0257/">docstrings</a>, where the <code>TODO</code> and <code>pass</code>
+commands are (you may remove the pass once you complete the method).</p>
+</div>
+<h3 id="task-2-initial-import">Task 2: Initial Import<a class="headerlink" href="#task-2-initial-import" title="Permanent link">&para;</a></h3>
+<p>Now that the files are downloaded into the <code>homework08</code> folder, you can
+<strong>commit</strong> them to your <a href="https://git-scm.com/">git</a> repository:</p>
+<div class="codehilite"><pre><span></span><code>$<span class="w"> </span>git<span class="w"> </span>add<span class="w"> </span>Makefile<span class="w">                            </span><span class="c1"># Mark changes for commit</span>
+$<span class="w"> </span>git<span class="w"> </span>add<span class="w"> </span>*.py
+$<span class="w"> </span>git<span class="w"> </span>commit<span class="w"> </span>-m<span class="w"> </span><span class="s2">&quot;Homework 08: Initial Import&quot;</span><span class="w"> </span><span class="c1"># Record changes</span>
+</code></pre></div>
+
+<h3 id="task-3-unit-and-functional-tests">Task 3: Unit and Functional Tests<a class="headerlink" href="#task-3-unit-and-functional-tests" title="Permanent link">&para;</a></h3>
+<p>After downloading these files, you can run <code>make test</code> to run the tests.</p>
+<div class="codehilite"><pre><span></span><code><span class="c1"># Run all tests (will trigger automatic download)</span>
+$<span class="w"> </span>make<span class="w"> </span><span class="nb">test</span>
+</code></pre></div>
+
+<p>You will notice that the Makefile downloads these additional test data and scripts:</p>
+<div class="codehilite"><pre><span></span><code>homework08
+<span class="w">    </span><span class="se">\_</span><span class="w"> </span>curlit.test<span class="w">      </span><span class="c1"># This is the Python test for the curlit script</span>
+</code></pre></div>
+
+<p>In addition to the embedded <a href="https://docs.python.org/3/library/doctest.html">doctests</a> in the <strong>skeleton code</strong>, you will be
+using these <a href="https://en.wikipedia.org/wiki/Unit_testing">unit tests</a> to verify the correctness and behavior of your code.</p>
+<div class="alert info-bg">
+<h3 id="download-embed_icon-automatic-download"><i class="icon icon-medium"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><title>download</title><path d="M5,20H19V18H5M19,9H15V3H9V9H5L12,16L19,9Z" /></svg>
+</i> Automatic Download<a class="headerlink" href="#download-embed_icon-automatic-download" title="Permanent link">&para;</a></h3>
+<p>The <code>test</code> scripts are automatically downloaded by the <code>Makefile</code>, so any
+modifications you do to them will be lost when you run <code>make</code> again. Likewise,
+because they are automatically downloaded, you do not need to <code>add</code> or <code>commit</code>
+them to your <a href="https://git-scm.com/">git</a> repository.</p>
+</div>
+<p>The details on what you need to implement for this assignment are described
+in the following sections.</p>
+<h2 id="activity-1-curlit-08-points">Activity 1: <code>curlit</code> (<em>0.8 Points</em>)<a class="headerlink" href="#activity-1-curlit-08-points" title="Permanent link">&para;</a></h2>
+<p>For this activity, write a <a href="https://python.org">Python</a> script, <code>curlit.py</code>, that implements a
+subset of the <a href="http://man7.org/linux/man-pages/man1/curl.1.html">curl</a> utility:</p>
+<div class="codehilite"><pre><span></span><code><span class="c1"># Display usage message</span>
+$<span class="w"> </span>./curlit.py
+Usage:<span class="w"> </span>curlit<span class="w"> </span><span class="o">[</span>-v<span class="w"> </span>-H<span class="w"> </span>HEADER<span class="o">]</span><span class="w"> </span>URL
+
+<span class="c1"># Curl this webpage</span>
+$<span class="w"> </span>./curlit.py<span class="w"> </span>https://pnutz.h4x0r.space/courses/cse.20589.fa26/homework08.html
+&lt;!doctype<span class="w"> </span>html&gt;
+&lt;html<span class="w"> </span><span class="nv">lang</span><span class="o">=</span><span class="s2">&quot;en&quot;</span>&gt;
+&lt;head&gt;
+...
+
+<span class="c1"># Curl this webpage with verbosity</span>
+$<span class="w"> </span>./curlit.py<span class="w"> </span>-v<span class="w"> </span>https://pnutz.h4x0r.space/courses/cse.20589.fa26/homework08.html
+&lt;<span class="w"> </span>HTTP/1.1<span class="w"> </span><span class="m">200</span><span class="w"> </span>OK
+&lt;<span class="w"> </span>Server:<span class="w"> </span>nginx/1.28.3
+&lt;<span class="w"> </span>Date:<span class="w"> </span>Mon,<span class="w"> </span><span class="m">02</span><span class="w"> </span>Nov<span class="w"> </span><span class="m">2026</span><span class="w"> </span><span class="m">04</span>:03:44<span class="w"> </span>GMT
+&lt;<span class="w"> </span>Content-Type:<span class="w"> </span>text/html
+&lt;<span class="w"> </span>Content-Length:<span class="w"> </span><span class="m">16746</span>
+&lt;<span class="w"> </span>Last-Modified:<span class="w"> </span>Mon,<span class="w"> </span><span class="m">02</span><span class="w"> </span>Nov<span class="w"> </span><span class="m">2026</span><span class="w"> </span><span class="m">04</span>:03:17<span class="w"> </span>GMT
+&lt;<span class="w"> </span>Connection:<span class="w"> </span>close
+&lt;<span class="w"> </span>ETag:<span class="w"> </span><span class="s2">&quot;6ae80b85-416a&quot;</span>
+&lt;<span class="w"> </span>Accept-Ranges:<span class="w"> </span>bytes
+...
+
+<span class="c1"># Curl with custom header</span>
+$<span class="w"> </span>./curlit.py<span class="w"> </span>-H<span class="w"> </span><span class="s1">&#39;User-Agent: Homework08/Fall2026&#39;</span><span class="w"> </span>https://ip.yld.me/User-Agent
+Homework08/Fall2026
+</code></pre></div>
+
+<p>The <code>curlit.py</code> takes a <code>URL</code> argument and a series of <em>optional</em> flags:</p>
+<ul>
+<li>
+<p><code>-v</code>: This enables <strong>verbose</strong> information (ie. display the <a href="https://en.wikipedia.org/wiki/Hypertext_Transfer_Protocol">HTTP</a> headers
+before the <a href="https://en.wikipedia.org/wiki/Hypertext_Transfer_Protocol">HTTP</a> contents).</p>
+</li>
+<li>
+<p><code>-H HEADER</code>: This allows the user to add additional <a href="https://en.wikipedia.org/wiki/Hypertext_Transfer_Protocol">HTTP</a> headers as part
+  of the request (must be in the format <code>KEY: VALUE</code>.</p>
+</li>
+</ul>
+<p>If no <strong>scheme</strong> is provided in the <code>URL</code> then <code>http</code> is assumed.  Likewise,
+if no <strong>port</strong> is provided, then <code>80</code> is assumed.  Finally if no <strong>path</strong> is
+provided, then <code>/</code> is assumed.</p>
+<h3 id="task-1-curlitpy">Task 1: <code>curlit.py</code><a class="headerlink" href="#task-1-curlitpy" title="Permanent link">&para;</a></h3>
+<p>To implement the <code>curlit.py</code> script, you will need complete the following:</p>
+<h4 id="classes">Classes<a class="headerlink" href="#classes" title="Permanent link">&para;</a></h4>
+<p>The first <strong>class</strong> you will need to implement is <code>HTTPConnection</code>:</p>
+<ul>
+<li>
+<div class="flex-col" markdown="1">
+<div class="codehilite"><pre><span></span><code><span class="nd">@dataclass</span>
+<span class="k">class</span> <span class="nc">HTTPConnection</span><span class="p">:</span>
+    <span class="n">host</span><span class="p">:</span>       <span class="nb">str</span>
+    <span class="n">port</span><span class="p">:</span>       <span class="nb">int</span>
+    <span class="n">use_ssl</span><span class="p">:</span>    <span class="nb">bool</span><span class="o">=</span><span class="kc">False</span>
+</code></pre></div>
+
+<blockquote>
+<p>This implements the <strong>context manager protocol</strong> such that the
+<code>__enter__</code> method allocates a <a href="https://docs.python.org/3/library/socket.html#socket.socket">socket</a> using <a href="https://docs.python.org/3/library/socket.html#socket.create_connection">socket.create_connection</a>
+to the given <code>host</code> and <code>port</code> and <code>__exit__</code> performs <a href="https://docs.python.org/3/library/socket.html#socket.socket.close">socket.close</a>.</p>
+</blockquote>
+<div class="alert success-bg" markdown="1">
+<p><strong>Hint</strong>: If <code>use_ssl</code> is <code>True</code>, then you can use
+<a href="https://docs.python.org/3/library/ssl.html#ssl.create_default_context">ssl.create_default_context</a> and <a href="https://docs.python.org/3/library/ssl.html#ssl.SSLContext.wrap_socket">SSLContext.wrap_socket</a> as described in
+<a href="https://docs.python.org/3/library/ssl.html#socket-creation">socket creation</a> to provide encrypted communication on the <a href="https://docs.python.org/3/library/socket.html#socket.socket">socket</a>.</p>
+</div>
+</li>
+</ul>
+<p>The second <strong>class</strong> you will need to implement is <code>HTTPResponse</code>:</p>
+<ul>
+<li>
+<div class="flex-col" markdown="1">
+<div class="codehilite"><pre><span></span><code><span class="nd">@dataclass</span>
+<span class="k">class</span> <span class="nc">HTTPResponse</span><span class="p">:</span>
+    <span class="n">status</span><span class="p">:</span>     <span class="nb">str</span>
+    <span class="n">headers</span><span class="p">:</span>    <span class="nb">dict</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="nb">str</span><span class="p">]</span>
+    <span class="n">text</span><span class="p">:</span>       <span class="nb">str</span>
+</code></pre></div>
+
+<blockquote>
+<p>This stores the result of <a href="https://en.wikipedia.org/wiki/Hypertext_Transfer_Protocol">HTTP</a> request (ie. the <code>status</code> message, all
+the <code>headers</code>, and the <a href="https://en.wikipedia.org/wiki/Hypertext_Transfer_Protocol">HTTP</a> content <code>text</code>) and a provides a few
+utility methods for accessing the <a href="https://en.wikipedia.org/wiki/Hypertext_Transfer_Protocol">HTTP</a> <code>status_code</code>, the <code>text</code>
+contents as <code>bytes</code>, and the <code>text</code> contents as <a href="https://json.org/">JSON</a>.</p>
+</blockquote>
+<div class="alert success-bg" markdown="1">
+<p><strong>Hint</strong>: All these methods should be <strong>one-liners</strong>.</p>
+</div>
+</li>
+</ul>
+<h4 id="functions">Functions<a class="headerlink" href="#functions" title="Permanent link">&para;</a></h4>
+<p>Once you have the <strong>classes</strong> above, you can then implement the following
+<strong>functions</strong>:</p>
+<ul>
+<li>
+<div class="flex-col" markdown="1">
+<div class="codehilite"><pre><span></span><code><span class="k">def</span> <span class="nf">get</span><span class="p">(</span><span class="n">url</span><span class="p">,</span> <span class="n">headers</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="nb">dict</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="nb">str</span><span class="p">]]</span><span class="o">=</span><span class="kc">None</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">HTTPResponse</span><span class="p">:</span>
+</code></pre></div>
+
+<blockquote>
+<p>This function parses the <code>url</code>, performs a <a href="https://en.wikipedia.org/wiki/Hypertext_Transfer_Protocol">HTTP</a> request using the
+given <code>headers</code>, and then returns a <code>HTTPResponse</code> with the results.</p>
+</blockquote>
+<div class="alert success-bg" markdown="1">
+<p><strong>Hints</strong>:</p>
+<ul>
+<li>
+<p>You can use <a href="https://docs.python.org/3/library/urllib.parse.html#urllib.parse.urlsplit">urlsplit</a> to parse the <code>url</code> to determine the <strong>scheme</strong>,
+<strong>host</strong>, <strong>port</strong>, and *<em>path</em>.</p>
+</li>
+<li>
+<p>You will need to handle the situations where the <code>url</code> does not specify
+a component (ie. <strong>scheme</strong>, <strong>port</strong>, or <strong>path</strong>) and fall back to the
+appropriate default.</p>
+</li>
+<li>
+<p>You will want to ensure you set the <code>Host</code> <a href="https://en.wikipedia.org/wiki/Hypertext_Transfer_Protocol">HTTP</a> header.</p>
+</li>
+<li>
+<p>You should use your <code>HTTPConnection</code> class to make a connection.</p>
+</li>
+<li>
+<p>You should use <a href="https://docs.python.org/3/library/socket.html#socket.socket.makefile">socket.makefile</a> to get a reader and writer stream.</p>
+</li>
+<li>
+<div class="flex-col" markdown="1">
+<p>Remember that a <a href="https://en.wikipedia.org/wiki/Hypertext_Transfer_Protocol">HTTP</a> transaction looks like the following:</p>
+<div class="codehilite"><pre><span></span><code>GET<span class="w"> </span><span class="nv">$PATH</span><span class="w"> </span>HTTP/1.0<span class="se">\r\n</span><span class="w">    </span><span class="c1"># HTTP Request Method</span>
+Host:<span class="w"> </span><span class="nv">$HOST</span><span class="se">\r\n</span><span class="w">           </span><span class="c1"># HTTP Request Headers</span>
+Key:<span class="w"> </span>Value<span class="se">\r\n</span>
+...
+<span class="se">\r\n</span><span class="w">                      </span><span class="c1"># HTTP Request Sentinel</span>
+HTTP/1.0<span class="w"> </span><span class="m">200</span><span class="w"> </span>OK<span class="se">\r\n</span><span class="w">       </span><span class="c1"># HTTP Response Status</span>
+Key:<span class="w"> </span>Value<span class="se">\r\n</span><span class="w">            </span><span class="c1"># HTTP Response Headers</span>
+...
+<span class="se">\r\n</span><span class="w">                      </span><span class="c1"># HTTP Response Sentinel</span>
+Contents<span class="w">                  </span><span class="c1"># HTTP Response Contents</span>
+</code></pre></div>
+
+</li>
+</ul>
+</div>
+</li>
+<li>
+<div class="flex-col" markdown="1">
+<div class="codehilite"><pre><span></span><code><span class="k">def</span> <span class="nf">curlit</span><span class="p">(</span><span class="n">url</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span> <span class="n">headers</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="nb">dict</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="nb">str</span><span class="p">]]</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">verbose</span><span class="p">:</span> <span class="nb">bool</span><span class="o">=</span><span class="kc">False</span><span class="p">):</span>
+</code></pre></div>
+
+<blockquote>
+<p>This function performs a <a href="https://en.wikipedia.org/wiki/Hypertext_Transfer_Protocol">HTTP</a> <code>GET</code> request on specified <code>url</code> with
+given <code>headers</code>.  If <code>verbose</code> is <code>True</code>, then output status and headers
+before text.</p>
+</blockquote>
+<div class="alert success-bg" markdown="1">
+<p><strong>Hints</strong>: Use the <code>get</code> function and access the headers from the <code>HTTPReponse</code> object.</p>
+</div>
+</li>
+<li>
+<div class="flex-col" markdown="1">
+<div class="codehilite"><pre><span></span><code><span class="k">def</span> <span class="nf">main</span><span class="p">(</span><span class="n">arguments</span><span class="p">:</span> <span class="nb">list</span><span class="p">[</span><span class="nb">str</span><span class="p">]</span><span class="o">=</span><span class="n">sys</span><span class="o">.</span><span class="n">argv</span><span class="p">[</span><span class="mi">1</span><span class="p">:])</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
+</code></pre></div>
+
+<blockquote>
+<p>This function parses the command line arguments and then performs the
+<a href="https://en.wikipedia.org/wiki/Hypertext_Transfer_Protocol">HTTP</a> <code>GET</code> request on the specified <code>url</code>.</p>
+</blockquote>
+<div class="alert success-bg" markdown="1">
+<p><strong>Hints</strong>: The <a href="https://docs.python.org/3/builtins/stdtypes.html#str.split">str.split</a> function has a <code>maxsplit</code> keyword argument.
+Use <code>curlit</code> to perform the actual <a href="https://en.wikipedia.org/wiki/Hypertext_Transfer_Protocol">HTTP</a> <code>GET</code> request.</p>
+</div>
+</li>
+</ul>
+<h3 id="task-2-testing">Task 2: Testing<a class="headerlink" href="#task-2-testing" title="Permanent link">&para;</a></h3>
+<p>As you implement <code>curlit.py</code>, you can use the provided <a href="https://docs.python.org/3/library/doctest.html">doctests</a> to verify the
+correctness of your code:</p>
+<div class="codehilite"><pre><span></span><code><span class="c1"># Run doctests</span>
+$<span class="w"> </span>python3<span class="w"> </span>-m<span class="w"> </span>doctest<span class="w"> </span>curlit.py<span class="w"> </span>-v
+...
+<span class="m">6</span><span class="w"> </span>items<span class="w"> </span>passed<span class="w"> </span>all<span class="w"> </span>tests:
+<span class="w">   </span><span class="m">2</span><span class="w"> </span>tests<span class="w"> </span><span class="k">in</span><span class="w"> </span>curlit.HTTPConnection.__enter__
+<span class="w">   </span><span class="m">1</span><span class="w"> </span><span class="nb">test</span><span class="w"> </span><span class="k">in</span><span class="w"> </span>curlit.HTTPResponse.content
+<span class="w">   </span><span class="m">1</span><span class="w"> </span><span class="nb">test</span><span class="w"> </span><span class="k">in</span><span class="w"> </span>curlit.HTTPResponse.json
+<span class="w">   </span><span class="m">3</span><span class="w"> </span>tests<span class="w"> </span><span class="k">in</span><span class="w"> </span>curlit.HTTPResponse.status_code
+<span class="w">   </span><span class="m">3</span><span class="w"> </span>tests<span class="w"> </span><span class="k">in</span><span class="w"> </span>curlit.curlit
+<span class="w">   </span><span class="m">4</span><span class="w"> </span>tests<span class="w"> </span><span class="k">in</span><span class="w"> </span>curlit.get
+<span class="m">14</span><span class="w"> </span>tests<span class="w"> </span><span class="k">in</span><span class="w"> </span><span class="m">20</span><span class="w"> </span>items.
+<span class="m">14</span><span class="w"> </span>passed.
+Test<span class="w"> </span>passed.
+</code></pre></div>
+
+<p>You can also use <code>make</code> to run both the <a href="https://docs.python.org/3/library/doctest.html">doctests</a> and the <a href="https://en.wikipedia.org/wiki/Unit_testing">unit tests</a>:</p>
+<div class="codehilite"><pre><span></span><code><span class="c1"># Run unit tests (and doctests)</span>
+$<span class="w"> </span>make<span class="w"> </span>test-curlit
+test_00_doctest<span class="w"> </span><span class="o">(</span>__main__.CurlItTest.test_00_doctest<span class="o">)</span><span class="w"> </span>...<span class="w"> </span>ok
+test_01_mypy<span class="w"> </span><span class="o">(</span>__main__.CurlItTest.test_01_mypy<span class="o">)</span><span class="w"> </span>...<span class="w"> </span>ok
+test_02_usage<span class="w"> </span><span class="o">(</span>__main__.CurlItTest.test_02_usage<span class="o">)</span><span class="w"> </span>...<span class="w"> </span>ok
+test_03_curl_dredd<span class="w"> </span><span class="o">(</span>__main__.CurlItTest.test_03_curl_dredd<span class="o">)</span><span class="w"> </span>...<span class="w"> </span>ok
+test_04_curl_loki<span class="w"> </span><span class="o">(</span>__main__.CurlItTest.test_04_curl_loki<span class="o">)</span><span class="w"> </span>...<span class="w"> </span>ok
+test_05_curl_yldme<span class="w"> </span><span class="o">(</span>__main__.CurlItTest.test_05_curl_yldme<span class="o">)</span><span class="w"> </span>...<span class="w"> </span>ok
+
+<span class="w">   </span>Score<span class="w">  </span><span class="m">6</span>.00<span class="w"> </span>/<span class="w">  </span><span class="m">6</span>.00
+<span class="w">   </span>Grade<span class="w">  </span><span class="m">1</span>.00<span class="w"> </span>/<span class="w">  </span><span class="m">1</span>.00
+<span class="w">  </span>Status<span class="w"> </span>Success
+
+----------------------------------------------------------------------
+Ran<span class="w"> </span><span class="m">6</span><span class="w"> </span>tests<span class="w"> </span><span class="k">in</span><span class="w"> </span><span class="m">1</span>.219s
+
+OK
+</code></pre></div>
+
+<p>To just run the <a href="https://en.wikipedia.org/wiki/Unit_testing">unit tests</a>, you can do the following:</p>
+<div class="codehilite"><pre><span></span><code><span class="c1"># Run unit tests</span>
+$<span class="w"> </span>./curlit.test<span class="w"> </span>-v
+...
+</code></pre></div>
+
+<p>To run a specific <a href="https://en.wikipedia.org/wiki/Unit_testing">unit test</a>, you can specify the <strong>method name</strong>:</p>
+<div class="codehilite"><pre><span></span><code><span class="c1"># Run only mypy unit test</span>
+$<span class="w"> </span>./curlit.test<span class="w"> </span>-v<span class="w"> </span>curlitTest.test_01_mypy
+...
+</code></pre></div>
+
+<p>To manually check your types, you can use <a href="https://mypy-lang.org/">mypy</a>:</p>
+<div class="codehilite"><pre><span></span><code><span class="c1"># Run mypy to check types</span>
+$<span class="w"> </span>mypy<span class="w"> </span>curlit.py
+</code></pre></div>
+
+<h2 id="activity-2-quiz-02-points">Activity 2: Quiz (<em>0.2 Points</em>)<a class="headerlink" href="#activity-2-quiz-02-points" title="Permanent link">&para;</a></h2>
+<p>Once you have completed all the activities above, you are to complete the
+following <strong>reflection quiz</strong>:</p>
+<div id="quiz-questions"></div>
+
+<div id="quiz-responses"></div>
+
+<script src="static/js/dredd-quiz.js"></script>
+<script>
+loadQuiz('static/json/homework08.json');
+</script>
+
+<pre style="display: none;" id="dr-container" class="codehilite"><code id="dredd-response"></code></pre>
+
+<p>As with <a href="reading01.html">Reading 01</a>, you will need to store your answers in a
+<code>homework08/answers.json</code> file.  You can use the form above to generate the
+contents of this file, or you can write the <a href="https://json.org/">JSON</a> by hand.</p>
+<p>To test your quiz, you can use the <code>check.py</code> script:</p>
+<div class="codehilite"><pre><span></span><code>$<span class="w"> </span>../.scripts/check.py
+Checking<span class="w"> </span>homework08<span class="w"> </span>quiz<span class="w"> </span>...
+<span class="w">      </span>Q1<span class="w">  </span><span class="m">7</span>.00<span class="w"> </span>/<span class="w">  </span><span class="m">7</span>.00
+<span class="w">      </span>Q2<span class="w">  </span><span class="m">4</span>.00<span class="w"> </span>/<span class="w">  </span><span class="m">4</span>.00
+<span class="w">      </span>Q3<span class="w">  </span><span class="m">3</span>.00<span class="w"> </span>/<span class="w">  </span><span class="m">3</span>.00
+<span class="w">      </span>Q4<span class="w">  </span><span class="m">3</span>.00<span class="w"> </span>/<span class="w">  </span><span class="m">3</span>.00
+<span class="w">  </span>--------------------
+<span class="w">   </span>Score<span class="w"> </span><span class="m">17</span>.00<span class="w"> </span>/<span class="w"> </span><span class="m">17</span>.00
+<span class="w">   </span>Grade<span class="w">  </span><span class="m">1</span>.00<span class="w"> </span>/<span class="w">  </span><span class="m">1</span>.00
+<span class="w">  </span>Status<span class="w"> </span>Success
+</code></pre></div>
+
+<h2 id="submission">Submission<a class="headerlink" href="#submission" title="Permanent link">&para;</a></h2>
+<p>To submit your assignment, please commit your work to the <code>homework08</code> folder
+of your <code>homework08</code> branch in your <strong>assignments</strong> <a href="https://github.com">GitHub</a> repository.
+Your <code>homework08</code> folder should <strong>only</strong> contain the following files:</p>
+<ul>
+<li><code>Makefile</code></li>
+<li><code>answers.json</code></li>
+<li><code>curlit.py</code></li>
+</ul>
+<div class="alert info-bg">
+<p><strong>Note</strong>: You do not need to commit the test scripts because the <code>Makefile</code>
+automatically downloads them.</p>
+</div>
+<div class="codehilite"><pre><span></span><code><span class="c1">#-----------------------------------------------------------------------</span>
+<span class="c1"># Make sure you have already completed Activity 0: Preparation</span>
+<span class="c1">#-----------------------------------------------------------------------</span>
+...
+$<span class="w"> </span>git<span class="w"> </span>add<span class="w"> </span>Makefile<span class="w">                        </span><span class="c1"># Mark changes for commit</span>
+$<span class="w"> </span>git<span class="w"> </span>add<span class="w"> </span>curlit.py<span class="w">                       </span><span class="c1"># Mark changes for commit</span>
+$<span class="w"> </span>git<span class="w"> </span>commit<span class="w"> </span>-m<span class="w"> </span><span class="s2">&quot;Homework 08: curlit&quot;</span><span class="w">     </span><span class="c1"># Record changes</span>
+...
+$<span class="w"> </span>git<span class="w"> </span>add<span class="w"> </span>answers.json<span class="w">                    </span><span class="c1"># Mark changes for commit</span>
+$<span class="w"> </span>git<span class="w"> </span>commit<span class="w"> </span>-m<span class="w"> </span><span class="s2">&quot;Homework 08: quiz&quot;</span><span class="w">       </span><span class="c1"># Record changes</span>
+...
+$<span class="w"> </span>git<span class="w"> </span>push<span class="w"> </span>-u<span class="w"> </span>origin<span class="w"> </span>homework08<span class="w">           </span><span class="c1"># Push branch to GitHub</span>
+</code></pre></div>
+
+<div class="alert warning-bg">
+<h3 id="lifebuoy-embed_icon-acknowledgments"><i class="icon icon-medium"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><title>lifebuoy</title><path d="M19.79,15.41C20.74,13.24 20.74,10.75 19.79,8.59L17.05,9.83C17.65,11.21 17.65,12.78 17.06,14.17L19.79,15.41M15.42,4.21C13.25,3.26 10.76,3.26 8.59,4.21L9.83,6.94C11.22,6.35 12.79,6.35 14.18,6.95L15.42,4.21M4.21,8.58C3.26,10.76 3.26,13.24 4.21,15.42L6.95,14.17C6.35,12.79 6.35,11.21 6.95,9.82L4.21,8.58M8.59,19.79C10.76,20.74 13.25,20.74 15.42,19.78L14.18,17.05C12.8,17.65 11.22,17.65 9.84,17.06L8.59,19.79M12,2A10,10 0 0,1 22,12A10,10 0 0,1 12,22A10,10 0 0,1 2,12A10,10 0 0,1 12,2M12,8A4,4 0 0,0 8,12A4,4 0 0,0 12,16A4,4 0 0,0 16,12A4,4 0 0,0 12,8Z" /></svg>
+</i> Acknowledgments<a class="headerlink" href="#lifebuoy-embed_icon-acknowledgments" title="Permanent link">&para;</a></h3>
+<p>If you collaborated with any other students, or received help from TAs or AI
+tools on this assignment, please record this support in the <code>README.md</code> in
+the <code>homework08</code> folder and include it with your <strong>Pull Request</strong>.</p>
+</div>
+<div class="alert success-bg">
+<h3 id="account-question-embed_icon-graders"><i class="icon icon-medium"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><title>account-question</title><path d="M13,8A4,4 0 0,1 9,12A4,4 0 0,1 5,8A4,4 0 0,1 9,4A4,4 0 0,1 13,8M17,18V20H1V18C1,15.79 4.58,14 9,14C13.42,14 17,15.79 17,18M20.5,14.5V16H19V14.5H20.5M18.5,9.5H17V9A3,3 0 0,1 20,6A3,3 0 0,1 23,9C23,9.97 22.5,10.88 21.71,11.41L21.41,11.6C20.84,12 20.5,12.61 20.5,13.3V13.5H19V13.3C19,12.11 19.6,11 20.59,10.35L20.88,10.16C21.27,9.9 21.5,9.47 21.5,9A1.5,1.5 0 0,0 20,7.5A1.5,1.5 0 0,0 18.5,9V9.5Z" /></svg>
+</i> Graders<a class="headerlink" href="#account-question-embed_icon-graders" title="Permanent link">&para;</a></h3>
+<p>Once you have committed your work and pushed it to <a href="https://github.com">GitHub</a>, remember to
+create a <strong>pull request</strong> and assign it to the appropriate <strong>teaching
+assistant</strong> from the <a href="reading08_tas.html">Reading 08 TA List</a>.</p>
+<p><strong>Note</strong>: this list changes each week, so be sure to consult the appropriate
+list for each assignment.</p>
+</div>
+</main>
+<footer>
+Built using <a href="https://python.org">Python</a>
+and <a href="https://jinja.palletsprojects.com">Jinja</a>
+with colors from 
+<a href="https://onmessage.nd.edu/university-branding/colors/">Notre Dame</a>, 
+<a href="https://spreadsheet.dev/how-to-get-the-hexadecimal-codes-of-colors-in-google-sheets">Google Docs</a>, and 
+<a href="https://nordtheme.com">Nord Theme</a>,
+and icons from <a href="https://pictogrammers.com/library/mdi/">Material Design Icons</a>.</footer>
+</body>
+</html>
