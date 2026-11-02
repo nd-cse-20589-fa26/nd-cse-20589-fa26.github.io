@@ -1,0 +1,42 @@
+{
+    "q1": {
+        "type": "order",
+        "question": "\n<p>Because <code>curlit.py</code> is a <b>client</b> application, it makes\na <b>HTTP</b> request by performing the following <b>system calls</b>:\n<code>socket</code>, <code>connect</code>, <code>send</code>,\n<code>recv</code>, <code>close</code>.</p>\n\n<p>Now consider something like <b>apache</b> or <b>nginx</b> which are\npopular <b>HTTP</b> servers.  What is order of the <b>system calls</b>\nthese programs must perform to handle a <b>HTTP</b> request and send back\nresponse?</p>\n",
+        "responses": {
+            "socket": "socket",
+            "close": "close",
+            "send": "send",
+            "bind": "bind",
+            "recv": "recv",
+            "accept": "accept",
+            "listen": "listen"
+        }
+    },
+    "q2": {
+        "type": "multiple",
+        "question": "\n<p>Because <code>connect</code> is a <b>system call</b>, it can fail.  Which of\nthe following are reasons why it can fail (<i>choose all that apply</i>)?</p>\n",
+        "responses": {
+            "listening": "The remote machine is not listening at specified address.",
+            "interrupt": "The system call was interrupted by a signal.",
+            "encryption": "The connection is insecure due to lack of encryption.",
+            "unreachable": "The network is unreachable.",
+            "busy": "The connection timed out because the server was too busy."
+        }
+    },
+    "q3": {
+        "type": "blank",
+        "question": "\n<p>In <a href=\"reading05.html\">Reading 05</a>, you used\n<code>requests</code> to implement the <code>machines.py</code> script.\nNow, use your <code>curlit</code> library instead of <code>requests</code>\nto accomplish the same task:</p>\n\n<pre>\nimport ____ # 1.\n\nURL = 'http://catalog.cse.nd.edu:9097/query.json'\n\nresponse = ____ # 2.\ndata     = ____ # 3.\n\nfor machine in data:\n    if machine['type'] == 'chirp':\n        print(machine['name'], machine['address'])\n</pre>\n"
+    },
+    "q4": {
+        "type": "multiple",
+        "question": "\n<p>On the <b>student machines</b>, use <code>strace</code> to monitor the\n<b>system calls</b> used by <code>curlit.py</code> to fetch\n<code>h4x0r.space:9898/txt/gatsby.txt</code>:</p>\n\n<pre>\n$ strace -e recvfrom,sendto,connect -c ./curlit.py h4x0r.space:9898/txt/gatsby.txt > /dev/null\n</pre>\n\n<p>Run this multiple times, examine the output of <code>strace</code>, and\ndetermine which of the following statements are true (<i>choose all that\napply</i>)?</p>\n",
+        "responses": {
+            "recvfrom_frequent": "<code>recvfrom</code> is the most frequent <b>system call</b>.",
+            "sendto_frequent": "<code>sendto</code> is the most frequent <b>system call</b>.",
+            "recvfrom_slowest": "<code>recvfrom</code> is the slowest <b>system call</b>.",
+            "sendto_slowest": "<code>sendto</code> is the slowest <b>system call</b>.",
+            "connect_once": "<code>connect</code> is called exactly once.",
+            "connect_multiple": "<code>connect</code> is called multiple times."
+        }
+    }
+}
