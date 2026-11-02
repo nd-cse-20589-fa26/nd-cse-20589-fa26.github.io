@@ -9,7 +9,6 @@ body:   |
 
       - Implement [requests] like library
       - Implement [curl] based on that library
-      - Measure **bandwidth**
 
   [requests]: https://requests.readthedocs.io/en/latest/
   [curl]:  https://curl.se/
