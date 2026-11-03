@@ -46,10 +46,10 @@ body:       |
       $ cd homework08
 
       # Download Makefile
-      $ curl -LO https://pnutz.h4x0r.space/courses/cse.20289.fa26/static/txt/homework08/Makefile
+      $ curl -LO https://pnutz.h4x0r.space/courses/cse.20589.fa26/static/txt/homework08/Makefile
 
       # Download Python skeleton code
-      $ curl -LO https://pnutz.h4x0r.space/courses/cse.20289.fa26/static/txt/homework08/curlit.py
+      $ curl -LO https://pnutz.h4x0r.space/courses/cse.20589.fa26/static/txt/homework08/curlit.py
 
   Once downloaded, you should see the following files in your `homework08`
   directory:
