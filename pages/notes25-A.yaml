@@ -1,0 +1,156 @@
+title:  "Notes 25-A: HTTP (Client)"
+body:   |
+
+  ## Review: [echo_client] / [echo_server]
+
+  ### Echo Server
+
+  ```python
+  #!/usr/bin/env python3
+
+  import socket
+  import sys
+
+  # Constants
+
+  BUFSIZ = (1<<10)
+
+  # Parse command line arguments
+
+  try:
+      host = '127.0.0.1'
+      port = int(sys.argv[1])
+  except IndexError:
+      print('Usage: echo_server.py port', file=sys.stderr)
+      sys.exit(1)
+
+  # Connect to remote machine at host and port
+
+  with socket.socket(socket.AF_INET, socket.SOCK_STREAM) as server:
+      # Bind to port and begin listening
+      server.bind((host, port))
+      server.listen()
+      print(f'Listening on {host}:{port}')
+
+      while True:
+          # Accept a client
+          client, address = server.accept()
+
+          with client:
+              print(f'Accepted connection from {address[0]}:{address[1]}')
+
+              # Read from client and send it back
+              while request := client.recv(BUFSIZ):
+                  print(request.decode(), end='')
+                  client.send(request)
+  ```
+
+  <div class="alert success-bg" markdown="1">
+
+  - **client**: `./echo_client.py localhost 9999`
+  - **server**: `./echo_server.py 9999`
+
+  </div>
+
+  [echo_client]: https://github.com/nd-cse-20589-fa26/examples/blob/master/slides24/echo_client.py
+  [echo_server]: https://github.com/nd-cse-20589-fa26/examples/blob/master/slides24/echo_server.py
+
+  ## Review: <span class="gold">URL</span>
+
+  <div class="centered">
+
+  <img src="static/img/slides24-url.svg" class="transparent responsive">
+
+  </div>
+
+  1. <strong class="primary">Web browser</strong> is the most common <strong
+  class="info">client</strong> (<strong class="special">HTTP</strong>).
+
+  2. Use a <strong class="success">URL</strong> to denote what **resource** we
+  are requesting.
+
+  3. <strong class="special">Protocol</strong> defines rules for communication.
+
+  4. <strong class="info">Host</strong> indicates the <strong
+  class="danger">server</strong> we want to contact.
+
+  5. <strong class="warning">Port</strong> specifies the <strong
+  class="warning">service</strong> number we want to utilize.
+
+  6. <strong class="success">Path</strong> tells server what **resource** we
+  want.
+
+  7. <strong class="danger">Query String</strong> are arguments (**example**:
+    google.com, query string).
+
+  ## HTTP: [Client]
+
+  <div class="centered">
+
+  <img src="static/img/slides25-http-client.svg" class="transparent responsive">
+
+  </div>
+
+  [Client]: https://github.com/nd-cse-20589-fa26/examples/blob/master/slides25/http_client.py
+
+  <div class="alert info-bg" markdown="1">
+
+  ### Review
+
+  - Why **hypertext**? **Links**!
+
+  - **Example Request**: `curl -sv example.com | less`
+
+  </div>
+
+  ```python
+  #!/usr/bin/env python3
+
+  import socket
+  import ssl
+  import sys
+
+  from urllib.parse import urlsplit
+
+  # Parse command line arguments
+
+  try:
+      url = urlsplit(sys.argv[1])
+  except IndexError:
+      print('Usage: http_client.py URL', file=sys.stderr)
+      sys.exit(1)
+
+  # Create socket (wrap with ssl if scheme is HTTPS)
+
+  socket = socket.create_connection((url.hostname, url.port))
+  if url.scheme == 'https':
+      context = ssl.create_default_context()
+      socket  = context.wrap_socket(socket, server_hostname=url.hostname)
+
+  with socket:
+      # Send HTTP Request
+      with socket.makefile('w', encoding='utf-8') as wfile:
+          wfile.write(f'GET {url.path} HTTP/1.0\r\n')
+          wfile.write(f'Host: {url.hostname}\r\n')
+          wfile.write('\r\n')
+
+      # Read HTTP Response
+      with socket.makefile('r', encoding='utf-8') as rfile:
+          while line := rfile.readline().strip():
+              print(line)
+
+          print()
+          print(rfile.read())
+  ```
+
+  <div class="alert warning-bg" markdown="1">
+
+  ### Discuss
+
+  - How different from **curl**? **headers**
+
+  - Use on bad **host**, **port** (**errors**, **timeout**)
+
+    - `fake.domain`, `nd.edu`, `student10.cse.nd.edu:21`
+
+  </div>
