@@ -275,10 +275,10 @@
       - date:           Fri 11/06
         topics:         HTTP Server
         items:
-          - name:       Slides 26
+          - name:       Slides 25
 
       - date:           Sat 11/07
-        topics:         '<i class="muted">ScanIt, Curlit</i>'
+        topics:         '<i class="muted">Curlit</i>'
         assignments:
           - Homework 08
 

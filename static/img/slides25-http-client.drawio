@@ -1,0 +1,48 @@
+<mxfile host="Electron">
+  <diagram name="Page-1" id="U1L8l-U17fqGpl2mAKsj">
+    <mxGraphModel dx="1414" dy="843" grid="1" gridSize="10" guides="1" tooltips="1" connect="1" arrows="1" fold="1" page="1" pageScale="1" pageWidth="1100" pageHeight="850" math="0" shadow="0">
+      <root>
+        <mxCell id="0" />
+        <mxCell id="1" parent="0" />
+        <mxCell id="PzXlLXl7uA2mllf3LHsy-15" parent="1" style="rounded=0;whiteSpace=wrap;html=1;fontFamily=Ubuntu Sans Mono;fillColor=#d5e8d4;strokeColor=#82b366;strokeWidth=2;" value="&lt;b&gt;&lt;font style=&quot;font-size: 18px;&quot;&gt;socket&lt;/font&gt;&lt;/b&gt;" vertex="1">
+          <mxGeometry height="40" width="160" x="120" y="160" as="geometry" />
+        </mxCell>
+        <mxCell id="PzXlLXl7uA2mllf3LHsy-16" parent="1" style="rounded=0;whiteSpace=wrap;html=1;fontFamily=Ubuntu Sans Mono;fillColor=#d5e8d4;strokeColor=#82b366;strokeWidth=2;" value="&lt;b&gt;&lt;font style=&quot;font-size: 18px;&quot;&gt;connect&lt;/font&gt;&lt;/b&gt;" vertex="1">
+          <mxGeometry height="40" width="160" x="120" y="210" as="geometry" />
+        </mxCell>
+        <mxCell id="vc5QIKy_TWZmE-wcqEY5-3" edge="1" parent="1" source="PzXlLXl7uA2mllf3LHsy-17" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;exitX=1;exitY=0.5;exitDx=0;exitDy=0;entryX=0;entryY=0.5;entryDx=0;entryDy=0;defaultLabelBackgroundColor=page;strokeWidth=2;" target="frwtmhP38qCFVA1UWTYX-3">
+          <mxGeometry relative="1" as="geometry">
+            <Array as="points">
+              <mxPoint x="320" y="280" />
+              <mxPoint x="320" y="120" />
+            </Array>
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="PzXlLXl7uA2mllf3LHsy-17" parent="1" style="rounded=0;whiteSpace=wrap;html=1;fontFamily=Ubuntu Sans Mono;fillColor=#fff2cc;strokeColor=#d6b656;strokeWidth=2;" value="&lt;b&gt;&lt;font style=&quot;font-size: 18px;&quot;&gt;send&lt;/font&gt;&lt;/b&gt;" vertex="1">
+          <mxGeometry height="40" width="160" x="120" y="260" as="geometry" />
+        </mxCell>
+        <mxCell id="PzXlLXl7uA2mllf3LHsy-18" parent="1" style="rounded=0;whiteSpace=wrap;html=1;fontFamily=Ubuntu Sans Mono;fillColor=#ffe6cc;strokeColor=#d79b00;strokeWidth=2;" value="&lt;b&gt;&lt;font style=&quot;font-size: 18px;&quot;&gt;recv&lt;/font&gt;&lt;/b&gt;" vertex="1">
+          <mxGeometry height="40" width="160" x="120" y="310" as="geometry" />
+        </mxCell>
+        <mxCell id="PzXlLXl7uA2mllf3LHsy-19" parent="1" style="rounded=0;whiteSpace=wrap;html=1;fontFamily=Ubuntu Sans Mono;fillColor=#f8cecc;strokeColor=#b85450;strokeWidth=2;" value="&lt;b&gt;&lt;font style=&quot;font-size: 18px;&quot;&gt;close&lt;/font&gt;&lt;/b&gt;" vertex="1">
+          <mxGeometry height="40" width="160" x="120" y="360" as="geometry" />
+        </mxCell>
+        <mxCell id="frwtmhP38qCFVA1UWTYX-2" parent="1" style="rounded=0;whiteSpace=wrap;html=1;fontFamily=Ubuntu Sans Mono;fillColor=#dae8fc;strokeColor=#6c8ebf;strokeWidth=2;" value="&lt;span style=&quot;font-size: 18px;&quot;&gt;&lt;b&gt;HTTP&lt;/b&gt;&lt;/span&gt;&lt;div&gt;&lt;span style=&quot;font-size: 18px;&quot;&gt;&lt;b&gt;Client&lt;/b&gt;&lt;/span&gt;&lt;/div&gt;" vertex="1">
+          <mxGeometry height="60" width="120" x="140" y="90" as="geometry" />
+        </mxCell>
+        <mxCell id="vc5QIKy_TWZmE-wcqEY5-1" edge="1" parent="1" source="frwtmhP38qCFVA1UWTYX-3" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;exitX=0.5;exitY=1;exitDx=0;exitDy=0;entryX=1;entryY=0.5;entryDx=0;entryDy=0;defaultLabelBackgroundColor=page;strokeWidth=2;" target="PzXlLXl7uA2mllf3LHsy-18">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="frwtmhP38qCFVA1UWTYX-3" parent="1" style="rounded=0;whiteSpace=wrap;html=1;fontFamily=Ubuntu Sans Mono;fillColor=#f8cecc;strokeColor=#b85450;strokeWidth=2;" value="&lt;span style=&quot;font-size: 18px;&quot;&gt;&lt;b&gt;HTTP&lt;/b&gt;&lt;/span&gt;&lt;div&gt;&lt;span style=&quot;font-size: 18px;&quot;&gt;&lt;b&gt;Server&lt;/b&gt;&lt;/span&gt;&lt;/div&gt;" vertex="1">
+          <mxGeometry height="60" width="120" x="760" y="90" as="geometry" />
+        </mxCell>
+        <mxCell id="frwtmhP38qCFVA1UWTYX-5" parent="1" style="text;html=1;whiteSpace=wrap;align=left;verticalAlign=middle;rounded=0;fillColor=#fff2cc;strokeColor=#d6b656;strokeWidth=2;spacingLeft=0;spacingTop=0;spacingRight=0;spacingBottom=0;spacing=5;" value="&lt;b&gt;&lt;font face=&quot;Ubuntu Sans Mono&quot; data-font-src=&quot;https://fonts.googleapis.com/css2?family=JetBrains+Mono:ital,wght@0,100..800;1,100..800&amp;amp;family=Ubuntu+Sans+Mono:ital,wght@0,400..700;1,400..700&amp;amp;display=swap&quot; style=&quot;font-size: 18px;&quot;&gt;GET /index.html HTTP/1.0&lt;span style=&quot;color: rgb(153, 0, 0);&quot;&gt;\r\n&lt;/span&gt;&lt;/font&gt;&lt;/b&gt;&lt;div&gt;&lt;b&gt;&lt;font face=&quot;Ubuntu Sans Mono&quot; data-font-src=&quot;https://fonts.googleapis.com/css2?family=JetBrains+Mono:ital,wght@0,100..800;1,100..800&amp;amp;family=Ubuntu+Sans+Mono:ital,wght@0,400..700;1,400..700&amp;amp;display=swap&quot; style=&quot;font-size: 18px;&quot;&gt;Host: hostname.com&lt;span style=&quot;color: rgb(153, 0, 0);&quot;&gt;\r\n&lt;/span&gt;&lt;/font&gt;&lt;/b&gt;&lt;/div&gt;&lt;div&gt;&lt;b&gt;&lt;font face=&quot;Ubuntu Sans Mono&quot; data-font-src=&quot;https://fonts.googleapis.com/css2?family=JetBrains+Mono:ital,wght@0,100..800;1,100..800&amp;amp;family=Ubuntu+Sans+Mono:ital,wght@0,400..700;1,400..700&amp;amp;display=swap&quot; style=&quot;font-size: 18px; color: rgb(153, 0, 0);&quot;&gt;\r\n&lt;/font&gt;&lt;/b&gt;&lt;/div&gt;" vertex="1">
+          <mxGeometry height="80" width="320" x="360" y="150" as="geometry" />
+        </mxCell>
+        <mxCell id="vc5QIKy_TWZmE-wcqEY5-2" parent="1" style="text;html=1;whiteSpace=wrap;strokeColor=#d79b00;fillColor=#ffe6cc;align=left;verticalAlign=middle;rounded=0;direction=west;strokeWidth=2;spacing=5;" value="&lt;b&gt;&lt;font face=&quot;Ubuntu Sans Mono&quot; data-font-src=&quot;https://fonts.googleapis.com/css2?family=JetBrains+Mono:ital,wght@0,100..800;1,100..800&amp;amp;family=Ubuntu+Sans+Mono:ital,wght@0,400..700;1,400..700&amp;amp;display=swap&quot; style=&quot;font-size: 18px;&quot;&gt;HTTP/1.0 200 OK&lt;span style=&quot;color: rgb(153, 0, 0);&quot;&gt;\r\n&lt;/span&gt;&lt;/font&gt;&lt;/b&gt;&lt;div&gt;&lt;b&gt;&lt;font face=&quot;Ubuntu Sans Mono&quot; data-font-src=&quot;https://fonts.googleapis.com/css2?family=JetBrains+Mono:ital,wght@0,100..800;1,100..800&amp;amp;family=Ubuntu+Sans+Mono:ital,wght@0,400..700;1,400..700&amp;amp;display=swap&quot; style=&quot;font-size: 18px;&quot;&gt;&lt;span style=&quot;color: rgb(0, 0, 0);&quot;&gt;Content-Type: text/html&lt;/span&gt;&lt;span style=&quot;color: rgb(153, 0, 0);&quot;&gt;\r\n&lt;/span&gt;&lt;/font&gt;&lt;/b&gt;&lt;/div&gt;&lt;div&gt;&lt;b&gt;&lt;font face=&quot;Ubuntu Sans Mono&quot; data-font-src=&quot;https://fonts.googleapis.com/css2?family=JetBrains+Mono:ital,wght@0,100..800;1,100..800&amp;amp;family=Ubuntu+Sans+Mono:ital,wght@0,400..700;1,400..700&amp;amp;display=swap&quot; style=&quot;font-size: 18px; color: rgb(153, 0, 0);&quot;&gt;\r\n&lt;/font&gt;&lt;/b&gt;&lt;/div&gt;&lt;div&gt;&lt;font face=&quot;Ubuntu Sans Mono&quot; style=&quot;font-size: 18px;&quot;&gt;&lt;b&gt;&amp;lt;html&amp;gt;&amp;lt;body&amp;gt;Hi&amp;lt;/body&amp;gt;&amp;lt;/html&amp;gt;&lt;/b&gt;&lt;/font&gt;&lt;/div&gt;" vertex="1">
+          <mxGeometry height="90" width="320" x="360" y="360" as="geometry" />
+        </mxCell>
+      </root>
+    </mxGraphModel>
+  </diagram>
+</mxfile>
