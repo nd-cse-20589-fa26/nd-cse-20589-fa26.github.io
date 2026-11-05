@@ -1,0 +1,37 @@
+{
+    "q1": {
+        "type": "multiple",
+        "question": "\n<p>Suppose you ran the command, <code>python3 -m http.server 8080</code>.\nWhich of the following statements about this command are true (<i>choose\nall that apply</i>)?</p>\n",
+        "responses": {
+            "localhost": "This starts a <b>HTTP</b> server that only accepts connections from <code>localhost</code>.",
+            "port": "This starts a <b>HTTP</b> server that listens on port <code>8080</code>.",
+            "cwd": "This starts a <b>HTTP</b> server that serves files in your <b>current working directory</b>.",
+            "encryption": "This starts a <b>HTTP</b> server that supports <b>encrypted communication</b>."
+        }
+    },
+    "q2": {
+        "type": "blank",
+        "question": "\n<p>Complete the following <b>Python</b> script, <code>hello_app.py</code>,\nwhich is a <b>web application</b> that simply returns <code>\"Hello,\nWorld\"</code> whenever a user performs a <b>HTTP</b> <code>GET</code>\nrequest:</p>\n\n<pre>\n#!/usr/bin/env python3\n\nfrom http.server import BaseHTTPRequestHandler, HTTPServer\n\nclass HelloHandler(____):                               # 1.\n    def ____(self):                                     # 2.\n        self.____(200)                                  # 3.\n        self.____('Content-Type', 'text/plain')         # 4.\n        self.____()                                     # 5.\n        self.____('Hello, World'.encode())              # 6.\n\nif __name__ == '__main__':\n    server = ____(('0.0.0.0', 9999), HelloHandler)      # 7.\n    server.____()                                       # 8.\n</pre>\n"
+    },
+    "q3": {
+        "type": "order",
+        "question": "\n<p>Match the following descriptions with the appropriate <b>HTTP</b> method:</p>\n\n<ul>\n<li><b>Create</b> a new resource.</li>\n<li><b>Delete</b> a resource.</li>\n<li><b>Update</b> an existing resource.</li>\n<li><b>Partially update</b> an existing resource.</li>\n<li><b>Retrieve</b> an existing resource.</li>\n</ul>\n",
+        "responses": {
+            "DELETE": "DELETE",
+            "GET": "GET",
+            "PATCH": "PATCH",
+            "POST": "POST",
+            "PUT": "PUT"
+        }
+    },
+    "q4": {
+        "type": "order",
+        "question": "\n<p>Match the following descriptions with the appropriate <b>HTTP</b> status code:</p>\n\n<ul>\n<li>The request was malformed.</li>\n<li>The requested resource was not found.</li>\n<li>The server threw an error when processing the request.</li>\n<li>The requested action was successful.</li>\n</ul>\n",
+        "responses": {
+            "200": "<code>200</code>",
+            "400": "<code>400</code>",
+            "404": "<code>404</code>",
+            "500": "<code>500</code>"
+        }
+    }
+}
