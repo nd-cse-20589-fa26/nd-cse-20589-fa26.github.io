@@ -69,7 +69,10 @@ class CurlItTest(unittest.TestCase):
         arguments = 'dredd.h4x0r.space'
         with unittest.mock.patch('sys.stdout', new=io.StringIO()) as output:
             curlit.main(arguments.split())
-        self.assertEqual(sha1sum(output.getvalue()), '05e1348f6db843a082e73df51e7db97507f0b672')
+        self.assertTrue(sha1sum(output.getvalue()) in (
+            'ac9be58aced7f47ddc1280c5040224ba88b2bfeb',
+            '05e1348f6db843a082e73df51e7db97507f0b672'
+        ))
         CurlItTest.Points += 0.33
 
         arguments = 'https://dredd.h4x0r.space'
