@@ -1,0 +1,234 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<!-- Favicon -->
+<link rel="icon" type="image/png" sizes="32x32" href="static/ico/favicon-32x32.png">
+<link rel="icon" type="image/png" sizes="16x16" href="static/ico/favicon-16x16.png">
+<link rel="manifest" href="static/ico/site.webmanifest">
+<!-- Stylesheets -->
+<link rel="stylesheet" href="static/css/domer.css">
+<title>Notes 25-B: HTTP (Server)</title>
+</head>
+<body>
+<header>
+<a class="logo" href="notes25-B.html">
+    <h1>Notes 25-B: HTTP (Server)</h1>
+</a>
+<nav>
+    <ul>
+        <li><a href="index.html"><h4>Home</h4></a></li>
+        </ul>
+</nav></header>
+<main>
+<h2 id="review-http">Review: <span class="gold">HTTP</span><a class="headerlink" href="#review-http" title="Permanent link">&para;</a></h2>
+<blockquote>
+<p>What happens during a <a href="https://en.wikipedia.org/wiki/HTTP">HTTP</a> transaction?</p>
+</blockquote>
+<div class="alert success-bg">
+<ul>
+<li><strong>Skit</strong>: out <a href="https://en.wikipedia.org/wiki/HTTP">HTTP</a> transaction (<em>use <b>chalkboard</b> to draw out diagram</em>).</li>
+</ul>
+</div>
+<h3 id="http-client">HTTP: <span class="gold">Client</span><a class="headerlink" href="#http-client" title="Permanent link">&para;</a></h3>
+<div class="centered">
+
+<img src="static/img/slides25-http-client.svg" class="transparent responsive">
+
+</div>
+
+<h3 id="http-server">HTTP: <span class="gold">Server</span><a class="headerlink" href="#http-server" title="Permanent link">&para;</a></h3>
+<div class="centered">
+
+<img src="static/img/slides25-http-server.svg" class="transparent responsive">
+
+</div>
+
+<div class="alert danger-bg">
+<p><strong>Discuss</strong>:</p>
+<ul>
+<li>
+<div class="flex-col" markdown="1">
+<p>How many <strong class="info">clients</strong> can we handle at a time?</p>
+<blockquote>
+<p>Only <code>1</code> <strong class="info">client</strong> at a time.</p>
+</blockquote>
+</li>
+<li>
+<div class="flex-col" markdown="1">
+<p>How can we use <strong class="success">task parallelism</strong> to improve this?</p>
+<blockquote>
+<p>Split up <strong>accepting</strong> <strong class="info">client</strong> from
+<strong>handling</strong> <strong class="info">client</strong>.</p>
+</blockquote>
+</li>
+<li>
+<div class="flex-col" markdown="1">
+<p>How can we use <strong class="success">data parallelism</strong> to improve this?</p>
+<blockquote>
+<p>Create a new <strong class="success">process</strong> to <strong>handle</strong>
+each <strong class="info">client</strong>.</p>
+</blockquote>
+</li>
+</ul>
+</div>
+<h2 id="http-server-single">HTTP: <a href="https://github.com/nd-cse-20589-fa26/examples/blob/master/slides25/http_server_forking.py">Server</a> (<i class="muted">Single</i>)<a class="headerlink" href="#http-server-single" title="Permanent link">&para;</a></h2>
+<div class="codehilite"><pre><span></span><code><span class="kn">import</span> <span class="nn">datetime</span>
+<span class="kn">import</span> <span class="nn">socket</span>
+<span class="kn">import</span> <span class="nn">sys</span>
+
+<span class="c1"># Parse command line arguments</span>
+
+<span class="k">try</span><span class="p">:</span>
+    <span class="n">host</span> <span class="o">=</span> <span class="s1">&#39;127.0.0.1&#39;</span>
+    <span class="n">port</span> <span class="o">=</span> <span class="nb">int</span><span class="p">(</span><span class="n">sys</span><span class="o">.</span><span class="n">argv</span><span class="p">[</span><span class="mi">1</span><span class="p">])</span>
+<span class="k">except</span> <span class="ne">IndexError</span><span class="p">:</span>
+    <span class="nb">print</span><span class="p">(</span><span class="s1">&#39;Usage: http_server.py port&#39;</span><span class="p">,</span> <span class="n">file</span><span class="o">=</span><span class="n">sys</span><span class="o">.</span><span class="n">stderr</span><span class="p">)</span>
+    <span class="n">sys</span><span class="o">.</span><span class="n">exit</span><span class="p">(</span><span class="mi">1</span><span class="p">)</span>
+
+<span class="c1"># Create and advertise server socket</span>
+
+<span class="k">with</span> <span class="n">socket</span><span class="o">.</span><span class="n">socket</span><span class="p">(</span><span class="n">socket</span><span class="o">.</span><span class="n">AF_INET</span><span class="p">,</span> <span class="n">socket</span><span class="o">.</span><span class="n">SOCK_STREAM</span><span class="p">)</span> <span class="k">as</span> <span class="n">server</span><span class="p">:</span>
+    <span class="c1"># Bind to port and begin listening</span>
+    <span class="n">server</span><span class="o">.</span><span class="n">bind</span><span class="p">((</span><span class="n">host</span><span class="p">,</span> <span class="n">port</span><span class="p">))</span>
+    <span class="n">server</span><span class="o">.</span><span class="n">listen</span><span class="p">()</span>
+    <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s1">&#39;Listening on </span><span class="si">{</span><span class="n">host</span><span class="si">}</span><span class="s1">:</span><span class="si">{</span><span class="n">port</span><span class="si">}</span><span class="s1">&#39;</span><span class="p">)</span>
+
+    <span class="k">while</span> <span class="kc">True</span><span class="p">:</span>
+        <span class="c1"># Accept a client</span>
+        <span class="n">client</span><span class="p">,</span> <span class="n">address</span> <span class="o">=</span> <span class="n">server</span><span class="o">.</span><span class="n">accept</span><span class="p">()</span>
+
+        <span class="k">with</span> <span class="n">client</span><span class="p">:</span>
+            <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s1">&#39;Accepted connection from </span><span class="si">{</span><span class="n">address</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="si">}</span><span class="s1">:</span><span class="si">{</span><span class="n">address</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span><span class="si">}</span><span class="s1">&#39;</span><span class="p">)</span>
+
+            <span class="c1"># Read HTTP request</span>
+            <span class="k">with</span> <span class="n">client</span><span class="o">.</span><span class="n">makefile</span><span class="p">(</span><span class="s1">&#39;r&#39;</span><span class="p">,</span> <span class="n">encoding</span><span class="o">=</span><span class="s1">&#39;utf-8&#39;</span><span class="p">)</span> <span class="k">as</span> <span class="n">rfile</span><span class="p">:</span>
+                <span class="k">while</span> <span class="n">line</span> <span class="o">:=</span> <span class="n">rfile</span><span class="o">.</span><span class="n">readline</span><span class="p">()</span><span class="o">.</span><span class="n">strip</span><span class="p">():</span>
+                    <span class="nb">print</span><span class="p">(</span><span class="n">line</span><span class="p">)</span>
+
+            <span class="c1"># Send HTTP response</span>
+            <span class="k">with</span> <span class="n">client</span><span class="o">.</span><span class="n">makefile</span><span class="p">(</span><span class="s1">&#39;w&#39;</span><span class="p">,</span> <span class="n">encoding</span><span class="o">=</span><span class="s1">&#39;utf-8&#39;</span><span class="p">)</span> <span class="k">as</span> <span class="n">wfile</span><span class="p">:</span>
+                <span class="n">wfile</span><span class="o">.</span><span class="n">write</span><span class="p">(</span><span class="s1">&#39;HTTP/1.0 200 OK</span><span class="se">\r\n</span><span class="s1">&#39;</span><span class="p">)</span>
+                <span class="n">wfile</span><span class="o">.</span><span class="n">write</span><span class="p">(</span><span class="s1">&#39;Context-Type: text/plain</span><span class="se">\r\n</span><span class="s1">&#39;</span><span class="p">)</span>
+                <span class="n">wfile</span><span class="o">.</span><span class="n">write</span><span class="p">(</span><span class="s1">&#39;</span><span class="se">\r\n</span><span class="s1">&#39;</span><span class="p">)</span>
+                <span class="n">wfile</span><span class="o">.</span><span class="n">write</span><span class="p">(</span><span class="nb">str</span><span class="p">(</span><span class="n">datetime</span><span class="o">.</span><span class="n">datetime</span><span class="o">.</span><span class="n">now</span><span class="p">()))</span>
+</code></pre></div>
+
+<div class="alert warning-bg">
+<ul>
+<li>
+<p>What impact does <code>host</code> have?</p>
+</li>
+<li>
+<p>How to enable <strong>concurrency</strong>?</p>
+</li>
+</ul>
+</div>
+<h2 id="http-forking-server-oop-forking">HTTP: [Forking Server] (<i class="muted">OOP, Forking</i>)<a class="headerlink" href="#http-forking-server-oop-forking" title="Permanent link">&para;</a></h2>
+<div class="codehilite"><pre><span></span><code><span class="kn">import</span> <span class="nn">datetime</span>
+<span class="kn">import</span> <span class="nn">logging</span>
+<span class="kn">import</span> <span class="nn">os</span>
+<span class="kn">import</span> <span class="nn">signal</span>
+<span class="kn">import</span> <span class="nn">socket</span>
+<span class="kn">import</span> <span class="nn">sys</span>
+
+<span class="c1"># Class</span>
+
+<span class="k">class</span> <span class="nc">HTTPServer</span><span class="p">:</span>
+
+    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">server_address</span><span class="p">:</span> <span class="nb">tuple</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="nb">int</span><span class="p">]):</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">host</span>   <span class="o">=</span> <span class="n">server_address</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">port</span>   <span class="o">=</span> <span class="n">server_address</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">socket</span> <span class="o">=</span> <span class="n">socket</span><span class="o">.</span><span class="n">socket</span><span class="p">(</span><span class="n">socket</span><span class="o">.</span><span class="n">AF_INET</span><span class="p">,</span> <span class="n">socket</span><span class="o">.</span><span class="n">SOCK_STREAM</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">socket</span><span class="o">.</span><span class="n">setsockopt</span><span class="p">(</span><span class="n">socket</span><span class="o">.</span><span class="n">SOL_SOCKET</span><span class="p">,</span> <span class="n">socket</span><span class="o">.</span><span class="n">SO_REUSEADDR</span><span class="p">,</span> <span class="mi">1</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">socket</span><span class="o">.</span><span class="n">bind</span><span class="p">((</span><span class="bp">self</span><span class="o">.</span><span class="n">host</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">port</span><span class="p">))</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">socket</span><span class="o">.</span><span class="n">listen</span><span class="p">()</span>
+
+        <span class="n">logging</span><span class="o">.</span><span class="n">info</span><span class="p">(</span><span class="s1">&#39;Listening on </span><span class="si">%s</span><span class="s1">:</span><span class="si">%d</span><span class="s1">&#39;</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">host</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">port</span><span class="p">)</span>
+
+    <span class="k">def</span> <span class="fm">__del__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="n">logging</span><span class="o">.</span><span class="n">info</span><span class="p">(</span><span class="s1">&#39;Shutting down&#39;</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">socket</span><span class="o">.</span><span class="n">close</span><span class="p">()</span>
+
+    <span class="k">def</span> <span class="nf">handle_client</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">client</span><span class="p">,</span> <span class="n">address</span><span class="p">):</span>
+        <span class="c1"># Read HTTP request</span>
+        <span class="k">with</span> <span class="n">client</span><span class="o">.</span><span class="n">makefile</span><span class="p">(</span><span class="s1">&#39;r&#39;</span><span class="p">,</span> <span class="n">encoding</span><span class="o">=</span><span class="s1">&#39;utf-8&#39;</span><span class="p">)</span> <span class="k">as</span> <span class="n">rfile</span><span class="p">:</span>
+            <span class="k">while</span> <span class="n">line</span> <span class="o">:=</span> <span class="n">rfile</span><span class="o">.</span><span class="n">readline</span><span class="p">()</span><span class="o">.</span><span class="n">strip</span><span class="p">():</span>
+                <span class="n">logging</span><span class="o">.</span><span class="n">debug</span><span class="p">(</span><span class="s1">&#39;Client </span><span class="si">%s</span><span class="s1">:</span><span class="si">%d</span><span class="s1"> - </span><span class="si">%s</span><span class="s1">&#39;</span><span class="p">,</span> <span class="n">address</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span> <span class="n">address</span><span class="p">[</span><span class="mi">1</span><span class="p">],</span> <span class="n">line</span><span class="p">)</span>
+
+        <span class="c1"># Send HTTP response</span>
+        <span class="k">with</span> <span class="n">client</span><span class="o">.</span><span class="n">makefile</span><span class="p">(</span><span class="s1">&#39;w&#39;</span><span class="p">,</span> <span class="n">encoding</span><span class="o">=</span><span class="s1">&#39;utf-8&#39;</span><span class="p">)</span> <span class="k">as</span> <span class="n">wfile</span><span class="p">:</span>
+            <span class="n">wfile</span><span class="o">.</span><span class="n">write</span><span class="p">(</span><span class="s1">&#39;HTTP/1.0 200 OK</span><span class="se">\r\n</span><span class="s1">&#39;</span><span class="p">)</span>
+            <span class="n">wfile</span><span class="o">.</span><span class="n">write</span><span class="p">(</span><span class="s1">&#39;Context-Type: text/plain</span><span class="se">\r\n</span><span class="s1">&#39;</span><span class="p">)</span>
+            <span class="n">wfile</span><span class="o">.</span><span class="n">write</span><span class="p">(</span><span class="s1">&#39;</span><span class="se">\r\n</span><span class="s1">&#39;</span><span class="p">)</span>
+            <span class="n">wfile</span><span class="o">.</span><span class="n">write</span><span class="p">(</span><span class="nb">str</span><span class="p">(</span><span class="n">datetime</span><span class="o">.</span><span class="n">datetime</span><span class="o">.</span><span class="n">now</span><span class="p">()))</span>
+
+    <span class="k">def</span> <span class="nf">serve_forever</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="c1"># Ignore children (let init adopt them)</span>
+        <span class="n">signal</span><span class="o">.</span><span class="n">signal</span><span class="p">(</span><span class="n">signal</span><span class="o">.</span><span class="n">SIGCHLD</span><span class="p">,</span> <span class="n">signal</span><span class="o">.</span><span class="n">SIG_IGN</span><span class="p">)</span>
+
+        <span class="k">while</span> <span class="kc">True</span><span class="p">:</span>
+            <span class="c1"># Accept one client</span>
+            <span class="n">client</span><span class="p">,</span> <span class="n">address</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">socket</span><span class="o">.</span><span class="n">accept</span><span class="p">()</span>
+            <span class="n">logging</span><span class="o">.</span><span class="n">info</span><span class="p">(</span><span class="s1">&#39;Accepted client from </span><span class="si">%s</span><span class="s1">:</span><span class="si">%d</span><span class="s1">&#39;</span><span class="p">,</span> <span class="n">address</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span> <span class="n">address</span><span class="p">[</span><span class="mi">1</span><span class="p">])</span>
+
+            <span class="c1"># Fork child process and let it handle client</span>
+            <span class="k">with</span> <span class="n">client</span><span class="p">:</span>
+                <span class="k">if</span> <span class="n">os</span><span class="o">.</span><span class="n">fork</span><span class="p">()</span> <span class="o">==</span> <span class="mi">0</span><span class="p">:</span>   <span class="c1"># Child</span>
+                    <span class="bp">self</span><span class="o">.</span><span class="n">handle_client</span><span class="p">(</span><span class="n">client</span><span class="p">,</span> <span class="n">address</span><span class="p">)</span>
+
+<span class="c1"># Main Execution</span>
+
+<span class="k">def</span> <span class="nf">main</span><span class="p">(</span><span class="n">arguments</span><span class="p">:</span> <span class="nb">list</span><span class="p">[</span><span class="nb">str</span><span class="p">]</span><span class="o">=</span><span class="n">sys</span><span class="o">.</span><span class="n">argv</span><span class="p">[</span><span class="mi">1</span><span class="p">:]):</span>
+    <span class="c1"># Parse command line options</span>
+    <span class="k">try</span><span class="p">:</span>
+        <span class="n">host</span> <span class="o">=</span> <span class="n">arguments</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>
+        <span class="n">port</span> <span class="o">=</span> <span class="nb">int</span><span class="p">(</span><span class="n">arguments</span><span class="p">[</span><span class="mi">1</span><span class="p">])</span>
+    <span class="k">except</span> <span class="ne">IndexError</span><span class="p">:</span>
+        <span class="nb">print</span><span class="p">(</span><span class="s1">&#39;Usage: http_server_forking.py host port&#39;</span><span class="p">,</span> <span class="n">file</span><span class="o">=</span><span class="n">sys</span><span class="o">.</span><span class="n">stderr</span><span class="p">)</span>
+        <span class="n">sys</span><span class="o">.</span><span class="n">exit</span><span class="p">(</span><span class="mi">1</span><span class="p">)</span>
+
+    <span class="c1"># Configure logging format and level</span>
+    <span class="n">logging</span><span class="o">.</span><span class="n">basicConfig</span><span class="p">(</span>
+        <span class="n">datefmt</span> <span class="o">=</span> <span class="s1">&#39;%Y-%m-</span><span class="si">%d</span><span class="s1"> %H:%M:%S&#39;</span><span class="p">,</span>
+        <span class="nb">format</span>  <span class="o">=</span> <span class="s1">&#39;[</span><span class="si">%(levelname)1.1s</span><span class="s1"> </span><span class="si">%(asctime)s</span><span class="s1"> </span><span class="si">%(module)s</span><span class="s1">:</span><span class="si">%(lineno)d</span><span class="s1">] </span><span class="si">%(message)s</span><span class="s1">&#39;</span><span class="p">,</span>
+        <span class="n">level</span>   <span class="o">=</span> <span class="n">logging</span><span class="o">.</span><span class="n">INFO</span><span class="p">,</span> <span class="c1"># Demo: Switch to logging.DEBUG</span>
+    <span class="p">)</span>
+
+    <span class="c1"># Create and run server</span>
+    <span class="n">server</span> <span class="o">=</span> <span class="n">HTTPServer</span><span class="p">((</span><span class="n">host</span><span class="p">,</span> <span class="n">port</span><span class="p">))</span>
+    <span class="n">server</span><span class="o">.</span><span class="n">serve_forever</span><span class="p">()</span>
+
+<span class="k">if</span> <span class="vm">__name__</span> <span class="o">==</span> <span class="s1">&#39;__main__&#39;</span><span class="p">:</span>
+    <span class="n">main</span><span class="p">()</span>
+</code></pre></div>
+
+<div class="alert danger-bg">
+<p><strong>Discuss</strong>:</p>
+<ul>
+<li>
+<p>Change <code>logging</code> level from <code>logging.INFO</code> to <code>logging.DEBUG</code>.</p>
+</li>
+<li>
+<p>Is <code>exit(0)</code> in <strong>child</strong> necessary? Yes, prevent <strong>fork bomb</strong>!</p>
+</li>
+<li>
+<p>Is <code>client.close()</code> in <strong>parent</strong> necessary? Yes, prevent using up all <strong>file descriptors</strong>!</p>
+</li>
+<li>
+<p>Add <code>signal.signal(signal.SIGCHLD, signal.SIGIGN)</code> to ignore children.</p>
+</li>
+</ul>
+</div>
+</main>
+<footer>
+Built using <a href="https://python.org">Python</a>
+and <a href="https://jinja.palletsprojects.com">Jinja</a>
+with colors from 
+<a href="https://onmessage.nd.edu/university-branding/colors/">Notre Dame</a>, 
+<a href="https://spreadsheet.dev/how-to-get-the-hexadecimal-codes-of-colors-in-google-sheets">Google Docs</a>, and 
+<a href="https://nordtheme.com">Nord Theme</a>,
+and icons from <a href="https://pictogrammers.com/library/mdi/">Material Design Icons</a>.</footer>
+</body>
+</html>
