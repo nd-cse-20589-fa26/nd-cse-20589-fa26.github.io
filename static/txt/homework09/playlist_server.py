@@ -17,8 +17,7 @@ except IndexError:
 
 # Globals
 
-App = Vial(HOST, PORT)
-Playlists: dict[int, dict] = {}
+App = Vial(HOST, PORT, {'playlists': {}})
 
 # Handlers
 
@@ -59,9 +58,9 @@ def create_playlist(request):
 
     Return 400 if name is not in form data.  Otherwise, create a new playlist:
 
-    1. Generate new playlist id based on length of Playlists.
+    1. Generate new playlist id based on length of App.playlists.
 
-    2. Add playlist dictionary to global Playlists with the given name.
+    2. Add playlist dictionary to App.playlists with the given name.
 
     @params {"name": str}
     @return {"id": int}
