@@ -1,0 +1,591 @@
+title:      "Homework 09: Playlist"
+body:       |
+
+  The goal of this homework assignment is to allow you to practice building a
+  [web application] that implements a [REST] interface by using the [HTTP]
+  library included with [Python].  To streamline the implementation, you will
+  be using the [vial.py] **micro-framework** developed and discussed in class.
+
+  For this assignment, record your source code and any responses to the
+  following activities in the `homework09` folder of your **assignments**
+  [GitHub] repository and push your work by **noon Saturday, November 14**.
+
+  [networking]: https://en.wikipedia.org/wiki/Computer_network
+  [HTTP]: https://en.wikipedia.org/wiki/Hypertext_Transfer_Protocol
+  [curl]: https://curl.se/
+  [Python]: https://python.org
+  [web application]: https://en.wikipedia.org/wiki/Web_application
+  [REST]: https://en.wikipedia.org/wiki/REST
+  [vial.py]: https://github.com/nd-cse-20589-fa26/examples/blob/master/slides27/vial.py
+
+  ## Activity 0: Preparation
+
+  Before starting this homework assignment, you should first perform a `git
+  pull` to retrieve any changes in your remote [GitHub] repository:
+
+      :::bash
+      $ cd path/to/repository                   # Go to assignments repository
+
+      $ git switch master                       # Make sure we are in master branch
+
+      $ git pull --rebase                       # Get any remote changes not present locally
+
+  Next, create a new branch for this assignment:
+
+      :::bash
+      $ git switch -c homework09                # Create homework09 branch and check it out
+
+  ### Task 1: Skeleton Code
+
+  To help you get started, the instructor has provided you with the following
+  **skeleton code**:
+
+      :::bash
+      # Create homework09 folder
+      $ mkdir homework09
+
+      # Go to homework09 folder
+      $ cd homework09
+
+      # Download Makefile
+      $ curl -LO https://pnutz.h4x0r.space/courses/cse.20589.fa26/static/txt/homework09/Makefile
+
+      # Download Python skeleton code
+      $ curl -LO https://pnutz.h4x0r.space/courses/cse.20589.fa26/static/txt/homework09/playlist_server.py
+
+  Once downloaded, you should see the following files in your `homework09`
+  directory:
+
+      :::bash
+      homework09
+          \_ Makefile           # This is the Makefile for building all the assignment artifacts
+          \_ playlist_server.py # This is the Python script for the playlist_server script
+
+  [docstrings]: https://peps.python.org/pep-0257/
+  [doctests]: https://docs.python.org/3/library/doctest.html
+  [unit test]: https://en.wikipedia.org/wiki/Unit_testing
+  [unit tests]: https://en.wikipedia.org/wiki/Unit_testing
+
+  ### Task 2: Initial Import
+
+  Now that the files are downloaded into the `homework09` folder, you can
+  **commit** them to your [git] repository:
+
+      :::bash
+      $ git add Makefile                            # Mark changes for commit
+      $ git add *.py
+      $ git commit -m "Homework 09: Initial Import" # Record changes
+
+  ### Task 3: Unit and Functional Tests
+
+  After downloading these files, you can run `make test` to run the tests.
+
+      :::bash
+      # Run all tests (will trigger automatic download)
+      $ make test
+
+  You will notice that the Makefile downloads these additional test data and scripts:
+
+      :::bash
+      homework09
+          \_ playlist_server.test      # This is the Python test for the playlist_server script
+
+  In addition to the embedded [doctests] in the **skeleton code**, you will be
+  using these [unit tests] to verify the correctness and behavior of your code.
+
+  <div class="alert info-bg" markdown="1">
+
+  ### <i class="icon icon-medium">{{ "download" | embed_icon }}</i> Automatic Download
+
+  The `test` scripts are automatically downloaded by the `Makefile`, so any
+  modifications you do to them will be lost when you run `make` again. Likewise,
+  because they are automatically downloaded, you do not need to `add` or `commit`
+  them to your [git] repository.
+
+  </div>
+
+  The details on what you need to implement for this assignment are described
+  in the following sections.
+
+  ## Activity 1: `playlist_server` (*0.8 Points*)
+
+  For this activity, you are to write `playlist_server.py`, which is a [web
+  application] that uses the [vial.py] **micro-framework** to implement the
+  following [REST] API:
+
+  <table class="bordered" markdown="1">
+  <thead>
+    <th class="special-bg">Method</th>
+    <th class="special-bg">Endpoint</th>
+    <th class="special-bg">Description</th>
+  </thead>
+  <tbody markdown="1">
+  <tr class="success-bg" markdown="1">
+  <td class="centered">POST</td>
+  <td>/playlist</td>
+  <td class="flex-col" markdown="1">
+
+  <p>Create a playlist with the given <code>name</code>.</p>
+
+  <p><b>Request Payload (<i>JSON</i>)</b></p>
+
+  ```
+  {"name": str}
+  ```
+
+  <p><b>Response Codes</b></p>
+
+  <ol markdown="1">
+  <li markdown="1">`200`: Operating successful.</li>
+  <li markdown="1">`400`: `name` missing from form data.</li>
+  </ol>
+
+  <p><b>Response Body (<i>JSON</i>)</b></p>
+
+  ```
+  {"id": int}
+  ```
+  </td>
+  </tr>
+  <tr class="danger-bg" markdown="1">
+  <td class="centered">DELETE</td>
+  <td>/playlist/{playlist_id}</td>
+  <td class="flex-col" markdown="1">
+
+  <p>Remove specified playlist.</p>
+
+  <p><b>Response Codes</b></p>
+
+  <ol markdown="1">
+  <li markdown="1">`200`: Operating successful.</li>
+  <li markdown="1">`404`: Invalid `playlist_id`.</li>
+  </ol>
+  </td>
+  </tr>
+  <tr class="info-bg" markdown="1">
+  <td class="centered">GET</td>
+  <td>/playlist/{playlist_id}</td>
+  <td class="flex-col" markdown="1">
+
+  <p>Get specified playlist.</p>
+
+  <p><b>Response Codes</b></p>
+
+  <ol markdown="1">
+  <li markdown="1">`200`: Operating successful.</li>
+  <li markdown="1">`404`: Invalid `playlist_id`.</li>
+  </ol>
+
+  <p><b>Response Body (<i>JSON</i>)</b></p>
+
+  ```
+  {
+   "id": int,
+   "name": str,
+   "items": {
+     "total": int,
+     "items": [{"title": str, "url": str}, ...]
+    }
+  }
+  ```
+  </td>
+  </tr>
+  </tbody>
+  </table>
+
+  The first three operations allow you to create, remove, and get a
+  **playlist**, which consists of a list of **items** (each of which has a
+  `title` and `url`).
+
+  <div class="alert success-bg" markdown="1">
+
+  **Note**: `{playlist_id}` should be some sort of [int].
+
+  </div>
+
+  <table class="bordered" markdown="1">
+  <thead>
+    <th class="special-bg">Method</th>
+    <th class="special-bg">Endpoint</th>
+    <th class="special-bg">Description</th>
+  </thead>
+  <tbody markdown="1">
+  <tr class="info-bg" markdown="1">
+  <td class="centered">GET</td>
+  <td>/playlist/{playlist_id}/items</td>
+  <td class="flex-col" markdown="1">
+
+  <p>Get items from specified playlist.</p>
+
+  <p><b>Response Codes</b></p>
+
+  <ol markdown="1">
+  <li markdown="1">`200`: Operating successful.</li>
+  <li markdown="1">`404`: Invalid `playlist_id`.</li>
+  </ol>
+
+  <p><b>Response Body (<i>JSON</i>)</b></p>
+
+  ```
+  {
+    "total": int,
+    "items": [{"title": str, "url": str}, ...]
+  }
+  ```
+  </td>
+  </tr>
+  <tr class="success-bg" markdown="1">
+  <td class="centered">POST</td>
+  <td>/playlist/{playlist_id}/items</td>
+  <td class="flex-col" markdown="1">
+
+  <p>Add items to specified playlist.</p>
+
+  <p><b>Request Payload (<i>JSON</i>)</b></p>
+
+  ```
+  {
+    "items": [{"title": str, "url": str}, ...],
+    "position": int
+  }
+  ```
+
+  <p><b>Response Codes</b></p>
+
+  <ol markdown="1">
+  <li markdown="1">`200`: Operating successful.</li>
+  <li markdown="1">`404`: Invalid `playlist_id`.</li>
+  </ol>
+
+  <p><b>Response Body (<i>JSON</i>)</b></p>
+
+  ```
+  {"total": int}
+  ```
+  </td>
+  </tr>
+  <tr class="danger-bg" markdown="1">
+  <td class="centered">DELETE</td>
+  <td>/playlist/{playlist_id}/items</td>
+  <td class="flex-col" markdown="1">
+
+  <p>Remove items from specified playlist.</p>
+
+  <p><b>Response Codes</b></p>
+
+  <ol markdown="1">
+  <li markdown="1">`200`: Operating successful.</li>
+  <li markdown="1">`404`: Invalid `playlist_id`.</li>
+  </ol>
+
+  <p><b>Response Body (<i>JSON</i>)</b></p>
+
+  ```
+  {"total": int}
+  ```
+  </td>
+  </tr>
+  </tbody>
+  </table>
+
+  The last three operations allow you to get the **items** of a **playlist**,
+  add **items** to a **playlist**, and remove **items** from a **playlist**.
+
+  <div class="alert special-bg" markdown="1">
+
+  ### <i class="icon icon-medium">{{ "spotify" | embed_icon }}</i> Spotify
+
+  The design of **playlist** [REST] API is based on the [Spotify
+  Playlists](https://developer.spotify.com/documentation/web-api/reference/get-playlist)
+  API.
+
+  </div>
+
+  ### Task 1: `playlist_server.py`
+
+  To implement the `playlist_server.py` script, you will need complete the
+  following functions:
+
+  1.  <div class="flex-col" markdown="1">
+
+          :::python
+          @App.route('/playlist', methods=['POST'])
+          def create_playlist(request):
+              ...
+
+      > This function returns `400` if `name` is not in **form data**.
+      > Otherwise, create a new **playlist**:<br><br>
+      >
+      > 1. Generate new **playlist id** based on length of `Playlists`.
+      > 2. Add playlist `dictionary` to global `Playlists` with the given `name`.
+
+      <div class="alert success-bg" markdown="1">
+
+      **Hints**: Access the **form data** using `request.form_data.get`.  Think
+      carefully about how you want to structure the `Playlists` data for each
+      new **playlist**.  Remember that [vial.py] will automatically convert a
+      [dict] into [JSON], so you can simply `return` a [dict] with the
+      appropriate **response body**.
+
+      </div>
+
+  2.  <div class="flex-col" markdown="1">
+
+          :::python
+          @App.route('') # TODO
+          def remove_playlist(request, playlist_id):
+              ...
+
+      > This function returns `404` if `playlist_id` is invalid.  Otherwise,
+      remove the specified **playlist** by setting the corresponding
+      **playlist** to an empty **dictionary**.
+
+      <div class="alert success-bg" markdown="1">
+
+      **Hints**: Make sure you complete the `@App.route` [decorator] for the
+      appropriate **endpoint** and **method**.  You may wish to convert
+      `playlist_id` into an [int] for consistency.
+
+      </div>
+
+  3.  <div class="flex-col" markdown="1">
+
+          :::python
+          @App.route('') # TODO
+          def get_playlist(request, playlist_id):
+              ...
+
+      > This function returns `404` if `playlist_id` is invalid.  Otherwise,
+      it returns the specified **playlist** information.
+
+      <div class="alert success-bg" markdown="1">
+
+      **Hints**: Make sure you complete the `@App.route` [decorator] for the
+      appropriate **endpoint** and **method**.  You may be able to reuse
+      `get_playlist_items` for part of the [JSON] **dictionary** you return.
+
+      </div>
+
+  4.  <div class="flex-col" markdown="1">
+
+          :::python
+          @App.route('') # TODO
+          def get_playlist_items(request, playlist_id):
+              ...
+
+      > This function returns `404` if `playlist_id` is invalid.  Otherwise,
+      it returns the specified **playlist** items.
+
+      <div class="alert success-bg" markdown="1">
+
+      **Hints**: Make sure you complete the `@App.route` [decorator] for the
+      appropriate **endpoint** and **method**.
+
+      </div>
+
+  5.  <div class="flex-col" markdown="1">
+
+          :::python
+          @App.route('') # TODO
+          def add_playlist_items(request, playlist_id):
+              ...
+
+      >  This function returns `404` if `playlist_id` is invalid.  Otherwise,
+      it adds the specified `items` in the **form data** to the existing
+      **playlist** at the specified `position` and then returns the new total
+      number of **items**.
+
+      <div class="alert success-bg" markdown="1">
+
+      **Hints**: Make sure you complete the `@App.route` [decorator] for the
+      appropriate **endpoint** and **method**.  To insert a [list] into a
+      specific `position` of another [list], you can use **slicing**:
+
+          :::python
+          # Insert new list into the middle of old list using slicing
+          old_list[index:index] = new_list
+
+      </div>
+
+  6.  <div class="flex-col" markdown="1">
+
+          :::python
+          @App.route('') # TODO
+          def remove_playlist_items(request, playlist_id):
+              ...
+
+      >  This function returns `404` if `playlist_id` is invalid.  Otherwise,
+      it removes the specified `items` in the **form data** from the existing
+      **playlist** and then returns the new total number of **items**.
+
+      <div class="alert success-bg" markdown="1">
+
+      **Hints**: Make sure you complete the `@App.route` [decorator] for the
+      appropriate **endpoint** and **method**.  Rather than removing items from
+      a [list] while iterating over it, you should consider using a [list
+      comprehension] to filter the [list].
+
+      </div>
+
+  [decorator]: https://docs.python.org/3/glossary.html#term-decorator
+  [dict]: https://docs.python.org/3/library/stdtypes.html#mapping-types-dict
+  [list]: https://docs.python.org/3/library/stdtypes.html#sequence-types-list-tuple-range
+  [int]: https://docs.python.org/3/builtins/functions.html#int
+  [list comprehension]: https://docs.python.org/3/tutorial/datastructures.html#list-comprehensions
+
+  ### Task 2: Testing
+
+  As you implement `playlist_server.py`, you should run the [web application]
+  manually in one terminal and then use a [HTTP] client of your choice in another
+  to interact with it:
+
+      :::bash
+      # Start server in one terminal
+      $ ./playlist_server.py 0.0.0.0 9999
+
+      # Use curl in another terminal
+      $ curl localhost:9999
+
+  You can also use `make` to run the [unit tests]:
+
+      :::bash
+      # Run unit tests (and doctests)
+      $ make test-playlist
+      Testing playlist ...
+      test_00_index (__main__.PlaylistTest.test_00_index) ... ok
+      test_01_create_playlist (__main__.PlaylistTest.test_01_create_playlist) ... ok
+      test_02_remove_playlist (__main__.PlaylistTest.test_02_remove_playlist) ... ok
+      test_03_get_playlist (__main__.PlaylistTest.test_03_get_playlist) ... ok
+      test_04_get_playlist_items (__main__.PlaylistTest.test_04_get_playlist_items) ... ok
+      test_05_add_playlist_items (__main__.PlaylistTest.test_05_add_playlist_items) ... ok
+      test_06_remove_playlist_items (__main__.PlaylistTest.test_06_remove_playlist_items) ... ok
+
+         Score  7.00 /  7.00
+         Grade  1.00 /  1.00
+        Status Success
+
+      ----------------------------------------------------------------------
+      Ran 7 tests in 0.287s
+
+      OK
+
+  To just run the [unit tests], you can do the following:
+
+      :::bash
+      # Run unit tests
+      $ ./playlist_server.test -v
+      ...
+
+  To run a specific [unit test], you can specify the **method name**:
+
+      :::bash
+      # Run only mypy unit test
+      $ ./playlist_server.test -v PlaylistTest.test_00_index
+      ...
+
+  ## Activity 2: Quiz (*0.2 Points*)
+
+  Once you have completed all the activities above, you are to complete the
+  following **reflection quiz**:
+
+  <div id="quiz-questions"></div>
+
+  <div id="quiz-responses"></div>
+
+  <script src="static/js/dredd-quiz.js"></script>
+  <script>
+  loadQuiz('static/json/homework09.json');
+  </script>
+
+  <pre style="display: none;" id="dr-container" class="codehilite"><code id="dredd-response"></code></pre>
+
+  As with [Reading 01], you will need to store your answers in a
+  `homework09/answers.json` file.  You can use the form above to generate the
+  contents of this file, or you can write the [JSON] by hand.
+
+  To test your quiz, you can use the `check.py` script:
+
+      :::bash
+      $ ../.scripts/check.py
+      Checking homework09 quiz ...
+            Q1  2.00 /  2.00
+            Q2  2.00 /  2.00
+            Q3  8.00 /  8.00
+            Q4  5.00 /  5.00
+        --------------------
+         Score 17.00 / 17.00
+         Grade  1.00 /  1.00
+        Status Success
+
+  [JSON]: https://json.org
+
+  ## Submission
+
+  To submit your assignment, please commit your work to the `homework09` folder
+  of your `homework09` branch in your **assignments** [GitHub] repository.
+  Your `homework09` folder should **only** contain the following files:
+
+  - `Makefile`
+  - `answers.json`
+  - `playlist_server.py`
+  - `vial.py`
+
+  <div class="alert info-bg" markdown="1">
+
+  **Note**: You do not need to commit the test scripts because the `Makefile`
+  automatically downloads them.
+
+  </div>
+
+      :::bash
+      #-----------------------------------------------------------------------
+      # Make sure you have already completed Activity 0: Preparation
+      #-----------------------------------------------------------------------
+      ...
+      $ git add Makefile                        # Mark changes for commit
+      $ git add playlist_server.py              # Mark changes for commit
+      $ git commit -m "Homework 09: playlist"   # Record changes
+      ...
+      $ git add answers.json                    # Mark changes for commit
+      $ git commit -m "Homework 09: quiz"       # Record changes
+      ...
+      $ git push -u origin homework09           # Push branch to GitHub
+
+  <div class="alert warning-bg" markdown="1">
+
+  ### <i class="icon icon-medium">{{ "lifebuoy" | embed_icon }}</i> Acknowledgments
+
+  If you collaborated with any other students, or received help from TAs or AI
+  tools on this assignment, please record this support in the `README.md` in
+  the `homework09` folder and include it with your **Pull Request**.
+
+  </div>
+
+  <div class="alert success-bg" markdown="1">
+
+  ### <i class="icon icon-medium">{{ "account-question" | embed_icon }}</i> Graders
+
+  Once you have committed your work and pushed it to [GitHub], remember to
+  create a **pull request** and assign it to the appropriate **teaching
+  assistant** from the [Reading 09 TA List].
+
+  **Note**: this list changes each week, so be sure to consult the appropriate
+  list for each assignment.
+
+  </div>
+
+  [git]: https://git-scm.com/
+  [clone]: https://git-scm.com/docs/git-clone
+  [commit]: https://git-scm.com/docs/git-commit
+  [push]: https://git-scm.com/docs/git-push
+  [GitHub]: https://github.com
+  [Linux]: https://kernel.org
+  [branch]: https://git-scm.com/docs/git-branch
+  [add]: https://git-scm.com/docs/git-add
+  [Reading 01]: reading01.html
+  [Reading 09 TA List]: reading09_tas.html
+  [curl]: http://man7.org/linux/man-pages/man1/curl.1.html
+  [wget]: http://man7.org/linux/man-pages/man1/wget.1.html
+  [JSON]: https://json.org/
+  [ESC]: https://esc.nd.edu/
+  [mypy]: https://mypy-lang.org/

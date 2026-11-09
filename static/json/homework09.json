@@ -1,0 +1,24 @@
+{
+    "q1": {
+        "type": "multiple",
+        "question": "\n<p>In <code>vial.py</code>, the <code>Vial</code> class calls the\n<code>super()</code> function inside its <b>constructor</b>:</p>\n\n<pre>\nclass Vial(HTTPServer):\n    def __init__(self, host, port):\n        super().__init__((host, port), VialRequestHandler)\n    ...\n</pre>\n\n<p>Which of the following statements are true (<i>choose all that\napply</i>)?</p>\n",
+        "responses": {
+            "single": "<code>super()</code> always refers to the direct <b>parent</b> class in <b>single inheritance</b>.",
+            "multiple": "<code>super()</code> always refers to the direct <b>parent</b> class in <b>multiple inheritance</b>.",
+            "recursive": "<code>super().__init__</code> in this case redirects to the <code>__init__</code> of <code>Vial</code>.",
+            "httpserver": "<code>super().__init__</code> in this case redirects to the <code>__init__</code> of <code>HTTPServer</code>."
+        }
+    },
+    "q2": {
+        "type": "blank",
+        "question": "\n<p>In <code>playlist_server.py</code>, you used <b>decorators</b> to map\n<i>routes</i> to specific <b>functions</b>.  For instance, for\n<code>index</code> and <code>create_playlist</code>, you did the\nfollowing:</p>\n\n<pre>\n@App.route('/')\ndef index(request):\n    ...\n\n@App.route('/playlist', methods=['POST'])\ndef create_playlist(request):\n    ...\n</pre>\n\n<p>What would each of <b>functions</b> unwrap to if we didn't use\n<b>decorators</b>?</p>\n\n<pre>\ndef index(request):\n    ...\n\ndef create_playlist(request):\n    ...\n\nindex = ____            # 1.\ncreate_playlist = ____  # 2.\n</pre>\n"
+    },
+    "q3": {
+        "type": "blank",
+        "question": "\n<p>Suppose you are running your <code>playlist_server.py</code> on port\n<code>9999</code> on <b>student05.cse.nd.edu</b>.  Complete the following\n<code>curl</code> commands to interact with your\n<code>playlist_server.py</code>.</p>\n\n<pre>\n# Create a playlist named \"Mix Tape\"\n$ curl --json ____ student05.cse.nd.edu:9999/____   # 1. & 2.\n\n# Add \"DOWN GOES NUMBER ONE\" at https://youtu.be/2qfxJ3WRy9I to playlist\n$ curl --json ____ student05.cse.nd.edu:9999/____   # 3. & 4.\n\n# Get playlist items\n$ curl student05.cse.nd.edu:9999/____               # 5.\n</pre>\n\n<p>For each of the <code>curl</code> commands above, what\n<b>HTTP</b> method was used?</p>\n\n<ul>\n  <li>Create a playlist: ____</li>\n  <li>Add items to playlist: ____</li>\n  <li>Get playlist items: ____</li>\n</ul>\n"
+    },
+    "q4": {
+        "type": "blank",
+        "question": "\n<p>Continuing from the previous example, use <code>requests</code> in\n<b>Python</b> to first remove the item you added to the playlist, and then\nto remove the playlist itself:</p>\n\n<pre>\nimport requests\n\n# Remove \"DOWN GOES NUMBER ONE\" at https://youtu.be/2qfxJ3WRy9I from playlist\nrequests.____('____', json=____)  # 1., 2., 3.\n\n# Remove playlist\nrequests.____('____')             # 4. & 5.\n</pre>\n"
+    }
+}
