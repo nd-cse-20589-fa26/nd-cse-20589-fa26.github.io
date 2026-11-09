@@ -316,16 +316,16 @@ body:       |
       > This function returns `400` if `name` is not in **form data**.
       > Otherwise, create a new **playlist**:<br><br>
       >
-      > 1. Generate new **playlist id** based on length of `Playlists`.
-      > 2. Add playlist `dictionary` to global `Playlists` with the given `name`.
+      > 1. Generate new **playlist id** based on length of `App.playlists`.
+      > 2. Add playlist `dictionary` to `App.playlists` with the given `name`.
 
       <div class="alert success-bg" markdown="1">
 
       **Hints**: Access the **form data** using `request.form_data.get`.  Think
-      carefully about how you want to structure the `Playlists` data for each
-      new **playlist**.  Remember that [vial.py] will automatically convert a
-      [dict] into [JSON], so you can simply `return` a [dict] with the
-      appropriate **response body**.
+      carefully about how you want to structure the `App.playlists` data for
+      each new **playlist**.  Remember that [vial.py] will automatically
+      convert a [dict] into [JSON], so you can simply `return` a [dict] with
+      the appropriate **response body**.
 
       </div>
 
