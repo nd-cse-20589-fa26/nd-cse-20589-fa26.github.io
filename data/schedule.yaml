@@ -287,14 +287,16 @@
 - name:     Web Application
   days:
       - date:           Mon 11/09
-        topics:         Web Application
+        topics:         Web Applications
         assignments:
           - Reading 09
         items:
           - name:       Slides 26
+          - name:       Panopo
+            link:       https://notredame.hosted.panopto.com/Panopto/Pages/Viewer.aspx?id=d9cb7828-9f6d-42c4-890e-b4fd012155d9
 
       - date:           Wed 11/11
-        topics:         REST
+        topics:         REST / Vial
         items:
           - name:       Slides 27
 
