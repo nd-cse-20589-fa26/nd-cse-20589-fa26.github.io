@@ -138,6 +138,8 @@ access this data, we can use the following utility methods from [RealPython]:
 
 ```python
 class HelloRequestHandler(BaseHTTPRequestHandler):
+    greeting: str='Hello'                                           # Class attribute
+
     @cached_property
     def url(self):          return urlparse(self.path)              # Parse path into URL structure
 
@@ -145,11 +147,9 @@ class HelloRequestHandler(BaseHTTPRequestHandler):
     def query_data(self):   return dict(parse_qsl(self.url.query))  # Parse URL query into dictionary
 
     def do_GET(self):
-        self.send_response(200)
-        self.send_header('Content-Type', 'text/plain')
-        self.end_headers()
+        self.send_response(200); self.send_header('Content-Type', 'text/plain'); self.end_headers()
         name = self.query_data.get('name', 'Unknown')               # Lookup name in query dictionary
-        self.wfile.write(f'Hello, {name}!'.encode())
+        self.wfile.write(f'{self.greeting}, {name}'.encode())
 ```
 
 [RealPython]: https://realpython.com/python-http-server/#serve-static-and-dynamic-content-programmatically
@@ -163,18 +163,16 @@ this data, we can use the following utility methods from [RealPython]:
 
 ```python
 class HelloRequestHandler(BaseHTTPRequestHandler):
-    default_name: str='Unknown'                                       # Class attribute
-
     @cached_property                                                  # Read Post data payload
     def post_data(self): return self.rfile.read(int(self.headers.get('Content-Length', 0)))
 
     @cached_property                                                  # Parse Post data payload
     def form_data(self): return dict(parse_qsl(self.post_data.decode('utf-8')))
 
-    def do_POST(self):                                              
+    def do_POST(self):
         self.send_response(200); self.send_header('Content-Type', 'text/plain'); self.end_headers()
-        HelloRequestHandler.default_name = self.form_data.get('name') # Lookup name in Post form data
-        self.wfile.write(f'Default name is {HelloRequestHandler.default_name}'.encode())
+        HelloRequestHandler.greeting = self.form_data.get('greeting') # Lookup name in Post form data
+        self.wfile.write(f'Greeting is {HelloRequestHandler.greeting}'.encode())
 ```
 
 ---
@@ -191,8 +189,8 @@ $ ./hello_app.py localhost 9999             # Start Hello Web Application
 $ curl localhost:9999/?name=Domer           # Get greeting
 Hello, Domer
 
-$ curl -d 'name=Irish' localhost:9999/      # Set default name
-Default name is Irish
+$ curl -d 'greeting=Hola' localhost:9999/   # Set greeting
+Greeting is Hola
 ```
 
 [hello_app.py]: https://github.com/nd-cse-20589-fa26/examples/blob/master/slides26/hello_app.py

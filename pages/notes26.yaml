@@ -132,6 +132,8 @@ body:   |
   ```python
   class HelloRequestHandler(BaseHTTPRequestHandler):
 
+      greeting: str='Unknown' # Class attribute
+
       @cached_property
       def url(self):
           # Parse path into URL structure
@@ -149,7 +151,7 @@ body:   |
 
           # Lookup name in query dictionary
           name = self.query_data.get('name', 'Unknown')
-          self.wfile.write(f'Hello, {name}!'.encode())
+          self.wfile.write(f'{self.greeting}, {name}'.encode())
   ```
 
   [RealPython]: https://realpython.com/python-http-server/#serve-static-and-dynamic-content-programmatically
@@ -161,9 +163,6 @@ body:   |
 
   ```python
   class HelloRequestHandler(BaseHTTPRequestHandler):
-
-      # Class attribute
-      default_name: str='Unknown'
 
       @cached_property
       def post_data(self):
@@ -182,8 +181,8 @@ body:   |
           self.end_headers()
 
           # Lookup name in Post form data
-          HelloRequestHandler.default_name = self.form_data.get('name')
-          self.wfile.write(f'Default name is {HelloRequestHandler.default_name}'.encode())
+          HelloRequestHandler.greeting = self.form_data.get('greeting')
+          self.wfile.write(f'Greeting is {HelloRequestHandler.greeting}'.encode())
   ```
 
   ## Web Applications: [hello_app.py]
@@ -194,15 +193,15 @@ body:   |
 
   ```bash
   # Start Hello Web Application
-  $ ./hello_app.py localhost 9999           
+  $ ./hello_app.py localhost 9999
 
   # Get greeting
-  $ curl localhost:9999/?name=Domer           
+  $ curl localhost:9999/?name=Domer
   Hello, Domer
 
   # Set default name
-  $ curl -d 'name=Irish' localhost:9999/      
-  Default name is Irish
+  $ curl -d 'greeting=Hola' localhost:9999/
+  Greeting is Hola
   ```
 
   <div class="alert danger-bg" markdown="1">
@@ -231,7 +230,7 @@ body:   |
 
   class HelloRequestHandler(BaseHTTPRequestHandler):
 
-      default_name: str='Unknown'
+      greeting: str='Hello'
 
       # Helper Properties from RealPython
 
@@ -272,19 +271,19 @@ body:   |
           self.send_header('Content-Type', 'text/plain')
           self.end_headers()
 
-          name = self.query_data.get('name', self.default_name)
-          self.wfile.write(f'Hello, {name}'.encode())
+          name = self.query_data.get('name', 'Unkown')
+          self.wfile.write(f'{self.greeting}, {name}'.encode())
 
       def do_POST(self):
-          if not (name := self.form_data.get('name')):
+          if not (greeting := self.form_data.get('greeting')):
               self.send_response(400)
 
           self.send_response(200)
           self.send_header('Content-Type', 'text/plain')
           self.end_headers()
 
-          HelloRequestHandler.default_name = name
-          self.wfile.write(f'Default name is {HelloRequestHandler.default_name}'.encode())
+          HelloRequestHandler.greeting = greeting
+          self.wfile.write(f'Greeting is {HelloRequestHandler.greeting}'.encode())
 
   # Main Execution
 
