@@ -163,17 +163,17 @@ this data, we can use the following utility methods from [RealPython]:
 
 ```python
 class HelloRequestHandler(BaseHTTPRequestHandler):
-    default_name: str='Unknown'                                     # Class attribute
+    default_name: str='Unknown'                                       # Class attribute
 
-    @cached_property                                                # Read Post data payload
+    @cached_property                                                  # Read Post data payload
     def post_data(self): return self.rfile.read(int(self.headers.get('Content-Length', 0)))
 
-    @cached_property                                                # Parse Post data payload
+    @cached_property                                                  # Parse Post data payload
     def form_data(self): return dict(parse_qsl(self.post_data.decode('utf-8')))
 
-    def do_POST(self):                                              # Lookup name in Post form data
-        HelloRequestHandler.default_name = self.form_data.get('name')
+    def do_POST(self):                                              
         self.send_response(200); self.send_header('Content-Type', 'text/plain'); self.end_headers()
+        HelloRequestHandler.default_name = self.form_data.get('name') # Lookup name in Post form data
         self.wfile.write(f'Default name is {HelloRequestHandler.default_name}'.encode())
 ```
 

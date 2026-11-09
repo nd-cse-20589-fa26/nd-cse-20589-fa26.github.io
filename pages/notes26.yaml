@@ -1,0 +1,305 @@
+title:  "Notes 26: Web Applications"
+body:   |
+
+  ## Logistics
+
+  - [Homework 09]: A [web application] that implements a [REST] interface using
+  [vial.py] **micro-framework**.
+
+  [Homework 09]: homework09.html
+  [web application]: https://en.wikipedia.org/wiki/Web_application
+  [REST]: https://en.wikipedia.org/wiki/REST
+  [vial.py]: https://github.com/nd-cse-20589-fa26/examples/blob/master/slides27/vial.py
+
+  ## Web Applications: <span class="gold">Overview</span>
+
+  A <strong class="special">web application</strong> is a <strong
+  class="success">software system</strong> that uses the <strong
+  class="info">client</strong> / <strong class="danger">server</strong> model to
+  provide dynamic and interactive services.
+
+  <div class="centered">
+
+  <img src="static/img/software-systems.svg" class="responsive transparent">
+
+  </div>
+
+  1. <strong class="info">Client-side (*Front-end*)</strong>: This is what you see
+    and interact with (typically inside your **web browser**) and is built with
+    [HTML], [CSS], and [JavaScript].
+
+  2. <strong class="danger">Server-side (*Back-end*)</strong>: This is what handles
+    the data storage and processing user requests via [HTTP] and is built with
+    languages like [Python], [PHP], or [Node.js].
+
+  [HTML]: https://en.wikipedia.org/wiki/HTML
+  [CSS]: https://en.wikipedia.org/wiki/CSS
+  [JavaScript]: https://en.wikipedia.org/wiki/JavaScript
+  [HTTP]: https://en.wikipedia.org/wiki/HTTP
+  [Python]: https://python.org
+  [PHP]: https://www.php.net/
+  [Node.js]: https://nodejs.org/en
+
+  ## Web Applications: <span class="gold">HTTP Server</span>
+
+  <div class="centered">
+
+  <img src="static/img/slides25-http-server.svg" class="responsive transparent">
+
+  </div>
+
+  To implement the [HTTP] <strong class="danger">back-end</strong> of a <strong
+  class="special">web application</strong> in [Python], we can use the builtin
+  [HTTPServer].
+
+  ```python
+  from http.server import HTTPServer, SimpleHTTPRequestHandler
+
+  # Create a HTTP server that listens on port 9999 of every IP address
+  server = HTTPServer(('0.0.0.0', 9999), SimpleHTTPRequestHandler)
+  server.serve_forever()
+  ```
+
+  <div class="alert info-bg" markdown="1">
+
+  Every time a [HTTP] <strong class="info">client</strong> is `accepted` by the
+  <strong class="danger">server</strong>, a [SimpleHTTPRequestHandler] object is
+  created to process that connection.
+
+  </div>
+
+  [HTTPServer]: https://docs.python.org/3/library/http.server.html#http.server.HTTPServer
+  [SimpleHTTPRequestHandler]: https://docs.python.org/3/library/http.server.html#http.server.SimpleHTTPRequestHandler
+
+  ## Web Applications: <span class="gold">Concurrency</span>
+
+  [HTTPServer] handles one [HTTP] connection at a time.  To add <strong
+  class="success">concurrency</strong> we can either use [ThreadingHTTPServer] in
+  place of [HTTPServer] or create our own `ForkingHTTPServer` by using <strong
+  class="special">multiple inheritance</strong>.
+
+  ```python
+  from socketserver import ForkingMixIn
+
+  # Create custom Forking HTTPServer by inheriting ForkingMixIn
+
+  class ForkingHTTPServer(ForkingMixIn, HTTPServer):
+      ''' Multi-process HTTP server that forks a new process per request. '''
+      max_children = 8    # Limit the number of concurrent processes
+
+  # Create a Forking HTTP server that listens on port 9999 of every IP address
+
+  server = ForkingHTTPServer(('0.0.0.0', 9999), SimpleHTTPRequestHandler)
+  server.serve_forever()
+  ```
+
+  [ThreadingHTTPServer]: https://docs.python.org/3/library/http.server.html#http.server.ThreadingHTTPServer
+
+  ## Web Applications: <span class="gold">Custom Handlers</span>
+
+  The provided [SimpleHTTPRequestHandler] serves files from the current
+  directory.  If we wish to create our own <strong
+  class="special">handler</strong>, then we need to <strong
+  class="caution">subclass</strong> [BaseHTTPRequestHandler]:
+
+  ```python
+  class HelloRequestHandler(BaseHTTPRequestHandler):
+      def do_GET(self):                                   # Implement HTTP Method
+          self.send_response(200)                         # Send HTTP Status
+          self.send_header('Content-Type', 'text/plain')  # Send HTTP Headers
+          self.end_headers()
+
+          self.wfile.write(f'Hello, World'.encode())      # Send HTTP Response
+  ```
+
+  <div class="alert warning-bg" markdown="1">
+
+  This `HelloRequestHandler` will be used to create a <strong
+  class="special">handler</strong> object for every incoming connection.  If the
+  requested [HTTP] method is a `GET` then the `do_GET` method of this <strong
+  class="special">handler</strong> object will be called.
+
+  </div>
+
+  [BaseHTTPRequestHandler]: https://docs.python.org/3/library/http.server.html#http.server.BaseHTTPRequestHandler
+
+  ## Web Applications: <span class="gold">Query Data</span>
+
+  As discussed previously, a [HTTP] request may have a <strong
+  class="danger">query string</strong> which contains **key/value** pairs.  To
+  access this data, we can use the following utility methods from [RealPython]:
+
+  ```python
+  class HelloRequestHandler(BaseHTTPRequestHandler):
+
+      @cached_property
+      def url(self):
+          # Parse path into URL structure
+          return urlparse(self.path)
+
+      @cached_property
+      def query_data(self):
+          # Parse URL query into dictionary
+          return dict(parse_qsl(self.url.query))
+
+      def do_GET(self):
+          self.send_response(200)
+          self.send_header('Content-Type', 'text/plain')
+          self.end_headers()
+
+          # Lookup name in query dictionary
+          name = self.query_data.get('name', 'Unknown')
+          self.wfile.write(f'Hello, {name}!'.encode())
+  ```
+
+  [RealPython]: https://realpython.com/python-http-server/#serve-static-and-dynamic-content-programmatically
+
+  ## Web Applications: <span class="gold">Form Data</span>
+
+  For a [HTTP] `POST` request, the user may upload a data **payload**.  To access
+  this data, we can use the following utility methods from [RealPython]:
+
+  ```python
+  class HelloRequestHandler(BaseHTTPRequestHandler):
+
+      # Class attribute
+      default_name: str='Unknown'
+
+      @cached_property
+      def post_data(self):
+          # Read Post data payload
+          content_length = int(self.headers.get('Content-Length', 0))
+          return self.rfile.read(content_length)
+
+      @cached_property
+      def form_data(self):
+          # Parse Post data payload
+          return dict(parse_qsl(self.post_data.decode('utf-8')))
+
+      def do_POST(self):
+          self.send_response(200)
+          self.send_header('Content-Type', 'text/plain')
+          self.end_headers()
+
+          # Lookup name in Post form data
+          HelloRequestHandler.default_name = self.form_data.get('name')
+          self.wfile.write(f'Default name is {HelloRequestHandler.default_name}'.encode())
+  ```
+
+  ## Web Applications: [hello_app.py]
+
+  > Write a simple **Hello, World** <strong class="special">web
+  > application</strong> that says hello to the user and let's the user specify
+  > the default name if none is specified.
+
+  ```bash
+  # Start Hello Web Application
+  $ ./hello_app.py localhost 9999           
+
+  # Get greeting
+  $ curl localhost:9999/?name=Domer           
+  Hello, Domer
+
+  # Set default name
+  $ curl -d 'name=Irish' localhost:9999/      
+  Default name is Irish
+  ```
+
+  <div class="alert danger-bg" markdown="1">
+
+  **Discuss**:
+
+  - Should add **error handling**.
+
+  - What parts could we **abstract** away?
+
+  - How would we support different **paths**?
+
+  </div>
+
+  ```python
+  #!/usr/bin/env python3
+
+  import sys
+
+  from functools import cached_property
+  from http.client import responses
+  from http.server import HTTPServer, BaseHTTPRequestHandler
+  from urllib.parse import parse_qsl, urlparse
+
+  # Classes
+
+  class HelloRequestHandler(BaseHTTPRequestHandler):
+
+      default_name: str='Unknown'
+
+      # Helper Properties from RealPython
+
+      @cached_property
+      def url(self):
+          return urlparse(self.path)
+
+      @cached_property
+      def query_data(self):
+          return dict(parse_qsl(self.url.query))
+
+      @cached_property
+      def post_data(self):
+          content_length = int(self.headers.get('Content-Length', 0))
+          return self.rfile.read(content_length)
+
+      @cached_property
+      def form_data(self):
+          return dict(parse_qsl(self.post_data.decode('utf-8')))
+
+      # Handle Error
+
+      def error(self, status_code: int):
+          self.send_response(status_code)
+          self.send_header('Content-Type', 'text/plain')
+          self.end_headers()
+
+          self.wfile.write(responses[status_code].encode())
+
+      # Handle HTTP Methods
+
+      def do_GET(self):
+          if self.url.path != '/':
+              self.error(404)
+              return
+
+          self.send_response(200)
+          self.send_header('Content-Type', 'text/plain')
+          self.end_headers()
+
+          name = self.query_data.get('name', self.default_name)
+          self.wfile.write(f'Hello, {name}'.encode())
+
+      def do_POST(self):
+          if not (name := self.form_data.get('name')):
+              self.send_response(400)
+
+          self.send_response(200)
+          self.send_header('Content-Type', 'text/plain')
+          self.end_headers()
+
+          HelloRequestHandler.default_name = name
+          self.wfile.write(f'Default name is {HelloRequestHandler.default_name}'.encode())
+
+  # Main Execution
+
+  def main(arguments: list[str]=sys.argv[1:]):
+      try:
+          host = arguments[0]
+          port = int(arguments[1])
+      except IndexError:
+          print('Usage: hello_app.py host port', file=sys.stderr)
+
+      server = HTTPServer((host, port), HelloRequestHandler)
+      server.serve_forever()
+
+  if __name__ == '__main__':
+      main()
+  ```
+
+  [hello_app.py]: https://github.com/nd-cse-20589-fa26/examples/blob/master/slides26/hello_app.py
