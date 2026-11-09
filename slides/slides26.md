@@ -17,10 +17,10 @@ theme: domer-slides
 
 # Web Applications: <span class="gold">Overview</span>
 
-A <strong class="special">web application</strong> is a **software system**
-that uses the <strong class="info">client</strong> / <strong
-class="danger">server</strong> model to provide dynamic and interactive
-services.
+A <strong class="special">web application</strong> is a <strong
+class="success">software system</strong> that uses the <strong
+class="info">client</strong> / <strong class="danger">server</strong> model to
+provide dynamic and interactive services.
 
 <div class="columns">
 
