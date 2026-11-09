@@ -117,6 +117,8 @@ class="danger">query string</strong> which contains <strong>key/value</strong> p
 access this data, we can use the following utility methods from <a href="https://realpython.com/python-http-server/#serve-static-and-dynamic-content-programmatically">RealPython</a>:</p>
 <div class="codehilite"><pre><span></span><code><span class="k">class</span> <span class="nc">HelloRequestHandler</span><span class="p">(</span><span class="n">BaseHTTPRequestHandler</span><span class="p">):</span>
 
+    <span class="n">greeting</span><span class="p">:</span> <span class="nb">str</span><span class="o">=</span><span class="s1">&#39;Unknown&#39;</span> <span class="c1"># Class attribute</span>
+
     <span class="nd">@cached_property</span>
     <span class="k">def</span> <span class="nf">url</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
         <span class="c1"># Parse path into URL structure</span>
@@ -134,16 +136,13 @@ access this data, we can use the following utility methods from <a href="https:/
 
         <span class="c1"># Lookup name in query dictionary</span>
         <span class="n">name</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">query_data</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s1">&#39;name&#39;</span><span class="p">,</span> <span class="s1">&#39;Unknown&#39;</span><span class="p">)</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">wfile</span><span class="o">.</span><span class="n">write</span><span class="p">(</span><span class="sa">f</span><span class="s1">&#39;Hello, </span><span class="si">{</span><span class="n">name</span><span class="si">}</span><span class="s1">!&#39;</span><span class="o">.</span><span class="n">encode</span><span class="p">())</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">wfile</span><span class="o">.</span><span class="n">write</span><span class="p">(</span><span class="sa">f</span><span class="s1">&#39;</span><span class="si">{</span><span class="bp">self</span><span class="o">.</span><span class="n">greeting</span><span class="si">}</span><span class="s1">, </span><span class="si">{</span><span class="n">name</span><span class="si">}</span><span class="s1">&#39;</span><span class="o">.</span><span class="n">encode</span><span class="p">())</span>
 </code></pre></div>
 
 <h2 id="web-applications-form-data">Web Applications: <span class="gold">Form Data</span><a class="headerlink" href="#web-applications-form-data" title="Permanent link">&para;</a></h2>
 <p>For a <a href="https://en.wikipedia.org/wiki/HTTP">HTTP</a> <code>POST</code> request, the user may upload a data <strong>payload</strong>.  To access
 this data, we can use the following utility methods from <a href="https://realpython.com/python-http-server/#serve-static-and-dynamic-content-programmatically">RealPython</a>:</p>
 <div class="codehilite"><pre><span></span><code><span class="k">class</span> <span class="nc">HelloRequestHandler</span><span class="p">(</span><span class="n">BaseHTTPRequestHandler</span><span class="p">):</span>
-
-    <span class="c1"># Class attribute</span>
-    <span class="n">default_name</span><span class="p">:</span> <span class="nb">str</span><span class="o">=</span><span class="s1">&#39;Unknown&#39;</span>
 
     <span class="nd">@cached_property</span>
     <span class="k">def</span> <span class="nf">post_data</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
@@ -162,8 +161,8 @@ this data, we can use the following utility methods from <a href="https://realpy
         <span class="bp">self</span><span class="o">.</span><span class="n">end_headers</span><span class="p">()</span>
 
         <span class="c1"># Lookup name in Post form data</span>
-        <span class="n">HelloRequestHandler</span><span class="o">.</span><span class="n">default_name</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">form_data</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s1">&#39;name&#39;</span><span class="p">)</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">wfile</span><span class="o">.</span><span class="n">write</span><span class="p">(</span><span class="sa">f</span><span class="s1">&#39;Default name is </span><span class="si">{</span><span class="n">HelloRequestHandler</span><span class="o">.</span><span class="n">default_name</span><span class="si">}</span><span class="s1">&#39;</span><span class="o">.</span><span class="n">encode</span><span class="p">())</span>
+        <span class="n">HelloRequestHandler</span><span class="o">.</span><span class="n">greeting</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">form_data</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s1">&#39;greeting&#39;</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">wfile</span><span class="o">.</span><span class="n">write</span><span class="p">(</span><span class="sa">f</span><span class="s1">&#39;Greeting is </span><span class="si">{</span><span class="n">HelloRequestHandler</span><span class="o">.</span><span class="n">greeting</span><span class="si">}</span><span class="s1">&#39;</span><span class="o">.</span><span class="n">encode</span><span class="p">())</span>
 </code></pre></div>
 
 <h2 id="web-applications-hello_apppy">Web Applications: <a href="https://github.com/nd-cse-20589-fa26/examples/blob/master/slides26/hello_app.py">hello_app.py</a><a class="headerlink" href="#web-applications-hello_apppy" title="Permanent link">&para;</a></h2>
@@ -173,15 +172,15 @@ application</strong> that says hello to the user and let's the user specify
 the default name if none is specified.</p>
 </blockquote>
 <div class="codehilite"><pre><span></span><code><span class="c1"># Start Hello Web Application</span>
-$<span class="w"> </span>./hello_app.py<span class="w"> </span>localhost<span class="w"> </span><span class="m">9999</span><span class="w">           </span>
+$<span class="w"> </span>./hello_app.py<span class="w"> </span>localhost<span class="w"> </span><span class="m">9999</span>
 
 <span class="c1"># Get greeting</span>
-$<span class="w"> </span>curl<span class="w"> </span>localhost:9999/?name<span class="o">=</span>Domer<span class="w">           </span>
+$<span class="w"> </span>curl<span class="w"> </span>localhost:9999/?name<span class="o">=</span>Domer
 Hello,<span class="w"> </span>Domer
 
 <span class="c1"># Set default name</span>
-$<span class="w"> </span>curl<span class="w"> </span>-d<span class="w"> </span><span class="s1">&#39;name=Irish&#39;</span><span class="w"> </span>localhost:9999/<span class="w">      </span>
-Default<span class="w"> </span>name<span class="w"> </span>is<span class="w"> </span>Irish
+$<span class="w"> </span>curl<span class="w"> </span>-d<span class="w"> </span><span class="s1">&#39;greeting=Hola&#39;</span><span class="w"> </span>localhost:9999/
+Greeting<span class="w"> </span>is<span class="w"> </span>Hola
 </code></pre></div>
 
 <div class="alert danger-bg">
@@ -211,7 +210,7 @@ Default<span class="w"> </span>name<span class="w"> </span>is<span class="w"> </
 
 <span class="k">class</span> <span class="nc">HelloRequestHandler</span><span class="p">(</span><span class="n">BaseHTTPRequestHandler</span><span class="p">):</span>
 
-    <span class="n">default_name</span><span class="p">:</span> <span class="nb">str</span><span class="o">=</span><span class="s1">&#39;Unknown&#39;</span>
+    <span class="n">greeting</span><span class="p">:</span> <span class="nb">str</span><span class="o">=</span><span class="s1">&#39;Hello&#39;</span>
 
     <span class="c1"># Helper Properties from RealPython</span>
 
@@ -252,19 +251,19 @@ Default<span class="w"> </span>name<span class="w"> </span>is<span class="w"> </
         <span class="bp">self</span><span class="o">.</span><span class="n">send_header</span><span class="p">(</span><span class="s1">&#39;Content-Type&#39;</span><span class="p">,</span> <span class="s1">&#39;text/plain&#39;</span><span class="p">)</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">end_headers</span><span class="p">()</span>
 
-        <span class="n">name</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">query_data</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s1">&#39;name&#39;</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">default_name</span><span class="p">)</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">wfile</span><span class="o">.</span><span class="n">write</span><span class="p">(</span><span class="sa">f</span><span class="s1">&#39;Hello, </span><span class="si">{</span><span class="n">name</span><span class="si">}</span><span class="s1">&#39;</span><span class="o">.</span><span class="n">encode</span><span class="p">())</span>
+        <span class="n">name</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">query_data</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s1">&#39;name&#39;</span><span class="p">,</span> <span class="s1">&#39;Unkown&#39;</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">wfile</span><span class="o">.</span><span class="n">write</span><span class="p">(</span><span class="sa">f</span><span class="s1">&#39;</span><span class="si">{</span><span class="bp">self</span><span class="o">.</span><span class="n">greeting</span><span class="si">}</span><span class="s1">, </span><span class="si">{</span><span class="n">name</span><span class="si">}</span><span class="s1">&#39;</span><span class="o">.</span><span class="n">encode</span><span class="p">())</span>
 
     <span class="k">def</span> <span class="nf">do_POST</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
-        <span class="k">if</span> <span class="ow">not</span> <span class="p">(</span><span class="n">name</span> <span class="o">:=</span> <span class="bp">self</span><span class="o">.</span><span class="n">form_data</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s1">&#39;name&#39;</span><span class="p">)):</span>
+        <span class="k">if</span> <span class="ow">not</span> <span class="p">(</span><span class="n">greeting</span> <span class="o">:=</span> <span class="bp">self</span><span class="o">.</span><span class="n">form_data</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s1">&#39;greeting&#39;</span><span class="p">)):</span>
             <span class="bp">self</span><span class="o">.</span><span class="n">send_response</span><span class="p">(</span><span class="mi">400</span><span class="p">)</span>
 
         <span class="bp">self</span><span class="o">.</span><span class="n">send_response</span><span class="p">(</span><span class="mi">200</span><span class="p">)</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">send_header</span><span class="p">(</span><span class="s1">&#39;Content-Type&#39;</span><span class="p">,</span> <span class="s1">&#39;text/plain&#39;</span><span class="p">)</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">end_headers</span><span class="p">()</span>
 
-        <span class="n">HelloRequestHandler</span><span class="o">.</span><span class="n">default_name</span> <span class="o">=</span> <span class="n">name</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">wfile</span><span class="o">.</span><span class="n">write</span><span class="p">(</span><span class="sa">f</span><span class="s1">&#39;Default name is </span><span class="si">{</span><span class="n">HelloRequestHandler</span><span class="o">.</span><span class="n">default_name</span><span class="si">}</span><span class="s1">&#39;</span><span class="o">.</span><span class="n">encode</span><span class="p">())</span>
+        <span class="n">HelloRequestHandler</span><span class="o">.</span><span class="n">greeting</span> <span class="o">=</span> <span class="n">greeting</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">wfile</span><span class="o">.</span><span class="n">write</span><span class="p">(</span><span class="sa">f</span><span class="s1">&#39;Greeting is </span><span class="si">{</span><span class="n">HelloRequestHandler</span><span class="o">.</span><span class="n">greeting</span><span class="si">}</span><span class="s1">&#39;</span><span class="o">.</span><span class="n">encode</span><span class="p">())</span>
 
 <span class="c1"># Main Execution</span>
 
