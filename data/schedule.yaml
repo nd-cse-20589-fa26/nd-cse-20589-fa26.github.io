@@ -291,17 +291,17 @@
         assignments:
           - Reading 09
         items:
-          - name:       Slides 27
+          - name:       Slides 26
 
       - date:           Wed 11/11
         topics:         REST
         items:
-          - name:       Slides 28
+          - name:       Slides 27
 
       - date:           Fri 11/13
         topics:         Unit Testing
         items:
-          - name:       Slides 29
+          - name:       Slides 28
 
       - date:           Sat 11/14
         topics:         '<i class="muted">Playlist</i>'
@@ -323,14 +323,14 @@
       - date:           Fri 11/20
         topics:         Databases
         items:
-          - name:       Slides 30
+          - name:       Slides 29
 
 - name:     Databases
   days:
       - date:           Mon 11/23
         topics:         SQLite
         items:
-          - name:       Slides 31
+          - name:       Slides 29
         assignments:
           - Reading 10
 
@@ -346,19 +346,19 @@
       - date:           Mon 11/30
         topics:         HTML, Templates
         items:
-          - name:       Slides 32
+          - name:       Slides 30
         assignments:
           - Reading 11
 
       - date:           Wed 12/02
         topics:         Forms
         items:
-          - name:       Slides 33
+          - name:       Slides 31
 
       - date:           Fri 12/04
         topics:         CSS
         items:
-          - name:       Slides 34
+          - name:       Slides 32
 
       - date:           Sat 12/05
         topics:         '<i class="muted">WebApp</i>'
