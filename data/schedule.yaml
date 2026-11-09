@@ -278,6 +278,8 @@
         topics:         HTTP Server
         items:
           - name:       Slides 25
+          - name:       Panopto
+            link:       https://notredame.hosted.panopto.com/Panopto/Pages/Viewer.aspx?id=381048e4-07d0-4d09-8712-b4fa0124f450
 
       - date:           Sat 11/07
         topics:         '<i class="muted">Curlit</i>'
