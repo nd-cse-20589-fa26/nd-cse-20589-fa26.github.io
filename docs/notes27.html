@@ -1,0 +1,430 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<!-- Favicon -->
+<link rel="icon" type="image/png" sizes="32x32" href="static/ico/favicon-32x32.png">
+<link rel="icon" type="image/png" sizes="16x16" href="static/ico/favicon-16x16.png">
+<link rel="manifest" href="static/ico/site.webmanifest">
+<!-- Stylesheets -->
+<link rel="stylesheet" href="static/css/domer.css">
+<title>Notes 27: REST, Vial</title>
+</head>
+<body>
+<header>
+<a class="logo" href="notes27.html">
+    <h1>Notes 27: REST, Vial</h1>
+</a>
+<nav>
+    <ul>
+        <li><a href="index.html"><h4>Home</h4></a></li>
+        </ul>
+</nav></header>
+<main>
+<h2 id="logistics">Logistics<a class="headerlink" href="#logistics" title="Permanent link">&para;</a></h2>
+<ul>
+<li><a href="interview03.html">Interview 03</a></li>
+</ul>
+<h2 id="rest-overview">REST: <span class="gold">Overview</span><a class="headerlink" href="#rest-overview" title="Permanent link">&para;</a></h2>
+<p><strong class="special">REST</strong> (<i><b>re</b>presentational <strong>s</strong>tate
+<strong>t</strong>ransfer</i>) and is a <strong class="success">software architecture
+style</strong> that defines a <strong class="strong">pattern</strong> for
+<strong class="info">client</strong> and <strong class="danger">server</strong>
+interactions.</p>
+<div class="centered">
+
+<img src="static/img/software-systems.svg" class="transparent responsive">
+
+</div>
+
+<ol>
+<li>
+<p><strong class="success">Stateless</strong>: The <strong
+  class="danger">server</strong> won't maintain any <strong
+  class="warning">state</strong> between <strong
+  class="caution">requests</strong> from the <strong
+  class="info">client</strong>.</p>
+</li>
+<li>
+<p><strong class="info">Client</strong>-<strong class="danger">server</strong>:
+  The <strong class="info">client</strong> and <strong
+  class="danger">server</strong> must be <strong
+  class="warning">decoupled</strong> from each other, allowing each to develop
+  <strong class="success">independently</strong>.</p>
+</li>
+<li>
+<p><strong class="caution">Uniform interface</strong>: The <strong
+  class="danger">server</strong> will provide a <strong
+  class="caution">uniform interface</strong> for accessing <strong
+  class="warning">resources</strong> without defining their representation.</p>
+</li>
+</ol>
+<h2 id="rest-http-methods">REST: <span class="gold">HTTP Methods</span><a class="headerlink" href="#rest-http-methods" title="Permanent link">&para;</a></h2>
+<p>A <strong class="special">web application</strong> adheres to <strong
+class="special">REST</strong> architecture constraints by exposing their data
+(ie. <strong class="warning">resources</strong>) to the outside world through
+an API accessible via public <a href="https://en.wikipedia.org/wiki/HTTP">HTTP</a> <strong class="success">URLs</strong>.</p>
+<table class="bordered">
+<thead>
+    <th class="special-bg">HTTP Method</th>
+    <th class="special-bg">Description</th>
+</thead>
+<tr class="info-bg">
+    <td class="centered"><b>GET</b></td>
+    <td><b>Retrieve</b> an existing <b>resource</b>.</td>
+</tr>
+<tr class="success-bg">
+    <td class="centered"><b>POST</b></td>
+    <td><b>Create</b> a new <b>resource</b>.</td>
+</tr>
+<tr class="success-bg">
+    <td class="centered"><b>PUT</b></td>
+    <td><b>Update</b> an existing <b>resource</b>.</td>
+</tr>
+<tr class="caution-bg">
+    <td class="centered"><b>PATCH</b></td>
+    <td><b>Partially update</b> an existing <b>resource</b>.</td>
+</tr class="centered">
+<tr class="danger-bg">
+    <td class="centered"><b>DELETE</b></td>
+    <td><b>Delete</b> a <b>resource</b>.</td>
+</tr>
+<tbody>
+</tbody>
+</table>
+
+<h2 id="rest-http-status-codes">REST: <span class="gold">HTTP Status Codes</span><a class="headerlink" href="#rest-http-status-codes" title="Permanent link">&para;</a></h2>
+<p>When performing a <a href="https://en.wikipedia.org/wiki/HTTP">HTTP</a> operation, it is important to check the <a href="https://en.wikipedia.org/wiki/HTTP">HTTP</a>
+<strong>status code</strong> to determine if the result of the <strong
+class="special">REST</strong> API was successful:</p>
+<table class="bordered font-smaller">
+<thead>
+    <th class="special-bg">Code</th>
+    <th class="special-bg">Meaning</th>
+    <th class="special-bg">Description</th>
+</thead>
+<tbody>
+<tr class="success-bg">
+    <td class="centered"><b>200</b></td>
+    <td>OK</td>
+    <td>The requested action was <b>successful</b>.</td>
+</tr>
+<tr class="caution-bg">
+    <td class="centered"><b>400</b></td>
+    <td>Bad Request</td>
+    <td>The request was <b>malformed</b>.</td>
+</tr>
+<tr class="caution-bg">
+    <td class="centered"><b>404</b></td>
+    <td>Not Found</td>
+    <td>The requested resource was <b>not found</b>.</td>
+</tr>
+<tr class="caution-bg">
+    <td class="centered"><b>405</b></td>
+    <td>Method Not Allowed</td>
+    <td>The requested method was <b>not supported</b>.</td>
+</tr>
+<tr class="danger-bg">
+    <td class="centered"><b>500</b></td>
+    <td>Internal Server Error</td>
+    <td><b>Error</b> occurred when processing the request.</td>
+</tr>
+</tbody>
+</table>
+
+<h2 id="rest-endpoints">REST: <span class="gold">Endpoints</span><a class="headerlink" href="#rest-endpoints" title="Permanent link">&para;</a></h2>
+<p>To define a <strong class="special">REST</strong> API, it is necessary to
+describe the <a href="https://en.wikipedia.org/wiki/HTTP">HTTP</a> methods and <strong class="success">endpoints</strong> (ie.
+<strong class="success">URL paths</strong>), along with any <strong
+class="danger">parameters</strong> they may take.</p>
+<table class="bordered font-smaller">
+<thead>
+    <th class="special-bg">HTTP Method</th>
+    <th class="special-bg">API Endpoint</th>
+    <th class="special-bg">Description</th>
+    <th class="special-bg">Query Data</th>
+    <th class="special-bg">Form Data</th>
+</thead>
+<tbody>
+<tr class="info-bg">
+    <td class="centered"><b>GET</b></td>
+    <td>/greeting</td>
+    <td>Get greeting for <code>name</code></td>
+    <td><code>name<code>: <code>str</code></td>
+    <td></td>
+</tr>
+<tr class="success-bg">
+    <td class="centered"><b>POST</b>/<b>PUT</b></td>
+    <td>/greeting</td>
+    <td>Set greeting to <code>greeting<code></td>
+    <td></td>
+    <td><code>greeting<code>: <code>str</code></td>
+</tr>
+</tbody>
+</table>
+
+<h2 id="vial-overview">Vial: <span class="gold">Overview</span><a class="headerlink" href="#vial-overview" title="Permanent link">&para;</a></h2>
+<p><a href="https://github.com/nd-cse-20589-fa26/examples/blob/master/slides27/vial.py">Vial</a> is <strong>micro-framework</strong> based on <strong
+class="success">Python</strong>'s built-in <a href="https://docs.python.org/3/library/http.server.html#http.server.HTTPServer">HTTPserver</a> and is similar in
+design to <a href="https://flask.palletsprojects.com/en/stable/">flask</a> and <a href="https://bottlepy.org/docs/dev/">bottle</a>.</p>
+<div class="codehilite"><pre><span></span><code><span class="kn">from</span> <span class="nn">vial</span> <span class="kn">import</span> <span class="n">Vial</span>
+
+<span class="n">App</span> <span class="o">=</span> <span class="n">Vial</span><span class="p">()</span>
+
+<span class="nd">@App</span><span class="o">.</span><span class="n">route</span><span class="p">(</span><span class="s1">&#39;/&#39;</span><span class="p">)</span>
+<span class="k">def</span> <span class="nf">hello</span><span class="p">(</span><span class="n">request</span><span class="p">):</span>
+    <span class="k">return</span> <span class="s1">&#39;Hello, world!&#39;</span>
+
+<span class="n">App</span><span class="o">.</span><span class="n">run</span><span class="p">()</span>
+</code></pre></div>
+
+<ul>
+<li>
+<p><a href="https://github.com/nd-cse-20589-fa26/examples/blob/master/slides27/vial.py">Vial</a> wraps the <a href="https://docs.python.org/3/library/http.server.html#http.server.HTTPServer">HTTPServer</a> class with a custom <code>VialHTTPRequestHandler</code>
+that provides utility methods for reading <strong
+class="caution">request</strong> data and writing <strong
+class="warning">responses</strong>.</p>
+</li>
+<li>
+<p>User declares a <strong class="danger">global</strong> <code>App</code> instance of <a href="https://github.com/nd-cse-20589-fa26/examples/blob/master/slides27/vial.py">Vial</a>.</p>
+</li>
+<li>
+<p>User maps <strong class="success">functions</strong> to specific <strong
+  class="special">routes</strong> using a <a href="https://docs.python.org/3/glossary.html#term-decorator">decorator</a>.</p>
+</li>
+</ul>
+<h2 id="vial-super">Vial: <span class="gold">Super()</span><a class="headerlink" href="#vial-super" title="Permanent link">&para;</a></h2>
+<p>The <code>Vial</code> <strong class="caution">class</strong> inherits from <a href="https://docs.python.org/3/library/http.server.html#http.server.HTTPServer">HTTPServer</a>.
+Therefore, it uses <a href="https://docs.python.org/3/builtins/functions.html#super">super</a> during construction to call the <code>__init__</code> of its
+<strong class="warning">parent</strong>.</p>
+<div class="codehilite"><pre><span></span><code><span class="c1"># Vial Application Class</span>
+<span class="k">class</span> <span class="nc">Vial</span><span class="p">(</span><span class="n">HTTPServer</span><span class="p">):</span>
+    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">host</span><span class="p">:</span> <span class="nb">str</span><span class="o">=</span><span class="s1">&#39;127.0.0.1&#39;</span><span class="p">,</span> <span class="n">port</span><span class="p">:</span> <span class="nb">int</span><span class="o">=</span><span class="mi">8080</span><span class="p">,</span> <span class="n">attributes</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
+        <span class="c1"># Call __init__ of HTTPServer</span>
+        <span class="nb">super</span><span class="p">()</span><span class="o">.</span><span class="fm">__init__</span><span class="p">((</span><span class="n">host</span><span class="p">,</span> <span class="n">port</span><span class="p">),</span> <span class="n">VialRequestHandler</span><span class="p">)</span>
+        <span class="o">...</span>
+</code></pre></div>
+
+<p><a href="https://docs.python.org/3/builtins/functions.html#super">super</a> uses the <a href="https://docs.python.org/3/howto/mro.html">Method Resolution Order</a> to determine which
+<strong class="caution">class</strong> to call next:</p>
+<ol>
+<li>
+<p><strong class="caution">Subclasses</strong> always come before their <strong
+  class="warning">parents</strong>.</p>
+</li>
+<li>
+<p>The order of <strong class="warning">parents</strong> specified in the
+  <strong class="caution">class</strong> definition is preserved (<b><i
+  class="muted">left-to-right</i></b>).</p>
+</li>
+</ol>
+<h2 id="vial-setattr">Vial: <span class="gold">setattr</span><a class="headerlink" href="#vial-setattr" title="Permanent link">&para;</a></h2>
+<p>The <code>Vial</code> <strong class="caution">class</strong> allows the user to specify
+custom <strong class="info">attributes</strong> which can be used in lieu of
+<strong class="danger">global</strong> variables:</p>
+<div class="codehilite"><pre><span></span><code><span class="c1"># Vial Application Class</span>
+<span class="k">class</span> <span class="nc">Vial</span><span class="p">(</span><span class="n">HTTPServer</span><span class="p">):</span>
+    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">host</span><span class="p">:</span> <span class="nb">str</span><span class="o">=</span><span class="s1">&#39;127.0.0.1&#39;</span><span class="p">,</span> <span class="n">port</span><span class="p">:</span> <span class="nb">int</span><span class="o">=</span><span class="mi">8080</span><span class="p">,</span> <span class="n">attributes</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
+        <span class="o">...</span>
+        <span class="k">if</span> <span class="n">attributes</span><span class="p">:</span>  <span class="c1"># Add attributes to object instance at run-time</span>
+            <span class="k">for</span> <span class="n">key</span><span class="p">,</span> <span class="n">value</span> <span class="ow">in</span> <span class="n">attributes</span><span class="o">.</span><span class="n">items</span><span class="p">():</span>
+                <span class="nb">setattr</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">key</span><span class="p">,</span> <span class="n">value</span><span class="p">)</span>
+</code></pre></div>
+
+<p>The <a href="https://docs.python.org/3/builtins/functions.html#setattr">setattr</a> function adds (or updates) an <strong class="info">attribute</strong> to the given
+<strong class="primary">object</strong> instance with the given <code>value</code>.  Similarly,
+<a href="https://docs.python.org/3/builtins/functions.html#getattr">getattr</a> can be used to read the value of a given <strong class="info">attribute</strong>.</p>
+<h2 id="vial-cached-properties">Vial: <span class="gold">Cached Properties</span><a class="headerlink" href="#vial-cached-properties" title="Permanent link">&para;</a></h2>
+<p>The <code>Vial</code> <strong class="caution">class</strong> uses a custom
+<code>VialRequestHandler</code> to process <strong class="info">client</strong> connections.</p>
+<table class="bordered">
+<thead>
+    <th class="special-bg">Cached Property</th>
+    <th class="special-bg">Description</th>
+</thead>
+<tbody>
+<tr class="success-bg">
+    <td class="centered"><b>url</b></td>
+    <td>Returns parsed <code>URL</code> structure from request path.</td>
+</tr>
+<tr class="danger-bg">
+    <td class="centered"><b>query_data</b></td>
+    <td>Returns <code>dict</code> of parsed query string from <code>URL</code>.</td>
+</tr>
+<tr class="caution-bg">
+    <td class="centered"><b>post_data</b></td>
+    <td>Returns read <code>POST</code> data payload.</td>
+</tr>
+<tr class="warning-bg">
+    <td class="centered"><b>form_data</b></td>
+    <td>Returns <code>dict</code> of parsed <code>POST</code> data payload (<i class="muted">possibly JSON</i>).</td>
+</tr>
+</tbody>
+</table>
+
+<div class="alert info-bg">
+<p>These <strong>cached properties</strong> come from <a href="https://realpython.com/python-http-server/#serve-static-and-dynamic-content-programmatically">RealPython</a>.</p>
+</div>
+<h2 id="vial-writing-text">Vial: <span class="gold">Writing Text</span><a class="headerlink" href="#vial-writing-text" title="Permanent link">&para;</a></h2>
+<p>As discussed in lecture, most <a href="https://en.wikipedia.org/wiki/HTTP">HTTP</a> <strong class="warning">responses</strong>
+have the same structure: 1. <a href="https://en.wikipedia.org/wiki/HTTP">HTTP</a> <strong>status_code</strong>, 2. <a href="https://en.wikipedia.org/wiki/HTTP">HTTP</a> <strong>headers</strong>, 3.
+<a href="https://en.wikipedia.org/wiki/HTTP">HTTP</a> body.</p>
+<div class="codehilite"><pre><span></span><code><span class="k">def</span> <span class="nf">write_text</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">text</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span> <span class="n">status_code</span><span class="p">:</span> <span class="nb">int</span><span class="o">=</span><span class="mi">200</span><span class="p">,</span> <span class="n">mimetype</span><span class="p">:</span> <span class="nb">str</span><span class="o">=</span><span class="s1">&#39;text/plain&#39;</span><span class="p">):</span>
+    <span class="bp">self</span><span class="o">.</span><span class="n">send_response</span><span class="p">(</span><span class="n">status_code</span><span class="p">)</span>             <span class="c1"># HTTP Status Code</span>
+    <span class="bp">self</span><span class="o">.</span><span class="n">send_header</span><span class="p">(</span><span class="s1">&#39;Content-Type&#39;</span><span class="p">,</span> <span class="n">mimetype</span><span class="p">)</span>  <span class="c1"># HTTP Headers</span>
+    <span class="bp">self</span><span class="o">.</span><span class="n">end_headers</span><span class="p">()</span>
+    <span class="bp">self</span><span class="o">.</span><span class="n">wfile</span><span class="o">.</span><span class="n">write</span><span class="p">(</span><span class="n">text</span><span class="o">.</span><span class="n">encode</span><span class="p">())</span>             <span class="c1"># HTTP Body</span>
+
+<span class="k">def</span> <span class="nf">write_error</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">status_code</span><span class="p">:</span> <span class="nb">int</span><span class="p">):</span>        <span class="c1"># Lookup HTTP error status string</span>
+    <span class="bp">self</span><span class="o">.</span><span class="n">write_text</span><span class="p">(</span><span class="n">responses</span><span class="p">[</span><span class="n">status_code</span><span class="p">],</span> <span class="n">status_code</span><span class="o">=</span><span class="n">status_code</span><span class="p">)</span>
+</code></pre></div>
+
+<div class="alert danger-bg">
+<p><a href="https://docs.python.org/3/library/http.client.html#http.client.responses">http.client.responses</a> is a <strong>dictionary</strong> that maps <a href="https://en.wikipedia.org/wiki/HTTP">HTTP</a> <strong>status codes</strong>
+to their corresponding <strong>strings</strong>.</p>
+</div>
+<h2 id="vial-routes-implementation">Vial: <span class="gold">Routes</span> (<i class="muted">Implementation</i>)<a class="headerlink" href="#vial-routes-implementation" title="Permanent link">&para;</a></h2>
+<p>To allow different <strong>functions</strong> to handle separate <strong
+class="success">endpoints</strong>, the <code>Vial</code> <strong
+class="caution">class</strong> provides a <code>route</code> <a href="https://docs.python.org/3/glossary.html#term-decorator">decorator</a>:</p>
+<div class="codehilite"><pre><span></span><code><span class="k">class</span> <span class="nc">VialRequestHandler</span><span class="p">(</span><span class="n">BaseHTTPRequestHandler</span><span class="p">):</span>
+    <span class="c1"># Routes dict {method: {pattern: callback}}</span>
+    <span class="n">Routes</span><span class="p">:</span> <span class="nb">dict</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="nb">dict</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="n">Callable</span><span class="p">]]</span> <span class="o">=</span> <span class="p">{}</span>
+
+<span class="k">class</span> <span class="nc">Vial</span><span class="p">(</span><span class="n">HTTPServer</span><span class="p">):</span>
+    <span class="c1"># Route Decorator factory</span>
+    <span class="k">def</span> <span class="nf">route</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">pattern</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span> <span class="n">methods</span><span class="p">:</span> <span class="nb">list</span><span class="p">[</span><span class="nb">str</span><span class="p">]</span><span class="o">=</span><span class="p">[</span><span class="s1">&#39;GET&#39;</span><span class="p">]):</span>
+        <span class="c1"># Route Decorator function</span>
+        <span class="k">def</span> <span class="nf">decorator</span><span class="p">(</span><span class="n">callback</span><span class="p">):</span>
+            <span class="c1"># Add pattern/callback to Routes dict</span>
+            <span class="k">for</span> <span class="n">method</span> <span class="ow">in</span> <span class="n">methods</span><span class="p">:</span>
+                <span class="k">try</span><span class="p">:</span>
+                    <span class="n">VialRequestHandler</span><span class="o">.</span><span class="n">Routes</span><span class="p">[</span><span class="n">method</span><span class="p">]</span><span class="o">.</span><span class="n">update</span><span class="p">({</span><span class="n">pattern</span><span class="p">:</span> <span class="n">callback</span><span class="p">})</span>
+                <span class="k">except</span> <span class="ne">KeyError</span><span class="p">:</span>
+                    <span class="n">VialRequestHandler</span><span class="o">.</span><span class="n">Routes</span><span class="p">[</span><span class="n">method</span><span class="p">]</span> <span class="o">=</span> <span class="p">{</span><span class="n">pattern</span><span class="p">:</span> <span class="n">callback</span><span class="p">}</span>
+            <span class="k">return</span> <span class="n">callback</span>
+        <span class="k">return</span> <span class="n">decorator</span>
+</code></pre></div>
+
+<h2 id="vial-routes-usage">Vial: <span class="gold">Routes</span> (<i class="muted">Usage</i>)<a class="headerlink" href="#vial-routes-usage" title="Permanent link">&para;</a></h2>
+<p>To map a <code>route</code>, we use the <a href="https://docs.python.org/3/glossary.html#term-decorator">decorator</a> to <strong
+class="comment">annotate</strong> a <strong>function</strong>:</p>
+<div class="codehilite"><pre><span></span><code><span class="n">App</span> <span class="o">=</span> <span class="n">Vial</span><span class="p">()</span>            <span class="c1"># Create instance of Vial</span>
+
+<span class="nd">@App</span><span class="o">.</span><span class="n">route</span><span class="p">(</span><span class="s1">&#39;/&#39;</span><span class="p">)</span>
+<span class="k">def</span> <span class="nf">hello</span><span class="p">(</span><span class="n">request</span><span class="p">):</span>     <span class="c1"># Route / to hello function</span>
+    <span class="k">return</span> <span class="s1">&#39;Hello, World&#39;</span>
+
+<span class="nd">@App</span><span class="o">.</span><span class="n">route</span><span class="p">(</span><span class="s1">&#39;/upload&#39;</span><span class="p">,</span> <span class="n">methods</span><span class="o">=</span><span class="p">[</span><span class="s1">&#39;PUT&#39;</span><span class="p">])</span>
+<span class="k">def</span> <span class="nf">upload</span><span class="p">(</span><span class="n">request</span><span class="p">):</span>    <span class="c1"># Route /upload to upload function</span>
+    <span class="k">return</span> <span class="p">{</span><span class="s1">&#39;body&#39;</span><span class="p">:</span> <span class="n">request</span><span class="o">.</span><span class="n">post_data</span><span class="p">}</span>
+</code></pre></div>
+
+<p>Unwrapping the <code>route</code> <a href="https://docs.python.org/3/glossary.html#term-decorator">decorator</a> would be equivalent to:</p>
+<div class="codehilite"><pre><span></span><code><span class="k">def</span> <span class="nf">hello</span><span class="p">(</span><span class="n">request</span><span class="p">):</span>
+    <span class="k">return</span> <span class="s1">&#39;Hello, World&#39;</span>
+
+<span class="k">def</span> <span class="nf">upload</span><span class="p">(</span><span class="n">request</span><span class="p">):</span>
+    <span class="k">return</span> <span class="p">{</span><span class="s1">&#39;body&#39;</span><span class="p">:</span> <span class="n">request</span><span class="o">.</span><span class="n">post_data</span><span class="p">}</span>
+
+<span class="c1"># App.route(&#39;/&#39;) -&gt; returns decorator</span>
+<span class="c1"># decorator(hello) -&gt; registers routers and returns hello</span>
+<span class="n">hello</span> <span class="o">=</span> <span class="n">App</span><span class="o">.</span><span class="n">route</span><span class="p">(</span><span class="s1">&#39;/&#39;</span><span class="p">)(</span><span class="n">hello</span><span class="p">)</span>
+
+<span class="c1"># App.route(&#39;/upload&#39;, methods=[&#39;PUT&#39;]) -&gt; returns decorator</span>
+<span class="c1"># decorator(hello) -&gt; registers routers and returns hello</span>
+<span class="n">upload</span> <span class="o">=</span> <span class="n">App</span><span class="o">.</span><span class="n">route</span><span class="p">(</span><span class="s1">&#39;/upload&#39;</span><span class="p">,</span> <span class="n">methods</span><span class="o">=</span><span class="p">[</span><span class="s1">&#39;PUT&#39;</span><span class="p">])(</span><span class="n">upload</span><span class="p">)</span>
+</code></pre></div>
+
+<h2 id="vial-method-dispatch">Vial: <span class="gold">Method Dispatch</span><a class="headerlink" href="#vial-method-dispatch" title="Permanent link">&para;</a></h2>
+<p>To dispatch the <code>route</code> <strong class="success">callbacks</strong>, we use a
+generalized <code>do_METHOD</code>:</p>
+<div class="codehilite"><pre><span></span><code><span class="k">def</span> <span class="nf">do_METHOD</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">method</span><span class="p">:</span> <span class="nb">str</span><span class="p">):</span>
+    <span class="c1"># Check if method is in Routes</span>
+    <span class="k">if</span> <span class="ow">not</span> <span class="n">method</span> <span class="ow">in</span> <span class="n">VialRequestHandler</span><span class="o">.</span><span class="n">Routes</span><span class="p">:</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">write_error</span><span class="p">(</span><span class="mi">405</span><span class="p">)</span>
+
+    <span class="c1"># Loop through all callbacks for method</span>
+    <span class="k">for</span> <span class="n">pattern</span><span class="p">,</span> <span class="n">callback</span> <span class="ow">in</span> <span class="n">VialRequestHandler</span><span class="o">.</span><span class="n">Routes</span><span class="p">[</span><span class="n">method</span><span class="p">]</span><span class="o">.</span><span class="n">items</span><span class="p">():</span>
+        <span class="c1"># Check if pattern matches full URL path</span>
+        <span class="k">if</span> <span class="n">matched</span> <span class="o">:=</span> <span class="n">re</span><span class="o">.</span><span class="n">fullmatch</span><span class="p">(</span><span class="n">pattern</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">url</span><span class="o">.</span><span class="n">path</span><span class="p">):</span>
+            <span class="c1"># Execute callback and collect results</span>
+            <span class="n">result</span> <span class="o">=</span> <span class="n">callback</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="o">*</span><span class="n">matched</span><span class="o">.</span><span class="n">groups</span><span class="p">())</span>
+            <span class="c1"># Process result based on type</span>
+            <span class="k">match</span> <span class="n">result</span><span class="p">:</span>
+                <span class="k">case</span> <span class="nb">int</span><span class="p">():</span>  <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">write_error</span><span class="p">(</span><span class="n">result</span><span class="p">)</span>
+                <span class="k">case</span> <span class="nb">str</span><span class="p">():</span>  <span class="n">response</span><span class="p">,</span> <span class="o">*</span><span class="n">args</span> <span class="o">=</span> <span class="n">result</span><span class="p">,</span> <span class="mi">200</span><span class="p">,</span> <span class="s1">&#39;text/plain&#39;</span>
+                <span class="k">case</span> <span class="nb">dict</span><span class="p">():</span> <span class="n">response</span><span class="p">,</span> <span class="o">*</span><span class="n">args</span> <span class="o">=</span> <span class="n">json</span><span class="o">.</span><span class="n">dumps</span><span class="p">(</span><span class="n">result</span><span class="p">),</span> <span class="mi">200</span><span class="p">,</span> <span class="s1">&#39;application/json&#39;</span>
+                <span class="n">case</span> <span class="kc">None</span><span class="p">:</span>   <span class="n">response</span><span class="p">,</span> <span class="o">*</span><span class="n">args</span> <span class="o">=</span> <span class="s1">&#39;&#39;</span><span class="p">,</span> <span class="mi">200</span><span class="p">,</span> <span class="s1">&#39;text/plain&#39;</span>
+                <span class="k">case</span><span class="w"> </span><span class="k">_</span><span class="p">:</span>      <span class="n">response</span><span class="p">,</span> <span class="o">*</span><span class="n">args</span> <span class="o">=</span> <span class="n">result</span>
+            <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">write_text</span><span class="p">(</span><span class="n">response</span><span class="p">,</span> <span class="o">*</span><span class="n">args</span><span class="p">)</span> <span class="c1"># type: ignore[arg-type]</span>
+    <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">write_error</span><span class="p">(</span><span class="mi">405</span><span class="p">)</span>
+</code></pre></div>
+
+<div class="alert success-bg">
+<p>The <code>do_METHOD</code> checks the <code>result</code> of the <strong class="success">callback</strong> and will
+call <code>write_text</code> with the appropriate <code>text</code>, <code>status_code</code>, and <code>mimetype</code>.</p>
+</div>
+<h2 id="vial-hello_apppy">Vial: <a href="https://github.com/nd-cse-20589-fa26/examples/blob/master/slides27/hello_app.py">hello_app.py</a><a class="headerlink" href="#vial-hello_apppy" title="Permanent link">&para;</a></h2>
+<blockquote>
+<p>Implement <a href="https://github.com/nd-cse-20589-fa26/examples/blob/master/slides27/hello_app.py">hello_app.py</a> using <a href="https://github.com/nd-cse-20589-fa26/examples/blob/master/slides27/vial.py">Vial</a>.</p>
+</blockquote>
+<div class="codehilite"><pre><span></span><code>$<span class="w"> </span>curl<span class="w"> </span>localhost:9999/greeting?name<span class="o">=</span>Tin<span class="w">                         </span><span class="c1"># Get greeting for Tin</span>
+Hello,<span class="w"> </span>Tin
+
+$<span class="w"> </span>curl<span class="w"> </span>--json<span class="w"> </span><span class="s1">&#39;{&quot;greeting&quot;: &quot;Hola&quot;}&#39;</span><span class="w"> </span>localhost:9999/greeting<span class="w">    </span><span class="c1"># Set greeting to Hola</span>
+<span class="o">{</span><span class="s2">&quot;greeting&quot;</span>:<span class="w"> </span><span class="s2">&quot;Hola&quot;</span>,<span class="w"> </span><span class="s2">&quot;default_name&quot;</span>:<span class="w"> </span><span class="s2">&quot;Unknown&quot;</span><span class="o">}</span>
+
+$<span class="w"> </span>curl<span class="w"> </span>localhost:9999/greeting?name<span class="o">=</span>Huzz<span class="w">                        </span><span class="c1"># Get greeting for Huzz</span>
+Hola,<span class="w"> </span>Huzz
+</code></pre></div>
+
+<div class="codehilite"><pre><span></span><code><span class="ch">#!/usr/bin/env python3</span>
+
+<span class="kn">import</span> <span class="nn">sys</span>
+
+<span class="kn">from</span> <span class="nn">vial</span> <span class="kn">import</span> <span class="n">Vial</span>
+
+<span class="c1"># Constants</span>
+
+<span class="k">try</span><span class="p">:</span>
+    <span class="n">HOST</span> <span class="o">=</span> <span class="n">sys</span><span class="o">.</span><span class="n">argv</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span>
+    <span class="n">PORT</span> <span class="o">=</span> <span class="nb">int</span><span class="p">(</span><span class="n">sys</span><span class="o">.</span><span class="n">argv</span><span class="p">[</span><span class="mi">2</span><span class="p">])</span>
+<span class="k">except</span> <span class="ne">IndexError</span><span class="p">:</span>
+    <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s1">&#39;Usage: </span><span class="si">{</span><span class="n">sys</span><span class="o">.</span><span class="n">argv</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="si">}</span><span class="s1"> HOST PORT&#39;</span><span class="p">,</span> <span class="n">file</span><span class="o">=</span><span class="n">sys</span><span class="o">.</span><span class="n">stderr</span><span class="p">)</span>
+    <span class="n">sys</span><span class="o">.</span><span class="n">exit</span><span class="p">(</span><span class="mi">1</span><span class="p">)</span>
+
+<span class="c1"># Globals</span>
+
+<span class="n">App</span> <span class="o">=</span> <span class="n">Vial</span><span class="p">(</span><span class="n">HOST</span><span class="p">,</span> <span class="n">PORT</span><span class="p">,</span> <span class="p">{</span><span class="s1">&#39;greeting&#39;</span><span class="p">:</span> <span class="s1">&#39;Hello&#39;</span><span class="p">,</span> <span class="s1">&#39;default_name&#39;</span><span class="p">:</span> <span class="s1">&#39;Unknown&#39;</span><span class="p">})</span>
+
+<span class="c1"># Handlers</span>
+
+<span class="nd">@App</span><span class="o">.</span><span class="n">route</span><span class="p">(</span><span class="s1">&#39;/greeting&#39;</span><span class="p">)</span>
+<span class="k">def</span> <span class="nf">greet</span><span class="p">(</span><span class="n">request</span><span class="p">):</span>
+    <span class="n">name</span> <span class="o">=</span> <span class="n">request</span><span class="o">.</span><span class="n">query_data</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s1">&#39;name&#39;</span><span class="p">,</span> <span class="n">App</span><span class="o">.</span><span class="n">default_name</span><span class="p">)</span>
+    <span class="k">return</span> <span class="sa">f</span><span class="s1">&#39;</span><span class="si">{</span><span class="n">App</span><span class="o">.</span><span class="n">greeting</span><span class="si">}</span><span class="s1">, </span><span class="si">{</span><span class="n">name</span><span class="si">}</span><span class="s1">!&#39;</span>
+
+<span class="nd">@App</span><span class="o">.</span><span class="n">route</span><span class="p">(</span><span class="s1">&#39;/greeting&#39;</span><span class="p">,</span> <span class="n">methods</span><span class="o">=</span><span class="p">[</span><span class="s1">&#39;POST&#39;</span><span class="p">,</span> <span class="s1">&#39;PUT&#39;</span><span class="p">])</span>
+<span class="k">def</span> <span class="nf">update</span><span class="p">(</span><span class="n">request</span><span class="p">):</span>
+    <span class="n">App</span><span class="o">.</span><span class="n">greeting</span>     <span class="o">=</span> <span class="n">request</span><span class="o">.</span><span class="n">form_data</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s1">&#39;greeting&#39;</span><span class="p">,</span> <span class="n">App</span><span class="o">.</span><span class="n">greeting</span><span class="p">)</span>
+    <span class="n">App</span><span class="o">.</span><span class="n">default_name</span> <span class="o">=</span> <span class="n">request</span><span class="o">.</span><span class="n">form_data</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s1">&#39;name&#39;</span><span class="p">,</span> <span class="n">App</span><span class="o">.</span><span class="n">default_name</span><span class="p">)</span>
+    <span class="k">return</span> <span class="p">{</span><span class="s1">&#39;greeting&#39;</span><span class="p">:</span> <span class="n">App</span><span class="o">.</span><span class="n">greeting</span><span class="p">,</span> <span class="s1">&#39;default_name&#39;</span><span class="p">:</span> <span class="n">App</span><span class="o">.</span><span class="n">default_name</span><span class="p">}</span>
+
+<span class="c1"># Main Execution</span>
+
+<span class="k">if</span> <span class="vm">__name__</span> <span class="o">==</span> <span class="s1">&#39;__main__&#39;</span><span class="p">:</span>
+    <span class="n">App</span><span class="o">.</span><span class="n">run</span><span class="p">()</span>
+</code></pre></div>
+</main>
+<footer>
+Built using <a href="https://python.org">Python</a>
+and <a href="https://jinja.palletsprojects.com">Jinja</a>
+with colors from 
+<a href="https://onmessage.nd.edu/university-branding/colors/">Notre Dame</a>, 
+<a href="https://spreadsheet.dev/how-to-get-the-hexadecimal-codes-of-colors-in-google-sheets">Google Docs</a>, and 
+<a href="https://nordtheme.com">Nord Theme</a>,
+and icons from <a href="https://pictogrammers.com/library/mdi/">Material Design Icons</a>.</footer>
+</body>
+</html>
