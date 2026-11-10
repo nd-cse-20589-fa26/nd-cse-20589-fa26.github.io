@@ -70,23 +70,23 @@ an API accessible via public [HTTP] <strong class="success">URLs</strong>.
 </thead>
 <tr class="info-bg">
     <td class="centered"><b>GET</b></td>
-    <td>Retrieve an existing resource.</td>
+    <td><b>Retrieve</b> an existing <b>resource</b>.</td>
 </tr>
 <tr class="success-bg">
     <td class="centered"><b>POST</b></td>
-    <td>Create a new resource.</td>
+    <td><b>Create</b> a new <b>resource</b>.</td>
 </tr>
 <tr class="success-bg">
     <td class="centered"><b>PUT</b></td>
-    <td>Update an existing resource.</td>
+    <td><b>Update</b> an existing <b>resource</b>.</td>
 </tr>
 <tr class="caution-bg">
     <td class="centered"><b>PATCH</b></td>
-    <td>Partially update an existing resource.</td>
+    <td><b>Partially update</b> an existing <b>resource</b>.</td>
 </tr class="centered">
 <tr class="danger-bg">
     <td class="centered"><b>DELETE</b></td>
-    <td>Delete a resource.</td>
+    <td><b>Delete</b> a <b>resource</b>.</td>
 </tr>
 <tbody>
 </tbody>
@@ -112,27 +112,27 @@ class="special">REST</strong> API was successful:
 <tr class="success-bg">
     <td class="centered"><b>200</b></td>
     <td>OK</td>
-    <td>The requested action was successful.</td>
+    <td>The requested action was <b>successful</b>.</td>
 </tr>
 <tr class="caution-bg">
     <td class="centered"><b>400</b></td>
     <td>Bad Request</td>
-    <td>The request was malformed.</td>
+    <td>The request was <b>malformed</b>.</td>
 </tr>
 <tr class="caution-bg">
     <td class="centered"><b>404</b></td>
     <td>Not Found</td>
-    <td>The requested resource was not found.</td>
+    <td>The requested resource was <b>not found</b>.</td>
 </tr>
 <tr class="caution-bg">
     <td class="centered"><b>405</b></td>
     <td>Method Not Allowed</td>
-    <td>The requested method was not supported.</td>
+    <td>The requested method was <b>not supported</b>.</td>
 </tr>
 <tr class="danger-bg">
     <td class="centered"><b>500</b></td>
     <td>Internal Server Error</td>
-    <td>Error occurred when processing the request.</td>
+    <td><b>Error</b> occurred when processing the request.</td>
 </tr>
 </tbody>
 </table>
