@@ -68,13 +68,18 @@ class PlaylistTest(unittest.TestCase):
         response = requests.post(f'http://{self.host}:{self.port}/playlist', json={'name': 'Mix Tape 1'})
         self.assertEqual(response.status_code, 200)
         self.assertEqual(response.json(), {'id': 1})
-        PlaylistTest.Points += 0.5
+        PlaylistTest.Points += 0.4
 
         # Success: Form Data
         response = requests.post(f'http://{self.host}:{self.port}/playlist', data={'name': 'Mix Tape 2'})
         self.assertEqual(response.status_code, 200)
         self.assertEqual(response.json(), {'id': 2})
-        PlaylistTest.Points += 0.5
+        PlaylistTest.Points += 0.3
+        
+        # Failure: No name
+        response = requests.post(f'http://{self.host}:{self.port}/playlist')
+        self.assertEqual(response.status_code, 400)
+        PlaylistTest.Points += 0.3
 
     def test_02_remove_playlist(self):
         # Success

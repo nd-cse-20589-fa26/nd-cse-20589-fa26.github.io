@@ -55,6 +55,9 @@ $<span class="w"> </span><span class="nb">cd</span><span class="w"> </span>homew
 <span class="c1"># Download Makefile</span>
 $<span class="w"> </span>curl<span class="w"> </span>-LO<span class="w"> </span>https://pnutz.h4x0r.space/courses/cse.20589.fa26/static/txt/homework09/Makefile
 
+<span class="c1"># Download Vial from Slides 27</span>
+$<span class="w"> </span>curl<span class="w"> </span>-LO<span class="w"> </span>https://raw.githubusercontent.com/nd-cse-20589-fa26/examples/refs/heads/master/slides27/vial.py
+
 <span class="c1"># Download Python skeleton code</span>
 $<span class="w"> </span>curl<span class="w"> </span>-LO<span class="w"> </span>https://pnutz.h4x0r.space/courses/cse.20589.fa26/static/txt/homework09/playlist_server.py
 </code></pre></div>
@@ -296,6 +299,10 @@ each new <strong>playlist</strong>.  Remember that <a href="https://github.com/n
 convert a <a href="https://docs.python.org/3/library/stdtypes.html#mapping-types-dict">dict</a> into <a href="https://json.org/">JSON</a>, so you can simply <code>return</code> a <a href="https://docs.python.org/3/library/stdtypes.html#mapping-types-dict">dict</a> with
 the appropriate <strong>response body</strong>.</p>
 </div>
+<div class="codehilite"><pre><span></span><code><span class="c1"># Test with curl (replace host and port)</span>
+$<span class="w"> </span>curl<span class="w"> </span>-H<span class="w"> </span><span class="s1">&#39;Content-Type: application/json&#39;</span><span class="w"> </span>-d<span class="w"> </span><span class="s1">&#39;{&quot;name&quot;: &quot;Mix Tape&quot;}&#39;</span><span class="w"> </span>http://host:port/playlist
+</code></pre></div>
+
 </li>
 <li>
 <div class="flex-col" markdown="1">
@@ -314,6 +321,10 @@ remove the specified <strong>playlist</strong> by setting the corresponding
 appropriate <strong>endpoint</strong> and <strong>method</strong>.  You may wish to convert
 <code>playlist_id</code> into an <a href="https://docs.python.org/3/builtins/functions.html#int">int</a> for consistency.</p>
 </div>
+<div class="codehilite"><pre><span></span><code><span class="c1"># Test with curl (replace host, port, playlist_id)</span>
+$<span class="w"> </span>curl<span class="w"> </span>-X<span class="w"> </span>DELETE<span class="w"> </span>http://host:port/playlist/playlist_id
+</code></pre></div>
+
 </li>
 <li>
 <div class="flex-col" markdown="1">
@@ -331,6 +342,10 @@ it returns the specified <strong>playlist</strong> information.</p>
 appropriate <strong>endpoint</strong> and <strong>method</strong>.  You may be able to reuse
 <code>get_playlist_items</code> for part of the <a href="https://json.org/">JSON</a> <strong>dictionary</strong> you return.</p>
 </div>
+<div class="codehilite"><pre><span></span><code><span class="c1"># Test with curl (replace host, port, playlist_id)</span>
+$<span class="w"> </span>curl<span class="w"> </span>http://host:port/playlist/playlist_id
+</code></pre></div>
+
 </li>
 <li>
 <div class="flex-col" markdown="1">
@@ -347,6 +362,10 @@ it returns the specified <strong>playlist</strong> items.</p>
 <p><strong>Hints</strong>: Make sure you complete the <code>@App.route</code> <a href="https://docs.python.org/3/glossary.html#term-decorator">decorator</a> for the
 appropriate <strong>endpoint</strong> and <strong>method</strong>.</p>
 </div>
+<div class="codehilite"><pre><span></span><code><span class="c1"># Test with curl (replace host, port, playlist_id)</span>
+$<span class="w"> </span>curl<span class="w"> </span>http://host:port/playlist/playlist_id/items
+</code></pre></div>
+
 </li>
 <li>
 <div class="flex-col" markdown="1">
@@ -370,6 +389,10 @@ specific <code>position</code> of another <a href="https://docs.python.org/3/lib
 </code></pre></div>
 
 </div>
+<div class="codehilite"><pre><span></span><code><span class="c1"># Test with curl (replace host, port, playlist_id)</span>
+$<span class="w"> </span>curl<span class="w"> </span>-H<span class="w"> </span><span class="s1">&#39;Content-Type: application/json&#39;</span><span class="w"> </span>-d<span class="w"> </span><span class="s1">&#39;{&quot;items&quot;: [{&quot;title&quot;: &quot;DOWN GOES NUMBER ONE&quot;, &quot;url&quot;: &quot;https://youtu.be/2qfxJ3WRy9I&quot;}]}&#39;</span><span class="w"> </span>http://host:port/playlist/playlist_id/items
+</code></pre></div>
+
 </li>
 <li>
 <div class="flex-col" markdown="1">
@@ -389,6 +412,10 @@ appropriate <strong>endpoint</strong> and <strong>method</strong>.  Rather than 
 a <a href="https://docs.python.org/3/library/stdtypes.html#sequence-types-list-tuple-range">list</a> while iterating over it, you should consider using a <a href="https://docs.python.org/3/tutorial/datastructures.html#list-comprehensions">list
 comprehension</a> to filter the <a href="https://docs.python.org/3/library/stdtypes.html#sequence-types-list-tuple-range">list</a>.</p>
 </div>
+<div class="codehilite"><pre><span></span><code><span class="c1"># Test with curl (replace host, port, playlist_id)</span>
+$<span class="w"> </span>curl<span class="w"> </span>-X<span class="w"> </span>DELETE<span class="w"> </span>-H<span class="w"> </span><span class="s1">&#39;Content-Type: application/json&#39;</span><span class="w"> </span>-d<span class="w"> </span><span class="s1">&#39;{&quot;items&quot;: [{&quot;title&quot;: &quot;DOWN GOES NUMBER ONE&quot;, &quot;url&quot;: &quot;https://youtu.be/2qfxJ3WRy9I&quot;}]}&#39;</span><span class="w"> </span>http://host:port/playlist/playlist_id/items
+</code></pre></div>
+
 </li>
 </ol>
 <h3 id="task-2-testing">Task 2: Testing<a class="headerlink" href="#task-2-testing" title="Permanent link">&para;</a></h3>
