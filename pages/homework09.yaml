@@ -50,6 +50,9 @@ body:       |
       # Download Makefile
       $ curl -LO https://pnutz.h4x0r.space/courses/cse.20589.fa26/static/txt/homework09/Makefile
 
+      # Download Vial from Slides 27
+      $ curl -LO https://raw.githubusercontent.com/nd-cse-20589-fa26/examples/refs/heads/master/slides27/vial.py
+
       # Download Python skeleton code
       $ curl -LO https://pnutz.h4x0r.space/courses/cse.20589.fa26/static/txt/homework09/playlist_server.py
 
@@ -329,6 +332,10 @@ body:       |
 
       </div>
 
+          :::bash
+          # Test with curl (replace host and port)
+          $ curl -H 'Content-Type: application/json' -d '{"name": "Mix Tape"}' http://host:port/playlist
+
   2.  <div class="flex-col" markdown="1">
 
           :::python
@@ -348,6 +355,10 @@ body:       |
 
       </div>
 
+          :::bash
+          # Test with curl (replace host, port, playlist_id)
+          $ curl -X DELETE http://host:port/playlist/playlist_id
+
   3.  <div class="flex-col" markdown="1">
 
           :::python
@@ -366,6 +377,10 @@ body:       |
 
       </div>
 
+          :::bash
+          # Test with curl (replace host, port, playlist_id)
+          $ curl http://host:port/playlist/playlist_id
+
   4.  <div class="flex-col" markdown="1">
 
           :::python
@@ -382,6 +397,10 @@ body:       |
       appropriate **endpoint** and **method**.
 
       </div>
+
+          :::bash
+          # Test with curl (replace host, port, playlist_id)
+          $ curl http://host:port/playlist/playlist_id/items
 
   5.  <div class="flex-col" markdown="1">
 
@@ -407,6 +426,10 @@ body:       |
 
       </div>
 
+          :::bash
+          # Test with curl (replace host, port, playlist_id)
+          $ curl -H 'Content-Type: application/json' -d '{"items": [{"title": "DOWN GOES NUMBER ONE", "url": "https://youtu.be/2qfxJ3WRy9I"}]}' http://host:port/playlist/playlist_id/items
+
   6.  <div class="flex-col" markdown="1">
 
           :::python
@@ -426,6 +449,10 @@ body:       |
       comprehension] to filter the [list].
 
       </div>
+
+          :::bash
+          # Test with curl (replace host, port, playlist_id)
+          $ curl -X DELETE -H 'Content-Type: application/json' -d '{"items": [{"title": "DOWN GOES NUMBER ONE", "url": "https://youtu.be/2qfxJ3WRy9I"}]}' http://host:port/playlist/playlist_id/items
 
   [decorator]: https://docs.python.org/3/glossary.html#term-decorator
   [dict]: https://docs.python.org/3/library/stdtypes.html#mapping-types-dict
