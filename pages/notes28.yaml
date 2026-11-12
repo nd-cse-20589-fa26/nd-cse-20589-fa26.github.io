@@ -1,0 +1,427 @@
+title:  "Notes 28: Unit Tests"
+body:   |
+
+  ## Logistics
+
+  - [Interview 03](interview03.html)
+
+  ## Review: <span class="gold">REST</span>
+
+  <strong class="special">REST</strong> (<i><b>re</b>presentational **s**tate
+  **t**ransfer</i>) and is a <strong class="success">software architecture
+  style</strong> that defines a <strong class="strong">pattern</strong> for
+  <strong class="info">client</strong> and <strong class="danger">server</strong>
+  interactions.
+
+  1. <strong class="success">Stateless</strong>: The <strong
+    class="danger">server</strong> won't maintain any <strong
+    class="warning">state</strong> between <strong
+    class="caution">requests</strong> from the <strong
+    class="info">client</strong>.
+
+  2. <strong class="info">Client</strong>-<strong class="danger">server</strong>:
+    The <strong class="info">client</strong> and <strong
+    class="danger">server</strong> must be <strong
+    class="warning">decoupled</strong> from each other, allowing each to develop
+    <strong class="success">independently</strong>.
+
+  3. <strong class="caution">Uniform interface</strong>: The <strong
+    class="danger">server</strong> will provide a <strong
+    class="caution">uniform interface</strong> for accessing <strong
+    class="warning">resources</strong> without defining their representation.
+
+  ## Review: <span class="gold">Endpoints</span>
+
+  To define a <strong class="special">REST</strong> API, it is necessary to
+  describe the [HTTP] methods and <strong class="success">endpoints</strong> (ie.
+  <strong class="success">URL paths</strong>), along with any <strong
+  class="danger">parameters</strong> they may take.
+
+  <table class="bordered font-smaller">
+  <thead>
+      <th class="special-bg">HTTP Method</th>
+      <th class="special-bg">API Endpoint</th>
+      <th class="special-bg">Description</th>
+      <th class="special-bg">Query Data</th>
+      <th class="special-bg">Form Data</th>
+  </thead>
+  <tbody>
+  <tr class="info-bg">
+      <td class="centered"><b>GET</b></td>
+      <td>/greeting</td>
+      <td>Get greeting for <code>name</code></td>
+      <td><code>name<code>: <code>str</code></td>
+      <td></td>
+  </tr>
+  <tr class="success-bg">
+      <td class="centered"><b>POST</b>/<b>PUT</b></td>
+      <td>/greeting</td>
+      <td>Set greeting to <code>greeting<code></td>
+      <td></td>
+      <td><code>greeting<code>: <code>str</code></td>
+  </tr>
+  </tbody>
+  </table>
+
+  [HTTP]: https://en.wikipedia.org/wiki/HTTP
+
+  ## Vial: [hello_app.py]
+
+  > Implement [hello_app.py] using [Vial].
+
+  ```bash
+  $ curl localhost:9999/greeting?name=Tin                         # Get greeting for Tin
+  Hello, Tin
+
+  $ curl --json '{"greeting": "Hola"}' localhost:9999/greeting    # Set greeting to Hola
+  {"greeting": "Hola", "default_name": "Unknown"}
+
+  $ curl localhost:9999/greeting?name=Huzz                        # Get greeting for Huzz
+  Hola, Huzz
+  ```
+
+  ```python
+  #!/usr/bin/env python3
+
+  import sys
+
+  from vial import Vial
+
+  # Constants
+
+  try:
+      HOST = sys.argv[1]
+      PORT = int(sys.argv[2])
+  except IndexError:
+      print(f'Usage: {sys.argv[0]} HOST PORT', file=sys.stderr)
+      sys.exit(1)
+
+  # Globals
+
+  App = Vial(HOST, PORT, {'greeting': 'Hello', 'default_name': 'Unknown'})
+
+  # Handlers
+
+  @App.route('/greeting')
+  def greet(request):
+      name = request.query_data.get('name', App.default_name)
+      return f'{App.greeting}, {name}!'
+
+  @App.route('/greeting', methods=['POST', 'PUT'])
+  def update(request):
+      App.greeting     = request.form_data.get('greeting', App.greeting)
+      App.default_name = request.form_data.get('name', App.default_name)
+      return {'greeting': App.greeting, 'default_name': App.default_name}
+
+  # Main Execution
+
+  if __name__ == '__main__':
+      App.run()
+  ```
+
+  [hello_app.py]: https://github.com/nd-cse-20589-fa26/examples/blob/master/slides27/hello_app.py
+
+  ## Testing: <span class="gold">Overview</span>
+
+  When building <strong class="special">software systems</strong>, it is often necessary to
+  determine whether or not the program is <strong class="success">correct</strong>.  In the
+  absence of <strong class="danger">proofs</strong>, developers utilize
+  <strong class="caution">testing</strong>:
+
+  <table class="bordered">
+  <thead>
+  <th class="info-bg">Functional</th>
+  <th class="success-bg">Performance</th>
+  <th class="caution-bg">Unit</th>
+  </thead>
+  <tbody>
+  <tr>
+  <td class="centered">
+
+  Check that program performs the correct <strong class="info">functionality</strong>.
+
+  </td>
+  <td class="centered">
+
+  Check that program performs within the desired <strong
+  class="success">time</strong> and <strong class="success">resource</strong>
+  constraints.
+
+  </td>
+  <td class="centered">
+
+  Check that <strong class="caution">individual components</strong> of program
+  work correctly.
+
+  </td>
+  </tr>
+  </tbody>
+  </table>
+
+  ## Unit Tests: [unittest]
+
+  Inspired by [JUnit], <strong class="success">Python</strong> provides
+  [unittest] as a <strong class="caution">unit testing</strong> framework that
+  provides <strong class="success">test automation</strong>.
+
+  1. <strong class="caution">Test Fixtures</strong>:
+
+      Preparation needed to perform tests, along with any cleanup.
+
+  2. <strong class="info">Test Cases</strong>:
+
+      Collection of methods that check response to particular set of inputs.
+
+  3. <strong class="danger">Test Suites</strong>
+
+      Collection of test cases.
+
+  4. <strong class="success">Test Runner</strong>
+
+      Orchestrates test execution and outputs the results.
+
+  ```python
+  import unittest
+
+  class TestStringMethods(unittest.TestCase):
+      def test_upper(self):
+          self.assertEqual('foo'.upper(), 'FOO')
+
+      def test_isupper(self):
+          self.assertTrue('FOO'.isupper())
+          self.assertFalse('Foo'.isupper())
+
+  if __name__ == '__main__:
+      unittest.main()
+  ```
+
+  [JUnit]: https://junit.org/
+  [unittest]: https://docs.python.org/3/library/unittest.html
+
+  ## Unit Test: <span class="gold">Test Cases</span>
+
+  A <strong class="caution">test case</strong> is created by subclassing [unittest.TestCase]
+  and defining individual `test` methods:
+
+  ```python
+  import os
+  import requests
+  import unittest
+
+  class HelloTest(unittest.TestCase):               # Test Case
+      host = '127.0.0.1'
+      port = 9999
+
+      def test_01_greeting_get_default(self):       # Individual Test Method
+          # Perform operation and get results
+          endpoint = f'http://{self.host}:{self.port}/greeting'
+          response = requests.get(endpoint)
+
+          # Assertions that compare output with expected result
+          self.assertEqual(response.status_code, 200)
+          self.assertEqual(response.text, 'Hello, Unknown!')
+
+      def test_02_greeting_get_name(self):          # Individual Test Method
+          # Perform operation and get results
+          endpoint = f'http://{self.host}:{self.port}/greeting'
+          params   = {'name': os.environ['USER']}
+          response = requests.get(endpoint, params=params)
+
+          # Assertions that compare output with expected result
+          self.assertEqual(response.status_code, 200)
+          self.assertEqual(response.text, f'Hello, {os.environ["USER"]}!')
+
+  if '__name__' == '__main__':
+      unittest.main()
+  ```
+
+  <div class="alert info-bg centered" markdown="1">
+
+  The individual `test` methods are executed in **lexicographical** order.
+
+  </div>
+
+  [unittest.TestCase]: https://docs.python.org/3/library/unittest.html#unittest.TestCase
+
+  ## Unit Test: <span class="gold">Test Fixtures</span>
+
+  The [setUpClass] and [tearDownClass] methods are used to define instructions
+  that will be executed before and after **all** test methods.
+
+  ```python
+  def find_open_port(start: int=9000, end: int=9999) -> int:
+      # Get used ports
+      with os.popen("ss -tlpn | awk '{print $4}' | cut -d : -f 2") as stream:
+          used_ports = {int(port) for port in stream if port.strip().isnumeric()}
+          # Generate random port in range until we find one not in use
+          while (port := random.randint(start, end)) in used_ports: pass
+          return port
+
+  class HelloTest(unittest.TestCase):
+
+      @classmethod
+      def setUpClass(cls):
+          cls.host    = '127.0.0.1'                   # Use localhost
+          cls.port    = str(find_open_port())         # Find open port
+          cls.logfile = open('hello_app.log', 'w')    # Open log file
+          cls.process = subprocess.Popen(             # Start web application
+              ['python3', '../slides27/hello_app.py', cls.host, cls.port],
+              stdout  = cls.logfile,                  # I/O redirection
+              stderr  = cls.logfile
+          )
+          time.sleep(0.25)                            # Let web application start
+
+      @classmethod
+      def tearDownClass(cls):
+          cls.process.terminate()                     # Kill web application
+          cls.process.wait()                          # Clean up child process
+          cls.logfile.close()                         # Close log file
+  ```
+
+  [setUpClass]: https://docs.python.org/3/library/unittest.html#unittest.TestCase.setUpClass
+  [tearDownClass]: https://docs.python.org/3/library/unittest.html#unittest.TestCase.tearDownClass
+
+  ## Unit Test: [hello_app.test]
+
+  > Write <strong class="caution">unit tests</strong> for [hello_app.py].
+
+  ```bash
+  # Run all tests
+  $ ./hello_app.test
+  ...
+  Ran 8 tests in 0.277s
+
+  OK
+
+  # Run individual test
+  $ ./hello_app.test -v HelloTest.test_01_greeting_get_default
+  test_01_greeting_get_default (__main__.HelloTest.test_01_greeting_get_default) ... ok
+  ...
+  ```
+
+  ```python
+  #!/usr/bin/env python3
+
+  import json
+  import os
+  import random
+  import requests
+  import subprocess
+  import time
+  import unittest
+
+  # Functions
+
+  def find_open_port(start: int=9000, end: int=9999) -> int:
+      with os.popen("ss -tlpn | awk '{print $4}' | cut -d : -f 2") as stream:
+          used_ports = {int(port) for port in stream if port.strip().isnumeric()}
+          while (port := random.randint(start, end)) in used_ports: pass
+          return port
+
+  # Unit Tests
+
+  class HelloTest(unittest.TestCase):
+      ''' Hello Unit Tests '''
+
+      @classmethod
+      def setUpClass(cls):
+          cls.host    = '127.0.0.1'
+          cls.port    = str(find_open_port())
+          cls.logfile = open('hello_app.log', 'w')
+          cls.process = subprocess.Popen(
+              ['python3', '../slides27/hello_app.py', cls.host, cls.port],
+              stdout  = cls.logfile,
+              stderr  = cls.logfile,
+          )
+
+          time.sleep(0.25)
+
+      @classmethod
+      def tearDownClass(cls):
+          cls.process.terminate()
+          cls.process.wait()
+          cls.logfile.close()
+
+      def test_01_greeting_get_default(self):
+          # Perform operation and get results
+          endpoint = f'http://{self.host}:{self.port}/greeting'
+          response = requests.get(endpoint)
+
+          # Assertions that compare output with expected result
+          self.assertEqual(response.status_code, 200)
+          self.assertEqual(response.text, 'Hello, Unknown!')
+
+      def test_02_greeting_get_name(self):
+          # Perform operation and get results
+          endpoint = f'http://{self.host}:{self.port}/greeting'
+          params   = {'name': os.environ['USER']}
+          response = requests.get(endpoint, params=params)
+
+          # Assertions that compare output with expected result
+          self.assertEqual(response.status_code, 200)
+          self.assertEqual(response.text, f'Hello, {os.environ["USER"]}!')
+
+      def test_03_greeting_bad_method(self):
+          # Perform operation and get results
+          endpoint = f'http://{self.host}:{self.port}/greeting'
+          response = requests.delete(endpoint)
+
+          # Assertions that compare output with expected result
+          self.assertEqual(response.status_code, 405)
+          self.assertEqual(response.text, 'Method Not Allowed')
+
+      def test_04_greeting_post_default(self):
+          # Perform operation and get results
+          endpoint = f'http://{self.host}:{self.port}/greeting'
+          response = requests.post(endpoint)
+
+          # Assertions that compare output with expected result
+          self.assertEqual(response.status_code, 200)
+          self.assertEqual(json.loads(response.text), {'greeting': 'Hello', 'default_name': 'Unknown'})
+
+      def test_05_greeting_post_greeting(self):
+          # Perform operation and get results
+          endpoint = f'http://{self.host}:{self.port}/greeting'
+          data     = {'greeting': 'Hola'}
+          response = requests.post(endpoint, json=data)
+
+          # Assertions that compare output with expected result
+          self.assertEqual(response.status_code, 200)
+          self.assertEqual(json.loads(response.text), {'greeting': 'Hola', 'default_name': 'Unknown'})
+
+      def test_06_greeting_post_name(self):
+          # Perform operation and get results
+          endpoint = f'http://{self.host}:{self.port}/greeting'
+          data     = {'name': 'Anonymous'}
+          response = requests.post(endpoint, json=data)
+
+          # Assertions that compare output with expected result
+          self.assertEqual(response.status_code, 200)
+          self.assertEqual(json.loads(response.text), {'greeting': 'Hola', 'default_name': 'Anonymous'})
+
+      def test_07_greeting_get_default(self):
+          # Perform operation and get results
+          endpoint = f'http://{self.host}:{self.port}/greeting'
+          response = requests.get(endpoint)
+
+          # Assertions that compare output with expected result
+          self.assertEqual(response.status_code, 200)
+          self.assertEqual(response.text, 'Hola, Anonymous!')
+
+      def test_08_greeting_get_name(self):
+          # Perform operation and get results
+          endpoint = f'http://{self.host}:{self.port}/greeting'
+          params   = {'name': os.environ['USER']}
+          response = requests.get(endpoint, params=params)
+
+          # Assertions that compare output with expected result
+          self.assertEqual(response.status_code, 200)
+          self.assertEqual(response.text, f'Hola, {os.environ["USER"]}!')
+
+  # Main Execution
+
+  if __name__ == '__main__':
+      unittest.main()
+
+  # vim: set sts=4 sw=4 ts=8 expandtab ft=python:
+  ```
