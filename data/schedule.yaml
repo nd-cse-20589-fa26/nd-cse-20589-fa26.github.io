@@ -301,6 +301,8 @@
         topics:         REST / Vial
         items:
           - name:       Slides 27
+          - name:       Panopto
+            link:       https://notredame.hosted.panopto.com/Panopto/Pages/Viewer.aspx?id=263a0d08-109d-48e4-8582-b4ff01266015
 
       - date:           Fri 11/13
         topics:         Unit Testing
