@@ -1,0 +1,432 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<!-- Favicon -->
+<link rel="icon" type="image/png" sizes="32x32" href="static/ico/favicon-32x32.png">
+<link rel="icon" type="image/png" sizes="16x16" href="static/ico/favicon-16x16.png">
+<link rel="manifest" href="static/ico/site.webmanifest">
+<!-- Stylesheets -->
+<link rel="stylesheet" href="static/css/domer.css">
+<title>Notes 28: Unit Tests</title>
+</head>
+<body>
+<header>
+<a class="logo" href="notes28.html">
+    <h1>Notes 28: Unit Tests</h1>
+</a>
+<nav>
+    <ul>
+        <li><a href="index.html"><h4>Home</h4></a></li>
+        </ul>
+</nav></header>
+<main>
+<h2 id="logistics">Logistics<a class="headerlink" href="#logistics" title="Permanent link">&para;</a></h2>
+<ul>
+<li><a href="interview03.html">Interview 03</a></li>
+</ul>
+<h2 id="review-rest">Review: <span class="gold">REST</span><a class="headerlink" href="#review-rest" title="Permanent link">&para;</a></h2>
+<p><strong class="special">REST</strong> (<i><b>re</b>presentational <strong>s</strong>tate
+<strong>t</strong>ransfer</i>) and is a <strong class="success">software architecture
+style</strong> that defines a <strong class="strong">pattern</strong> for
+<strong class="info">client</strong> and <strong class="danger">server</strong>
+interactions.</p>
+<ol>
+<li>
+<p><strong class="success">Stateless</strong>: The <strong
+  class="danger">server</strong> won't maintain any <strong
+  class="warning">state</strong> between <strong
+  class="caution">requests</strong> from the <strong
+  class="info">client</strong>.</p>
+</li>
+<li>
+<p><strong class="info">Client</strong>-<strong class="danger">server</strong>:
+  The <strong class="info">client</strong> and <strong
+  class="danger">server</strong> must be <strong
+  class="warning">decoupled</strong> from each other, allowing each to develop
+  <strong class="success">independently</strong>.</p>
+</li>
+<li>
+<p><strong class="caution">Uniform interface</strong>: The <strong
+  class="danger">server</strong> will provide a <strong
+  class="caution">uniform interface</strong> for accessing <strong
+  class="warning">resources</strong> without defining their representation.</p>
+</li>
+</ol>
+<h2 id="review-endpoints">Review: <span class="gold">Endpoints</span><a class="headerlink" href="#review-endpoints" title="Permanent link">&para;</a></h2>
+<p>To define a <strong class="special">REST</strong> API, it is necessary to
+describe the <a href="https://en.wikipedia.org/wiki/HTTP">HTTP</a> methods and <strong class="success">endpoints</strong> (ie.
+<strong class="success">URL paths</strong>), along with any <strong
+class="danger">parameters</strong> they may take.</p>
+<table class="bordered font-smaller">
+<thead>
+    <th class="special-bg">HTTP Method</th>
+    <th class="special-bg">API Endpoint</th>
+    <th class="special-bg">Description</th>
+    <th class="special-bg">Query Data</th>
+    <th class="special-bg">Form Data</th>
+</thead>
+<tbody>
+<tr class="info-bg">
+    <td class="centered"><b>GET</b></td>
+    <td>/greeting</td>
+    <td>Get greeting for <code>name</code></td>
+    <td><code>name<code>: <code>str</code></td>
+    <td></td>
+</tr>
+<tr class="success-bg">
+    <td class="centered"><b>POST</b>/<b>PUT</b></td>
+    <td>/greeting</td>
+    <td>Set greeting to <code>greeting<code></td>
+    <td></td>
+    <td><code>greeting<code>: <code>str</code></td>
+</tr>
+</tbody>
+</table>
+
+<h2 id="vial-hello_apppy">Vial: <a href="https://github.com/nd-cse-20589-fa26/examples/blob/master/slides27/hello_app.py">hello_app.py</a><a class="headerlink" href="#vial-hello_apppy" title="Permanent link">&para;</a></h2>
+<blockquote>
+<p>Implement <a href="https://github.com/nd-cse-20589-fa26/examples/blob/master/slides27/hello_app.py">hello_app.py</a> using [Vial].</p>
+</blockquote>
+<div class="codehilite"><pre><span></span><code>$<span class="w"> </span>curl<span class="w"> </span>localhost:9999/greeting?name<span class="o">=</span>Tin<span class="w">                         </span><span class="c1"># Get greeting for Tin</span>
+Hello,<span class="w"> </span>Tin
+
+$<span class="w"> </span>curl<span class="w"> </span>--json<span class="w"> </span><span class="s1">&#39;{&quot;greeting&quot;: &quot;Hola&quot;}&#39;</span><span class="w"> </span>localhost:9999/greeting<span class="w">    </span><span class="c1"># Set greeting to Hola</span>
+<span class="o">{</span><span class="s2">&quot;greeting&quot;</span>:<span class="w"> </span><span class="s2">&quot;Hola&quot;</span>,<span class="w"> </span><span class="s2">&quot;default_name&quot;</span>:<span class="w"> </span><span class="s2">&quot;Unknown&quot;</span><span class="o">}</span>
+
+$<span class="w"> </span>curl<span class="w"> </span>localhost:9999/greeting?name<span class="o">=</span>Huzz<span class="w">                        </span><span class="c1"># Get greeting for Huzz</span>
+Hola,<span class="w"> </span>Huzz
+</code></pre></div>
+
+<div class="codehilite"><pre><span></span><code><span class="ch">#!/usr/bin/env python3</span>
+
+<span class="kn">import</span> <span class="nn">sys</span>
+
+<span class="kn">from</span> <span class="nn">vial</span> <span class="kn">import</span> <span class="n">Vial</span>
+
+<span class="c1"># Constants</span>
+
+<span class="k">try</span><span class="p">:</span>
+    <span class="n">HOST</span> <span class="o">=</span> <span class="n">sys</span><span class="o">.</span><span class="n">argv</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span>
+    <span class="n">PORT</span> <span class="o">=</span> <span class="nb">int</span><span class="p">(</span><span class="n">sys</span><span class="o">.</span><span class="n">argv</span><span class="p">[</span><span class="mi">2</span><span class="p">])</span>
+<span class="k">except</span> <span class="ne">IndexError</span><span class="p">:</span>
+    <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s1">&#39;Usage: </span><span class="si">{</span><span class="n">sys</span><span class="o">.</span><span class="n">argv</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="si">}</span><span class="s1"> HOST PORT&#39;</span><span class="p">,</span> <span class="n">file</span><span class="o">=</span><span class="n">sys</span><span class="o">.</span><span class="n">stderr</span><span class="p">)</span>
+    <span class="n">sys</span><span class="o">.</span><span class="n">exit</span><span class="p">(</span><span class="mi">1</span><span class="p">)</span>
+
+<span class="c1"># Globals</span>
+
+<span class="n">App</span> <span class="o">=</span> <span class="n">Vial</span><span class="p">(</span><span class="n">HOST</span><span class="p">,</span> <span class="n">PORT</span><span class="p">,</span> <span class="p">{</span><span class="s1">&#39;greeting&#39;</span><span class="p">:</span> <span class="s1">&#39;Hello&#39;</span><span class="p">,</span> <span class="s1">&#39;default_name&#39;</span><span class="p">:</span> <span class="s1">&#39;Unknown&#39;</span><span class="p">})</span>
+
+<span class="c1"># Handlers</span>
+
+<span class="nd">@App</span><span class="o">.</span><span class="n">route</span><span class="p">(</span><span class="s1">&#39;/greeting&#39;</span><span class="p">)</span>
+<span class="k">def</span> <span class="nf">greet</span><span class="p">(</span><span class="n">request</span><span class="p">):</span>
+    <span class="n">name</span> <span class="o">=</span> <span class="n">request</span><span class="o">.</span><span class="n">query_data</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s1">&#39;name&#39;</span><span class="p">,</span> <span class="n">App</span><span class="o">.</span><span class="n">default_name</span><span class="p">)</span>
+    <span class="k">return</span> <span class="sa">f</span><span class="s1">&#39;</span><span class="si">{</span><span class="n">App</span><span class="o">.</span><span class="n">greeting</span><span class="si">}</span><span class="s1">, </span><span class="si">{</span><span class="n">name</span><span class="si">}</span><span class="s1">!&#39;</span>
+
+<span class="nd">@App</span><span class="o">.</span><span class="n">route</span><span class="p">(</span><span class="s1">&#39;/greeting&#39;</span><span class="p">,</span> <span class="n">methods</span><span class="o">=</span><span class="p">[</span><span class="s1">&#39;POST&#39;</span><span class="p">,</span> <span class="s1">&#39;PUT&#39;</span><span class="p">])</span>
+<span class="k">def</span> <span class="nf">update</span><span class="p">(</span><span class="n">request</span><span class="p">):</span>
+    <span class="n">App</span><span class="o">.</span><span class="n">greeting</span>     <span class="o">=</span> <span class="n">request</span><span class="o">.</span><span class="n">form_data</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s1">&#39;greeting&#39;</span><span class="p">,</span> <span class="n">App</span><span class="o">.</span><span class="n">greeting</span><span class="p">)</span>
+    <span class="n">App</span><span class="o">.</span><span class="n">default_name</span> <span class="o">=</span> <span class="n">request</span><span class="o">.</span><span class="n">form_data</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s1">&#39;name&#39;</span><span class="p">,</span> <span class="n">App</span><span class="o">.</span><span class="n">default_name</span><span class="p">)</span>
+    <span class="k">return</span> <span class="p">{</span><span class="s1">&#39;greeting&#39;</span><span class="p">:</span> <span class="n">App</span><span class="o">.</span><span class="n">greeting</span><span class="p">,</span> <span class="s1">&#39;default_name&#39;</span><span class="p">:</span> <span class="n">App</span><span class="o">.</span><span class="n">default_name</span><span class="p">}</span>
+
+<span class="c1"># Main Execution</span>
+
+<span class="k">if</span> <span class="vm">__name__</span> <span class="o">==</span> <span class="s1">&#39;__main__&#39;</span><span class="p">:</span>
+    <span class="n">App</span><span class="o">.</span><span class="n">run</span><span class="p">()</span>
+</code></pre></div>
+
+<h2 id="testing-overview">Testing: <span class="gold">Overview</span><a class="headerlink" href="#testing-overview" title="Permanent link">&para;</a></h2>
+<p>When building <strong class="special">software systems</strong>, it is often necessary to
+determine whether or not the program is <strong class="success">correct</strong>.  In the
+absence of <strong class="danger">proofs</strong>, developers utilize
+<strong class="caution">testing</strong>:</p>
+<table class="bordered">
+<thead>
+<th class="info-bg">Functional</th>
+<th class="success-bg">Performance</th>
+<th class="caution-bg">Unit</th>
+</thead>
+<tbody>
+<tr>
+<td class="centered">
+
+Check that program performs the correct <strong class="info">functionality</strong>.
+
+</td>
+<td class="centered">
+
+Check that program performs within the desired <strong
+class="success">time</strong> and <strong class="success">resource</strong>
+constraints.
+
+</td>
+<td class="centered">
+
+Check that <strong class="caution">individual components</strong> of program
+work correctly.
+
+</td>
+</tr>
+</tbody>
+</table>
+
+<h2 id="unit-tests-unittest">Unit Tests: <a href="https://docs.python.org/3/library/unittest.html">unittest</a><a class="headerlink" href="#unit-tests-unittest" title="Permanent link">&para;</a></h2>
+<p>Inspired by <a href="https://junit.org/">JUnit</a>, <strong class="success">Python</strong> provides
+<a href="https://docs.python.org/3/library/unittest.html">unittest</a> as a <strong class="caution">unit testing</strong> framework that
+provides <strong class="success">test automation</strong>.</p>
+<ol>
+<li>
+<p><strong class="caution">Test Fixtures</strong>:</p>
+<p>Preparation needed to perform tests, along with any cleanup.</p>
+</li>
+<li>
+<p><strong class="info">Test Cases</strong>:</p>
+<p>Collection of methods that check response to particular set of inputs.</p>
+</li>
+<li>
+<p><strong class="danger">Test Suites</strong></p>
+<p>Collection of test cases.</p>
+</li>
+<li>
+<p><strong class="success">Test Runner</strong></p>
+<p>Orchestrates test execution and outputs the results.</p>
+</li>
+</ol>
+<div class="codehilite"><pre><span></span><code><span class="kn">import</span> <span class="nn">unittest</span>
+
+<span class="k">class</span> <span class="nc">TestStringMethods</span><span class="p">(</span><span class="n">unittest</span><span class="o">.</span><span class="n">TestCase</span><span class="p">):</span>
+    <span class="k">def</span> <span class="nf">test_upper</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">assertEqual</span><span class="p">(</span><span class="s1">&#39;foo&#39;</span><span class="o">.</span><span class="n">upper</span><span class="p">(),</span> <span class="s1">&#39;FOO&#39;</span><span class="p">)</span>
+
+    <span class="k">def</span> <span class="nf">test_isupper</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">assertTrue</span><span class="p">(</span><span class="s1">&#39;FOO&#39;</span><span class="o">.</span><span class="n">isupper</span><span class="p">())</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">assertFalse</span><span class="p">(</span><span class="s1">&#39;Foo&#39;</span><span class="o">.</span><span class="n">isupper</span><span class="p">())</span>
+
+<span class="k">if</span> <span class="vm">__name__</span> <span class="o">==</span> <span class="s1">&#39;__main__:</span>
+    <span class="n">unittest</span><span class="o">.</span><span class="n">main</span><span class="p">()</span>
+</code></pre></div>
+
+<h2 id="unit-test-test-cases">Unit Test: <span class="gold">Test Cases</span><a class="headerlink" href="#unit-test-test-cases" title="Permanent link">&para;</a></h2>
+<p>A <strong class="caution">test case</strong> is created by subclassing <a href="https://docs.python.org/3/library/unittest.html#unittest.TestCase">unittest.TestCase</a>
+and defining individual <code>test</code> methods:</p>
+<div class="codehilite"><pre><span></span><code><span class="kn">import</span> <span class="nn">os</span>
+<span class="kn">import</span> <span class="nn">requests</span>
+<span class="kn">import</span> <span class="nn">unittest</span>
+
+<span class="k">class</span> <span class="nc">HelloTest</span><span class="p">(</span><span class="n">unittest</span><span class="o">.</span><span class="n">TestCase</span><span class="p">):</span>               <span class="c1"># Test Case</span>
+    <span class="n">host</span> <span class="o">=</span> <span class="s1">&#39;127.0.0.1&#39;</span>
+    <span class="n">port</span> <span class="o">=</span> <span class="mi">9999</span>
+
+    <span class="k">def</span> <span class="nf">test_01_greeting_get_default</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>       <span class="c1"># Individual Test Method</span>
+        <span class="c1"># Perform operation and get results</span>
+        <span class="n">endpoint</span> <span class="o">=</span> <span class="sa">f</span><span class="s1">&#39;http://</span><span class="si">{</span><span class="bp">self</span><span class="o">.</span><span class="n">host</span><span class="si">}</span><span class="s1">:</span><span class="si">{</span><span class="bp">self</span><span class="o">.</span><span class="n">port</span><span class="si">}</span><span class="s1">/greeting&#39;</span>
+        <span class="n">response</span> <span class="o">=</span> <span class="n">requests</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="n">endpoint</span><span class="p">)</span>
+
+        <span class="c1"># Assertions that compare output with expected result</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">assertEqual</span><span class="p">(</span><span class="n">response</span><span class="o">.</span><span class="n">status_code</span><span class="p">,</span> <span class="mi">200</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">assertEqual</span><span class="p">(</span><span class="n">response</span><span class="o">.</span><span class="n">text</span><span class="p">,</span> <span class="s1">&#39;Hello, Unknown!&#39;</span><span class="p">)</span>
+
+    <span class="k">def</span> <span class="nf">test_02_greeting_get_name</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>          <span class="c1"># Individual Test Method</span>
+        <span class="c1"># Perform operation and get results</span>
+        <span class="n">endpoint</span> <span class="o">=</span> <span class="sa">f</span><span class="s1">&#39;http://</span><span class="si">{</span><span class="bp">self</span><span class="o">.</span><span class="n">host</span><span class="si">}</span><span class="s1">:</span><span class="si">{</span><span class="bp">self</span><span class="o">.</span><span class="n">port</span><span class="si">}</span><span class="s1">/greeting&#39;</span>
+        <span class="n">params</span>   <span class="o">=</span> <span class="p">{</span><span class="s1">&#39;name&#39;</span><span class="p">:</span> <span class="n">os</span><span class="o">.</span><span class="n">environ</span><span class="p">[</span><span class="s1">&#39;USER&#39;</span><span class="p">]}</span>
+        <span class="n">response</span> <span class="o">=</span> <span class="n">requests</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="n">endpoint</span><span class="p">,</span> <span class="n">params</span><span class="o">=</span><span class="n">params</span><span class="p">)</span>
+
+        <span class="c1"># Assertions that compare output with expected result</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">assertEqual</span><span class="p">(</span><span class="n">response</span><span class="o">.</span><span class="n">status_code</span><span class="p">,</span> <span class="mi">200</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">assertEqual</span><span class="p">(</span><span class="n">response</span><span class="o">.</span><span class="n">text</span><span class="p">,</span> <span class="sa">f</span><span class="s1">&#39;Hello, </span><span class="si">{</span><span class="n">os</span><span class="o">.</span><span class="n">environ</span><span class="p">[</span><span class="s2">&quot;USER&quot;</span><span class="p">]</span><span class="si">}</span><span class="s1">!&#39;</span><span class="p">)</span>
+
+<span class="k">if</span> <span class="s1">&#39;__name__&#39;</span> <span class="o">==</span> <span class="s1">&#39;__main__&#39;</span><span class="p">:</span>
+    <span class="n">unittest</span><span class="o">.</span><span class="n">main</span><span class="p">()</span>
+</code></pre></div>
+
+<div class="alert info-bg centered">
+<p>The individual <code>test</code> methods are executed in <strong>lexicographical</strong> order.</p>
+</div>
+<h2 id="unit-test-test-fixtures">Unit Test: <span class="gold">Test Fixtures</span><a class="headerlink" href="#unit-test-test-fixtures" title="Permanent link">&para;</a></h2>
+<p>The <a href="https://docs.python.org/3/library/unittest.html#unittest.TestCase.setUpClass">setUpClass</a> and <a href="https://docs.python.org/3/library/unittest.html#unittest.TestCase.tearDownClass">tearDownClass</a> methods are used to define instructions
+that will be executed before and after <strong>all</strong> test methods.</p>
+<div class="codehilite"><pre><span></span><code><span class="k">def</span> <span class="nf">find_open_port</span><span class="p">(</span><span class="n">start</span><span class="p">:</span> <span class="nb">int</span><span class="o">=</span><span class="mi">9000</span><span class="p">,</span> <span class="n">end</span><span class="p">:</span> <span class="nb">int</span><span class="o">=</span><span class="mi">9999</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">int</span><span class="p">:</span>
+    <span class="c1"># Get used ports</span>
+    <span class="k">with</span> <span class="n">os</span><span class="o">.</span><span class="n">popen</span><span class="p">(</span><span class="s2">&quot;ss -tlpn | awk &#39;{print $4}&#39; | cut -d : -f 2&quot;</span><span class="p">)</span> <span class="k">as</span> <span class="n">stream</span><span class="p">:</span>
+        <span class="n">used_ports</span> <span class="o">=</span> <span class="p">{</span><span class="nb">int</span><span class="p">(</span><span class="n">port</span><span class="p">)</span> <span class="k">for</span> <span class="n">port</span> <span class="ow">in</span> <span class="n">stream</span> <span class="k">if</span> <span class="n">port</span><span class="o">.</span><span class="n">strip</span><span class="p">()</span><span class="o">.</span><span class="n">isnumeric</span><span class="p">()}</span>
+        <span class="c1"># Generate random port in range until we find one not in use</span>
+        <span class="k">while</span> <span class="p">(</span><span class="n">port</span> <span class="o">:=</span> <span class="n">random</span><span class="o">.</span><span class="n">randint</span><span class="p">(</span><span class="n">start</span><span class="p">,</span> <span class="n">end</span><span class="p">))</span> <span class="ow">in</span> <span class="n">used_ports</span><span class="p">:</span> <span class="k">pass</span>
+        <span class="k">return</span> <span class="n">port</span>
+
+<span class="k">class</span> <span class="nc">HelloTest</span><span class="p">(</span><span class="n">unittest</span><span class="o">.</span><span class="n">TestCase</span><span class="p">):</span>
+
+    <span class="nd">@classmethod</span>
+    <span class="k">def</span> <span class="nf">setUpClass</span><span class="p">(</span><span class="bp">cls</span><span class="p">):</span>
+        <span class="bp">cls</span><span class="o">.</span><span class="n">host</span>    <span class="o">=</span> <span class="s1">&#39;127.0.0.1&#39;</span>                   <span class="c1"># Use localhost</span>
+        <span class="bp">cls</span><span class="o">.</span><span class="n">port</span>    <span class="o">=</span> <span class="nb">str</span><span class="p">(</span><span class="n">find_open_port</span><span class="p">())</span>         <span class="c1"># Find open port</span>
+        <span class="bp">cls</span><span class="o">.</span><span class="n">logfile</span> <span class="o">=</span> <span class="nb">open</span><span class="p">(</span><span class="s1">&#39;hello_app.log&#39;</span><span class="p">,</span> <span class="s1">&#39;w&#39;</span><span class="p">)</span>    <span class="c1"># Open log file</span>
+        <span class="bp">cls</span><span class="o">.</span><span class="n">process</span> <span class="o">=</span> <span class="n">subprocess</span><span class="o">.</span><span class="n">Popen</span><span class="p">(</span>             <span class="c1"># Start web application</span>
+            <span class="p">[</span><span class="s1">&#39;python3&#39;</span><span class="p">,</span> <span class="s1">&#39;../slides27/hello_app.py&#39;</span><span class="p">,</span> <span class="bp">cls</span><span class="o">.</span><span class="n">host</span><span class="p">,</span> <span class="bp">cls</span><span class="o">.</span><span class="n">port</span><span class="p">],</span>
+            <span class="n">stdout</span>  <span class="o">=</span> <span class="bp">cls</span><span class="o">.</span><span class="n">logfile</span><span class="p">,</span>                  <span class="c1"># I/O redirection</span>
+            <span class="n">stderr</span>  <span class="o">=</span> <span class="bp">cls</span><span class="o">.</span><span class="n">logfile</span>
+        <span class="p">)</span>
+        <span class="n">time</span><span class="o">.</span><span class="n">sleep</span><span class="p">(</span><span class="mf">0.25</span><span class="p">)</span>                            <span class="c1"># Let web application start</span>
+
+    <span class="nd">@classmethod</span>
+    <span class="k">def</span> <span class="nf">tearDownClass</span><span class="p">(</span><span class="bp">cls</span><span class="p">):</span>
+        <span class="bp">cls</span><span class="o">.</span><span class="n">process</span><span class="o">.</span><span class="n">terminate</span><span class="p">()</span>                     <span class="c1"># Kill web application</span>
+        <span class="bp">cls</span><span class="o">.</span><span class="n">process</span><span class="o">.</span><span class="n">wait</span><span class="p">()</span>                          <span class="c1"># Clean up child process</span>
+        <span class="bp">cls</span><span class="o">.</span><span class="n">logfile</span><span class="o">.</span><span class="n">close</span><span class="p">()</span>                         <span class="c1"># Close log file</span>
+</code></pre></div>
+
+<h2 id="unit-test-hello_apptest">Unit Test: [hello_app.test]<a class="headerlink" href="#unit-test-hello_apptest" title="Permanent link">&para;</a></h2>
+<blockquote>
+<p>Write <strong class="caution">unit tests</strong> for <a href="https://github.com/nd-cse-20589-fa26/examples/blob/master/slides27/hello_app.py">hello_app.py</a>.</p>
+</blockquote>
+<div class="codehilite"><pre><span></span><code><span class="c1"># Run all tests</span>
+$<span class="w"> </span>./hello_app.test
+...
+Ran<span class="w"> </span><span class="m">8</span><span class="w"> </span>tests<span class="w"> </span><span class="k">in</span><span class="w"> </span><span class="m">0</span>.277s
+
+OK
+
+<span class="c1"># Run individual test</span>
+$<span class="w"> </span>./hello_app.test<span class="w"> </span>-v<span class="w"> </span>HelloTest.test_01_greeting_get_default
+test_01_greeting_get_default<span class="w"> </span><span class="o">(</span>__main__.HelloTest.test_01_greeting_get_default<span class="o">)</span><span class="w"> </span>...<span class="w"> </span>ok
+...
+</code></pre></div>
+
+<div class="codehilite"><pre><span></span><code><span class="ch">#!/usr/bin/env python3</span>
+
+<span class="kn">import</span> <span class="nn">json</span>
+<span class="kn">import</span> <span class="nn">os</span>
+<span class="kn">import</span> <span class="nn">random</span>
+<span class="kn">import</span> <span class="nn">requests</span>
+<span class="kn">import</span> <span class="nn">subprocess</span>
+<span class="kn">import</span> <span class="nn">time</span>
+<span class="kn">import</span> <span class="nn">unittest</span>
+
+<span class="c1"># Functions</span>
+
+<span class="k">def</span> <span class="nf">find_open_port</span><span class="p">(</span><span class="n">start</span><span class="p">:</span> <span class="nb">int</span><span class="o">=</span><span class="mi">9000</span><span class="p">,</span> <span class="n">end</span><span class="p">:</span> <span class="nb">int</span><span class="o">=</span><span class="mi">9999</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">int</span><span class="p">:</span>
+    <span class="k">with</span> <span class="n">os</span><span class="o">.</span><span class="n">popen</span><span class="p">(</span><span class="s2">&quot;ss -tlpn | awk &#39;{print $4}&#39; | cut -d : -f 2&quot;</span><span class="p">)</span> <span class="k">as</span> <span class="n">stream</span><span class="p">:</span>
+        <span class="n">used_ports</span> <span class="o">=</span> <span class="p">{</span><span class="nb">int</span><span class="p">(</span><span class="n">port</span><span class="p">)</span> <span class="k">for</span> <span class="n">port</span> <span class="ow">in</span> <span class="n">stream</span> <span class="k">if</span> <span class="n">port</span><span class="o">.</span><span class="n">strip</span><span class="p">()</span><span class="o">.</span><span class="n">isnumeric</span><span class="p">()}</span>
+        <span class="k">while</span> <span class="p">(</span><span class="n">port</span> <span class="o">:=</span> <span class="n">random</span><span class="o">.</span><span class="n">randint</span><span class="p">(</span><span class="n">start</span><span class="p">,</span> <span class="n">end</span><span class="p">))</span> <span class="ow">in</span> <span class="n">used_ports</span><span class="p">:</span> <span class="k">pass</span>
+        <span class="k">return</span> <span class="n">port</span>
+
+<span class="c1"># Unit Tests</span>
+
+<span class="k">class</span> <span class="nc">HelloTest</span><span class="p">(</span><span class="n">unittest</span><span class="o">.</span><span class="n">TestCase</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">&#39;&#39;&#39; Hello Unit Tests &#39;&#39;&#39;</span>
+
+    <span class="nd">@classmethod</span>
+    <span class="k">def</span> <span class="nf">setUpClass</span><span class="p">(</span><span class="bp">cls</span><span class="p">):</span>
+        <span class="bp">cls</span><span class="o">.</span><span class="n">host</span>    <span class="o">=</span> <span class="s1">&#39;127.0.0.1&#39;</span>
+        <span class="bp">cls</span><span class="o">.</span><span class="n">port</span>    <span class="o">=</span> <span class="nb">str</span><span class="p">(</span><span class="n">find_open_port</span><span class="p">())</span>
+        <span class="bp">cls</span><span class="o">.</span><span class="n">logfile</span> <span class="o">=</span> <span class="nb">open</span><span class="p">(</span><span class="s1">&#39;hello_app.log&#39;</span><span class="p">,</span> <span class="s1">&#39;w&#39;</span><span class="p">)</span>
+        <span class="bp">cls</span><span class="o">.</span><span class="n">process</span> <span class="o">=</span> <span class="n">subprocess</span><span class="o">.</span><span class="n">Popen</span><span class="p">(</span>
+            <span class="p">[</span><span class="s1">&#39;python3&#39;</span><span class="p">,</span> <span class="s1">&#39;../slides27/hello_app.py&#39;</span><span class="p">,</span> <span class="bp">cls</span><span class="o">.</span><span class="n">host</span><span class="p">,</span> <span class="bp">cls</span><span class="o">.</span><span class="n">port</span><span class="p">],</span>
+            <span class="n">stdout</span>  <span class="o">=</span> <span class="bp">cls</span><span class="o">.</span><span class="n">logfile</span><span class="p">,</span>
+            <span class="n">stderr</span>  <span class="o">=</span> <span class="bp">cls</span><span class="o">.</span><span class="n">logfile</span><span class="p">,</span>
+        <span class="p">)</span>
+
+        <span class="n">time</span><span class="o">.</span><span class="n">sleep</span><span class="p">(</span><span class="mf">0.25</span><span class="p">)</span>
+
+    <span class="nd">@classmethod</span>
+    <span class="k">def</span> <span class="nf">tearDownClass</span><span class="p">(</span><span class="bp">cls</span><span class="p">):</span>
+        <span class="bp">cls</span><span class="o">.</span><span class="n">process</span><span class="o">.</span><span class="n">terminate</span><span class="p">()</span>
+        <span class="bp">cls</span><span class="o">.</span><span class="n">process</span><span class="o">.</span><span class="n">wait</span><span class="p">()</span>
+        <span class="bp">cls</span><span class="o">.</span><span class="n">logfile</span><span class="o">.</span><span class="n">close</span><span class="p">()</span>
+
+    <span class="k">def</span> <span class="nf">test_01_greeting_get_default</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="c1"># Perform operation and get results</span>
+        <span class="n">endpoint</span> <span class="o">=</span> <span class="sa">f</span><span class="s1">&#39;http://</span><span class="si">{</span><span class="bp">self</span><span class="o">.</span><span class="n">host</span><span class="si">}</span><span class="s1">:</span><span class="si">{</span><span class="bp">self</span><span class="o">.</span><span class="n">port</span><span class="si">}</span><span class="s1">/greeting&#39;</span>
+        <span class="n">response</span> <span class="o">=</span> <span class="n">requests</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="n">endpoint</span><span class="p">)</span>
+
+        <span class="c1"># Assertions that compare output with expected result</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">assertEqual</span><span class="p">(</span><span class="n">response</span><span class="o">.</span><span class="n">status_code</span><span class="p">,</span> <span class="mi">200</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">assertEqual</span><span class="p">(</span><span class="n">response</span><span class="o">.</span><span class="n">text</span><span class="p">,</span> <span class="s1">&#39;Hello, Unknown!&#39;</span><span class="p">)</span>
+
+    <span class="k">def</span> <span class="nf">test_02_greeting_get_name</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="c1"># Perform operation and get results</span>
+        <span class="n">endpoint</span> <span class="o">=</span> <span class="sa">f</span><span class="s1">&#39;http://</span><span class="si">{</span><span class="bp">self</span><span class="o">.</span><span class="n">host</span><span class="si">}</span><span class="s1">:</span><span class="si">{</span><span class="bp">self</span><span class="o">.</span><span class="n">port</span><span class="si">}</span><span class="s1">/greeting&#39;</span>
+        <span class="n">params</span>   <span class="o">=</span> <span class="p">{</span><span class="s1">&#39;name&#39;</span><span class="p">:</span> <span class="n">os</span><span class="o">.</span><span class="n">environ</span><span class="p">[</span><span class="s1">&#39;USER&#39;</span><span class="p">]}</span>
+        <span class="n">response</span> <span class="o">=</span> <span class="n">requests</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="n">endpoint</span><span class="p">,</span> <span class="n">params</span><span class="o">=</span><span class="n">params</span><span class="p">)</span>
+
+        <span class="c1"># Assertions that compare output with expected result</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">assertEqual</span><span class="p">(</span><span class="n">response</span><span class="o">.</span><span class="n">status_code</span><span class="p">,</span> <span class="mi">200</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">assertEqual</span><span class="p">(</span><span class="n">response</span><span class="o">.</span><span class="n">text</span><span class="p">,</span> <span class="sa">f</span><span class="s1">&#39;Hello, </span><span class="si">{</span><span class="n">os</span><span class="o">.</span><span class="n">environ</span><span class="p">[</span><span class="s2">&quot;USER&quot;</span><span class="p">]</span><span class="si">}</span><span class="s1">!&#39;</span><span class="p">)</span>
+
+    <span class="k">def</span> <span class="nf">test_03_greeting_bad_method</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="c1"># Perform operation and get results</span>
+        <span class="n">endpoint</span> <span class="o">=</span> <span class="sa">f</span><span class="s1">&#39;http://</span><span class="si">{</span><span class="bp">self</span><span class="o">.</span><span class="n">host</span><span class="si">}</span><span class="s1">:</span><span class="si">{</span><span class="bp">self</span><span class="o">.</span><span class="n">port</span><span class="si">}</span><span class="s1">/greeting&#39;</span>
+        <span class="n">response</span> <span class="o">=</span> <span class="n">requests</span><span class="o">.</span><span class="n">delete</span><span class="p">(</span><span class="n">endpoint</span><span class="p">)</span>
+
+        <span class="c1"># Assertions that compare output with expected result</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">assertEqual</span><span class="p">(</span><span class="n">response</span><span class="o">.</span><span class="n">status_code</span><span class="p">,</span> <span class="mi">405</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">assertEqual</span><span class="p">(</span><span class="n">response</span><span class="o">.</span><span class="n">text</span><span class="p">,</span> <span class="s1">&#39;Method Not Allowed&#39;</span><span class="p">)</span>
+
+    <span class="k">def</span> <span class="nf">test_04_greeting_post_default</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="c1"># Perform operation and get results</span>
+        <span class="n">endpoint</span> <span class="o">=</span> <span class="sa">f</span><span class="s1">&#39;http://</span><span class="si">{</span><span class="bp">self</span><span class="o">.</span><span class="n">host</span><span class="si">}</span><span class="s1">:</span><span class="si">{</span><span class="bp">self</span><span class="o">.</span><span class="n">port</span><span class="si">}</span><span class="s1">/greeting&#39;</span>
+        <span class="n">response</span> <span class="o">=</span> <span class="n">requests</span><span class="o">.</span><span class="n">post</span><span class="p">(</span><span class="n">endpoint</span><span class="p">)</span>
+
+        <span class="c1"># Assertions that compare output with expected result</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">assertEqual</span><span class="p">(</span><span class="n">response</span><span class="o">.</span><span class="n">status_code</span><span class="p">,</span> <span class="mi">200</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">assertEqual</span><span class="p">(</span><span class="n">json</span><span class="o">.</span><span class="n">loads</span><span class="p">(</span><span class="n">response</span><span class="o">.</span><span class="n">text</span><span class="p">),</span> <span class="p">{</span><span class="s1">&#39;greeting&#39;</span><span class="p">:</span> <span class="s1">&#39;Hello&#39;</span><span class="p">,</span> <span class="s1">&#39;default_name&#39;</span><span class="p">:</span> <span class="s1">&#39;Unknown&#39;</span><span class="p">})</span>
+
+    <span class="k">def</span> <span class="nf">test_05_greeting_post_greeting</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="c1"># Perform operation and get results</span>
+        <span class="n">endpoint</span> <span class="o">=</span> <span class="sa">f</span><span class="s1">&#39;http://</span><span class="si">{</span><span class="bp">self</span><span class="o">.</span><span class="n">host</span><span class="si">}</span><span class="s1">:</span><span class="si">{</span><span class="bp">self</span><span class="o">.</span><span class="n">port</span><span class="si">}</span><span class="s1">/greeting&#39;</span>
+        <span class="n">data</span>     <span class="o">=</span> <span class="p">{</span><span class="s1">&#39;greeting&#39;</span><span class="p">:</span> <span class="s1">&#39;Hola&#39;</span><span class="p">}</span>
+        <span class="n">response</span> <span class="o">=</span> <span class="n">requests</span><span class="o">.</span><span class="n">post</span><span class="p">(</span><span class="n">endpoint</span><span class="p">,</span> <span class="n">json</span><span class="o">=</span><span class="n">data</span><span class="p">)</span>
+
+        <span class="c1"># Assertions that compare output with expected result</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">assertEqual</span><span class="p">(</span><span class="n">response</span><span class="o">.</span><span class="n">status_code</span><span class="p">,</span> <span class="mi">200</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">assertEqual</span><span class="p">(</span><span class="n">json</span><span class="o">.</span><span class="n">loads</span><span class="p">(</span><span class="n">response</span><span class="o">.</span><span class="n">text</span><span class="p">),</span> <span class="p">{</span><span class="s1">&#39;greeting&#39;</span><span class="p">:</span> <span class="s1">&#39;Hola&#39;</span><span class="p">,</span> <span class="s1">&#39;default_name&#39;</span><span class="p">:</span> <span class="s1">&#39;Unknown&#39;</span><span class="p">})</span>
+
+    <span class="k">def</span> <span class="nf">test_06_greeting_post_name</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="c1"># Perform operation and get results</span>
+        <span class="n">endpoint</span> <span class="o">=</span> <span class="sa">f</span><span class="s1">&#39;http://</span><span class="si">{</span><span class="bp">self</span><span class="o">.</span><span class="n">host</span><span class="si">}</span><span class="s1">:</span><span class="si">{</span><span class="bp">self</span><span class="o">.</span><span class="n">port</span><span class="si">}</span><span class="s1">/greeting&#39;</span>
+        <span class="n">data</span>     <span class="o">=</span> <span class="p">{</span><span class="s1">&#39;name&#39;</span><span class="p">:</span> <span class="s1">&#39;Anonymous&#39;</span><span class="p">}</span>
+        <span class="n">response</span> <span class="o">=</span> <span class="n">requests</span><span class="o">.</span><span class="n">post</span><span class="p">(</span><span class="n">endpoint</span><span class="p">,</span> <span class="n">json</span><span class="o">=</span><span class="n">data</span><span class="p">)</span>
+
+        <span class="c1"># Assertions that compare output with expected result</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">assertEqual</span><span class="p">(</span><span class="n">response</span><span class="o">.</span><span class="n">status_code</span><span class="p">,</span> <span class="mi">200</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">assertEqual</span><span class="p">(</span><span class="n">json</span><span class="o">.</span><span class="n">loads</span><span class="p">(</span><span class="n">response</span><span class="o">.</span><span class="n">text</span><span class="p">),</span> <span class="p">{</span><span class="s1">&#39;greeting&#39;</span><span class="p">:</span> <span class="s1">&#39;Hola&#39;</span><span class="p">,</span> <span class="s1">&#39;default_name&#39;</span><span class="p">:</span> <span class="s1">&#39;Anonymous&#39;</span><span class="p">})</span>
+
+    <span class="k">def</span> <span class="nf">test_07_greeting_get_default</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="c1"># Perform operation and get results</span>
+        <span class="n">endpoint</span> <span class="o">=</span> <span class="sa">f</span><span class="s1">&#39;http://</span><span class="si">{</span><span class="bp">self</span><span class="o">.</span><span class="n">host</span><span class="si">}</span><span class="s1">:</span><span class="si">{</span><span class="bp">self</span><span class="o">.</span><span class="n">port</span><span class="si">}</span><span class="s1">/greeting&#39;</span>
+        <span class="n">response</span> <span class="o">=</span> <span class="n">requests</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="n">endpoint</span><span class="p">)</span>
+
+        <span class="c1"># Assertions that compare output with expected result</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">assertEqual</span><span class="p">(</span><span class="n">response</span><span class="o">.</span><span class="n">status_code</span><span class="p">,</span> <span class="mi">200</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">assertEqual</span><span class="p">(</span><span class="n">response</span><span class="o">.</span><span class="n">text</span><span class="p">,</span> <span class="s1">&#39;Hola, Anonymous!&#39;</span><span class="p">)</span>
+
+    <span class="k">def</span> <span class="nf">test_08_greeting_get_name</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="c1"># Perform operation and get results</span>
+        <span class="n">endpoint</span> <span class="o">=</span> <span class="sa">f</span><span class="s1">&#39;http://</span><span class="si">{</span><span class="bp">self</span><span class="o">.</span><span class="n">host</span><span class="si">}</span><span class="s1">:</span><span class="si">{</span><span class="bp">self</span><span class="o">.</span><span class="n">port</span><span class="si">}</span><span class="s1">/greeting&#39;</span>
+        <span class="n">params</span>   <span class="o">=</span> <span class="p">{</span><span class="s1">&#39;name&#39;</span><span class="p">:</span> <span class="n">os</span><span class="o">.</span><span class="n">environ</span><span class="p">[</span><span class="s1">&#39;USER&#39;</span><span class="p">]}</span>
+        <span class="n">response</span> <span class="o">=</span> <span class="n">requests</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="n">endpoint</span><span class="p">,</span> <span class="n">params</span><span class="o">=</span><span class="n">params</span><span class="p">)</span>
+
+        <span class="c1"># Assertions that compare output with expected result</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">assertEqual</span><span class="p">(</span><span class="n">response</span><span class="o">.</span><span class="n">status_code</span><span class="p">,</span> <span class="mi">200</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">assertEqual</span><span class="p">(</span><span class="n">response</span><span class="o">.</span><span class="n">text</span><span class="p">,</span> <span class="sa">f</span><span class="s1">&#39;Hola, </span><span class="si">{</span><span class="n">os</span><span class="o">.</span><span class="n">environ</span><span class="p">[</span><span class="s2">&quot;USER&quot;</span><span class="p">]</span><span class="si">}</span><span class="s1">!&#39;</span><span class="p">)</span>
+
+<span class="c1"># Main Execution</span>
+
+<span class="k">if</span> <span class="vm">__name__</span> <span class="o">==</span> <span class="s1">&#39;__main__&#39;</span><span class="p">:</span>
+    <span class="n">unittest</span><span class="o">.</span><span class="n">main</span><span class="p">()</span>
+
+<span class="c1"># vim: set sts=4 sw=4 ts=8 expandtab ft=python:</span>
+</code></pre></div>
+</main>
+<footer>
+Built using <a href="https://python.org">Python</a>
+and <a href="https://jinja.palletsprojects.com">Jinja</a>
+with colors from 
+<a href="https://onmessage.nd.edu/university-branding/colors/">Notre Dame</a>, 
+<a href="https://spreadsheet.dev/how-to-get-the-hexadecimal-codes-of-colors-in-google-sheets">Google Docs</a>, and 
+<a href="https://nordtheme.com">Nord Theme</a>,
+and icons from <a href="https://pictogrammers.com/library/mdi/">Material Design Icons</a>.</footer>
+</body>
+</html>
