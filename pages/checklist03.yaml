@@ -8,23 +8,23 @@ body:       |
 
     The exam will have the following format:
 
-    1. **System Calls**: (*multiple-choice*, *fill-in-the-blank*).
-
-    2. **Files**, **Directories**, **I/O**: (*multiple-choice*,
+    1. **Files**, **Directories**, **I/O**: (*multiple-choice*,
     *fill-in-the-blank*, *free response*).
 
-    3. **Sockets, HTTP**: (*multiple-choice*, *fill-in-the-blank*, *free
+    2. **Sockets, HTTP**: (*multiple-choice*, *fill-in-the-blank*, *free
     response*).
 
-    4. **Networking**: (*multiple-choice*, *fill-in-the-blank*).
+    3. **Walking**: (*multiple-choice*, *fill-in-the-blank*).
 
-    Parts `1` through `3` are to be done first on **paper**. Once that portion
-    is completed and submitted, you will do part `4` on your own computer and
+    Parts `1` through `2` are to be done first on **paper**. Once that portion
+    is completed and submitted, you will do part `3` on your own computer and
     submit code to your **assignments** repository.
 
     <div class="alert special-bg" markdown="1">
 
-    **Note**: **REST** and `Vial` will not be on **Exam 03**.
+    **Note**: **REST** and `Vial` will not be on **Exam 03**, but you should
+    have completed and be familiar with the `playlist_server.py` in [Homework
+    09].
 
     </div>
 
@@ -100,8 +100,8 @@ body:       |
 
     2. What exactly is a [file descriptor] and what [system calls] can we do with one?
 
-    3. How do we get the [inode] information for a file?
-
+    3. How do we get the [inode] information for a file? What are the common
+    attributes in a [stat] structure?
 
     <div class="alert success-bg" markdown="1">
 
@@ -121,6 +121,10 @@ body:       |
 
     6. List the contents of a **directory**?
 
+    7. Access a particular byte with in a **file**?
+
+    8. Determine the owner of a **file**?
+
     </div>
 
     [file descriptor]: https://en.wikipedia.org/wiki/File_descriptor
@@ -130,6 +134,7 @@ body:       |
     [Python]: https://python.org
     [directories]: https://en.wikipedia.org/wiki/Directory_(computing)
     [i/o]: https://en.wikipedia.org/wiki/Input/output
+    [stat]: https://docs.python.org/3/library/os.html#os.stat
 
     ## OOP
 
@@ -149,7 +154,7 @@ body:       |
 
     [Homework 07]: homework07.html
     [Homework 08]: homework08.html
-
+    [Homework 09]: homework09.html
 
     ## Sockets, HTTP
 
