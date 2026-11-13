@@ -308,6 +308,8 @@
         topics:         Unit Testing
         items:
           - name:       Slides 28
+          - name:       Panopto
+            link:       https://notredame.hosted.panopto.com/Panopto/Pages/Viewer.aspx?id=283408ca-851d-4295-b0ed-b5010127ec5f
 
       - date:           Sat 11/14
         topics:         '<i class="muted">Playlist</i>'
