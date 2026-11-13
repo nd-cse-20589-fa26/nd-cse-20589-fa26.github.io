@@ -320,6 +320,9 @@ remove the specified <strong>playlist</strong> by setting the corresponding
 <p><strong>Hints</strong>: Make sure you complete the <code>@App.route</code> <a href="https://docs.python.org/3/glossary.html#term-decorator">decorator</a> for the
 appropriate <strong>endpoint</strong> and <strong>method</strong>.  You may wish to convert
 <code>playlist_id</code> into an <a href="https://docs.python.org/3/builtins/functions.html#int">int</a> for consistency.</p>
+<p>To capture the <code>playlist_id</code> in the <strong>URL</strong>, you will need to make sure
+you use a <a href="https://en.wikipedia.org/wiki/Regular_expression">regular expression</a> group in the <code>pattern</code> argument to the
+<code>@App.route</code> <a href="https://docs.python.org/3/glossary.html#term-decorator">decorator</a>.</p>
 </div>
 <div class="codehilite"><pre><span></span><code><span class="c1"># Test with curl (replace host, port, playlist_id)</span>
 $<span class="w"> </span>curl<span class="w"> </span>-X<span class="w"> </span>DELETE<span class="w"> </span>http://host:port/playlist/playlist_id
