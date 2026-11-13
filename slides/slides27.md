@@ -431,6 +431,20 @@ upload = App.route('/upload', methods=['PUT'])(upload)
 
 ---
 
+# Vial: <span class="gold">Routes</span> (<i class="muted">Patterns</i>)
+
+The `pattern` argument to the `route` [decorator] is a <strong class="success">regular
+expression</strong>.  Any <strong class="special">matched groups</strong> in the `pattern`
+will be sent to the **decorated** function as additional arguments.
+
+```python
+@App.route('/greeting/([a-zA-Z0-9]+)')  # Route /greeting/{name} to greet_name
+def greet_name(request, name):  # name is bound to first matched group in pattern
+    return f'Hello, {name}!'
+```
+
+---
+
 # Vial: <span class="gold">Method Dispatch</span>
 
 To dispatch the `route` <strong class="success">callbacks</strong>, we use a
