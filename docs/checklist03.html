@@ -1,0 +1,214 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<!-- Favicon -->
+<link rel="icon" type="image/png" sizes="32x32" href="static/ico/favicon-32x32.png">
+<link rel="icon" type="image/png" sizes="16x16" href="static/ico/favicon-16x16.png">
+<link rel="manifest" href="static/ico/site.webmanifest">
+<!-- Stylesheets -->
+<link rel="stylesheet" href="static/css/domer.css">
+<title>Checklist 03</title>
+</head>
+<body>
+<header>
+<a class="logo" href="checklist03.html">
+    <h1>Checklist 03</h1>
+</a>
+<nav>
+    <ul>
+        <li><a href="index.html"><h4>Home</h4></a></li>
+        </ul>
+</nav></header>
+<main>
+<h2 id="overview">Overview<a class="headerlink" href="#overview" title="Permanent link">&para;</a></h2>
+<p>Here is a general outline of the <strong>key concepts</strong> (<em>arranged by topic</em>)
+that you should know for <strong>Exam 03</strong>.</p>
+<p>The exam will have the following format:</p>
+<ol>
+<li>
+<p><strong>System Calls</strong>: (<em>multiple-choice</em>, <em>fill-in-the-blank</em>).</p>
+</li>
+<li>
+<p><strong>Files</strong>, <strong>Directories</strong>, <strong>I/O</strong>: (<em>multiple-choice</em>,
+<em>fill-in-the-blank</em>, <em>free response</em>).</p>
+</li>
+<li>
+<p><strong>Sockets, HTTP</strong>: (<em>multiple-choice</em>, <em>fill-in-the-blank</em>, <em>free
+response</em>).</p>
+</li>
+<li>
+<p><strong>Networking</strong>: (<em>multiple-choice</em>, <em>fill-in-the-blank</em>).</p>
+</li>
+</ol>
+<p>Parts <code>1</code> through <code>3</code> are to be done first on <strong>paper</strong>. Once that portion
+is completed and submitted, you will do part <code>4</code> on your own computer and
+submit code to your <strong>assignments</strong> repository.</p>
+<div class="alert special-bg">
+<p><strong>Note</strong>: <strong>REST</strong> and <code>Vial</code> will not be on <strong>Exam 03</strong>.</p>
+</div>
+<div class="alert warning-bg">
+<h3 id="check-all-embed_icon-representative-but-not-exhaustive"><i class="icon icon-medium"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><title>check-all</title><path d="M0.41,13.41L6,19L7.41,17.58L1.83,12M22.24,5.58L11.66,16.17L7.5,12L6.07,13.41L11.66,19L23.66,7M18,7L16.59,5.58L10.24,11.93L11.66,13.34L18,7Z" /></svg>
+</i> Representative, But Not Exhaustive<a class="headerlink" href="#check-all-embed_icon-representative-but-not-exhaustive" title="Permanent link">&para;</a></h3>
+<p>This checklist is meant to be representative, rather than exhaustive (ie.
+there may be questions that show up on the exam that are not shown below).</p>
+</div>
+<h2 id="logistics">Logistics<a class="headerlink" href="#logistics" title="Permanent link">&para;</a></h2>
+<p><strong>Exam 03</strong> will take place during our normal lecture session on
+<strong>Wednesday, November 18</strong> from <strong>11:30 AM - 12:20 PM</strong> in <strong>303 Cushing
+Hall</strong>.</p>
+<p>As noted above, the first portion of the exam with be on <strong>paper</strong>, while
+the remaining component with require <strong>coding</strong> and submitting work to your
+<strong>assignments</strong> <a href="https://github.com">GitHub</a> repository.</p>
+<p>During the <strong>paper</strong> portion of the exam, students will only be allowed to
+use <strong>one cheatsheet</strong>.  This <strong>paper</strong> component of the exam must be
+submitted before students can access the <strong>coding</strong> section.</p>
+<p>For the <strong>coding</strong> portion, students will use their own computer, and thus
+are permitted access to any material in their textbooks, notes,
+assignments, and the Internet.</p>
+<div class="alert danger-bg">
+<h3 id="alert-embed_icon-honor-code-violations"><i class="icon icon-medium"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><title>alert</title><path d="M13 14H11V9H13M13 18H11V16H13M1 21H23L12 2L1 21Z" /></svg>
+</i> Honor Code Violations<a class="headerlink" href="#alert-embed_icon-honor-code-violations" title="Permanent link">&para;</a></h3>
+<p>Although students are allowed to use their computers and the Internet
+during the <strong>coding</strong> portion of the exam, students <strong>may not communicate
+with others</strong> or <strong>solicit answers from others</strong>.  <strong>Nor may they use AI
+tools</strong> such as <strong>ChatGPT</strong> or <strong>Co-Pilot</strong> during the exam.  Students
+caught sharing solutions or violating any portion of the honor code will
+<strong>receive a zero on the exam</strong>.</p>
+<p>Furthermore, students are not allowed to consult, copy, or share material
+from previous sections of this course.</p>
+</div>
+<h2 id="system-calls">System Calls<a class="headerlink" href="#system-calls" title="Permanent link">&para;</a></h2>
+<ol>
+<li>
+<p>What exactly are <a href="https://en.wikipedia.org/wiki/System_call">system calls</a>? How are they different from normal
+functions?</p>
+</li>
+<li>
+<p>What are some reasons why <a href="https://en.wikipedia.org/wiki/System_call">system calls</a> related to <a href="https://en.wikipedia.org/wiki/Computer_file">files</a>, <a href="https://en.wikipedia.org/wiki/Directory_(computing)">directories</a>, <a href="https://en.wikipedia.org/wiki/Input/output">i/o</a>, and
+<a href="https://en.wikipedia.org/wiki/Network_socket">sockets</a> would fail?</p>
+</li>
+<li>
+<p>How could these <a href="https://en.wikipedia.org/wiki/System_call">system calls</a> <strong>fail</strong>?</p>
+</li>
+<li>
+<p>How do we check or detect these <strong>failures</strong>?</p>
+</li>
+</ol>
+<div class="alert success-bg">
+<h3 id="help-embed_icon-sample-questions"><i class="icon icon-medium"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><title>help</title><path d="M10,19H13V22H10V19M12,2C17.35,2.22 19.68,7.62 16.5,11.67C15.67,12.67 14.33,13.33 13.67,14.17C13,15 13,16 13,17H10C10,15.33 10,13.92 10.67,12.92C11.33,11.92 12.67,11.33 13.5,10.67C15.92,8.43 15.32,5.26 12,5A3,3 0 0,0 9,8H6A6,6 0 0,1 12,2Z" /></svg>
+</i> Sample Questions<a class="headerlink" href="#help-embed_icon-sample-questions" title="Permanent link">&para;</a></h3>
+<ol>
+<li>You are unsure why a program is failing.  How would you check what
+<a href="https://en.wikipedia.org/wiki/System_call">system calls</a> it is using?</li>
+</ol>
+</div>
+<h2 id="files-directories-io">Files, Directories, I/O<a class="headerlink" href="#files-directories-io" title="Permanent link">&para;</a></h2>
+<ol>
+<li>
+<p>What is the difference between <a href="https://docs.python.org/3/builtins/functions.html#open">open</a> and <a href="https://docs.python.org/3/library/os.html#os.open">os.open</a>?</p>
+</li>
+<li>
+<p>What exactly is a <a href="https://en.wikipedia.org/wiki/File_descriptor">file descriptor</a> and what <a href="https://en.wikipedia.org/wiki/System_call">system calls</a> can we do with one?</p>
+</li>
+<li>
+<p>How do we get the <a href="https://en.wikipedia.org/wiki/Inode">inode</a> information for a file?</p>
+</li>
+</ol>
+<div class="alert success-bg">
+<h3 id="help-embed_icon-sample-questions_1"><i class="icon icon-medium"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><title>help</title><path d="M10,19H13V22H10V19M12,2C17.35,2.22 19.68,7.62 16.5,11.67C15.67,12.67 14.33,13.33 13.67,14.17C13,15 13,16 13,17H10C10,15.33 10,13.92 10.67,12.92C11.33,11.92 12.67,11.33 13.5,10.67C15.92,8.43 15.32,5.26 12,5A3,3 0 0,0 9,8H6A6,6 0 0,1 12,2Z" /></svg>
+</i> Sample Questions<a class="headerlink" href="#help-embed_icon-sample-questions_1" title="Permanent link">&para;</a></h3>
+<p>How would you use <a href="https://en.wikipedia.org/wiki/System_call">system calls</a> in <a href="https://python.org">Python</a> to accomplish the following tasks:</p>
+<ol>
+<li>
+<p>Display the contents of a <strong>file</strong>?</p>
+</li>
+<li>
+<p>Copy the contents of a <strong>file</strong>?</p>
+</li>
+<li>
+<p>Check if a file is a regular <strong>file</strong> or <strong>directory</strong>?</p>
+</li>
+<li>
+<p>Check if a file is a <strong>readable</strong>, <strong>writable</strong>, or <strong>executable</strong>?</p>
+</li>
+<li>
+<p>Check the size of the <strong>file</strong>?</p>
+</li>
+<li>
+<p>List the contents of a <strong>directory</strong>?</p>
+</li>
+</ol>
+</div>
+<h2 id="oop">OOP<a class="headerlink" href="#oop" title="Permanent link">&para;</a></h2>
+<ol>
+<li>
+<p>How do we implement and use the <strong>context manger protocol</strong>?</p>
+</li>
+<li>
+<p>How do we implement and use the <strong>factory design pattern</strong>?</p>
+</li>
+</ol>
+<div class="alert success-bg">
+<h3 id="help-embed_icon-sample-questions_2"><i class="icon icon-medium"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><title>help</title><path d="M10,19H13V22H10V19M12,2C17.35,2.22 19.68,7.62 16.5,11.67C15.67,12.67 14.33,13.33 13.67,14.17C13,15 13,16 13,17H10C10,15.33 10,13.92 10.67,12.92C11.33,11.92 12.67,11.33 13.5,10.67C15.92,8.43 15.32,5.26 12,5A3,3 0 0,0 9,8H6A6,6 0 0,1 12,2Z" /></svg>
+</i> Sample Questions<a class="headerlink" href="#help-embed_icon-sample-questions_2" title="Permanent link">&para;</a></h3>
+<ol>
+<li>
+<p>Describe how and why the <strong>factory design pattern</strong> was used in <a href="homework07.html">Homework 07</a>.</p>
+</li>
+<li>
+<p>Describe how and why the <strong>context manager protocol</strong> was used in <a href="homework08.html">Homework 08</a>.</p>
+</li>
+</ol>
+</div>
+<h2 id="sockets-http">Sockets, HTTP<a class="headerlink" href="#sockets-http" title="Permanent link">&para;</a></h2>
+<ol>
+<li>
+<p>What is a <a href="https://en.wikipedia.org/wiki/URL">URL</a> and what are its components?</p>
+</li>
+<li>
+<p>How are <a href="https://en.wikipedia.org/wiki/Network_socket">sockets</a> similar to <a href="https://en.wikipedia.org/wiki/Computer_file">files</a>? How are they different?</p>
+</li>
+<li>
+<div class="flex-col" markdown="1">
+<p>What is <a href="https://en.wikipedia.org/wiki/Hypertext_Transfer_Protocol">HTTP</a>?</p>
+<ul>
+<li>
+<p>What <a href="https://en.wikipedia.org/wiki/System_call">system calls</a> does a typical <a href="https://en.wikipedia.org/wiki/Hypertext_Transfer_Protocol">HTTP</a> <strong>client</strong> perform? What
+messages does it send and receive?</p>
+</li>
+<li>
+<p>What <a href="https://en.wikipedia.org/wiki/System_call">system calls</a> does a typical <a href="https://en.wikipedia.org/wiki/Hypertext_Transfer_Protocol">HTTP</a> <strong>server</strong> perform? What
+messages does it send and receive?</p>
+</li>
+</ul>
+</li>
+</ol>
+<div class="alert success-bg">
+<h3 id="help-embed_icon-sample-questions_3"><i class="icon icon-medium"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><title>help</title><path d="M10,19H13V22H10V19M12,2C17.35,2.22 19.68,7.62 16.5,11.67C15.67,12.67 14.33,13.33 13.67,14.17C13,15 13,16 13,17H10C10,15.33 10,13.92 10.67,12.92C11.33,11.92 12.67,11.33 13.5,10.67C15.92,8.43 15.32,5.26 12,5A3,3 0 0,0 9,8H6A6,6 0 0,1 12,2Z" /></svg>
+</i> Sample Questions<a class="headerlink" href="#help-embed_icon-sample-questions_3" title="Permanent link">&para;</a></h3>
+<ol>
+<li>
+<p>Identify each of the components of the following <a href="https://en.wikipedia.org/wiki/URL">URL</a>: <code>https://pnutz.h4x0r.space/courses/cse.20589.fa26/checklist03.html</code>.</p>
+</li>
+<li>
+<p>Enumerate each step of a <a href="https://en.wikipedia.org/wiki/Hypertext_Transfer_Protocol">HTTP</a> transaction from the perspective of
+both the <info>client</info> and <danger>server</danger>.</p>
+</li>
+<li>
+<p>Modify <a href="https://github.com/nd-cse-20589-fa26/examples/blob/master/slides25/http_client.py">http_client.py</a> to perform a <code>POST</code>.</p>
+</li>
+</ol>
+</div>
+</main>
+<footer>
+Built using <a href="https://python.org">Python</a>
+and <a href="https://jinja.palletsprojects.com">Jinja</a>
+with colors from 
+<a href="https://onmessage.nd.edu/university-branding/colors/">Notre Dame</a>, 
+<a href="https://spreadsheet.dev/how-to-get-the-hexadecimal-codes-of-colors-in-google-sheets">Google Docs</a>, and 
+<a href="https://nordtheme.com">Nord Theme</a>,
+and icons from <a href="https://pictogrammers.com/library/mdi/">Material Design Icons</a>.</footer>
+</body>
+</html>
