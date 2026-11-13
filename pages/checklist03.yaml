@@ -1,0 +1,189 @@
+title:      Checklist 03
+body:       |
+
+    ## Overview
+
+    Here is a general outline of the **key concepts** (*arranged by topic*)
+    that you should know for **Exam 03**.
+
+    The exam will have the following format:
+
+    1. **System Calls**: (*multiple-choice*, *fill-in-the-blank*).
+
+    2. **Files**, **Directories**, **I/O**: (*multiple-choice*,
+    *fill-in-the-blank*, *free response*).
+
+    3. **Sockets, HTTP**: (*multiple-choice*, *fill-in-the-blank*, *free
+    response*).
+
+    4. **Networking**: (*multiple-choice*, *fill-in-the-blank*).
+
+    Parts `1` through `3` are to be done first on **paper**. Once that portion
+    is completed and submitted, you will do part `4` on your own computer and
+    submit code to your **assignments** repository.
+
+    <div class="alert special-bg" markdown="1">
+
+    **Note**: **REST** and `Vial` will not be on **Exam 03**.
+
+    </div>
+
+    <div class="alert warning-bg" markdown="1">
+
+    ### <i class="icon icon-medium">{{ "check-all" | embed_icon }}</i> Representative, But Not Exhaustive
+
+    This checklist is meant to be representative, rather than exhaustive (ie.
+    there may be questions that show up on the exam that are not shown below).
+
+    </div>
+
+    ## Logistics
+
+    **Exam 03** will take place during our normal lecture session on
+    **Wednesday, November 18** from **11:30 AM - 12:20 PM** in **303 Cushing
+    Hall**.
+
+    As noted above, the first portion of the exam with be on **paper**, while
+    the remaining component with require **coding** and submitting work to your
+    **assignments** [GitHub] repository.
+
+    During the **paper** portion of the exam, students will only be allowed to
+    use **one cheatsheet**.  This **paper** component of the exam must be
+    submitted before students can access the **coding** section.
+
+    For the **coding** portion, students will use their own computer, and thus
+    are permitted access to any material in their textbooks, notes,
+    assignments, and the Internet.
+
+    <div class="alert danger-bg"  markdown="1">
+
+    ### <i class="icon icon-medium">{{ "alert" | embed_icon }}</i> Honor Code Violations
+
+    Although students are allowed to use their computers and the Internet
+    during the **coding** portion of the exam, students **may not communicate
+    with others** or **solicit answers from others**.  **Nor may they use AI
+    tools** such as **ChatGPT** or **Co-Pilot** during the exam.  Students
+    caught sharing solutions or violating any portion of the honor code will
+    **receive a zero on the exam**.
+
+    Furthermore, students are not allowed to consult, copy, or share material
+    from previous sections of this course.
+
+    </div>
+
+    [GitHub]: https://github.com
+
+    ## System Calls
+
+    1. What exactly are [system calls]? How are they different from normal
+    functions?
+
+    2. What are some reasons why [system calls] related to [files], [directories], [i/o], and
+    [sockets] would fail?
+
+      - How could these [system calls] **fail**?
+
+      - How do we check or detect these **failures**?
+
+    <div class="alert success-bg" markdown="1">
+
+    ### <i class="icon icon-medium">{{ "help" | embed_icon }}</i> Sample Questions
+
+    1. You are unsure why a program is failing.  How would you check what
+    [system calls] it is using?
+
+    </div>
+
+    ## Files, Directories, I/O
+
+    1. What is the difference between [open] and [os.open]?
+
+    2. What exactly is a [file descriptor] and what [system calls] can we do with one?
+
+    3. How do we get the [inode] information for a file?
+
+
+    <div class="alert success-bg" markdown="1">
+
+    ### <i class="icon icon-medium">{{ "help" | embed_icon }}</i> Sample Questions
+
+    How would you use [system calls] in [Python] to accomplish the following tasks:
+
+    1. Display the contents of a **file**?
+
+    2. Copy the contents of a **file**?
+
+    3. Check if a file is a regular **file** or **directory**?
+
+    4. Check if a file is a **readable**, **writable**, or **executable**?
+
+    5. Check the size of the **file**?
+
+    6. List the contents of a **directory**?
+
+    </div>
+
+    [file descriptor]: https://en.wikipedia.org/wiki/File_descriptor
+    [inode]: https://en.wikipedia.org/wiki/Inode
+    [open]: https://docs.python.org/3/builtins/functions.html#open
+    [os.open]: https://docs.python.org/3/library/os.html#os.open
+    [Python]: https://python.org
+    [directories]: https://en.wikipedia.org/wiki/Directory_(computing)
+    [i/o]: https://en.wikipedia.org/wiki/Input/output
+
+    ## OOP
+
+    1. How do we implement and use the **context manger protocol**?
+
+    2. How do we implement and use the **factory design pattern**?
+
+    <div class="alert success-bg" markdown="1">
+
+    ### <i class="icon icon-medium">{{ "help" | embed_icon }}</i> Sample Questions
+
+    1. Describe how and why the **factory design pattern** was used in [Homework 07].
+
+    2. Describe how and why the **context manager protocol** was used in [Homework 08].
+
+    </div>
+
+    [Homework 07]: homework07.html
+    [Homework 08]: homework08.html
+
+
+    ## Sockets, HTTP
+
+    1.  What is a [URL] and what are its components?
+
+    2.  How are [sockets] similar to [files]? How are they different?
+
+    3.  <div class="flex-col" markdown="1">
+
+        What is [HTTP]?
+
+        - What [system calls] does a typical [HTTP] **client** perform? What
+        messages does it send and receive?
+
+        - What [system calls] does a typical [HTTP] **server** perform? What
+        messages does it send and receive?
+
+    [URL]: https://en.wikipedia.org/wiki/URL
+    [sockets]: https://en.wikipedia.org/wiki/Network_socket
+    [files]: https://en.wikipedia.org/wiki/Computer_file
+    [HTTP]: https://en.wikipedia.org/wiki/Hypertext_Transfer_Protocol
+    [system calls]: https://en.wikipedia.org/wiki/System_call
+
+    <div class="alert success-bg" markdown="1">
+
+    ### <i class="icon icon-medium">{{ "help" | embed_icon }}</i> Sample Questions
+
+    1.  Identify each of the components of the following [URL]: `https://pnutz.h4x0r.space/courses/cse.20589.fa26/checklist03.html`.
+
+    2.  Enumerate each step of a [HTTP] transaction from the perspective of
+    both the <info>client</info> and <danger>server</danger>.
+
+    3.  Modify [http_client.py] to perform a `POST`.
+
+    </div>
+
+    [http_client.py]: https://github.com/nd-cse-20589-fa26/examples/blob/master/slides25/http_client.py
