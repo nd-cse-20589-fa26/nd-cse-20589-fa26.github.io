@@ -353,6 +353,10 @@ body:       |
       appropriate **endpoint** and **method**.  You may wish to convert
       `playlist_id` into an [int] for consistency.
 
+      To capture the `playlist_id` in the **URL**, you will need to make sure
+      you use a [regular expression] group in the `pattern` argument to the
+      `@App.route` [decorator].
+
       </div>
 
           :::bash
@@ -459,6 +463,7 @@ body:       |
   [list]: https://docs.python.org/3/library/stdtypes.html#sequence-types-list-tuple-range
   [int]: https://docs.python.org/3/builtins/functions.html#int
   [list comprehension]: https://docs.python.org/3/tutorial/datastructures.html#list-comprehensions
+  [regular expression]: https://en.wikipedia.org/wiki/Regular_expression
 
   ### Task 2: Testing
 
