@@ -100,8 +100,8 @@ body:       |
 
     2. What exactly is a [file descriptor] and what [system calls] can we do with one?
 
-    3. How do we get the [inode] information for a file? What are the common
-    attributes in a [stat] structure?
+    3. How do we get the [inode] information for a file using [stat] or [Path]?
+    What are the common attributes in a [stat] structure?
 
     <div class="alert success-bg" markdown="1">
 
@@ -135,6 +135,7 @@ body:       |
     [directories]: https://en.wikipedia.org/wiki/Directory_(computing)
     [i/o]: https://en.wikipedia.org/wiki/Input/output
     [stat]: https://docs.python.org/3/library/os.html#os.stat
+    [Path]: https://docs.python.org/3/library/pathlib.html#pathlib.Path
 
     ## OOP
 
