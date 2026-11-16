@@ -14,7 +14,7 @@ body:       |
     2. **Sockets, HTTP**: (*multiple-choice*, *fill-in-the-blank*, *free
     response*).
 
-    3. **Walking**: (*coding on computer*).
+    3. **Walk, I/O**: (*coding on computer*).
 
     Parts `1` through `2` are to be done first on **paper**. Once that portion
     is completed and submitted, you will do part `3` on your own computer and
@@ -103,6 +103,8 @@ body:       |
     3. How do we get the [inode] information for a file using [stat] or [Path]?
     What are the common attributes in a [stat] structure?
 
+    4. How do we walk a directory using [os.walk] or [Path.walk]?
+
     <div class="alert success-bg" markdown="1">
 
     ### <i class="icon icon-medium">{{ "help" | embed_icon }}</i> Sample Questions
@@ -136,6 +138,8 @@ body:       |
     [i/o]: https://en.wikipedia.org/wiki/Input/output
     [stat]: https://docs.python.org/3/library/os.html#os.stat
     [Path]: https://docs.python.org/3/library/pathlib.html#pathlib.Path
+    [os.walk]: https://docs.python.org/3/library/os.html#os.walk
+    [Path.walk]: https://docs.python.org/3/library/pathlib.html#pathlib.Path.walk
 
     ## OOP
 
