@@ -1,0 +1,262 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<!-- Favicon -->
+<link rel="icon" type="image/png" sizes="32x32" href="static/ico/favicon-32x32.png">
+<link rel="icon" type="image/png" sizes="16x16" href="static/ico/favicon-16x16.png">
+<link rel="manifest" href="static/ico/site.webmanifest">
+<!-- Stylesheets -->
+<link rel="stylesheet" href="static/css/domer.css">
+<title>Notes 29: Databases</title>
+</head>
+<body>
+<header>
+<a class="logo" href="notes29.html">
+    <h1>Notes 29: Databases</h1>
+</a>
+<nav>
+    <ul>
+        <li><a href="index.html"><h4>Home</h4></a></li>
+        </ul>
+</nav></header>
+<main>
+<h2 id="logistics">Logistics<a class="headerlink" href="#logistics" title="Permanent link">&para;</a></h2>
+<ul>
+<li><strong>Exam 03</strong></li>
+</ul>
+<h2 id="databases-overview">Databases: <span class="gold">Overview</span><a class="headerlink" href="#databases-overview" title="Permanent link">&para;</a></h2>
+<blockquote>
+<p>What is a <strong>database</strong>? How has used one before?</p>
+</blockquote>
+<p>Most <strong class="success">software systems</strong>, including <strong
+class="special">web applications</strong>, usually store information in a
+<strong class="info">database</strong>, which is an organized collection of
+data that can be easily <strong>accessed</strong>, <strong>managed</strong>, <strong>updated</strong>, and
+<strong>queried</strong>.</p>
+<ul>
+<li>
+<p>For simple data, it is sufficient to use a <strong class="danger">flat
+  file</strong> to store data.</p>
+</li>
+<li>
+<p>For structured data, it is possible to use <strong
+  class="warning">CSV</strong> or <strong class="warning">JSON</strong>
+  formatted files.</p>
+</li>
+<li>
+<p>For large amounts of data, however, it is necessary to use a <strong
+  class="success">database management system</strong> (<em>DBMS</em>) such as
+  <a href="https://www.sqlite.org/">SQLite</a>.</p>
+</li>
+</ul>
+<p><img src="static/img/software-systems.svg" class="transparent responsive"></p>
+<h2 id="databases-doornotepy">Databases: <a href="https://github.com/nd-cse-20589-fa26/examples/blob/master/slides29/doornote.py">doornote.py</a><a class="headerlink" href="#databases-doornotepy" title="Permanent link">&para;</a></h2>
+<blockquote>
+<p>Add a database to <a href="https://github.com/nd-cse-20589-fa26/examples/blob/master/slides29/doornote.py">doornote.py</a>, which is a <strong class="special">web
+application</strong> that allows users to list the <code>messages</code> left by others
+for a particular <code>room</code> or allows users to post a <code>message</code> to a particular
+<code>room</code>.</p>
+</blockquote>
+<div class="codehilite"><pre><span></span><code><span class="c1"># Start doornote web application</span>
+$<span class="w"> </span>./doornote.py<span class="w"> </span><span class="m">0</span>.0.0.0<span class="w"> </span><span class="m">9999</span>
+
+<span class="c1"># Get messages for Dillon 210</span>
+$<span class="w"> </span>curl<span class="w"> </span>localhost:9999/room/dillon-210
+
+<span class="c1"># Post message to Dillon 210</span>
+$<span class="w"> </span>curl<span class="w"> </span>-d<span class="w"> </span><span class="s1">&#39;Hello&#39;</span><span class="w"> </span>localhost:9999/room/dillon-210
+</code></pre></div>
+
+<div class="codehilite"><pre><span></span><code><span class="kn">import</span> <span class="nn">json</span>
+<span class="kn">import</span> <span class="nn">sys</span>
+
+<span class="kn">from</span> <span class="nn">vial</span> <span class="kn">import</span> <span class="n">Vial</span>
+
+<span class="c1"># Constants</span>
+
+<span class="k">try</span><span class="p">:</span>
+    <span class="n">HOST</span> <span class="o">=</span> <span class="n">sys</span><span class="o">.</span><span class="n">argv</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span>
+    <span class="n">PORT</span> <span class="o">=</span> <span class="nb">int</span><span class="p">(</span><span class="n">sys</span><span class="o">.</span><span class="n">argv</span><span class="p">[</span><span class="mi">2</span><span class="p">])</span>
+<span class="k">except</span> <span class="ne">IndexError</span><span class="p">:</span>
+    <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s1">&#39;Usage: </span><span class="si">{</span><span class="n">sys</span><span class="o">.</span><span class="n">argv</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="si">}</span><span class="s1"> HOST PORT&#39;</span><span class="p">,</span> <span class="n">file</span><span class="o">=</span><span class="n">sys</span><span class="o">.</span><span class="n">stderr</span><span class="p">)</span>
+    <span class="n">sys</span><span class="o">.</span><span class="n">exit</span><span class="p">(</span><span class="mi">1</span><span class="p">)</span>
+
+<span class="c1"># Databases</span>
+
+<span class="o">...</span>
+
+<span class="c1"># Globals</span>
+
+<span class="n">App</span> <span class="o">=</span> <span class="n">Vial</span><span class="p">(</span><span class="n">HOST</span><span class="p">,</span> <span class="n">PORT</span><span class="p">,</span> <span class="p">{</span><span class="s1">&#39;db&#39;</span><span class="p">:</span> <span class="n">Database0</span><span class="p">()})</span>
+
+<span class="c1"># Handlers</span>
+
+<span class="nd">@App</span><span class="o">.</span><span class="n">route</span><span class="p">(</span><span class="s1">&#39;/room/([a-z]+-[0-9]</span><span class="si">{3}</span><span class="s1">)&#39;</span><span class="p">)</span>
+<span class="k">def</span> <span class="nf">doornote_messages</span><span class="p">(</span><span class="n">request</span><span class="p">,</span> <span class="n">room</span><span class="p">:</span> <span class="nb">str</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">str</span><span class="p">:</span>
+    <span class="n">messages</span> <span class="o">=</span> <span class="n">App</span><span class="o">.</span><span class="n">db</span><span class="o">.</span><span class="n">messages</span><span class="p">(</span><span class="n">room</span><span class="p">)</span>
+    <span class="k">return</span> <span class="s1">&#39;&#39;</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="sa">f</span><span class="s1">&#39;</span><span class="si">{</span><span class="n">i</span><span class="si">:</span><span class="s1">04d</span><span class="si">}</span><span class="s1">. </span><span class="si">{</span><span class="n">m</span><span class="si">}</span><span class="se">\n</span><span class="s1">&#39;</span> <span class="k">for</span> <span class="n">i</span><span class="p">,</span> <span class="n">m</span> <span class="ow">in</span> <span class="nb">enumerate</span><span class="p">(</span><span class="n">messages</span><span class="p">))</span>
+
+<span class="nd">@App</span><span class="o">.</span><span class="n">route</span><span class="p">(</span><span class="s1">&#39;/room/([a-z]+-[0-9]</span><span class="si">{3}</span><span class="s1">)&#39;</span><span class="p">,</span> <span class="n">methods</span><span class="o">=</span><span class="p">[</span><span class="s1">&#39;POST&#39;</span><span class="p">])</span>
+<span class="k">def</span> <span class="nf">doornote_append</span><span class="p">(</span><span class="n">request</span><span class="p">,</span> <span class="n">room</span><span class="p">:</span> <span class="nb">str</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">str</span><span class="p">:</span>
+    <span class="n">App</span><span class="o">.</span><span class="n">db</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">room</span><span class="p">,</span> <span class="n">request</span><span class="o">.</span><span class="n">post_data</span><span class="o">.</span><span class="n">decode</span><span class="p">())</span>
+    <span class="k">return</span> <span class="sa">f</span><span class="s1">&#39;</span><span class="si">{</span><span class="n">room</span><span class="si">}</span><span class="s1"> now has </span><span class="si">{</span><span class="n">App</span><span class="o">.</span><span class="n">db</span><span class="o">.</span><span class="n">count</span><span class="p">(</span><span class="n">room</span><span class="p">)</span><span class="si">}</span><span class="s1"> messages.</span><span class="se">\n</span><span class="s1">&#39;</span>
+
+<span class="c1"># Main Execution</span>
+
+<span class="k">if</span> <span class="vm">__name__</span> <span class="o">==</span> <span class="s1">&#39;__main__&#39;</span><span class="p">:</span>
+    <span class="n">App</span><span class="o">.</span><span class="n">run</span><span class="p">()</span>
+</code></pre></div>
+
+<h2 id="databases-version-0">Databases: <span class="gold">Version 0</span><a class="headerlink" href="#databases-version-0" title="Permanent link">&para;</a></h2>
+<p>Since we need to store <code>messages</code> for each <code>room</code>, we can create a <strong
+class="primary">dict</strong> where each <code>room</code> maps to a <strong
+class="primary">list</strong> of <code>messages</code>.</p>
+<div class="alert danger-bg centered">
+<p>This is <strong>fast</strong> and <strong>simple</strong> but offers no <strong
+class="info">persistence</strong>.  If server <strong>crashes</strong> or <strong>exits</strong>, then
+all data is lost!</p>
+</div>
+<div class="codehilite"><pre><span></span><code><span class="k">class</span> <span class="nc">Database0</span><span class="p">:</span>
+<span class="w">    </span><span class="sd">&#39;&#39;&#39; Database 0: Only stored in memory &#39;&#39;&#39;</span>
+
+    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">rooms</span> <span class="o">=</span> <span class="p">{}</span>
+
+    <span class="k">def</span> <span class="nf">messages</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">room</span><span class="p">:</span> <span class="nb">str</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">list</span><span class="p">[</span><span class="nb">str</span><span class="p">]:</span>
+<span class="w">        </span><span class="sd">&#39;&#39;&#39; Return messages associated with room. &#39;&#39;&#39;</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">rooms</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="n">room</span><span class="p">,</span> <span class="p">[])</span>
+
+    <span class="k">def</span> <span class="nf">append</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">room</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span> <span class="n">message</span><span class="p">:</span> <span class="nb">str</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&#39;&#39;&#39; Add message to end of list associated with room. &#39;&#39;&#39;</span>
+        <span class="k">try</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">rooms</span><span class="p">[</span><span class="n">room</span><span class="p">]</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">message</span><span class="p">)</span>
+        <span class="k">except</span> <span class="ne">KeyError</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">rooms</span><span class="p">[</span><span class="n">room</span><span class="p">]</span> <span class="o">=</span> <span class="p">[</span><span class="n">message</span><span class="p">]</span>
+
+    <span class="k">def</span> <span class="nf">count</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">room</span><span class="p">:</span> <span class="nb">str</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">int</span><span class="p">:</span>
+<span class="w">        </span><span class="sd">&#39;&#39;&#39; Return number of messages for room. &#39;&#39;&#39;</span>
+        <span class="k">return</span> <span class="nb">len</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">rooms</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="n">room</span><span class="p">,</span> <span class="p">[]))</span>
+</code></pre></div>
+
+<h2 id="databases-version-1">Databases: <span class="gold">Version 1</span><a class="headerlink" href="#databases-version-1" title="Permanent link">&para;</a></h2>
+<p>To add <strong class="info">persistence</strong>, we can consider storing the
+<code>messages</code> of each <code>room</code> in a separate <strong
+class="warning">file</strong>.</p>
+<div class="alert warning-bg centered">
+<p>This is <strong>simple</strong> but is slow: need to <code>open</code> and perform
+<strong class="caution">I/O</strong> for every operation.  Moreover, with many <code>rooms</code>, we
+would end up with a lot of <strong class="warning">files</strong>.</p>
+</div>
+<div class="codehilite"><pre><span></span><code><span class="k">class</span> <span class="nc">Database1</span><span class="p">:</span>
+<span class="w">    </span><span class="sd">&#39;&#39;&#39; Database 1: Stored in multiple files (one per room) &#39;&#39;&#39;</span>
+
+    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">prefix</span><span class="o">=</span><span class="s1">&#39;doornote&#39;</span><span class="p">):</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">prefix</span> <span class="o">=</span> <span class="n">prefix</span>
+
+    <span class="k">def</span> <span class="nf">messages</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">room</span><span class="p">:</span> <span class="nb">str</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">list</span><span class="p">[</span><span class="nb">str</span><span class="p">]:</span>
+<span class="w">        </span><span class="sd">&#39;&#39;&#39; Return messages associated with room. &#39;&#39;&#39;</span>
+        <span class="n">path</span> <span class="o">=</span> <span class="sa">f</span><span class="s1">&#39;</span><span class="si">{</span><span class="bp">self</span><span class="o">.</span><span class="n">prefix</span><span class="si">}</span><span class="s1">.</span><span class="si">{</span><span class="n">room</span><span class="si">}</span><span class="s1">&#39;</span>
+        <span class="k">try</span><span class="p">:</span>
+            <span class="k">with</span> <span class="nb">open</span><span class="p">(</span><span class="n">path</span><span class="p">)</span> <span class="k">as</span> <span class="n">stream</span><span class="p">:</span>
+                <span class="k">return</span> <span class="p">[</span><span class="n">line</span><span class="o">.</span><span class="n">strip</span><span class="p">()</span> <span class="k">for</span> <span class="n">line</span> <span class="ow">in</span> <span class="n">stream</span><span class="p">]</span>
+        <span class="k">except</span> <span class="ne">OSError</span><span class="p">:</span>
+            <span class="k">return</span> <span class="p">[]</span>
+
+    <span class="k">def</span> <span class="nf">append</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">room</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span> <span class="n">message</span><span class="p">:</span> <span class="nb">str</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&#39;&#39;&#39; Add message to end of list associated with room. &#39;&#39;&#39;</span>
+        <span class="n">path</span> <span class="o">=</span> <span class="sa">f</span><span class="s1">&#39;</span><span class="si">{</span><span class="bp">self</span><span class="o">.</span><span class="n">prefix</span><span class="si">}</span><span class="s1">.</span><span class="si">{</span><span class="n">room</span><span class="si">}</span><span class="s1">&#39;</span>
+        <span class="k">with</span> <span class="nb">open</span><span class="p">(</span><span class="n">path</span><span class="p">,</span> <span class="s1">&#39;a&#39;</span><span class="p">)</span> <span class="k">as</span> <span class="n">stream</span><span class="p">:</span>
+            <span class="n">stream</span><span class="o">.</span><span class="n">write</span><span class="p">(</span><span class="sa">f</span><span class="s1">&#39;</span><span class="si">{</span><span class="n">message</span><span class="si">}</span><span class="se">\n</span><span class="s1">&#39;</span><span class="p">)</span>
+
+    <span class="k">def</span> <span class="nf">count</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">room</span><span class="p">:</span> <span class="nb">str</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">int</span><span class="p">:</span>
+<span class="w">        </span><span class="sd">&#39;&#39;&#39; Return number of messages for room. &#39;&#39;&#39;</span>
+        <span class="n">path</span> <span class="o">=</span> <span class="sa">f</span><span class="s1">&#39;</span><span class="si">{</span><span class="bp">self</span><span class="o">.</span><span class="n">prefix</span><span class="si">}</span><span class="s1">.</span><span class="si">{</span><span class="n">room</span><span class="si">}</span><span class="s1">&#39;</span>
+        <span class="k">with</span> <span class="nb">open</span><span class="p">(</span><span class="n">path</span><span class="p">)</span> <span class="k">as</span> <span class="n">stream</span><span class="p">:</span>
+            <span class="k">return</span> <span class="nb">sum</span><span class="p">(</span><span class="mi">1</span> <span class="k">for</span> <span class="n">_</span> <span class="ow">in</span> <span class="n">stream</span><span class="p">)</span>
+</code></pre></div>
+
+<h2 id="databases-version-2">Databases: <span class="gold">Version 2</span><a class="headerlink" href="#databases-version-2" title="Permanent link">&para;</a></h2>
+<p>Rather than use many <strong class="warning">files</strong>, we can use a
+single structured <strong class="warning">JSON file</strong>.</p>
+<div class="alert caution-bg centered">
+<p>This is <strong>simple</strong> and a bit more efficient because we only need perform
+<strong class="caution">I/O</strong> when initially <strong>loading</strong> the <strong
+class="info">database</strong> and when <strong>saving</strong> after an <code>append</code>.</p>
+</div>
+<div class="codehilite"><pre><span></span><code><span class="k">class</span> <span class="nc">Database2</span><span class="p">:</span>
+<span class="w">    </span><span class="sd">&#39;&#39;&#39; Database 2: Stored in a single JSON file &#39;&#39;&#39;</span>
+
+    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">path</span><span class="o">=</span><span class="s1">&#39;doornote.json&#39;</span><span class="p">):</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">path</span> <span class="o">=</span> <span class="n">path</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">load</span><span class="p">()</span>
+
+    <span class="k">def</span> <span class="nf">load</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="k">try</span><span class="p">:</span>
+            <span class="k">with</span> <span class="nb">open</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">path</span><span class="p">)</span> <span class="k">as</span> <span class="n">stream</span><span class="p">:</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">rooms</span> <span class="o">=</span> <span class="n">json</span><span class="o">.</span><span class="n">load</span><span class="p">(</span><span class="n">stream</span><span class="p">)</span>
+        <span class="k">except</span> <span class="ne">OSError</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">rooms</span> <span class="o">=</span> <span class="p">{}</span>
+    <span class="k">def</span> <span class="nf">save</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="k">with</span> <span class="nb">open</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">path</span><span class="p">,</span> <span class="s1">&#39;w&#39;</span><span class="p">)</span> <span class="k">as</span> <span class="n">stream</span><span class="p">:</span>
+            <span class="n">json</span><span class="o">.</span><span class="n">dump</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">rooms</span><span class="p">,</span> <span class="n">stream</span><span class="p">)</span>
+
+    <span class="k">def</span> <span class="nf">messages</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">room</span><span class="p">:</span> <span class="nb">str</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">list</span><span class="p">[</span><span class="nb">str</span><span class="p">]:</span>
+<span class="w">        </span><span class="sd">&#39;&#39;&#39; Return messages associated with room. &#39;&#39;&#39;</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">rooms</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="n">room</span><span class="p">,</span> <span class="p">[])</span>
+
+    <span class="k">def</span> <span class="nf">append</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">room</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span> <span class="n">message</span><span class="p">:</span> <span class="nb">str</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&#39;&#39;&#39; Add message to end of list associated with room. &#39;&#39;&#39;</span>
+        <span class="k">try</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">rooms</span><span class="p">[</span><span class="n">room</span><span class="p">]</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">message</span><span class="p">)</span>
+        <span class="k">except</span> <span class="ne">KeyError</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">rooms</span><span class="p">[</span><span class="n">room</span><span class="p">]</span> <span class="o">=</span> <span class="p">[</span><span class="n">message</span><span class="p">]</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">save</span><span class="p">()</span>
+
+    <span class="k">def</span> <span class="nf">count</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">room</span><span class="p">:</span> <span class="nb">str</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">int</span><span class="p">:</span>
+<span class="w">        </span><span class="sd">&#39;&#39;&#39; Return number of messages for room. &#39;&#39;&#39;</span>
+        <span class="k">return</span> <span class="nb">len</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">rooms</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="n">room</span><span class="p">,</span> <span class="p">[]))</span>
+</code></pre></div>
+
+<h2 id="databases-memory-hierarchy">Databases: <span class="gold">Memory Hierarchy</span><a class="headerlink" href="#databases-memory-hierarchy" title="Permanent link">&para;</a></h2>
+<div class="centered">
+
+<a href="https://gist.github.com/hellerbarde/2843375">
+<img src="https://camo.githubusercontent.com/21e9781dff39ae0055959d1c686278591144f412c759dc77ebe1843e25376024/687474703a2f2f692e696d6775722e636f6d2f6b307431652e706e67" class="responsive">
+</a>
+
+</div>
+
+<h2 id="databases-reflection">Databases: <span class="gold">Reflection</span><a class="headerlink" href="#databases-reflection" title="Permanent link">&para;</a></h2>
+<p>While using <strong class="danger">flat files</strong> or even structured
+<strong class="warning">JSON files</strong> works for simple applications, they
+are <strong>insufficient</strong> for larger and more complex systems.</p>
+<ul>
+<li>
+<p>Changing data often requires <strong class="caution">loading the entire file
+  into memory</strong>, making the change, and then writing the data back out
+  to disk.</p>
+</li>
+<li>
+<p><strong class="success">Querying</strong> or <strong
+  class="success">searching</strong> data often requires a full search of all
+  data.</p>
+</li>
+</ul>
+<div class="alert info-bg centered">
+<p>For <strong>fast</strong> and <strong>persistent</strong> data storage, we will want to use a <strong>database
+management system</strong> such as <a href="https://www.sqlite.org/">SQLite</a>.</p>
+</div>
+</main>
+<footer>
+Built using <a href="https://python.org">Python</a>
+and <a href="https://jinja.palletsprojects.com">Jinja</a>
+with colors from 
+<a href="https://onmessage.nd.edu/university-branding/colors/">Notre Dame</a>, 
+<a href="https://spreadsheet.dev/how-to-get-the-hexadecimal-codes-of-colors-in-google-sheets">Google Docs</a>, and 
+<a href="https://nordtheme.com">Nord Theme</a>,
+and icons from <a href="https://pictogrammers.com/library/mdi/">Material Design Icons</a>.</footer>
+</body>
+</html>
