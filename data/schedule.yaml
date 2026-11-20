@@ -335,6 +335,8 @@
         topics:         Databases
         items:
           - name:       Slides 29
+          - name:       Panopto
+            link:       https://notredame.hosted.panopto.com/Panopto/Pages/Viewer.aspx?id=1b74629a-972f-4572-81f5-b5080124bd8c
 
 - name:     Databases
   days:
