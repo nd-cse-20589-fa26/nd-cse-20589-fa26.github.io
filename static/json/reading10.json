@@ -1,0 +1,20 @@
+{
+    "q1": {
+        "type": "multiple",
+        "question": "\n<p>Which of the following statements regarding <b>flat files</b> vs\n<b>databases</b> are true (<i>choose all that apply</i>)?</p>\n",
+        "responses": {
+            "flat_file_human": "<b>Flat files</b> have the advantage of being human readable.",
+            "flat_file_inefficient": "<b>Flat files</b> have the disadvantage of being inefficient for large amounts of data.",
+            "databases_efficient": "<b>Databases</b> provide efficient access to structured data.",
+            "databases_relationship": "<b>Databases</b> provide a means of defining relationships between data."
+        }
+    },
+    "q2": {
+        "type": "blank",
+        "question": "\n<p>____ <b>(1)</b> provide a way to store structured data in tables and\nestablish relationships between the data in those tables.  To interact with\nthe data, programmers can use  ____ <b>(2)</b>.  This is a ____ language\n<b>(3)</b> used to create, insert, select, or update information in the\ndatabase.</p>\n"
+    },
+    "q3": {
+        "type": "blank",
+        "question": "\n<p>Assuming you have a <b>database</b> with a <code>users</code> table as\ndescribed in <a\nhref=\"https://realpython.com/python-sql-libraries/#understanding-the-database-schema\">Understanding\nthe Database Schema</a>, complete the following <b>Python</b> code to\nretrieve all the <code>users</code> from the <code>social-media.db</code>\n<b>SQLite</b> database and print them out.</p>\n\n<pre>\nimport sqlite3\n\nSQL_SELECT_ALL_USERS = 'SELECT * FROM users'\n\nwith sqlite3.____('social-media.db') as connection: # 1.\n    cursor = connection.____()                      # 2.\n    cursor.____(SQL_ALL_USERS)                      # 3.\n\n    for user in cursor.____():                      # 4.\n        print(user)\n</pre>\n"
+    }
+}
