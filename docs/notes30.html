@@ -1,0 +1,303 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<!-- Favicon -->
+<link rel="icon" type="image/png" sizes="32x32" href="static/ico/favicon-32x32.png">
+<link rel="icon" type="image/png" sizes="16x16" href="static/ico/favicon-16x16.png">
+<link rel="manifest" href="static/ico/site.webmanifest">
+<!-- Stylesheets -->
+<link rel="stylesheet" href="static/css/domer.css">
+<title>Notes 30: SQLite</title>
+</head>
+<body>
+<header>
+<a class="logo" href="notes30.html">
+    <h1>Notes 30: SQLite</h1>
+</a>
+<nav>
+    <ul>
+        <li><a href="index.html"><h4>Home</h4></a></li>
+        </ul>
+</nav></header>
+<main>
+<h2 id="logistics">Logistics<a class="headerlink" href="#logistics" title="Permanent link">&para;</a></h2>
+<ul>
+<li>
+<p><strong>Exam 03</strong></p>
+</li>
+<li>
+<p><a href="homework10.html">Homework 10</a>: Requirements</p>
+</li>
+</ul>
+<h2 id="sqlite-overview">SQLite: <span class="gold">Overview</span><a class="headerlink" href="#sqlite-overview" title="Permanent link">&para;</a></h2>
+<p>A <strong class="info">relational database</strong> is a collection of data
+organized into <strong class="primary">tables</strong> that consist of <strong
+class="special">rows</strong> of items that correspond to <strong
+class="special">columns</strong>:</p>
+<ul>
+<li>
+<p>Has measures for <strong class="danger">data integrity</strong>.</p>
+</li>
+<li>
+<p>Allows for combining <strong class="warning">multiple datasets</strong>.</p>
+</li>
+<li>
+<p>Enables asking <strong class="info">detailed questions</strong>.</p>
+</li>
+<li>
+<p>Provides <strong class="success">scalable performance</strong>.</p>
+</li>
+</ul>
+<div class="alert info-bg centered">
+<p><a href="https://www.sqlite.org/">SQLite</a> is a lightweight and embeddable <strong>relational database</strong> implementation.</p>
+</div>
+<h2 id="sqlite-structure">SQLite: <span class="gold">Structure</span><a class="headerlink" href="#sqlite-structure" title="Permanent link">&para;</a></h2>
+<div class="flex-row">
+<div class="flex-col">
+<ul>
+<li>
+<p>Every <strong class="info">database</strong> consists of <strong
+  class="primary">tables</strong> that have a <strong
+  class="caution">relationship</strong>.</p>
+</li>
+<li>
+<p>Each <strong class="primary">table</strong> consists of <strong
+  class="special">rows</strong> and <strong class="special">columns</strong>.</p>
+</li>
+<li>
+<div class="flex-col" markdown="1">
+<p>Each <strong class="special">column</strong> has a <strong
+class="warning">name</strong> and a <strong
+class="warning">type</strong>.</p>
+<ul>
+<li>Duplicates?</li>
+<li>Empty?</li>
+<li>Default?</li>
+</ul>
+</li>
+<li>
+<p>Each <strong class="special">row</strong> is the actual <strong
+  class="info">data</strong>.</p>
+</li>
+</ul>
+</div>
+<div class="flex-col">
+<table class="bordered centered">
+<thead>
+    <th class="special-bg">id</th>
+    <th class="special-bg">room</th>
+    <th class="special-bg">message</th>
+</thead>
+<tbody>
+<tr class="info-bg"><td>0</td><td>dillon-210</td><td>Sup bro</td></tr>
+<tr class="caution-bg"><td>1</td><td>dillon-210</td><td>Hey bro</td></tr>
+<tr class="info-bg"><td>2</td><td>welsh-204</td><td>Yo girl</td></tr>
+<tr class="caution-bg"><td>3</td><td>welsh-204</td><td>Hi girl</td></tr>
+</tbody>
+</table>
+</div>
+</div>
+<h2 id="sqlite-interfaces">SQLite: <span class="gold">Interfaces</span><a class="headerlink" href="#sqlite-interfaces" title="Permanent link">&para;</a></h2>
+<p>We can interact with a <a href="https://www.sqlite.org/">SQLite</a> <strong class="info">database</strong> via the
+<strong class="success">command line interface</strong>:</p>
+<div class="codehilite"><pre><span></span><code><span class="c1"># Interact with doornote.db sqlite database</span>
+$<span class="w"> </span>sqlite3<span class="w"> </span>doornote.db
+SQLite<span class="w"> </span>version<span class="w"> </span><span class="m">3</span>.46.1<span class="w"> </span><span class="m">2024</span>-08-13<span class="w"> </span><span class="m">09</span>:16:08
+Enter<span class="w"> </span><span class="s2">&quot;.help&quot;</span><span class="w"> </span><span class="k">for</span><span class="w"> </span>usage<span class="w"> </span>hints.
+sqlite&gt;<span class="w"> </span>.tables
+Messages
+</code></pre></div>
+
+<div class="alert info-bg centered">
+<p>We can interact with a <a href="https://www.sqlite.org/">SQLite</a> <strong class="info">database</strong> via a
+<strong class="warning">graphical interface</strong> such as <a href="https://sqlitebrowser.org/">SQLite Browser</a>.</p>
+</div>
+<h2 id="sql-overview">SQL: <span class="gold">Overview</span><a class="headerlink" href="#sql-overview" title="Permanent link">&para;</a></h2>
+<p>To programmatically interact with a <a href="https://www.sqlite.org/">SQLite</a> <strong
+class="info">database</strong>, we use <strong class="warning">SQL</strong> (<i
+class="muted">Structured Query Language</i>):</p>
+<table class="bordered">
+<thead>
+    <th class="special-bg">Verb</th>
+    <th class="special-bg">Description</th>
+</thead>
+<tbody>
+<tr class="success-bg">
+    <td><b>CREATE</b></td>
+    <td>Create a <strong class="primary">table</strong> and specify its <strong
+    class="special">columns</strong>.</td>
+</tr>
+<tr class="danger-bg">
+    <td><b>DROP</b></td>
+    <td>Remove a <strong class="primary">table</strong>.</td>
+</tr>
+<tr class="success-bg">
+    <td><b>INSERT</b></td>
+    <td>Add <strong class="special">row(s)</strong> to a <strong
+    class="primary">table</strong>.</td>
+</tr>
+<tr class="caution-bg">
+    <td><b>UPDATE</b></td>
+    <td>Update <strong class="special">row(s)</strong> in a  <strong
+    class="primary">table</strong>.</td>
+</tr>
+<tr class="danger-bg">
+    <td><b>DELETE</b></td>
+    <td>Remove <strong class="special">row(s)</strong> from a  <strong
+    class="primary">table</strong>.</td>
+</tr>
+<tr class="info-bg">
+    <td><b>SELECT</b></td>
+    <td>Get <strong class="special">row(s)</strong> from a  <strong
+    class="primary">table</strong>.</td>
+</tr>
+</tbody>
+</table>
+
+<h2 id="sql-crud">SQL: <span class="gold">CRUD</span><a class="headerlink" href="#sql-crud" title="Permanent link">&para;</a></h2>
+<p>Many <strong class="info">database</strong> and <strong class="special">web
+applications</strong> are classified as <a href="https://en.wikipedia.org/wiki/Create,_read,_update_and_delete">CRUD</a> applications:</p>
+<table class="bordered centered">
+<thead>
+    <th class="special-bg">Operation</th>
+    <th class="special-bg">SQL</th>
+    <th class="special-bg">HTTP</th>
+</thead>
+<tbody>
+<tr class="success-bg">
+    <td><b>Create</b></td>
+    <td><b>INSERT</b></td>
+    <td><b>PUT / POST</b></td>
+</tr>
+<tr class="info-bg">
+    <td><b>Read</b></td>
+    <td><b>SELECT</b></td>
+    <td><b>GET</b></td>
+</tr>
+<tr class="warning-bg">
+    <td><b>Update</b></td>
+    <td><b>UPDATE</b></td>
+    <td><b>PUT / POST</b></td>
+</tr>
+<tr class="danger-bg">
+    <td><b>Delete</b></td>
+    <td><b>DELETE</b></td>
+    <td><b>DELETE</b></td>
+</tr>
+</tbody>
+</table>
+
+<h2 id="python-sqlite-doornotepy">Python + SQLite: <a href="https://github.com/nd-cse-20589-fa26/examples/blob/master/slides30/doornote.py">doornote.py</a><a class="headerlink" href="#python-sqlite-doornotepy" title="Permanent link">&para;</a></h2>
+<blockquote>
+<p>Use <a href="https://docs.python.org/3/library/sqlite3.html">sqlite3</a> in <a href="https://github.com/nd-cse-20589-fa26/examples/blob/master/slides30/doornote.py">doornote.py</a>, which is a <strong class="special">web
+application</strong> that allows users to list the <code>messages</code> left by others
+for a particular <code>room</code> or allows users to post a <code>message</code> to a particular
+<code>room</code>.</p>
+</blockquote>
+<div class="codehilite"><pre><span></span><code><span class="c1"># Start doornote web application</span>
+$<span class="w"> </span>./doornote.py<span class="w"> </span><span class="m">0</span>.0.0.0<span class="w"> </span><span class="m">9999</span>
+
+<span class="c1"># Get messages for Dillon 210</span>
+$<span class="w"> </span>curl<span class="w"> </span>localhost:9999/room/dillon-210
+
+<span class="c1"># Post message to Dillon 210</span>
+$<span class="w"> </span>curl<span class="w"> </span>-d<span class="w"> </span><span class="s1">&#39;Hello&#39;</span><span class="w"> </span>localhost:9999/room/dillon-210
+</code></pre></div>
+
+<h2 id="python-sqlite-connections">Python + SQLite: <span class="gold">Connections</span><a class="headerlink" href="#python-sqlite-connections" title="Permanent link">&para;</a></h2>
+<p>To utilize <a href="https://www.sqlite.org/">SQLite</a> with <strong class="success">Python</strong>, we use the
+<a href="https://docs.python.org/3/library/sqlite3.html">sqlite3</a> module to establish connections to a <strong
+class="info">database</strong>:</p>
+<div class="codehilite"><pre><span></span><code><span class="k">class</span> <span class="nc">Database</span><span class="p">:</span>
+<span class="w">  </span><span class="sd">&#39;&#39;&#39; Database: Stored in SQLite&#39;&#39;&#39;</span>
+  <span class="o">...</span>
+  <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">path</span><span class="o">=</span><span class="s1">&#39;doornote.db&#39;</span><span class="p">):</span>
+      <span class="c1"># Save path to database</span>
+      <span class="bp">self</span><span class="o">.</span><span class="n">path</span> <span class="o">=</span> <span class="n">path</span>
+
+      <span class="c1"># Establish database connection</span>
+      <span class="bp">self</span><span class="o">.</span><span class="n">conn</span> <span class="o">=</span> <span class="n">sqlite3</span><span class="o">.</span><span class="n">connect</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">path</span><span class="p">)</span>
+      <span class="o">...</span>
+</code></pre></div>
+
+<h2 id="python-sqlite-cursors-transactions">Python + SQLite: <span class="gold">Cursors / Transactions</span><a class="headerlink" href="#python-sqlite-cursors-transactions" title="Permanent link">&para;</a></h2>
+<p>To perform <strong class="warning">SQL</strong> operations, we first create a
+<strong class="caution">cursor</strong> and then use it to execute <strong
+class="warning">SQL</strong> statements:</p>
+<div class="codehilite"><pre><span></span><code><span class="k">class</span> <span class="nc">Database</span><span class="p">:</span>
+<span class="w">  </span><span class="sd">&#39;&#39;&#39; Database: Stored in SQLite&#39;&#39;&#39;</span>
+
+  <span class="n">SQL_CREATE_MESSAGES</span> <span class="o">=</span> <span class="s1">&#39;&#39;&#39;</span>
+<span class="s1">  CREATE TABLE IF NOT EXISTS Messages(</span>
+<span class="s1">      id          INTEGER NOT NULL PRIMARY KEY AUTOINCREMENT,</span>
+<span class="s1">      room        VARCHAR(20) NOT NULL,</span>
+<span class="s1">      message     VARCHAR(500) NOT NULL</span>
+<span class="s1">  )</span>
+<span class="s1">  &#39;&#39;&#39;</span>
+  <span class="o">...</span>
+
+  <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">path</span><span class="o">=</span><span class="s1">&#39;doornote.db&#39;</span><span class="p">):</span>
+      <span class="o">...</span>
+
+      <span class="c1"># Use database transaction (automatic commit)</span>
+      <span class="k">with</span> <span class="bp">self</span><span class="o">.</span><span class="n">conn</span><span class="p">:</span>
+          <span class="c1"># Get cursor to database</span>
+          <span class="n">cursor</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">conn</span><span class="o">.</span><span class="n">cursor</span><span class="p">()</span>
+
+          <span class="c1"># Execute SQL statement</span>
+          <span class="n">cursor</span><span class="o">.</span><span class="n">execute</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">SQL_CREATE_MESSAGES</span><span class="p">)</span>
+</code></pre></div>
+
+<div class="alert info-bg centered">
+<p>Using the <code>with</code> statement causes the <strong>database</strong> operations to occur as a single
+<strong>transaction</strong> (<em>ie. everything happens or nothing happens</em>).</p>
+</div>
+<h2 id="python-sqlite-statements">Python + SQLite: <span class="gold">Statements</span><a class="headerlink" href="#python-sqlite-statements" title="Permanent link">&para;</a></h2>
+<p>Rather than manually interpolating <strong class="warning">SQL</strong>
+statements, we can use the <code>execute</code> method to prepare <strong
+class="warning">SQL</strong> values for us:</p>
+<div class="codehilite"><pre><span></span><code><span class="k">class</span> <span class="nc">Database</span><span class="p">:</span>
+<span class="w">    </span><span class="sd">&#39;&#39;&#39; Database: Stored in SQLite&#39;&#39;&#39;</span>
+    <span class="o">...</span>
+    <span class="n">SQL_INSERT_ROOM_MESSAGE</span>  <span class="o">=</span> <span class="s1">&#39;INSERT INTO Messages(room, message) VALUES (?, ?)&#39;</span>
+    <span class="n">SQL_SELECT_ROOM_MESSAGES</span> <span class="o">=</span> <span class="s1">&#39;SELECT message FROM Messages WHERE room=?&#39;</span>
+    <span class="n">SQL_SELECT_ROOM_COUNT</span>    <span class="o">=</span> <span class="s1">&#39;SELECT Count(*) FROM Messages WHERE room=?&#39;</span>
+    <span class="o">...</span>
+    <span class="k">def</span> <span class="nf">messages</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">room</span><span class="p">:</span> <span class="nb">str</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">list</span><span class="p">[</span><span class="nb">str</span><span class="p">]:</span>
+<span class="w">        </span><span class="sd">&#39;&#39;&#39; Return messages associated with room. &#39;&#39;&#39;</span>
+        <span class="k">with</span> <span class="bp">self</span><span class="o">.</span><span class="n">conn</span><span class="p">:</span>
+            <span class="n">cursor</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">conn</span><span class="o">.</span><span class="n">cursor</span><span class="p">()</span>
+            <span class="n">cursor</span><span class="o">.</span><span class="n">execute</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">SQL_SELECT_ROOM_MESSAGES</span><span class="p">,</span> <span class="p">(</span><span class="n">room</span><span class="p">,))</span>
+            <span class="k">return</span> <span class="p">[</span><span class="n">row</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="k">for</span> <span class="n">row</span> <span class="ow">in</span> <span class="n">cursor</span><span class="o">.</span><span class="n">fetchall</span><span class="p">()]</span>
+
+    <span class="k">def</span> <span class="nf">append</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">room</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span> <span class="n">message</span><span class="p">:</span> <span class="nb">str</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&#39;&#39;&#39; Add message to end of list associated with room. &#39;&#39;&#39;</span>
+        <span class="k">with</span> <span class="bp">self</span><span class="o">.</span><span class="n">conn</span><span class="p">:</span>
+            <span class="n">cursor</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">conn</span><span class="o">.</span><span class="n">cursor</span><span class="p">()</span>
+            <span class="n">cursor</span><span class="o">.</span><span class="n">execute</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">SQL_INSERT_ROOM_MESSAGE</span><span class="p">,</span> <span class="p">(</span><span class="n">room</span><span class="p">,</span> <span class="n">message</span><span class="p">))</span>
+
+    <span class="k">def</span> <span class="nf">count</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">room</span><span class="p">:</span> <span class="nb">str</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">int</span><span class="p">:</span>
+<span class="w">        </span><span class="sd">&#39;&#39;&#39; Return number of messages for room. &#39;&#39;&#39;</span>
+        <span class="k">with</span> <span class="bp">self</span><span class="o">.</span><span class="n">conn</span><span class="p">:</span>
+            <span class="n">cursor</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">conn</span><span class="o">.</span><span class="n">cursor</span><span class="p">()</span>
+            <span class="n">cursor</span><span class="o">.</span><span class="n">execute</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">SQL_SELECT_ROOM_COUNT</span><span class="p">,</span> <span class="p">(</span><span class="n">room</span><span class="p">,))</span>
+            <span class="k">return</span> <span class="n">cursor</span><span class="o">.</span><span class="n">fetchone</span><span class="p">()[</span><span class="mi">0</span><span class="p">]</span>
+</code></pre></div>
+
+<div class="alert danger-bg centered">
+<p>Using <strong>prepared</strong> <strong class="warning">SQL</strong> statements is one way
+to avoid <a href="https://en.wikipedia.org/wiki/SQL_injection">SQL injections</a>!</p>
+</div>
+</main>
+<footer>
+Built using <a href="https://python.org">Python</a>
+and <a href="https://jinja.palletsprojects.com">Jinja</a>
+with colors from 
+<a href="https://onmessage.nd.edu/university-branding/colors/">Notre Dame</a>, 
+<a href="https://spreadsheet.dev/how-to-get-the-hexadecimal-codes-of-colors-in-google-sheets">Google Docs</a>, and 
+<a href="https://nordtheme.com">Nord Theme</a>,
+and icons from <a href="https://pictogrammers.com/library/mdi/">Material Design Icons</a>.</footer>
+</body>
+</html>
