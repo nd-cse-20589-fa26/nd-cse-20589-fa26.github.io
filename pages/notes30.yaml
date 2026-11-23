@@ -1,0 +1,305 @@
+title:  "Notes 30: SQLite"
+body:   |
+
+  ## Logistics
+
+  - **Exam 03**
+
+  - [Homework 10](homework10.html): Requirements
+
+  ## SQLite: <span class="gold">Overview</span>
+
+  A <strong class="info">relational database</strong> is a collection of data
+  organized into <strong class="primary">tables</strong> that consist of <strong
+  class="special">rows</strong> of items that correspond to <strong
+  class="special">columns</strong>:
+
+  - Has measures for <strong class="danger">data integrity</strong>.
+
+  - Allows for combining <strong class="warning">multiple datasets</strong>.
+
+  - Enables asking <strong class="info">detailed questions</strong>.
+
+  - Provides <strong class="success">scalable performance</strong>.
+
+  <div class="alert info-bg centered" markdown="1">
+
+  [SQLite] is a lightweight and embeddable **relational database** implementation.
+
+  </div>
+
+  [SQLite]: https://www.sqlite.org/
+
+  ## SQLite: <span class="gold">Structure</span>
+
+  <div class="flex-row" markdown="1">
+
+  <div class="flex-col" markdown="1">
+
+  - Every <strong class="info">database</strong> consists of <strong
+    class="primary">tables</strong> that have a <strong
+    class="caution">relationship</strong>.
+
+  - Each <strong class="primary">table</strong> consists of <strong
+    class="special">rows</strong> and <strong class="special">columns</strong>.
+
+  -   <div class="flex-col" markdown="1">
+
+      Each <strong class="special">column</strong> has a <strong
+      class="warning">name</strong> and a <strong
+      class="warning">type</strong>.
+
+      - Duplicates?
+      - Empty?
+      - Default?
+
+  - Each <strong class="special">row</strong> is the actual <strong
+    class="info">data</strong>.
+
+  </div>
+
+  <div class="flex-col" markdown="1">
+
+  <table class="bordered centered">
+  <thead>
+      <th class="special-bg">id</th>
+      <th class="special-bg">room</th>
+      <th class="special-bg">message</th>
+  </thead>
+  <tbody>
+  <tr class="info-bg"><td>0</td><td>dillon-210</td><td>Sup bro</td></tr>
+  <tr class="caution-bg"><td>1</td><td>dillon-210</td><td>Hey bro</td></tr>
+  <tr class="info-bg"><td>2</td><td>welsh-204</td><td>Yo girl</td></tr>
+  <tr class="caution-bg"><td>3</td><td>welsh-204</td><td>Hi girl</td></tr>
+  </tbody>
+  </table>
+
+  </div>
+
+  </div>
+
+  ## SQLite: <span class="gold">Interfaces</span>
+
+  We can interact with a [SQLite] <strong class="info">database</strong> via the
+  <strong class="success">command line interface</strong>:
+
+  ```bash
+  # Interact with doornote.db sqlite database
+  $ sqlite3 doornote.db
+  SQLite version 3.46.1 2024-08-13 09:16:08
+  Enter ".help" for usage hints.
+  sqlite> .tables
+  Messages
+  ```
+
+  <div class="alert info-bg centered" markdown="1">
+
+  We can interact with a [SQLite] <strong class="info">database</strong> via a
+  <strong class="warning">graphical interface</strong> such as [SQLite Browser].
+
+  </div>
+
+  [SQLite Browser]: https://sqlitebrowser.org/
+
+  ## SQL: <span class="gold">Overview</span>
+
+  To programmatically interact with a [SQLite] <strong
+  class="info">database</strong>, we use <strong class="warning">SQL</strong> (<i
+  class="muted">Structured Query Language</i>):
+
+  <table class="bordered">
+  <thead>
+      <th class="special-bg">Verb</th>
+      <th class="special-bg">Description</th>
+  </thead>
+  <tbody>
+  <tr class="success-bg">
+      <td><b>CREATE</b></td>
+      <td>Create a <strong class="primary">table</strong> and specify its <strong
+      class="special">columns</strong>.</td>
+  </tr>
+  <tr class="danger-bg">
+      <td><b>DROP</b></td>
+      <td>Remove a <strong class="primary">table</strong>.</td>
+  </tr>
+  <tr class="success-bg">
+      <td><b>INSERT</b></td>
+      <td>Add <strong class="special">row(s)</strong> to a <strong
+      class="primary">table</strong>.</td>
+  </tr>
+  <tr class="caution-bg">
+      <td><b>UPDATE</b></td>
+      <td>Update <strong class="special">row(s)</strong> in a  <strong
+      class="primary">table</strong>.</td>
+  </tr>
+  <tr class="danger-bg">
+      <td><b>DELETE</b></td>
+      <td>Remove <strong class="special">row(s)</strong> from a  <strong
+      class="primary">table</strong>.</td>
+  </tr>
+  <tr class="info-bg">
+      <td><b>SELECT</b></td>
+      <td>Get <strong class="special">row(s)</strong> from a  <strong
+      class="primary">table</strong>.</td>
+  </tr>
+  </tbody>
+  </table>
+
+  ## SQL: <span class="gold">CRUD</span>
+
+  Many <strong class="info">database</strong> and <strong class="special">web
+  applications</strong> are classified as [CRUD] applications:
+
+  <table class="bordered centered">
+  <thead>
+      <th class="special-bg">Operation</th>
+      <th class="special-bg">SQL</th>
+      <th class="special-bg">HTTP</th>
+  </thead>
+  <tbody>
+  <tr class="success-bg">
+      <td><b>Create</b></td>
+      <td><b>INSERT</b></td>
+      <td><b>PUT / POST</b></td>
+  </tr>
+  <tr class="info-bg">
+      <td><b>Read</b></td>
+      <td><b>SELECT</b></td>
+      <td><b>GET</b></td>
+  </tr>
+  <tr class="warning-bg">
+      <td><b>Update</b></td>
+      <td><b>UPDATE</b></td>
+      <td><b>PUT / POST</b></td>
+  </tr>
+  <tr class="danger-bg">
+      <td><b>Delete</b></td>
+      <td><b>DELETE</b></td>
+      <td><b>DELETE</b></td>
+  </tr>
+  </tbody>
+  </table>
+
+  [CRUD]: https://en.wikipedia.org/wiki/Create,_read,_update_and_delete
+
+  ## Python + SQLite: [doornote.py]
+
+  > Use [sqlite3] in [doornote.py], which is a <strong class="special">web
+  > application</strong> that allows users to list the `messages` left by others
+  > for a particular `room` or allows users to post a `message` to a particular
+  > `room`.
+
+  ```bash
+  # Start doornote web application
+  $ ./doornote.py 0.0.0.0 9999
+
+  # Get messages for Dillon 210
+  $ curl localhost:9999/room/dillon-210
+
+  # Post message to Dillon 210
+  $ curl -d 'Hello' localhost:9999/room/dillon-210
+  ```
+
+  ## Python + SQLite: <span class="gold">Connections</span>
+
+  To utilize [SQLite] with <strong class="success">Python</strong>, we use the
+  [sqlite3] module to establish connections to a <strong
+  class="info">database</strong>:
+
+  ```python
+  class Database:
+    ''' Database: Stored in SQLite'''
+    ...
+    def __init__(self, path='doornote.db'):
+        # Save path to database
+        self.path = path
+
+        # Establish database connection
+        self.conn = sqlite3.connect(self.path)
+        ...
+  ```
+
+  [sqlite3]: https://docs.python.org/3/library/sqlite3.html
+  [doornote.py]: https://github.com/nd-cse-20589-fa26/examples/blob/master/slides30/doornote.py
+
+  ## Python + SQLite: <span class="gold">Cursors / Transactions</span>
+
+  To perform <strong class="warning">SQL</strong> operations, we first create a
+  <strong class="caution">cursor</strong> and then use it to execute <strong
+  class="warning">SQL</strong> statements:
+
+  ```python
+  class Database:
+    ''' Database: Stored in SQLite'''
+
+    SQL_CREATE_MESSAGES = '''
+    CREATE TABLE IF NOT EXISTS Messages(
+        id          INTEGER NOT NULL PRIMARY KEY AUTOINCREMENT,
+        room        VARCHAR(20) NOT NULL,
+        message     VARCHAR(500) NOT NULL
+    )
+    '''
+    ...
+
+    def __init__(self, path='doornote.db'):
+        ...
+
+        # Use database transaction (automatic commit)
+        with self.conn:
+            # Get cursor to database
+            cursor = self.conn.cursor()
+
+            # Execute SQL statement
+            cursor.execute(self.SQL_CREATE_MESSAGES)
+  ```
+
+  <div class="alert info-bg centered" markdown="1">
+
+  Using the `with` statement causes the **database** operations to occur as a single
+  **transaction** (*ie. everything happens or nothing happens*).
+
+  </div>
+
+  ## Python + SQLite: <span class="gold">Statements</span>
+
+  Rather than manually interpolating <strong class="warning">SQL</strong>
+  statements, we can use the `execute` method to prepare <strong
+  class="warning">SQL</strong> values for us:
+
+  ```python
+  class Database:
+      ''' Database: Stored in SQLite'''
+      ...
+      SQL_INSERT_ROOM_MESSAGE  = 'INSERT INTO Messages(room, message) VALUES (?, ?)'
+      SQL_SELECT_ROOM_MESSAGES = 'SELECT message FROM Messages WHERE room=?'
+      SQL_SELECT_ROOM_COUNT    = 'SELECT Count(*) FROM Messages WHERE room=?'
+      ...
+      def messages(self, room: str) -> list[str]:
+          ''' Return messages associated with room. '''
+          with self.conn:
+              cursor = self.conn.cursor()
+              cursor.execute(self.SQL_SELECT_ROOM_MESSAGES, (room,))
+              return [row[0] for row in cursor.fetchall()]
+
+      def append(self, room: str, message: str):
+          ''' Add message to end of list associated with room. '''
+          with self.conn:
+              cursor = self.conn.cursor()
+              cursor.execute(self.SQL_INSERT_ROOM_MESSAGE, (room, message))
+
+      def count(self, room: str) -> int:
+          ''' Return number of messages for room. '''
+          with self.conn:
+              cursor = self.conn.cursor()
+              cursor.execute(self.SQL_SELECT_ROOM_COUNT, (room,))
+              return cursor.fetchone()[0]
+  ```
+
+  <div class="alert danger-bg centered" markdown="1">
+
+  Using **prepared** <strong class="warning">SQL</strong> statements is one way
+  to avoid [SQL injections]!
+
+  </div>
+
+  [SQL injections]: https://en.wikipedia.org/wiki/SQL_injection
