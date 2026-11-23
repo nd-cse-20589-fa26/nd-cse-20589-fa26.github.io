@@ -344,9 +344,10 @@
         topics:         SQLite
         items:
           - name:       Slides 30
+          - name:       Panopto
+            link:       https://notredame.hosted.panopto.com/Panopto/Pages/Viewer.aspx?id=5160f5aa-4822-48f4-976b-b50b012412c1
         assignments:
           - Reading 10
-
       - date:           Wed 11/25
         topics:         <i class="muted">Thanksgiving</i>
 
