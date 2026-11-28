@@ -1,0 +1,22 @@
+{
+    "q1": {
+        "type": "multiple",
+        "question": "\n<p>Which of the following statements regarding <b>HTML</b> are true\n(<i>choose all that apply</i>)?</p>\n",
+        "responses": {
+            "html_binary": "<b>HTML</b> documents are <b>binary</b> files.",
+            "html_text": "<b>HTML</b> documents are <b>text</b> files.",
+            "hypertext_graphics": "<b>HTML</b> links do not work across different hosts.",
+            "hypertext_link": "<b>HTML</b> links build connections between documents.",
+            "markup_structure": "<b>HTML</b> markup is used to <b>structure</b> the content in a document.",
+            "markup_format": "<b>HTML</b> markup is used to <b>format</b> the content in a document."
+        }
+    },
+    "q2": {
+        "type": "blank",
+        "question": "\n<p>Right click on this page and do <b>\"View page source\"</b>\"\n(<i>alternatively, view the contents of this page using\n<code>curl</code></i>) and then answer the following questions:</p>\n\n<ol>\n  <li>What is the <b>HTML tag</b> used for page heading \"Reading 11: HTML, CSS\"? ____</li>\n  <li>What is the <b>HTML tag</b> to link \"Reading 11 TA List\"? ____</li>\n  <li>What is the <b>location</b> of the <b>CSS stylesheet</b> used by this page? ____</li>\n  <li>What is the <b>font-size</b> of the <code>body tag</code> in the <b>CSS stylesheet</b> used by this page? ____</li>\n</ol>\n"
+    },
+    "q3": {
+        "type": "blank",
+        "question": "\n<p>Complete the code below to modify the <code>doornote_messages</code>\nfunction from <a href=\"slides30.html\">Slides 30</a> to return an\n<b>ordered list</b> in <b>HTML</b> instead of listing in plain text.</p>\n\n<pre>\n@App.route('/room/([a-z]+-[0-9]{3})')\ndef doornote_messages(request, room: str) -> str:\n    messages = App.db.messages(room)\n    html     = '____'                     # 1.\n    html    += ''.join(\n        f'____{m}____' for m in messages  # 2., 3.\n    )\n    html    += '____'                     # 4.\n    return html\n</pre>\n"
+    }
+}

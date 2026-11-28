@@ -1,0 +1,219 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<!-- Favicon -->
+<link rel="icon" type="image/png" sizes="32x32" href="static/ico/favicon-32x32.png">
+<link rel="icon" type="image/png" sizes="16x16" href="static/ico/favicon-16x16.png">
+<link rel="manifest" href="static/ico/site.webmanifest">
+<!-- Stylesheets -->
+<link rel="stylesheet" href="static/css/domer.css">
+<title>Homework 10: Web Application</title>
+</head>
+<body>
+<header>
+<a class="logo" href="homework10.html">
+    <h1>Homework 10: Web Application</h1>
+</a>
+<nav>
+    <ul>
+        <li><a href="index.html"><h4>Home</h4></a></li>
+        </ul>
+</nav></header>
+<main>
+<p>For this assignment, you are to build a <strong>full-stack</strong> <a href="https://en.wikipedia.org/wiki/Web_application">web application</a>
+consisting of the following components:</p>
+<ol>
+<li>
+<p><strong>Back-end</strong>: This is a <a href="https://python.org">Python</a> application that uses the <a href="https://github.com/nd-cse-20589-fa26/examples/blob/master/slides31/vial.py">vial.py</a>
+framework discussed in class.</p>
+</li>
+<li>
+<p><strong>Database</strong>: This is a <a href="https://www.sqlite.org/">SQLite</a> database that is used by the <a href="https://en.wikipedia.org/wiki/Web_application">web
+application</a>.</p>
+</li>
+<li>
+<p><strong>Front-End</strong>: This is <a href="https://en.wikipedia.org/wiki/HTML">HTML</a> and <a href="https://en.wikipedia.org/wiki/CSS">CSS</a> that formats the information from
+the <a href="https://en.wikipedia.org/wiki/Web_application">web application</a>.</p>
+</li>
+<li>
+<p><strong>Unit Test</strong>: This uses <a href="https://docs.python.org/3/library/unittest.html">unittest</a> to verify the correctness of the
+<a href="https://python.org">Python</a> <strong>back-end</strong>.</p>
+</li>
+</ol>
+<p>The exact <strong>requirements</strong> for each of these components are specified below.</p>
+<h2 id="activity-0-preparation">Activity 0: Preparation<a class="headerlink" href="#activity-0-preparation" title="Permanent link">&para;</a></h2>
+<p>Before starting this homework assignment, you should first perform a <code>git
+pull</code> to retrieve any changes in your remote <a href="https://github.com">GitHub</a> repository:</p>
+<div class="codehilite"><pre><span></span><code>$<span class="w"> </span><span class="nb">cd</span><span class="w"> </span>path/to/repository<span class="w">                   </span><span class="c1"># Go to assignments repository</span>
+
+$<span class="w"> </span>git<span class="w"> </span>switch<span class="w"> </span>master<span class="w">                       </span><span class="c1"># Make sure we are in master branch</span>
+
+$<span class="w"> </span>git<span class="w"> </span>pull<span class="w"> </span>--rebase<span class="w">                       </span><span class="c1"># Get any remote changes not present locally</span>
+</code></pre></div>
+
+<p>Next, create a new branch for this assignment:</p>
+<div class="codehilite"><pre><span></span><code>$<span class="w"> </span>git<span class="w"> </span>switch<span class="w"> </span>-c<span class="w"> </span>homework10<span class="w">                </span><span class="c1"># Create homework10 branch and check it out</span>
+</code></pre></div>
+
+<h3 id="task-1-vial">Task 1: Vial<a class="headerlink" href="#task-1-vial" title="Permanent link">&para;</a></h3>
+<p>To help you get started, the instructor has provided you with <a href="https://github.com/nd-cse-20589-fa26/examples/blob/master/slides31/vial.py">vial.py</a>:</p>
+<div class="codehilite"><pre><span></span><code><span class="c1"># Create homework10 folder</span>
+$<span class="w"> </span>mkdir<span class="w"> </span>homework10
+
+<span class="c1"># Go to homework10 folder</span>
+$<span class="w"> </span><span class="nb">cd</span><span class="w"> </span>homework10
+
+<span class="c1"># Download Vial from Slides 31</span>
+$<span class="w"> </span>curl<span class="w"> </span>-LO<span class="w"> </span>https://raw.githubusercontent.com/nd-cse-20589-fa26/examples/refs/heads/master/slides31/vial.py
+</code></pre></div>
+
+<h3 id="task-2-initial-import">Task 2: Initial Import<a class="headerlink" href="#task-2-initial-import" title="Permanent link">&para;</a></h3>
+<p>Now that the files are downloaded into the <code>homework10</code> folder, you can
+<strong>commit</strong> them to your <a href="https://git-scm.com/">git</a> repository:</p>
+<div class="codehilite"><pre><span></span><code>$<span class="w"> </span>git<span class="w"> </span>add<span class="w"> </span>Makefile<span class="w">                            </span><span class="c1"># Mark changes for commit</span>
+$<span class="w"> </span>git<span class="w"> </span>add<span class="w"> </span>*.py
+$<span class="w"> </span>git<span class="w"> </span>commit<span class="w"> </span>-m<span class="w"> </span><span class="s2">&quot;Homework 10: Initial Import&quot;</span><span class="w"> </span><span class="c1"># Record changes</span>
+</code></pre></div>
+
+<h2 id="requirements">Requirements<a class="headerlink" href="#requirements" title="Permanent link">&para;</a></h2>
+<p>For this assignment, you are free to implement any <a href="https://en.wikipedia.org/wiki/Web_application">web application</a> that you
+wish as long as you meet the following requirements.</p>
+<table class="bordered">
+<thead>
+  <th class="success-bg">Back-end</th>
+</thead>
+<tbody>
+<tr>
+  <td class="success-bg">
+  <ul>
+    <li><b>Must</b> implement a <b>REST API</b> that uses <b>JSON</b> as the data format.</li>
+    <li><b>Must</b> have at least one <code>GET</code> endpoint.</li>
+    <li><b>Must</b> have at least one <code>POST</code> or <code>PUT</code> endpoint.</li>
+    <li><b>Must</b> have at least one <code>DELETE</code> endpoint.</li>
+  </ul>
+  </td>
+</tr>
+</tbody>
+</table>
+
+<table class="bordered">
+<thead>
+  <th class="warning-bg">Database</th>
+</thead>
+<tbody>
+<tr>
+  <td class="warning-bg">
+  <ul>
+    <li><b>Must</b> have at least one <b>table</b> with at least <code>3</code> columns.</li>
+    <li><b>Must</b> use at least one <code>SELECT</code> <b>SQL</b> statement.</li>
+    <li><b>Must</b> use at least one <code>INSERT</code> or <code>UPDATE</code> <b>SQL</b> statement.</li>
+    <li><b>Must</b> use at least one <code>DELETE</code> <b>SQL</b> statement.</li>
+  </ul>
+  </td>
+</tr>
+</tbody>
+</table>
+
+<table class="bordered">
+<thead>
+  <th class="info-bg">Front-end</th>
+</thead>
+<tbody>
+<tr>
+  <td class="info-bg">
+  <ul>
+    <li><b>MUST</b> have endpoints that use the following <b>HTML</b> tags:
+      <code>a, p, div, li, table, img</code>.</li>
+
+    <li><b>MUST</b> use <b>CSS</b> to format the following attributes:
+      <code>background, font-family, font-size, color, margin, padding</code>.</li>
+
+    <li><b>MUST</b> implement a <b>HTML</b> <code>form</code> that interacts
+    with the <b>back-end</b>.</li>
+
+  </ul>
+  </td>
+</tr>
+</tbody>
+</table>
+
+<table class="bordered">
+<thead>
+  <th class="danger-bg">Testing</th>
+</thead>
+<tbody>
+<tr>
+  <td class="danger-bg">
+  <ul>
+    <li><b>Must</b> use automatically start <b>web application</b>.</li>
+    <li><b>Must</b> use <code>unittest</code> to test every <b>REST API</b> endpoint.</li>
+    <li><b>Must</b> use check for both successful requests and failed requests.</li>
+  </ul>
+  </td>
+</tr>
+</tbody>
+</table>
+
+<p>Once again, the exact <a href="https://en.wikipedia.org/wiki/Web_application">web application</a> is up to you.  That said, here are
+some possible ideas:</p>
+<ol>
+<li><strong>Todo List</strong></li>
+<li><strong>Dashboard</strong> / <strong>Scoreboard</strong></li>
+<li><strong>Bookmark manager</strong></li>
+<li><strong>Audio/Video manager</strong></li>
+<li><strong>Budget</strong></li>
+</ol>
+<div class="alert warning-bg">
+<h3 id="presentation-embed_icon-presentation"><i class="icon icon-medium"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><title>presentation</title><path d="M2,3H10A2,2 0 0,1 12,1A2,2 0 0,1 14,3H22V5H21V16H15.25L17,22H15L13.25,16H10.75L9,22H7L8.75,16H3V5H2V3M5,5V14H19V5H5Z" /></svg>
+</i> Presentation<a class="headerlink" href="#presentation-embed_icon-presentation" title="Permanent link">&para;</a></h3>
+<p>You will present your <a href="https://en.wikipedia.org/wiki/Web_application">web application</a> during <a href="interview04.html">Interview 04</a>.</p>
+</div>
+<h2 id="submission">Submission<a class="headerlink" href="#submission" title="Permanent link">&para;</a></h2>
+<p>To submit your assignment, please commit your work to the <code>homework10</code> folder
+of your <code>homework10</code> branch in your <strong>assignments</strong> <a href="https://github.com">GitHub</a> repository.
+Your <code>homework10</code> folder should <strong>only</strong> contain the following files:</p>
+<ul>
+<li><code>$WEB_APPLICATION.db</code></li>
+<li><code>$WEB_APPLICATION.py</code></li>
+<li><code>$WEB_APPLICATION.test</code></li>
+<li><code>vial.py</code></li>
+</ul>
+<div class="alert info-bg">
+<p>Replace <code>$WEB_APPLICATION</code> with whatever you named your project.</p>
+</div>
+<div class="codehilite"><pre><span></span><code><span class="c1">#-----------------------------------------------------------------------</span>
+<span class="c1"># Make sure you have already completed Activity 0: Preparation</span>
+<span class="c1">#-----------------------------------------------------------------------</span>
+...
+$<span class="w"> </span>git<span class="w"> </span>add<span class="w"> </span>*.db<span class="w"> </span>*.py<span class="w"> </span>*.test<span class="w">                </span><span class="c1"># Mark changes for commit</span>
+$<span class="w"> </span>git<span class="w"> </span>commit<span class="w"> </span>-m<span class="w"> </span><span class="s2">&quot;Homework 10&quot;</span><span class="w">             </span><span class="c1"># Record changes</span>
+$<span class="w"> </span>git<span class="w"> </span>push<span class="w"> </span>-u<span class="w"> </span>origin<span class="w"> </span>homework10<span class="w">           </span><span class="c1"># Push branch to GitHub</span>
+</code></pre></div>
+
+<div class="alert warning-bg">
+<h3 id="lifebuoy-embed_icon-acknowledgments"><i class="icon icon-medium"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><title>lifebuoy</title><path d="M19.79,15.41C20.74,13.24 20.74,10.75 19.79,8.59L17.05,9.83C17.65,11.21 17.65,12.78 17.06,14.17L19.79,15.41M15.42,4.21C13.25,3.26 10.76,3.26 8.59,4.21L9.83,6.94C11.22,6.35 12.79,6.35 14.18,6.95L15.42,4.21M4.21,8.58C3.26,10.76 3.26,13.24 4.21,15.42L6.95,14.17C6.35,12.79 6.35,11.21 6.95,9.82L4.21,8.58M8.59,19.79C10.76,20.74 13.25,20.74 15.42,19.78L14.18,17.05C12.8,17.65 11.22,17.65 9.84,17.06L8.59,19.79M12,2A10,10 0 0,1 22,12A10,10 0 0,1 12,22A10,10 0 0,1 2,12A10,10 0 0,1 12,2M12,8A4,4 0 0,0 8,12A4,4 0 0,0 12,16A4,4 0 0,0 16,12A4,4 0 0,0 12,8Z" /></svg>
+</i> Acknowledgments<a class="headerlink" href="#lifebuoy-embed_icon-acknowledgments" title="Permanent link">&para;</a></h3>
+<p>If you collaborated with any other students, or received help from TAs or AI
+tools on this assignment, please record this support in the <code>README.md</code> in
+the <code>homework10</code> folder and include it with your <strong>Pull Request</strong>.</p>
+</div>
+<div class="alert success-bg">
+<h3 id="account-question-embed_icon-interviewer"><i class="icon icon-medium"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><title>account-question</title><path d="M13,8A4,4 0 0,1 9,12A4,4 0 0,1 5,8A4,4 0 0,1 9,4A4,4 0 0,1 13,8M17,18V20H1V18C1,15.79 4.58,14 9,14C13.42,14 17,15.79 17,18M20.5,14.5V16H19V14.5H20.5M18.5,9.5H17V9A3,3 0 0,1 20,6A3,3 0 0,1 23,9C23,9.97 22.5,10.88 21.71,11.41L21.41,11.6C20.84,12 20.5,12.61 20.5,13.3V13.5H19V13.3C19,12.11 19.6,11 20.59,10.35L20.88,10.16C21.27,9.9 21.5,9.47 21.5,9A1.5,1.5 0 0,0 20,7.5A1.5,1.5 0 0,0 18.5,9V9.5Z" /></svg>
+</i> Interviewer<a class="headerlink" href="#account-question-embed_icon-interviewer" title="Permanent link">&para;</a></h3>
+<p>Once you have committed your work and pushed it to <a href="https://github.com">GitHub</a>, remember to
+create a <strong>pull request</strong> and assign it to the interviewer you will
+demonstrating your <a href="https://en.wikipedia.org/wiki/Web_application">web application</a> to in <a href="interview04.html">Interview 04</a>.</p>
+</div>
+</main>
+<footer>
+Built using <a href="https://python.org">Python</a>
+and <a href="https://jinja.palletsprojects.com">Jinja</a>
+with colors from 
+<a href="https://onmessage.nd.edu/university-branding/colors/">Notre Dame</a>, 
+<a href="https://spreadsheet.dev/how-to-get-the-hexadecimal-codes-of-colors-in-google-sheets">Google Docs</a>, and 
+<a href="https://nordtheme.com">Nord Theme</a>,
+and icons from <a href="https://pictogrammers.com/library/mdi/">Material Design Icons</a>.</footer>
+</body>
+</html>
