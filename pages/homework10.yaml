@@ -1,0 +1,229 @@
+title:      "Homework 10: Web Application"
+body:       |
+
+  For this assignment, you are to build a **full-stack** [web application]
+  consisting of the following components:
+
+  1. **Back-end**: This is a [Python] application that uses the [vial.py]
+  framework discussed in class.
+
+  2. **Database**: This is a [SQLite] database that is used by the [web
+  application].
+
+  3. **Front-End**: This is [HTML] and [CSS] that formats the information from
+  the [web application].
+
+  4. **Unit Test**: This uses [unittest] to verify the correctness of the
+  [Python] **back-end**.
+
+  The exact **requirements** for each of these components are specified below.
+
+  [web application]: https://en.wikipedia.org/wiki/Web_application
+  [HTML]: https://en.wikipedia.org/wiki/HTML
+  [CSS]: https://en.wikipedia.org/wiki/CSS
+  [SQLite]: https://www.sqlite.org/
+  [vial.py]: https://github.com/nd-cse-20589-fa26/examples/blob/master/slides31/vial.py
+  [Python]: https://python.org
+  [unittest]: https://docs.python.org/3/library/unittest.html
+
+  ## Activity 0: Preparation
+
+  Before starting this homework assignment, you should first perform a `git
+  pull` to retrieve any changes in your remote [GitHub] repository:
+
+      :::bash
+      $ cd path/to/repository                   # Go to assignments repository
+
+      $ git switch master                       # Make sure we are in master branch
+
+      $ git pull --rebase                       # Get any remote changes not present locally
+
+  Next, create a new branch for this assignment:
+
+      :::bash
+      $ git switch -c homework10                # Create homework10 branch and check it out
+
+  ### Task 1: Vial
+
+  To help you get started, the instructor has provided you with [vial.py]:
+
+      :::bash
+      # Create homework10 folder
+      $ mkdir homework10
+
+      # Go to homework10 folder
+      $ cd homework10
+
+      # Download Vial from Slides 31
+      $ curl -LO https://raw.githubusercontent.com/nd-cse-20589-fa26/examples/refs/heads/master/slides31/vial.py
+
+  ### Task 2: Initial Import
+
+  Now that the files are downloaded into the `homework10` folder, you can
+  **commit** them to your [git] repository:
+
+      :::bash
+      $ git add Makefile                            # Mark changes for commit
+      $ git add *.py
+      $ git commit -m "Homework 10: Initial Import" # Record changes
+
+  ## Requirements
+
+  For this assignment, you are free to implement any [web application] that you
+  wish as long as you meet the following requirements.
+
+  <table class="bordered">
+  <thead>
+    <th class="success-bg">Back-end</th>
+  </thead>
+  <tbody>
+  <tr>
+    <td class="success-bg">
+    <ul>
+      <li><b>Must</b> implement a <b>REST API</b> that uses <b>JSON</b> as the data format.</li>
+      <li><b>Must</b> have at least one <code>GET</code> endpoint.</li>
+      <li><b>Must</b> have at least one <code>POST</code> or <code>PUT</code> endpoint.</li>
+      <li><b>Must</b> have at least one <code>DELETE</code> endpoint.</li>
+    </ul>
+    </td>
+  </tr>
+  </tbody>
+  </table>
+
+  <table class="bordered">
+  <thead>
+    <th class="warning-bg">Database</th>
+  </thead>
+  <tbody>
+  <tr>
+    <td class="warning-bg">
+    <ul>
+      <li><b>Must</b> have at least one <b>table</b> with at least <code>3</code> columns.</li>
+      <li><b>Must</b> use at least one <code>SELECT</code> <b>SQL</b> statement.</li>
+      <li><b>Must</b> use at least one <code>INSERT</code> or <code>UPDATE</code> <b>SQL</b> statement.</li>
+      <li><b>Must</b> use at least one <code>DELETE</code> <b>SQL</b> statement.</li>
+    </ul>
+    </td>
+  </tr>
+  </tbody>
+  </table>
+
+  <table class="bordered">
+  <thead>
+    <th class="info-bg">Front-end</th>
+  </thead>
+  <tbody>
+  <tr>
+    <td class="info-bg">
+    <ul>
+      <li><b>MUST</b> have endpoints that use the following <b>HTML</b> tags:
+        <code>a, p, div, li, table, img</code>.</li>
+
+      <li><b>MUST</b> use <b>CSS</b> to format the following attributes:
+        <code>background, font-family, font-size, color, margin, padding</code>.</li>
+
+      <li><b>MUST</b> implement a <b>HTML</b> <code>form</code> that interacts
+      with the <b>back-end</b>.</li>
+
+    </ul>
+    </td>
+  </tr>
+  </tbody>
+  </table>
+
+  <table class="bordered">
+  <thead>
+    <th class="danger-bg">Testing</th>
+  </thead>
+  <tbody>
+  <tr>
+    <td class="danger-bg">
+    <ul>
+      <li><b>Must</b> use automatically start <b>web application</b>.</li>
+      <li><b>Must</b> use <code>unittest</code> to test every <b>REST API</b> endpoint.</li>
+      <li><b>Must</b> use check for both successful requests and failed requests.</li>
+    </ul>
+    </td>
+  </tr>
+  </tbody>
+  </table>
+
+  Once again, the exact [web application] is up to you.  That said, here are
+  some possible ideas:
+
+  1. **Todo List**
+  2. **Dashboard** / **Scoreboard**
+  3. **Bookmark manager**
+  3. **Audio/Video manager**
+  4. **Budget**
+
+  <div class="alert warning-bg" markdown="1">
+
+  ### <i class="icon icon-medium">{{ "presentation" | embed_icon }}</i> Presentation
+
+  You will present your [web application] during [Interview 04].
+
+  </div>
+
+  ## Submission
+
+  To submit your assignment, please commit your work to the `homework10` folder
+  of your `homework10` branch in your **assignments** [GitHub] repository.
+  Your `homework10` folder should **only** contain the following files:
+
+  - `$WEB_APPLICATION.db`
+  - `$WEB_APPLICATION.py`
+  - `$WEB_APPLICATION.test`
+  - `vial.py`
+
+  <div class="alert info-bg" markdown="1">
+
+  Replace `$WEB_APPLICATION` with whatever you named your project.
+
+  </div>
+
+      :::bash
+      #-----------------------------------------------------------------------
+      # Make sure you have already completed Activity 0: Preparation
+      #-----------------------------------------------------------------------
+      ...
+      $ git add *.db *.py *.test                # Mark changes for commit
+      $ git commit -m "Homework 10"             # Record changes
+      $ git push -u origin homework10           # Push branch to GitHub
+
+  <div class="alert warning-bg" markdown="1">
+
+  ### <i class="icon icon-medium">{{ "lifebuoy" | embed_icon }}</i> Acknowledgments
+
+  If you collaborated with any other students, or received help from TAs or AI
+  tools on this assignment, please record this support in the `README.md` in
+  the `homework10` folder and include it with your **Pull Request**.
+
+  </div>
+
+  <div class="alert success-bg" markdown="1">
+
+  ### <i class="icon icon-medium">{{ "account-question" | embed_icon }}</i> Interviewer
+
+  Once you have committed your work and pushed it to [GitHub], remember to
+  create a **pull request** and assign it to the interviewer you will
+  demonstrating your [web application] to in [Interview 04].
+
+
+  </div>
+
+  [git]: https://git-scm.com/
+  [clone]: https://git-scm.com/docs/git-clone
+  [commit]: https://git-scm.com/docs/git-commit
+  [push]: https://git-scm.com/docs/git-push
+  [GitHub]: https://github.com
+  [Linux]: https://kernel.org
+  [branch]: https://git-scm.com/docs/git-branch
+  [add]: https://git-scm.com/docs/git-add
+  [Reading 01]: reading01.html
+  [curl]: http://man7.org/linux/man-pages/man1/curl.1.html
+  [wget]: http://man7.org/linux/man-pages/man1/wget.1.html
+  [JSON]: https://json.org/
+  [ESC]: https://esc.nd.edu/
+  [mypy]: https://mypy-lang.org/
+  [Interview 04]: interview04.html
